@@ -27,6 +27,38 @@
 !(test (make-event 0 (exp00-rule r0))
        (event 0 r0 A B AB Cat))
 
+!(test (trace-state (exp00-expected-trace seed-7))
+       (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1)))
+
+!(test (trace-event (exp00-expected-trace seed-7))
+       (event 0 r0 A B AB Cat))
+
+!(test (exp00-candidate seed-7)
+       (candidate 0 (rule r0 A B AB Cat) 1))
+
+!(test (candidate-tick (exp00-candidate seed-7)) 0)
+
+!(test (candidate-rule (exp00-candidate seed-7))
+       (rule r0 A B AB Cat))
+
+!(test (candidate-score (exp00-candidate seed-7)) 1)
+
+!(test (exp00-initial-chamber seed-7)
+       (chamber exp00
+                (state 0 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1))
+                ((rule r0 A B AB Cat))
+                ()))
+
+!(test (chamber-id (exp00-initial-chamber seed-7)) exp00)
+
+!(test (chamber-state (exp00-initial-chamber seed-7))
+       (state 0 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1)))
+
+!(test (chamber-rules (exp00-initial-chamber seed-7))
+       ((rule r0 A B AB Cat)))
+
+!(test (chamber-events (exp00-initial-chamber seed-7)) ())
+
 !(test (fire-binary-catalytic
          (rule r0 A B AB Cat)
          (state 0 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1)))
@@ -42,7 +74,16 @@
 !(test (exp00-event-log seed-7)
        ((event 0 r0 A B AB Cat)))
 
+!(test (exp00-chamber-after-one-tick seed-7)
+       (chamber exp00
+                (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
+                ((rule r0 A B AB Cat))
+                ((event 0 r0 A B AB Cat))))
+
 !(test (exp00-product-abundance seed-7) 1)
+
+!(test (exp00-product-metric seed-7)
+       (metric product-abundance AB 1))
 
 !(test (exp00-catalyst-preserved? seed-7) True)
 

@@ -23,4 +23,4 @@ Run:
 scripts/run_exp00.sh
 ```
 
-Passing this smoke means the repo has a working PeTTa runtime path, first atom accessors, event construction, replay equality, and a bounded generic binary-catalytic state transformer. It does **not** claim ACS emergence.
+Passing this smoke means the repo has a working PeTTa runtime path, first atom accessors, event construction, replay equality, a bounded generic binary-catalytic state transformer, candidate atoms, chamber atoms, metric atoms, and a one-candidate chamber tick. It does **not** claim ACS emergence.

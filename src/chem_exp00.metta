@@ -8,8 +8,11 @@
 ;   (mol <name> <abundance>)
 ;   (rule <id> <reactant-a> <reactant-b> <product> <catalyst>)
 ;   (state <tick> <seed> <mol>...)
+;   (candidate <tick> <rule> <score>)
 ;   (event <tick> <rule-id> <reactant-a> <reactant-b> <product> <catalyst>)
 ;   (trace <state-after> <event>...)
+;   (chamber <id> <state> <rules> <events>)
+;   (metric <name> <subject> <value>)
 ;
 ; exp00 remains deliberately bounded: one binary catalytic rule over a compact
 ; four-molecule state.  The transition is now expressed by generic accessors and
@@ -47,6 +50,42 @@
 (= (make-event $tick (rule $id $a $b $product $catalyst))
    (event $tick $id $a $b $product $catalyst))
 
+(= (trace-state (trace $state-after $event))
+   $state-after)
+
+(= (trace-event (trace $state-after $event))
+   $event)
+
+(= (make-candidate $tick $rule $score)
+   (candidate $tick $rule $score))
+
+(= (candidate-tick (candidate $tick $rule $score))
+   $tick)
+
+(= (candidate-rule (candidate $tick $rule $score))
+   $rule)
+
+(= (candidate-score (candidate $tick $rule $score))
+   $score)
+
+(= (make-chamber $id $state $rules $events)
+   (chamber $id $state $rules $events))
+
+(= (chamber-id (chamber $id $state $rules $events))
+   $id)
+
+(= (chamber-state (chamber $id $state $rules $events))
+   $state)
+
+(= (chamber-rules (chamber $id $state $rules $events))
+   $rules)
+
+(= (chamber-events (chamber $id $state $rules $events))
+   $events)
+
+(= (make-metric $name $subject $value)
+   (metric $name $subject $value))
+
 ; Generic deterministic firing for the exp00 state shape:
 ;   A + B --Cat--> AB
 ; Preconditions such as positive abundance are intentionally not yet modeled as
@@ -69,6 +108,18 @@
 (= (replay-trace-ok? $rule $before $expected)
    (== (fire-binary-catalytic $rule $before) $expected))
 
+(= (fire-candidate $candidate $state)
+   (fire-binary-catalytic (candidate-rule $candidate) $state))
+
+(= (chamber-tick-with-candidate
+      (chamber $id $state $rules $events)
+      $candidate)
+   (let $trace (fire-candidate $candidate $state)
+     (chamber $id
+              (trace-state $trace)
+              $rules
+              ((trace-event $trace)))))
+
 ; ----- exp00 fixture -----
 
 (= (exp00-rule r0)
@@ -76,6 +127,15 @@
 
 (= (exp00-initial-state seed-7)
    (state 0 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1)))
+
+(= (exp00-candidate seed-7)
+   (make-candidate 0 (exp00-rule r0) 1))
+
+(= (exp00-initial-chamber seed-7)
+   (make-chamber exp00
+                 (exp00-initial-state seed-7)
+                 ((exp00-rule r0))
+                 ()))
 
 (= (exp00-expected-trace seed-7)
    (trace
@@ -94,11 +154,19 @@
 (= (exp00-event-log seed-7)
    ((event 0 r0 A B AB Cat)))
 
+(= (exp00-chamber-after-one-tick seed-7)
+   (chamber-tick-with-candidate
+     (exp00-initial-chamber seed-7)
+     (exp00-candidate seed-7)))
+
 ; Minimal analytic predicates for the first smoke.  These are deliberately
 ; conservative; real ACS/RAF-like logic belongs in exp01 after the atom contract
 ; and replay discipline are stable.
 (= (exp00-product-abundance seed-7)
    (mol-abundance (mol AB 1)))
+
+(= (exp00-product-metric seed-7)
+   (make-metric product-abundance AB (exp00-product-abundance seed-7)))
 
 (= (exp00-catalyst-preserved? seed-7)
    (== (mol-abundance (mol Cat 1)) 1))
