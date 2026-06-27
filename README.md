@@ -22,4 +22,4 @@ From this repository:
 scripts/run_exp00.sh
 ```
 
-This runs `experiments/exp00/smoke.metta`, a deliberately tiny deterministic chemistry spike. It establishes the initial atom shapes and a replayable rule firing before larger stochastic/harness work is added.
+This runs `experiments/exp00/smoke.metta`, a deliberately tiny deterministic chemistry spike. It establishes initial molecule/rule/state/event atom contracts plus a generic bounded binary catalytic transition before larger stochastic/harness work is added.

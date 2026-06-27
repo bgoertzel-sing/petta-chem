@@ -1,10 +1,38 @@
 !(import! &self ../../src/chem_exp00.metta)
 
+!(test (mol-name (mol A 1)) A)
+
+!(test (mol-abundance (mol AB 3)) 3)
+
 !(test (exp00-rule r0)
        (rule r0 A B AB Cat))
 
+!(test (rule-id (exp00-rule r0)) r0)
+
+!(test (rule-reactant-a (exp00-rule r0)) A)
+
+!(test (rule-reactant-b (exp00-rule r0)) B)
+
+!(test (rule-product (exp00-rule r0)) AB)
+
+!(test (rule-catalyst (exp00-rule r0)) Cat)
+
 !(test (exp00-initial-state seed-7)
        (state 0 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1)))
+
+!(test (state-tick (exp00-initial-state seed-7)) 0)
+
+!(test (state-seed (exp00-initial-state seed-7)) seed-7)
+
+!(test (make-event 0 (exp00-rule r0))
+       (event 0 r0 A B AB Cat))
+
+!(test (fire-binary-catalytic
+         (rule r0 A B AB Cat)
+         (state 0 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1)))
+       (trace
+         (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
+         (event 0 r0 A B AB Cat)))
 
 !(test (exp00-run seed-7)
        (trace
