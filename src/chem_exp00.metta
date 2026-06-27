@@ -47,6 +47,10 @@
 (= (rule-catalyst (rule $id $a $b $product $catalyst))
    $catalyst)
 
+(= (seed-number seed-7) 7)
+
+(= (seed-number seed-8) 8)
+
 (= (state-tick (state $tick $seed $m0 $m1 $m2 $m3))
    $tick)
 
@@ -98,6 +102,17 @@
 
 (= (make-metric $name $subject $value)
    (metric $name $subject $value))
+
+; Deterministic sampler seam.  This is not yet a scientific stochastic sampler;
+; it gives exp00 a replayable seed/tick-indexed choice point that later weighted
+; sampling can replace without changing candidate/chamber contracts.
+(= (seeded-choice-2 $seed $tick)
+   (#mod (+ (seed-number $seed) $tick) 2))
+
+(= (select-candidate-2 $seed $tick $candidate-0 $candidate-1)
+   (if (== (seeded-choice-2 $seed $tick) 0)
+       $candidate-0
+       $candidate-1))
 
 ; Generic deterministic firing for the exp00 state shape:
 ;   A + B --Cat--> AB
@@ -157,11 +172,24 @@
 (= (exp00-rule r0)
    (rule r0 A B AB Cat))
 
+(= (exp00-rule r1)
+   (rule r1 B Cat BCat A))
+
 (= (exp00-initial-state seed-7)
    (state 0 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1)))
 
-(= (exp00-candidate seed-7)
+(= (exp00-candidate $seed)
    (make-candidate 0 (exp00-rule r0) 1))
+
+(= (exp00-distractor-candidate $seed)
+   (make-candidate 0 (exp00-rule r1) 1))
+
+(= (exp00-sampled-candidate $seed)
+   (select-candidate-2
+     $seed
+     0
+     (exp00-distractor-candidate $seed)
+     (exp00-candidate $seed)))
 
 (= (exp00-starved-state seed-7)
    (state 0 seed-7 (mol A 0) (mol B 1) (mol AB 0) (mol Cat 1)))

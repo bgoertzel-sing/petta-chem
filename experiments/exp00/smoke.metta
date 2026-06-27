@@ -23,6 +23,12 @@
 
 !(test (rule-catalyst (exp00-rule r0)) Cat)
 
+!(test (seed-number seed-7) 7)
+
+!(test (seeded-choice-2 seed-7 0) 1)
+
+!(test (seeded-choice-2 seed-8 0) 0)
+
 !(test (exp00-initial-state seed-7)
        (state 0 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1)))
 
@@ -50,6 +56,26 @@
        (rule r0 A B AB Cat))
 
 !(test (candidate-score (exp00-candidate seed-7)) 1)
+
+!(test (exp00-distractor-candidate seed-7)
+       (candidate 0 (rule r1 B Cat BCat A) 1))
+
+!(test (select-candidate-2
+         seed-7
+         0
+         (exp00-distractor-candidate seed-7)
+         (exp00-candidate seed-7))
+       (candidate 0 (rule r0 A B AB Cat) 1))
+
+!(test (select-candidate-2
+         seed-8
+         0
+         (exp00-distractor-candidate seed-8)
+         (exp00-candidate seed-8))
+       (candidate 0 (rule r1 B Cat BCat A) 1))
+
+!(test (exp00-sampled-candidate seed-7)
+       (candidate 0 (rule r0 A B AB Cat) 1))
 
 !(test (candidate-applicable?
          (exp00-candidate seed-7)
