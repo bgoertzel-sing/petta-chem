@@ -1,0 +1,13 @@
+# Local/editor state
+.env
+.venv/
+__pycache__/
+*.pyc
+
+# Experiment outputs; committed experiments should keep compact configs/summaries explicitly.
+runs/
+artifacts/
+*.log
+
+# PeTTa/runtime scratch
+chroma_db/
