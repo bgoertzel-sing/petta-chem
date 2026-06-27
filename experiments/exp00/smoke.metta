@@ -4,6 +4,12 @@
 
 !(test (mol-abundance (mol AB 3)) 3)
 
+!(test (mol-positive? (mol AB 3)) True)
+
+!(test (mol-positive? (mol AB 0)) False)
+
+!(test (mol-nonnegative? (mol AB 0)) True)
+
 !(test (exp00-rule r0)
        (rule r0 A B AB Cat))
 
@@ -24,6 +30,8 @@
 
 !(test (state-seed (exp00-initial-state seed-7)) seed-7)
 
+!(test (state-nonnegative? (exp00-initial-state seed-7)) True)
+
 !(test (make-event 0 (exp00-rule r0))
        (event 0 r0 A B AB Cat))
 
@@ -42,6 +50,16 @@
        (rule r0 A B AB Cat))
 
 !(test (candidate-score (exp00-candidate seed-7)) 1)
+
+!(test (candidate-applicable?
+         (exp00-candidate seed-7)
+         (exp00-initial-state seed-7))
+       True)
+
+!(test (candidate-applicable?
+         (exp00-candidate seed-7)
+         (exp00-starved-state seed-7))
+       False)
 
 !(test (exp00-initial-chamber seed-7)
        (chamber exp00
@@ -65,6 +83,23 @@
        (trace
          (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
          (event 0 r0 A B AB Cat)))
+
+!(test (safe-fire-candidate
+         (exp00-candidate seed-7)
+         (exp00-initial-state seed-7))
+       (trace
+         (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
+         (event 0 r0 A B AB Cat)))
+
+!(test (safe-fire-candidate
+         (exp00-candidate seed-7)
+         (exp00-starved-state seed-7))
+       (blocked
+         (candidate 0 (rule r0 A B AB Cat) 1)
+         (state 0 seed-7 (mol A 0) (mol B 1) (mol AB 0) (mol Cat 1))
+         not-applicable))
+
+!(test (trace-nonnegative? (exp00-run seed-7)) True)
 
 !(test (exp00-run seed-7)
        (trace

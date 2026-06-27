@@ -26,6 +26,12 @@
 (= (mol-abundance (mol $name $abundance))
    $abundance)
 
+(= (mol-positive? (mol $name $abundance))
+   (> $abundance 0))
+
+(= (mol-nonnegative? (mol $name $abundance))
+   (>= $abundance 0))
+
 (= (rule-id (rule $id $a $b $product $catalyst))
    $id)
 
@@ -46,6 +52,13 @@
 
 (= (state-seed (state $tick $seed $m0 $m1 $m2 $m3))
    $seed)
+
+(= (state-nonnegative?
+      (state $tick $seed $m0 $m1 $m2 $m3))
+   (and (mol-nonnegative? $m0)
+        (and (mol-nonnegative? $m1)
+             (and (mol-nonnegative? $m2)
+                  (mol-nonnegative? $m3)))))
 
 (= (make-event $tick (rule $id $a $b $product $catalyst))
    (event $tick $id $a $b $product $catalyst))
@@ -111,6 +124,25 @@
 (= (fire-candidate $candidate $state)
    (fire-binary-catalytic (candidate-rule $candidate) $state))
 
+(= (candidate-applicable?
+      (candidate $tick (rule $id $a $b $product $catalyst) $score)
+      (state $tick $seed
+             (mol $a $a-count)
+             (mol $b $b-count)
+             (mol $product $product-count)
+             (mol $catalyst $catalyst-count)))
+   (and (> $a-count 0)
+        (and (> $b-count 0)
+             (> $catalyst-count 0))))
+
+(= (safe-fire-candidate $candidate $state)
+   (if (candidate-applicable? $candidate $state)
+       (fire-candidate $candidate $state)
+       (blocked $candidate $state not-applicable)))
+
+(= (trace-nonnegative? $trace)
+   (state-nonnegative? (trace-state $trace)))
+
 (= (chamber-tick-with-candidate
       (chamber $id $state $rules $events)
       $candidate)
@@ -130,6 +162,9 @@
 
 (= (exp00-candidate seed-7)
    (make-candidate 0 (exp00-rule r0) 1))
+
+(= (exp00-starved-state seed-7)
+   (state 0 seed-7 (mol A 0) (mol B 1) (mol AB 0) (mol Cat 1)))
 
 (= (exp00-initial-chamber seed-7)
    (make-chamber exp00
