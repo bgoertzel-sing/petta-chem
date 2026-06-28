@@ -60,6 +60,23 @@
 !(test (exp00-distractor-candidate seed-7)
        (candidate 0 (rule r1 B Cat BCat A) 1))
 
+!(test (exp00-third-candidate seed-7)
+       (candidate 0 (rule r2 A Cat ACat B) 1))
+
+!(test (exp00-generated-candidate-pool seed-7)
+       (candidate-pool
+         0
+         ((candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1)
+          (candidate 0 (rule r2 A Cat ACat B) 1))))
+
+!(test (cap-candidate-pool 1 (exp00-generated-candidate-pool seed-7))
+       ((candidate 0 (rule r1 B Cat BCat A) 1)))
+
+!(test (exp00-capped-candidates-2 seed-7)
+       ((candidate 0 (rule r1 B Cat BCat A) 1)
+        (candidate 0 (rule r0 A B AB Cat) 1)))
+
 !(test (select-candidate-2
          seed-7
          0
@@ -75,6 +92,12 @@
        (candidate 0 (rule r1 B Cat BCat A) 1))
 
 !(test (exp00-sampled-candidate seed-7)
+       (candidate 0 (rule r0 A B AB Cat) 1))
+
+!(test (selected-candidate-from-chamber-2
+         (exp00-initial-chamber seed-7)
+         (exp00-distractor-candidate seed-7)
+         (exp00-candidate seed-7))
        (candidate 0 (rule r0 A B AB Cat) 1))
 
 !(test (candidate-applicable?
@@ -136,6 +159,12 @@
        ((event 0 r0 A B AB Cat)))
 
 !(test (exp00-chamber-after-one-tick seed-7)
+       (chamber exp00
+                (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
+                ((rule r0 A B AB Cat))
+                ((event 0 r0 A B AB Cat))))
+
+!(test (exp00-chamber-after-selected-tick seed-7)
        (chamber exp00
                 (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
                 ((rule r0 A B AB Cat))

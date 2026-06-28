@@ -9,6 +9,7 @@
 ;   (rule <id> <reactant-a> <reactant-b> <product> <catalyst>)
 ;   (state <tick> <seed> <mol>...)
 ;   (candidate <tick> <rule> <score>)
+;   (candidate-pool <tick> (<candidate>...))
 ;   (event <tick> <rule-id> <reactant-a> <reactant-b> <product> <catalyst>)
 ;   (trace <state-after> <event>...)
 ;   (chamber <id> <state> <rules> <events>)
@@ -114,6 +115,15 @@
        $candidate-0
        $candidate-1))
 
+(= (cap-candidate-pool 1 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2)))
+   ($candidate-0))
+
+(= (cap-candidate-pool 2 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2)))
+   ($candidate-0 $candidate-1))
+
+(= (cap-candidate-pool 3 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2)))
+   ($candidate-0 $candidate-1 $candidate-2))
+
 ; Generic deterministic firing for the exp00 state shape:
 ;   A + B --Cat--> AB
 ; Preconditions such as positive abundance are intentionally not yet modeled as
@@ -167,6 +177,24 @@
               $rules
               ((trace-event $trace)))))
 
+(= (selected-candidate-from-chamber-2
+      (chamber $id $state $rules $events)
+      $candidate-0
+      $candidate-1)
+   (select-candidate-2
+     (state-seed $state)
+     (state-tick $state)
+     $candidate-0
+     $candidate-1))
+
+(= (chamber-tick-select-2
+      $chamber
+      $candidate-0
+      $candidate-1)
+   (chamber-tick-with-candidate
+     $chamber
+     (selected-candidate-from-chamber-2 $chamber $candidate-0 $candidate-1)))
+
 ; ----- exp00 fixture -----
 
 (= (exp00-rule r0)
@@ -174,6 +202,9 @@
 
 (= (exp00-rule r1)
    (rule r1 B Cat BCat A))
+
+(= (exp00-rule r2)
+   (rule r2 A Cat ACat B))
 
 (= (exp00-initial-state seed-7)
    (state 0 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1)))
@@ -183,6 +214,19 @@
 
 (= (exp00-distractor-candidate $seed)
    (make-candidate 0 (exp00-rule r1) 1))
+
+(= (exp00-third-candidate $seed)
+   (make-candidate 0 (exp00-rule r2) 1))
+
+(= (exp00-generated-candidate-pool $seed)
+   (candidate-pool
+     0
+     ((exp00-distractor-candidate $seed)
+      (exp00-candidate $seed)
+      (exp00-third-candidate $seed))))
+
+(= (exp00-capped-candidates-2 $seed)
+   (cap-candidate-pool 2 (exp00-generated-candidate-pool $seed)))
 
 (= (exp00-sampled-candidate $seed)
    (select-candidate-2
@@ -220,6 +264,12 @@
 (= (exp00-chamber-after-one-tick seed-7)
    (chamber-tick-with-candidate
      (exp00-initial-chamber seed-7)
+     (exp00-candidate seed-7)))
+
+(= (exp00-chamber-after-selected-tick seed-7)
+   (chamber-tick-select-2
+     (exp00-initial-chamber seed-7)
+     (exp00-distractor-candidate seed-7)
      (exp00-candidate seed-7)))
 
 ; Minimal analytic predicates for the first smoke.  These are deliberately
