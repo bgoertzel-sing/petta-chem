@@ -22,4 +22,4 @@ From this repository:
 scripts/run_exp00.sh
 ```
 
-This runs `experiments/exp00/smoke.metta`, a deliberately tiny deterministic chemistry spike. It establishes initial molecule/rule/state/candidate/candidate-pool/event/chamber/metric atom contracts plus a generic bounded binary catalytic transition, candidate applicability checks, nonnegative abundance invariants, a seed/tick deterministic candidate selector wired into chamber ticking, and first fixed-size candidate-pool caps before larger stochastic/harness work is added.
+This runs `experiments/exp00/smoke.metta`, a deliberately tiny deterministic chemistry spike. It establishes initial molecule/rule/state/candidate/candidate-pool/candidate-cap/event/chamber/metric atom contracts plus a generic bounded binary catalytic transition, candidate applicability checks, nonnegative abundance invariants, chamber-rule-based candidate generation, per-tick candidate caps, and a seed/tick deterministic candidate selector wired into generated chamber ticking before larger stochastic/harness work is added.

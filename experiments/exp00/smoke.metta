@@ -63,6 +63,14 @@
 !(test (exp00-third-candidate seed-7)
        (candidate 0 (rule r2 A Cat ACat B) 1))
 
+!(test (make-candidate-for-rule 0 (exp00-rule r0))
+       (candidate 0 (rule r0 A B AB Cat) 1))
+
+!(test (exp00-rules)
+       ((rule r1 B Cat BCat A)
+        (rule r0 A B AB Cat)
+        (rule r2 A Cat ACat B)))
+
 !(test (exp00-generated-candidate-pool seed-7)
        (candidate-pool
          0
@@ -70,8 +78,31 @@
           (candidate 0 (rule r0 A B AB Cat) 1)
           (candidate 0 (rule r2 A Cat ACat B) 1))))
 
+!(test (candidate-pool-tick (exp00-generated-candidate-pool seed-7)) 0)
+
+!(test (candidate-pool-candidates (exp00-generated-candidate-pool seed-7))
+       ((candidate 0 (rule r1 B Cat BCat A) 1)
+        (candidate 0 (rule r0 A B AB Cat) 1)
+        (candidate 0 (rule r2 A Cat ACat B) 1)))
+
+!(test (exp00-candidate-cap)
+       (candidate-cap 2 1))
+
+!(test (candidate-cap-per-tick (exp00-candidate-cap)) 2)
+
+!(test (candidate-cap-per-rule (exp00-candidate-cap)) 1)
+
+!(test (cap-candidate-pool 0 (exp00-generated-candidate-pool seed-7))
+       ())
+
 !(test (cap-candidate-pool 1 (exp00-generated-candidate-pool seed-7))
        ((candidate 0 (rule r1 B Cat BCat A) 1)))
+
+!(test (exp00-capped-candidate-pool seed-7)
+       (candidate-pool
+         0
+         ((candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1))))
 
 !(test (exp00-capped-candidates-2 seed-7)
        ((candidate 0 (rule r1 B Cat BCat A) 1)
@@ -113,7 +144,9 @@
 !(test (exp00-initial-chamber seed-7)
        (chamber exp00
                 (state 0 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1))
-                ((rule r0 A B AB Cat))
+                ((rule r1 B Cat BCat A)
+                 (rule r0 A B AB Cat)
+                 (rule r2 A Cat ACat B))
                 ()))
 
 !(test (chamber-id (exp00-initial-chamber seed-7)) exp00)
@@ -122,7 +155,9 @@
        (state 0 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1)))
 
 !(test (chamber-rules (exp00-initial-chamber seed-7))
-       ((rule r0 A B AB Cat)))
+       ((rule r1 B Cat BCat A)
+        (rule r0 A B AB Cat)
+        (rule r2 A Cat ACat B)))
 
 !(test (chamber-events (exp00-initial-chamber seed-7)) ())
 
@@ -161,13 +196,25 @@
 !(test (exp00-chamber-after-one-tick seed-7)
        (chamber exp00
                 (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
-                ((rule r0 A B AB Cat))
+                ((rule r1 B Cat BCat A)
+                 (rule r0 A B AB Cat)
+                 (rule r2 A Cat ACat B))
                 ((event 0 r0 A B AB Cat))))
 
 !(test (exp00-chamber-after-selected-tick seed-7)
        (chamber exp00
                 (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
-                ((rule r0 A B AB Cat))
+                ((rule r1 B Cat BCat A)
+                 (rule r0 A B AB Cat)
+                 (rule r2 A Cat ACat B))
+                ((event 0 r0 A B AB Cat))))
+
+!(test (exp00-chamber-after-generated-tick seed-7)
+       (chamber exp00
+                (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
+                ((rule r1 B Cat BCat A)
+                 (rule r0 A B AB Cat)
+                 (rule r2 A Cat ACat B))
                 ((event 0 r0 A B AB Cat))))
 
 !(test (exp00-product-abundance seed-7) 1)

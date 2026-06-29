@@ -10,6 +10,7 @@
 ;   (state <tick> <seed> <mol>...)
 ;   (candidate <tick> <rule> <score>)
 ;   (candidate-pool <tick> (<candidate>...))
+;   (candidate-cap <per-tick> <per-rule>)
 ;   (event <tick> <rule-id> <reactant-a> <reactant-b> <product> <catalyst>)
 ;   (trace <state-after> <event>...)
 ;   (chamber <id> <state> <rules> <events>)
@@ -86,6 +87,24 @@
 (= (candidate-score (candidate $tick $rule $score))
    $score)
 
+(= (make-candidate-for-rule $tick $rule)
+   (make-candidate $tick $rule 1))
+
+(= (candidate-pool-tick (candidate-pool $tick $candidates))
+   $tick)
+
+(= (candidate-pool-candidates (candidate-pool $tick $candidates))
+   $candidates)
+
+(= (make-candidate-cap $per-tick $per-rule)
+   (candidate-cap $per-tick $per-rule))
+
+(= (candidate-cap-per-tick (candidate-cap $per-tick $per-rule))
+   $per-tick)
+
+(= (candidate-cap-per-rule (candidate-cap $per-tick $per-rule))
+   $per-rule)
+
 (= (make-chamber $id $state $rules $events)
    (chamber $id $state $rules $events))
 
@@ -115,14 +134,66 @@
        $candidate-0
        $candidate-1))
 
+(= (cap-candidate-pool 0 (candidate-pool $tick $candidates))
+   ())
+
+(= (cap-candidate-pool 1 (candidate-pool $tick ($candidate-0)))
+   ($candidate-0))
+
+(= (cap-candidate-pool 1 (candidate-pool $tick ($candidate-0 $candidate-1)))
+   ($candidate-0))
+
 (= (cap-candidate-pool 1 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2)))
    ($candidate-0))
+
+(= (cap-candidate-pool 1 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3)))
+   ($candidate-0))
+
+(= (cap-candidate-pool 2 (candidate-pool $tick ($candidate-0 $candidate-1)))
+   ($candidate-0 $candidate-1))
 
 (= (cap-candidate-pool 2 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2)))
    ($candidate-0 $candidate-1))
 
+(= (cap-candidate-pool 2 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3)))
+   ($candidate-0 $candidate-1))
+
 (= (cap-candidate-pool 3 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2)))
    ($candidate-0 $candidate-1 $candidate-2))
+
+(= (cap-candidate-pool 3 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3)))
+   ($candidate-0 $candidate-1 $candidate-2))
+
+(= (cap-candidate-pool 4 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3)))
+   ($candidate-0 $candidate-1 $candidate-2 $candidate-3))
+
+(= (generate-candidate-pool
+      (chamber $id (state $tick $seed $m0 $m1 $m2 $m3) ($rule-0) $events))
+   (candidate-pool
+     $tick
+     ((make-candidate-for-rule $tick $rule-0))))
+
+(= (generate-candidate-pool
+      (chamber $id (state $tick $seed $m0 $m1 $m2 $m3) ($rule-0 $rule-1) $events))
+   (candidate-pool
+     $tick
+     ((make-candidate-for-rule $tick $rule-0)
+      (make-candidate-for-rule $tick $rule-1))))
+
+(= (generate-candidate-pool
+      (chamber $id (state $tick $seed $m0 $m1 $m2 $m3) ($rule-0 $rule-1 $rule-2) $events))
+   (candidate-pool
+     $tick
+     ((make-candidate-for-rule $tick $rule-0)
+      (make-candidate-for-rule $tick $rule-1)
+      (make-candidate-for-rule $tick $rule-2))))
+
+(= (bounded-candidate-pool $cap $chamber)
+   (candidate-pool
+     (candidate-pool-tick (generate-candidate-pool $chamber))
+     (cap-candidate-pool
+       (candidate-cap-per-tick $cap)
+       (generate-candidate-pool $chamber))))
 
 ; Generic deterministic firing for the exp00 state shape:
 ;   A + B --Cat--> AB
@@ -187,6 +258,15 @@
      $candidate-0
      $candidate-1))
 
+(= (selected-candidate-from-list-2
+      (chamber $id $state $rules $events)
+      ($candidate-0 $candidate-1))
+   (select-candidate-2
+     (state-seed $state)
+     (state-tick $state)
+     $candidate-0
+     $candidate-1))
+
 (= (chamber-tick-select-2
       $chamber
       $candidate-0
@@ -194,6 +274,14 @@
    (chamber-tick-with-candidate
      $chamber
      (selected-candidate-from-chamber-2 $chamber $candidate-0 $candidate-1)))
+
+(= (chamber-tick-generated-2 $cap $chamber)
+   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
+     (chamber-tick-with-candidate
+       $chamber
+       (selected-candidate-from-list-2
+         $chamber
+         (candidate-pool-candidates $candidate-pool)))))
 
 ; ----- exp00 fixture -----
 
@@ -218,15 +306,24 @@
 (= (exp00-third-candidate $seed)
    (make-candidate 0 (exp00-rule r2) 1))
 
+(= (exp00-rules)
+   ((exp00-rule r1)
+    (exp00-rule r0)
+    (exp00-rule r2)))
+
+(= (exp00-candidate-cap)
+   (make-candidate-cap 2 1))
+
 (= (exp00-generated-candidate-pool $seed)
-   (candidate-pool
-     0
-     ((exp00-distractor-candidate $seed)
-      (exp00-candidate $seed)
-      (exp00-third-candidate $seed))))
+   (generate-candidate-pool (exp00-initial-chamber $seed)))
+
+(= (exp00-capped-candidate-pool $seed)
+   (bounded-candidate-pool
+     (exp00-candidate-cap)
+     (exp00-initial-chamber $seed)))
 
 (= (exp00-capped-candidates-2 $seed)
-   (cap-candidate-pool 2 (exp00-generated-candidate-pool $seed)))
+   (candidate-pool-candidates (exp00-capped-candidate-pool $seed)))
 
 (= (exp00-sampled-candidate $seed)
    (select-candidate-2
@@ -241,7 +338,7 @@
 (= (exp00-initial-chamber seed-7)
    (make-chamber exp00
                  (exp00-initial-state seed-7)
-                 ((exp00-rule r0))
+                 (exp00-rules)
                  ()))
 
 (= (exp00-expected-trace seed-7)
@@ -271,6 +368,11 @@
      (exp00-initial-chamber seed-7)
      (exp00-distractor-candidate seed-7)
      (exp00-candidate seed-7)))
+
+(= (exp00-chamber-after-generated-tick seed-7)
+   (chamber-tick-generated-2
+     (exp00-candidate-cap)
+     (exp00-initial-chamber seed-7)))
 
 ; Minimal analytic predicates for the first smoke.  These are deliberately
 ; conservative; real ACS/RAF-like logic belongs in exp01 after the atom contract
