@@ -34,6 +34,37 @@
 (= (mol-nonnegative? (mol $name $abundance))
    (>= $abundance 0))
 
+(= (symbol-code A) 11)
+
+(= (symbol-code B) 13)
+
+(= (symbol-code AB) 17)
+
+(= (symbol-code Cat) 19)
+
+(= (symbol-code BCat) 23)
+
+(= (symbol-code ACat) 29)
+
+(= (symbol-code r0) 31)
+
+(= (symbol-code r1) 37)
+
+(= (symbol-code r2) 41)
+
+; Deterministic structural hashes for tiny exp00 fixtures.  They are not
+; cryptographic hashes; they provide stable PeTTa-native identities for replay
+; and run-contract tests before host-side canonical hashing exists.
+(= (mol-hash (mol $name $abundance))
+   (+ (* (symbol-code $name) 100) $abundance))
+
+(= (rule-hash (rule $id $a $b $product $catalyst))
+   (+ (* (symbol-code $id) 100000000)
+      (+ (* (symbol-code $a) 1000000)
+         (+ (* (symbol-code $b) 10000)
+            (+ (* (symbol-code $product) 100)
+               (symbol-code $catalyst))))))
+
 (= (rule-id (rule $id $a $b $product $catalyst))
    $id)
 
@@ -217,6 +248,9 @@
 (= (replay-trace-ok? $rule $before $expected)
    (== (fire-binary-catalytic $rule $before) $expected))
 
+(= (replay-chamber-ok? $candidate $before $expected)
+   (== (chamber-tick-with-candidate $before $candidate) $expected))
+
 (= (fire-candidate $candidate $state)
    (fire-binary-catalytic (candidate-rule $candidate) $state))
 
@@ -391,3 +425,13 @@
      (exp00-rule r0)
      (exp00-initial-state seed-7)
      (exp00-expected-trace seed-7)))
+
+(= (exp00-chamber-replay-ok? seed-7)
+   (replay-chamber-ok?
+     (exp00-candidate seed-7)
+     (exp00-initial-chamber seed-7)
+     (exp00-chamber-after-generated-tick seed-7)))
+
+(= (exp00-generated-replay-equivalent? seed-7)
+   (== (exp00-chamber-after-generated-tick seed-7)
+       (exp00-chamber-after-one-tick seed-7)))

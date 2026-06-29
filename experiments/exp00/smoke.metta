@@ -10,6 +10,10 @@
 
 !(test (mol-nonnegative? (mol AB 0)) True)
 
+!(test (symbol-code AB) 17)
+
+!(test (mol-hash (mol AB 3)) 1703)
+
 !(test (exp00-rule r0)
        (rule r0 A B AB Cat))
 
@@ -22,6 +26,10 @@
 !(test (rule-product (exp00-rule r0)) AB)
 
 !(test (rule-catalyst (exp00-rule r0)) Cat)
+
+!(test (rule-hash (exp00-rule r0)) 3111131719)
+
+!(test (rule-hash (exp00-rule r1)) 3713192311)
 
 !(test (seed-number seed-7) 7)
 
@@ -107,6 +115,11 @@
 !(test (exp00-capped-candidates-2 seed-7)
        ((candidate 0 (rule r1 B Cat BCat A) 1)
         (candidate 0 (rule r0 A B AB Cat) 1)))
+
+!(test (cap-candidate-pool 3 (exp00-generated-candidate-pool seed-7))
+       ((candidate 0 (rule r1 B Cat BCat A) 1)
+        (candidate 0 (rule r0 A B AB Cat) 1)
+        (candidate 0 (rule r2 A Cat ACat B) 1)))
 
 !(test (select-candidate-2
          seed-7
@@ -225,3 +238,7 @@
 !(test (exp00-catalyst-preserved? seed-7) True)
 
 !(test (exp00-replay-ok? seed-7) True)
+
+!(test (exp00-chamber-replay-ok? seed-7) True)
+
+!(test (exp00-generated-replay-equivalent? seed-7) True)
