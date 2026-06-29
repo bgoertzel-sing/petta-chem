@@ -14,12 +14,15 @@ Version 0.1 targets the locally validated PeTTa runtime:
 
 See `docs/runtime.md` for rationale and reproduction details.
 
-## First smoke test
+## Smoke tests
 
 From this repository:
 
 ```bash
 scripts/run_exp00.sh
+scripts/run_exp01.sh
 ```
 
-This runs `experiments/exp00/smoke.metta`, a deliberately tiny deterministic chemistry spike. It establishes initial molecule/rule/state/candidate/candidate-pool/candidate-cap/event/chamber/metric atom contracts plus a generic bounded binary catalytic transition, candidate applicability checks, nonnegative abundance invariants, chamber-rule-based candidate generation, per-tick candidate caps, and a seed/tick deterministic candidate selector wired into generated chamber ticking before larger stochastic/harness work is added.
+`experiments/exp00/smoke.metta` is a deliberately tiny deterministic chemistry spike. It establishes initial molecule/rule/state/candidate/candidate-pool/candidate-cap/event/chamber/metric atom contracts plus a generic bounded binary catalytic transition, candidate applicability checks, nonnegative abundance invariants, chamber-rule-based candidate generation, per-tick candidate caps, and a seed/tick deterministic candidate selector wired into generated chamber ticking before larger stochastic/harness work is added.
+
+`experiments/exp01/smoke.metta` validates the first planted ACS recovery seam: a two-rule catalytic closure is recovered from a rule list with distractors, non-catalytic cycles are rejected, and single-rule ablation produces a productivity drop.
