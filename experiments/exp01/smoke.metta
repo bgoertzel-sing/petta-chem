@@ -22,12 +22,84 @@
 
 !(test (exp01-planted-closure-ok?) True)
 
+!(test (acs-status-for-pair
+         (exp01-planted-rule rp0)
+         (exp01-planted-rule rp1))
+       active)
+
+!(test (acs-status-for-pair
+         (exp01-distractor-rule rd0)
+         (exp01-distractor-rule rd1))
+       rejected)
+
+!(test (scan-rule-pair pair-1-3
+                        (exp01-planted-rule rp0)
+                        (exp01-planted-rule rp1))
+       (acs-candidate
+         pair-1-3
+         ((rule rp0 Food X Y Z) (rule rp1 Food W Z Y))
+         (Y Z)
+         (Z Y)
+         active))
+
+!(test (candidate-rule-set-closed-2?
+         ((exp01-planted-rule rp0) (exp01-planted-rule rp1)))
+       True)
+
+!(test (scan-rule-set-2 planted-set
+                         ((exp01-planted-rule rp0)
+                          (exp01-planted-rule rp1)))
+       (acs-candidate
+         planted-set
+         ((rule rp0 Food X Y Z) (rule rp1 Food W Z Y))
+         (Y Z)
+         (Z Y)
+         active))
+
+!(test (exp01-scanned-pairs)
+       ((acs-candidate
+          pair-0-1
+          ((rule rd0 Food X Waste W) (rule rp0 Food X Y Z))
+          (Waste Y)
+          (W Z)
+          rejected)
+        (acs-candidate
+          pair-0-2
+          ((rule rd0 Food X Waste W) (rule rd1 Waste X Food W))
+          (Waste Food)
+          (W W)
+          rejected)
+        (acs-candidate
+          pair-0-3
+          ((rule rd0 Food X Waste W) (rule rp1 Food W Z Y))
+          (Waste Z)
+          (W Y)
+          rejected)
+        (acs-candidate
+          pair-1-2
+          ((rule rp0 Food X Y Z) (rule rd1 Waste X Food W))
+          (Y Food)
+          (Z W)
+          rejected)
+        (acs-candidate
+          pair-1-3
+          ((rule rp0 Food X Y Z) (rule rp1 Food W Z Y))
+          (Y Z)
+          (Z Y)
+          active)
+        (acs-candidate
+          pair-2-3
+          ((rule rd1 Waste X Food W) (rule rp1 Food W Z Y))
+          (Food Z)
+          (W Y)
+          rejected)))
+
 !(test (exp01-recovered-acs)
        (acs-candidate
          exp01-planted
          ((rule rp0 Food X Y Z) (rule rp1 Food W Z Y))
          (Y Z)
-         (Y Z)
+         (Z Y)
          active))
 
 !(test (acs-id (exp01-recovered-acs)) exp01-planted)
@@ -37,7 +109,7 @@
 
 !(test (acs-products (exp01-recovered-acs)) (Y Z))
 
-!(test (acs-catalysts (exp01-recovered-acs)) (Y Z))
+!(test (acs-catalysts (exp01-recovered-acs)) (Z Y))
 
 !(test (acs-status (exp01-recovered-acs)) active)
 

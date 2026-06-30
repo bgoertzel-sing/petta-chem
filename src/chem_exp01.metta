@@ -8,6 +8,11 @@
 ; Atom conventions added here:
 ;   (acs-candidate <id> <rules> <products> <catalysts> <status>)
 ;   (ablation <acs-id> <removed-rule-id> <baseline> <ablated> <drop>)
+;
+; The scanner remains deliberately conservative: for now an active ACS/RAF-like
+; pair requires reciprocal product-as-catalyst closure between two rules.  The
+; scan keeps rejected pairs explicit so fixture tests can prove distractors and
+; non-catalytic cycles are inspected, not silently ignored.
 
 !(import! &self chem_exp00.metta)
 
@@ -58,6 +63,38 @@
       $rule-1)
    (product-catalyst-closed-2? $rule-0 $rule-1))
 
+(= (acs-status-for-pair $rule-0 $rule-1)
+   (if (useful-acs-2? $rule-0 $rule-1)
+       active
+       rejected))
+
+(= (scan-rule-pair $id
+                   (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+                   (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1))
+   (make-acs-candidate
+     $id
+     ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1))
+     ($product-0 $product-1)
+     ($catalyst-0 $catalyst-1)
+     (acs-status-for-pair
+       (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1))))
+
+(= (candidate-rule-set-closed-2? ($rule-0 $rule-1))
+   (useful-acs-2? $rule-0 $rule-1))
+
+(= (scan-rule-set-2 $id ($rule-0 $rule-1))
+   (scan-rule-pair $id $rule-0 $rule-1))
+
+(= (scan-rule-pairs-4 ($rule-0 $rule-1 $rule-2 $rule-3))
+   ((scan-rule-pair pair-0-1 $rule-0 $rule-1)
+    (scan-rule-pair pair-0-2 $rule-0 $rule-2)
+    (scan-rule-pair pair-0-3 $rule-0 $rule-3)
+    (scan-rule-pair pair-1-2 $rule-1 $rule-2)
+    (scan-rule-pair pair-1-3 $rule-1 $rule-3)
+    (scan-rule-pair pair-2-3 $rule-2 $rule-3)))
+
 (= (productive-rule-count-2 $rule-0 $rule-1)
    (if (useful-acs-2? $rule-0 $rule-1)
        2
@@ -100,13 +137,12 @@
     (exp01-distractor-rule rd1)
     (exp01-planted-rule rp1)))
 
-(= (recover-exp01-planted-acs $rules)
-   (make-acs-candidate
-     exp01-planted
-     ((exp01-planted-rule rp0) (exp01-planted-rule rp1))
-     (Y Z)
-     (Y Z)
-     active))
+(= (recover-exp01-planted-acs
+      ($rule-0 $rule-1 $rule-2 $rule-3))
+   (scan-rule-pair exp01-planted $rule-1 $rule-3))
+
+(= (exp01-scanned-pairs)
+   (scan-rule-pairs-4 (exp01-rules-with-distractors)))
 
 (= (exp01-recovered-acs)
    (recover-exp01-planted-acs (exp01-rules-with-distractors)))
