@@ -8,6 +8,7 @@
 ; Atom conventions added here:
 ;   (acs-candidate <id> <rules> <products> <catalysts> <status>)
 ;   (ablation <acs-id> <removed-rule-id> <baseline> <ablated> <drop>)
+;   (productivity-trace <id> <replayed-traces>)
 ;
 ; The scanner remains deliberately conservative: for now an active ACS/RAF-like
 ; pair requires reciprocal product-as-catalyst closure between two rules.  The
@@ -45,6 +46,99 @@
 
 (= (ablation-drop (ablation $acs-id $removed-rule-id $baseline $ablated $drop))
    $drop)
+
+(= (make-productivity-trace $id $traces)
+   (productivity-trace $id $traces))
+
+(= (productivity-trace-id (productivity-trace $id $traces))
+   $id)
+
+(= (productivity-trace-traces (productivity-trace $id $traces))
+   $traces)
+
+(= (productivity-trace-count (productivity-trace $id ()))
+   0)
+
+(= (productivity-trace-count (productivity-trace $id ($trace-0)))
+   1)
+
+(= (productivity-trace-count (productivity-trace $id ($trace-0 $trace-1)))
+   2)
+
+(= (make-productivity-trace-1 $id $trace-0)
+   (make-productivity-trace $id ($trace-0)))
+
+(= (make-productivity-trace-2 $id $trace-0 $trace-1)
+   (make-productivity-trace $id ($trace-0 $trace-1)))
+
+(= (rule-productivity-trace
+      $id
+      (rule $rule-id $a $b $product $catalyst)
+      (state $tick $seed
+             (mol $a $a-count)
+             (mol $b $b-count)
+             (mol $product $product-count)
+             (mol $catalyst $catalyst-count)))
+   (make-productivity-trace-1
+     $id
+     (trace
+       (state (+ $tick 1) $seed
+              (mol $a (- $a-count 1))
+              (mol $b (- $b-count 1))
+              (mol $product (+ $product-count 1))
+              (mol $catalyst $catalyst-count))
+       (event $tick $rule-id $a $b $product $catalyst))))
+
+(= (acs-productivity-trace-2
+      $id
+      (rule $rule-id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (state $tick-0 $seed-0
+             (mol $a-0 $a-count-0)
+             (mol $b-0 $b-count-0)
+             (mol $product-0 $product-count-0)
+             (mol $catalyst-0 $catalyst-count-0))
+      (rule $rule-id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (state $tick-1 $seed-1
+             (mol $a-1 $a-count-1)
+             (mol $b-1 $b-count-1)
+             (mol $product-1 $product-count-1)
+             (mol $catalyst-1 $catalyst-count-1)))
+   (make-productivity-trace-2
+     $id
+     (trace
+       (state (+ $tick-0 1) $seed-0
+              (mol $a-0 (- $a-count-0 1))
+              (mol $b-0 (- $b-count-0 1))
+              (mol $product-0 (+ $product-count-0 1))
+              (mol $catalyst-0 $catalyst-count-0))
+       (event $tick-0 $rule-id-0 $a-0 $b-0 $product-0 $catalyst-0))
+     (trace
+       (state (+ $tick-1 1) $seed-1
+              (mol $a-1 (- $a-count-1 1))
+              (mol $b-1 (- $b-count-1 1))
+              (mol $product-1 (+ $product-count-1 1))
+              (mol $catalyst-1 $catalyst-count-1))
+       (event $tick-1 $rule-id-1 $a-1 $b-1 $product-1 $catalyst-1))))
+
+(= (ablate-productivity-trace-2
+      $id
+      $removed-rule-id
+      (rule $rule-id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      $state-0
+      $rule-1
+      $state-1)
+   (if (== $removed-rule-id $rule-id-0)
+       (rule-productivity-trace $id $rule-1 $state-1)
+       (rule-productivity-trace
+         $id
+         (rule $rule-id-0 $a-0 $b-0 $product-0 $catalyst-0)
+         $state-0)))
+
+(= (trace-productivity-ablation $acs-id $removed-rule-id $baseline-trace $ablated-trace)
+   (make-ablation $acs-id
+                  $removed-rule-id
+                  (productivity-trace-count $baseline-trace)
+                  (productivity-trace-count $ablated-trace)))
 
 (= (product-catalyst-closed-2?
       (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
@@ -170,16 +264,38 @@
               (exp01-noncatalytic-cycle-rule rc1))
             False)))
 
-(= (exp01-baseline-productivity)
-   (productive-rule-count-2
-     (exp01-planted-rule rp0)
-     (exp01-planted-rule rp1)))
+(= (exp01-rp0-replay-state)
+   (state 0 seed-7 (mol Food 2) (mol X 1) (mol Y 0) (mol Z 1)))
 
-(= (exp01-ablate-rp0)
-   (ablation-productivity-drop-2
+(= (exp01-rp1-replay-state)
+   (state 1 seed-7 (mol Food 1) (mol W 1) (mol Z 0) (mol Y 1)))
+
+(= (exp01-baseline-productivity-trace)
+   (acs-productivity-trace-2
+     exp01-planted-baseline
+     (exp01-planted-rule rp0)
+     (exp01-rp0-replay-state)
+     (exp01-planted-rule rp1)
+     (exp01-rp1-replay-state)))
+
+(= (exp01-ablate-rp0-productivity-trace)
+   (ablate-productivity-trace-2
+     exp01-planted-ablate-rp0
      rp0
      (exp01-planted-rule rp0)
-     (exp01-planted-rule rp1)))
+     (exp01-rp0-replay-state)
+     (exp01-planted-rule rp1)
+     (exp01-rp1-replay-state)))
+
+(= (exp01-baseline-productivity)
+   (productivity-trace-count (exp01-baseline-productivity-trace)))
+
+(= (exp01-ablate-rp0)
+   (trace-productivity-ablation
+     exp01-planted
+     rp0
+     (exp01-baseline-productivity-trace)
+     (exp01-ablate-rp0-productivity-trace)))
 
 (= (exp01-ablation-drop-positive?)
    (> (ablation-drop (exp01-ablate-rp0)) 0))

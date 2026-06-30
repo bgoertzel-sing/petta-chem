@@ -127,6 +127,33 @@
 
 !(test (exp01-noncatalytic-cycle-rejected?) True)
 
+!(test (exp01-rp0-replay-state)
+       (state 0 seed-7 (mol Food 2) (mol X 1) (mol Y 0) (mol Z 1)))
+
+!(test (exp01-rp1-replay-state)
+       (state 1 seed-7 (mol Food 1) (mol W 1) (mol Z 0) (mol Y 1)))
+
+!(test (exp01-baseline-productivity-trace)
+       (productivity-trace
+         exp01-planted-baseline
+         ((trace
+            (state 1 seed-7 (mol Food 1) (mol X 0) (mol Y 1) (mol Z 1))
+            (event 0 rp0 Food X Y Z))
+          (trace
+            (state 2 seed-7 (mol Food 0) (mol W 0) (mol Z 1) (mol Y 1))
+            (event 1 rp1 Food W Z Y)))))
+
+!(test (productivity-trace-count (exp01-baseline-productivity-trace)) 2)
+
+!(test (exp01-ablate-rp0-productivity-trace)
+       (productivity-trace
+         exp01-planted-ablate-rp0
+         ((trace
+            (state 2 seed-7 (mol Food 0) (mol W 0) (mol Z 1) (mol Y 1))
+            (event 1 rp1 Food W Z Y)))))
+
+!(test (productivity-trace-count (exp01-ablate-rp0-productivity-trace)) 1)
+
 !(test (exp01-baseline-productivity) 2)
 
 !(test (exp01-ablate-rp0)

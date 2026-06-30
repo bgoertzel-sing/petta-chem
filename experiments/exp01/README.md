@@ -9,7 +9,7 @@ rp0: Food + X --Z--> Y
 rp1: Food + W --Y--> Z
 ```
 
-The products `{Y, Z}` are also the cross-catalysts `{Z, Y}`, so the detector can recover a conservative `acs-candidate`. The first scanner enumerates all rule pairs in the four-rule planted fixture, marks only reciprocal product-as-catalyst closure as `active`, and keeps rejected distractor pairs explicit. A non-catalytic molecule cycle is still explicitly rejected. A first ablation check removes one planted rule and verifies productivity drops from `2` to `1`.
+The products `{Y, Z}` are also the cross-catalysts `{Z, Y}`, so the detector can recover a conservative `acs-candidate`. The first scanner enumerates all rule pairs in the four-rule planted fixture, marks only reciprocal product-as-catalyst closure as `active`, and keeps rejected distractor pairs explicit. A non-catalytic molecule cycle is still explicitly rejected. The ablation check now derives productivity from replayed PeTTa transition traces: baseline two-rule productivity has two trace events, removing one planted rule leaves one trace event, and the drop remains `1`.
 
 Run:
 
