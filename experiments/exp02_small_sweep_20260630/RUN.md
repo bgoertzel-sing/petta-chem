@@ -18,8 +18,10 @@ scripts/run_exp02.sh
 - SWI-Prolog: local `projects/omegaclaw/local/swipl-9.3.36`
 - Kernel/config source: `src/chem_exp02.metta`
 - Smoke/run-record source: `experiments/exp02/smoke.metta`
-- `src/chem_exp02.metta` SHA-256: `7d20716e1efff4eebcd9411af03b187d05fb9db54216301e9d6ba7bef6e88c15`
-- `experiments/exp02/smoke.metta` SHA-256: `e852cc7f4fa8fac29eb692962038b9472dad6d565e86ea6d9c68da577eac80e9`
+- `src/chem_exp02.metta` SHA-256: `5ebdb65162058f70d1dda8e7d9769f424b9e20f04b0d7996a764e91cc05c8669`
+- `experiments/exp02/smoke.metta` SHA-256: `4368026030f8be797b1c40a340f13c10e150199b66cedfed3cf05120b7563144`
+- `scripts/write_exp02_contract_files.py` SHA-256: `ebdeb1c459588082900af6c03ab4499f4aa149f3ca898cfd3e40e64713131aea`
+- `scripts/test_exp02_contract_files.sh` SHA-256: `a3bccd3d020661383cd76888cc944e22b772f85102fc94cb8c8941ff0387ebf4`
 
 ## Seed list
 
@@ -48,10 +50,16 @@ scripts/run_exp02.sh
 The small exp02 sweep passed across seed-7/four-rule, seed-11/six-rule, and component-generated seed-13/eight-rule parameter points. The seed-derived polymer fixtures contain conservative reciprocal product-as-catalyst pairs, while shuffled-catalyst and no-catalysis controls contain zero active ACS pairs. This validates broader exp02 control/run-record plumbing only; larger less-fixture-like sweeps are still needed before making any spontaneous-ACS claim.
 ## Serialized run-contract files
 
-After the PeTTa smoke passed, `scripts/write_exp02_contract_files.sh` wrote the tested run-contract atoms into per-run directories:
+After the PeTTa smoke passed, `scripts/write_exp02_contract_files.sh` serializes all nine tested run-contract records into per-run directories:
 
 - `runs/exp02-small-random/`
 - `runs/exp02-small-shuffled/`
 - `runs/exp02-small-no-catalysis/`
+- `runs/exp02-seed-11-rules-6-random/`
+- `runs/exp02-seed-11-rules-6-shuffled/`
+- `runs/exp02-seed-11-rules-6-no-catalysis/`
+- `runs/exp02-seed-13-rules-8-random/`
+- `runs/exp02-seed-13-rules-8-shuffled/`
+- `runs/exp02-seed-13-rules-8-no-catalysis/`
 
-Each directory follows the v0.1 file convention: `CONFIG.metta`, `MANIFEST.metta`, `EVENTS.metta`, `ABUNDANCES.metta`, `METRICS.metta`, `ACS.metta`, `ABLATIONS.metta`, and `SUMMARY.metta`. The host script only serializes atoms already represented in PeTTa; chemistry and ACS detection remain in `.metta` files.
+Each directory follows the v0.1 file convention: `CONFIG.metta`, `MANIFEST.metta`, `EVENTS.metta`, `ABUNDANCES.metta`, `METRICS.metta`, `ACS.metta`, `ABLATIONS.metta`, and `SUMMARY.metta`. The host script only serializes atoms already represented/tested in PeTTa; chemistry and ACS detection remain in `.metta` files.

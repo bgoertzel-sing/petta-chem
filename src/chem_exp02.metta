@@ -683,6 +683,26 @@
      ()
      (exp02-run-summary seed-13-no-catalysis)))
 
+(= (make-exp02-sweep-point $seed $rule-count $families)
+   (exp02-sweep-point $seed $rule-count $families))
+
+(= (exp02-sweep-point-seed (exp02-sweep-point $seed $rule-count $families))
+   $seed)
+
+(= (exp02-sweep-point-rule-count (exp02-sweep-point $seed $rule-count $families))
+   $rule-count)
+
+(= (exp02-sweep-point-families (exp02-sweep-point $seed $rule-count $families))
+   $families)
+
+(= (exp02-family-keys)
+   (random-polymer shuffled-catalysts no-catalysis))
+
+(= (exp02-systematic-sweep-points)
+   ((make-exp02-sweep-point seed-7 4 (exp02-family-keys))
+    (make-exp02-sweep-point seed-11 6 (exp02-family-keys))
+    (make-exp02-sweep-point seed-13 8 (exp02-family-keys))))
+
 (= (exp02-broadened-run-records)
    ((exp02-run-record random)
     (exp02-run-record shuffled)
@@ -694,9 +714,23 @@
     (exp02-run-record seed-13-shuffled)
     (exp02-run-record seed-13-no-catalysis)))
 
+(= (exp02-systematic-sweep-run-records)
+   (exp02-broadened-run-records))
+
+(= (exp02-systematic-sweep-record-count)
+   9)
+
+(= (exp02-systematic-sweep-complete?)
+   (and (== (exp02-systematic-sweep-record-count) 9)
+        (and (== (exp02-sweep-point-rule-count (make-exp02-sweep-point seed-13 8 (exp02-family-keys))) 8)
+             (and (exp02-small-sweep-discriminates?)
+                  (and (exp02-seed-11-sweep-discriminates?)
+                       (exp02-seed-13-sweep-discriminates?))))))
+
 (= (exp02-broadened-sweep-complete?)
    (and (exp02-parameterized-sweep-complete?)
         (and (run-record-passed? (exp02-run-record seed-13-random))
              (and (run-record-passed? (exp02-run-record seed-13-shuffled))
                   (and (run-record-passed? (exp02-run-record seed-13-no-catalysis))
-                       (exp02-seed-13-sweep-discriminates?))))))
+                       (and (exp02-seed-13-sweep-discriminates?)
+                            (exp02-systematic-sweep-complete?)))))))

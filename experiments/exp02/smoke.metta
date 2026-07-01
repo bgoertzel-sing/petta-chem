@@ -215,4 +215,13 @@
 
 !(test (run-record-ids-consistent? (exp02-run-record seed-13-no-catalysis)) True)
 
+!(test (exp02-systematic-sweep-points)
+       ((exp02-sweep-point seed-7 4 (random-polymer shuffled-catalysts no-catalysis))
+        (exp02-sweep-point seed-11 6 (random-polymer shuffled-catalysts no-catalysis))
+        (exp02-sweep-point seed-13 8 (random-polymer shuffled-catalysts no-catalysis))))
+
+!(test (exp02-systematic-sweep-record-count) 9)
+
+!(test (exp02-systematic-sweep-complete?) True)
+
 !(test (exp02-broadened-sweep-complete?) True)

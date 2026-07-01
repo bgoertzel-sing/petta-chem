@@ -32,6 +32,6 @@ scripts/test_exp02_contract_files.sh
 
 `experiments/run_contract/smoke.metta` defines the version-0.1 consequential-run output contract in PeTTa-shaped atoms before exp02 sweeps: config, manifest/provenance, events, abundance snapshots, metrics, ACS candidates, ablations, and summary/replay status.
 
-`experiments/exp02/smoke.metta` runs the first parameterized deterministic random-polymer control sweep in PeTTa: seed-7/four-rule, seed-11/six-rule, and component-generated seed-13/eight-rule sets are compared with shuffled-catalyst and no-catalysis controls, all rule pairs are scanned by the conservative ACS detector, and each run is represented as a run-contract record.
+`experiments/exp02/smoke.metta` runs the first systematic deterministic random-polymer control sweep in PeTTa: seed-7/four-rule, seed-11/six-rule, and component-generated seed-13/eight-rule points are represented as explicit `exp02-sweep-point` atoms, compared with shuffled-catalyst and no-catalysis controls, scanned by the conservative ACS detector, and recorded as run-contract records.
 
-`scripts/write_exp02_contract_files.sh` is a thin host harness that serializes the original PeTTa-tested seed-7 exp02 run-contract atoms into the v0.1 per-run file convention under `experiments/exp02_small_sweep_20260630/runs/`; it does not implement chemistry logic.
+`scripts/write_exp02_contract_files.sh` is a thin host harness that serializes all nine PeTTa-tested exp02 run-contract records into the v0.1 per-run file convention under `experiments/exp02_small_sweep_20260630/runs/`; it does not drive chemistry logic.
