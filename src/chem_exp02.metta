@@ -683,6 +683,171 @@
      ()
      (exp02-run-summary seed-13-no-catalysis)))
 
+; ----- fourth exp02 parameter point: seed-to-component generation seam -----
+;
+; seed-17 introduces a less fixture-like PeTTa-side generation seam.  The seed
+; maps to compact `rule-components` atoms, and all three families are generated
+; through the same component-to-rule function before ACS scanning.  This is
+; still a deterministic smoke sweep, not an emergence claim.
+
+(= (make-exp02-rule-components $seed $rule-id $a $b $product $random-catalyst $shuffled-catalyst)
+   (exp02-rule-components $seed $rule-id $a $b $product $random-catalyst $shuffled-catalyst))
+
+(= (exp02-rule-components-seed
+      (exp02-rule-components $seed $rule-id $a $b $product $random-catalyst $shuffled-catalyst))
+   $seed)
+
+(= (exp02-rule-components-id
+      (exp02-rule-components $seed $rule-id $a $b $product $random-catalyst $shuffled-catalyst))
+   $rule-id)
+
+(= (exp02-rule-components-product
+      (exp02-rule-components $seed $rule-id $a $b $product $random-catalyst $shuffled-catalyst))
+   $product)
+
+(= (exp02-seed-rule-components seed-17 rr0)
+   (make-exp02-rule-components seed-17 rr0 S0 S1 S01 S10 S2))
+(= (exp02-seed-rule-components seed-17 rr1)
+   (make-exp02-rule-components seed-17 rr1 S2 S3 S10 S01 S4))
+(= (exp02-seed-rule-components seed-17 rr2)
+   (make-exp02-rule-components seed-17 rr2 S4 S5 S45 S54 S6))
+(= (exp02-seed-rule-components seed-17 rr3)
+   (make-exp02-rule-components seed-17 rr3 S6 S7 S54 S45 S8))
+(= (exp02-seed-rule-components seed-17 rr4)
+   (make-exp02-rule-components seed-17 rr4 S8 S9 S89 S2 S10))
+(= (exp02-seed-rule-components seed-17 rr5)
+   (make-exp02-rule-components seed-17 rr5 S0 S5 S05 S3 S01))
+(= (exp02-seed-rule-components seed-17 rr6)
+   (make-exp02-rule-components seed-17 rr6 S1 S6 S16 S5 S45))
+(= (exp02-seed-rule-components seed-17 rr7)
+   (make-exp02-rule-components seed-17 rr7 S2 S7 S27 S9 S54))
+
+(= (exp02-component-catalyst random-polymer
+      (exp02-rule-components $seed $rule-id $a $b $product $random-catalyst $shuffled-catalyst))
+   $random-catalyst)
+
+(= (exp02-component-catalyst shuffled-catalysts
+      (exp02-rule-components $seed $rule-id $a $b $product $random-catalyst $shuffled-catalyst))
+   $shuffled-catalyst)
+
+(= (exp02-component-catalyst no-catalysis
+      (exp02-rule-components $seed $rule-id $a $b $product $random-catalyst $shuffled-catalyst))
+   None)
+
+(= (exp02-generated-rule
+      $family
+      (exp02-rule-components $seed $rule-id $a $b $product $random-catalyst $shuffled-catalyst))
+   (rule $rule-id
+         $a
+         $b
+         $product
+         (exp02-component-catalyst
+           $family
+           (exp02-rule-components $seed $rule-id $a $b $product $random-catalyst $shuffled-catalyst))))
+
+(= (exp02-generated-rules-8 seed-17 $family)
+   ((exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr0))
+    (exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr1))
+    (exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr2))
+    (exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr3))
+    (exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr4))
+    (exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr5))
+    (exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr6))
+    (exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr7))))
+
+(= (exp02-seed-17-acs-candidates $family)
+   (exp02-scan-rules-8 (exp02-generated-rules-8 seed-17 $family)))
+
+(= (exp02-seed-17-active-count $family)
+   (active-acs-count-28 (exp02-seed-17-acs-candidates $family)))
+
+(= (exp02-seed-17-sweep-discriminates?)
+   (and (> (exp02-seed-17-active-count random-polymer)
+           (exp02-seed-17-active-count shuffled-catalysts))
+        (> (exp02-seed-17-active-count random-polymer)
+           (exp02-seed-17-active-count no-catalysis))))
+
+(= (exp02-run-config seed-17-random)
+   (make-run-config exp02-seed-17-rules-8-random exp02 (seed-17) 1 (candidate-cap 8 1) random-polymer))
+
+(= (exp02-run-config seed-17-shuffled)
+   (make-run-config exp02-seed-17-rules-8-shuffled exp02 (seed-17) 1 (candidate-cap 8 1) shuffled-catalysts))
+
+(= (exp02-run-config seed-17-no-catalysis)
+   (make-run-config exp02-seed-17-rules-8-no-catalysis exp02 (seed-17) 1 (candidate-cap 8 1) no-catalysis))
+
+(= (exp02-run-manifest seed-17-random)
+   (make-run-manifest exp02-seed-17-rules-8-random config-hash-exp02-seed-17-rules-8-random petta-local swi-9-3-36 scripts-run-exp02-sh 0))
+
+(= (exp02-run-manifest seed-17-shuffled)
+   (make-run-manifest exp02-seed-17-rules-8-shuffled config-hash-exp02-seed-17-rules-8-shuffled petta-local swi-9-3-36 scripts-run-exp02-sh 0))
+
+(= (exp02-run-manifest seed-17-no-catalysis)
+   (make-run-manifest exp02-seed-17-rules-8-no-catalysis config-hash-exp02-seed-17-rules-8-no-catalysis petta-local swi-9-3-36 scripts-run-exp02-sh 0))
+
+(= (exp02-metrics seed-17-random)
+   ((metric active-acs-count exp02-seed-17-rules-8-random (exp02-seed-17-active-count random-polymer))
+    (metric control-family exp02-seed-17-rules-8-random random-polymer)
+    (metric rule-count exp02-seed-17-rules-8-random 8)
+    (metric generation-seam exp02-seed-17-rules-8-random seed-to-components)))
+
+(= (exp02-metrics seed-17-shuffled)
+   ((metric active-acs-count exp02-seed-17-rules-8-shuffled (exp02-seed-17-active-count shuffled-catalysts))
+    (metric control-family exp02-seed-17-rules-8-shuffled shuffled-catalysts)
+    (metric rule-count exp02-seed-17-rules-8-shuffled 8)
+    (metric generation-seam exp02-seed-17-rules-8-shuffled seed-to-components)))
+
+(= (exp02-metrics seed-17-no-catalysis)
+   ((metric active-acs-count exp02-seed-17-rules-8-no-catalysis (exp02-seed-17-active-count no-catalysis))
+    (metric control-family exp02-seed-17-rules-8-no-catalysis no-catalysis)
+    (metric rule-count exp02-seed-17-rules-8-no-catalysis 8)
+    (metric generation-seam exp02-seed-17-rules-8-no-catalysis seed-to-components)))
+
+(= (exp02-run-summary seed-17-random)
+   (make-run-summary exp02-seed-17-rules-8-random passed seed-17-rules-8-random-has-two-active-pairs True))
+
+(= (exp02-run-summary seed-17-shuffled)
+   (make-run-summary exp02-seed-17-rules-8-shuffled passed seed-17-rules-8-shuffled-control-has-zero-active-pairs True))
+
+(= (exp02-run-summary seed-17-no-catalysis)
+   (make-run-summary exp02-seed-17-rules-8-no-catalysis passed seed-17-rules-8-no-catalysis-control-has-zero-active-pairs True))
+
+(= (exp02-run-record seed-17-random)
+   (make-run-record
+     exp02-seed-17-rules-8-random
+     (exp02-run-config seed-17-random)
+     (exp02-run-manifest seed-17-random)
+     ()
+     (exp02-initial-abundances)
+     (exp02-metrics seed-17-random)
+     (exp02-seed-17-acs-candidates random-polymer)
+     ()
+     (exp02-run-summary seed-17-random)))
+
+(= (exp02-run-record seed-17-shuffled)
+   (make-run-record
+     exp02-seed-17-rules-8-shuffled
+     (exp02-run-config seed-17-shuffled)
+     (exp02-run-manifest seed-17-shuffled)
+     ()
+     (exp02-initial-abundances)
+     (exp02-metrics seed-17-shuffled)
+     (exp02-seed-17-acs-candidates shuffled-catalysts)
+     ()
+     (exp02-run-summary seed-17-shuffled)))
+
+(= (exp02-run-record seed-17-no-catalysis)
+   (make-run-record
+     exp02-seed-17-rules-8-no-catalysis
+     (exp02-run-config seed-17-no-catalysis)
+     (exp02-run-manifest seed-17-no-catalysis)
+     ()
+     (exp02-initial-abundances)
+     (exp02-metrics seed-17-no-catalysis)
+     (exp02-seed-17-acs-candidates no-catalysis)
+     ()
+     (exp02-run-summary seed-17-no-catalysis)))
+
 (= (make-exp02-sweep-point $seed $rule-count $families)
    (exp02-sweep-point $seed $rule-count $families))
 
@@ -701,7 +866,8 @@
 (= (exp02-systematic-sweep-points)
    ((make-exp02-sweep-point seed-7 4 (exp02-family-keys))
     (make-exp02-sweep-point seed-11 6 (exp02-family-keys))
-    (make-exp02-sweep-point seed-13 8 (exp02-family-keys))))
+    (make-exp02-sweep-point seed-13 8 (exp02-family-keys))
+    (make-exp02-sweep-point seed-17 8 (exp02-family-keys))))
 
 (= (exp02-broadened-run-records)
    ((exp02-run-record random)
@@ -712,25 +878,33 @@
     (exp02-run-record seed-11-no-catalysis)
     (exp02-run-record seed-13-random)
     (exp02-run-record seed-13-shuffled)
-    (exp02-run-record seed-13-no-catalysis)))
+    (exp02-run-record seed-13-no-catalysis)
+    (exp02-run-record seed-17-random)
+    (exp02-run-record seed-17-shuffled)
+    (exp02-run-record seed-17-no-catalysis)))
 
 (= (exp02-systematic-sweep-run-records)
    (exp02-broadened-run-records))
 
 (= (exp02-systematic-sweep-record-count)
-   9)
+   12)
 
 (= (exp02-systematic-sweep-complete?)
-   (and (== (exp02-systematic-sweep-record-count) 9)
+   (and (== (exp02-systematic-sweep-record-count) 12)
         (and (== (exp02-sweep-point-rule-count (make-exp02-sweep-point seed-13 8 (exp02-family-keys))) 8)
              (and (exp02-small-sweep-discriminates?)
                   (and (exp02-seed-11-sweep-discriminates?)
-                       (exp02-seed-13-sweep-discriminates?))))))
+                       (and (exp02-seed-13-sweep-discriminates?)
+                            (exp02-seed-17-sweep-discriminates?)))))))
 
 (= (exp02-broadened-sweep-complete?)
    (and (exp02-parameterized-sweep-complete?)
         (and (run-record-passed? (exp02-run-record seed-13-random))
              (and (run-record-passed? (exp02-run-record seed-13-shuffled))
                   (and (run-record-passed? (exp02-run-record seed-13-no-catalysis))
-                       (and (exp02-seed-13-sweep-discriminates?)
-                            (exp02-systematic-sweep-complete?)))))))
+                       (and (run-record-passed? (exp02-run-record seed-17-random))
+                            (and (run-record-passed? (exp02-run-record seed-17-shuffled))
+                                 (and (run-record-passed? (exp02-run-record seed-17-no-catalysis))
+                                      (and (exp02-seed-13-sweep-discriminates?)
+                                           (and (exp02-seed-17-sweep-discriminates?)
+                                                (exp02-systematic-sweep-complete?)))))))))))

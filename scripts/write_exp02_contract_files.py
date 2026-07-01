@@ -23,6 +23,7 @@ ABUNDANCES_BY_SEED = {
     "seed-7": "(abundance-snapshot 0 ((mol P0 2) (mol P1 1) (mol P2 1) (mol P3 1) (mol P01 0) (mol P10 1)))\n",
     "seed-11": "(abundance-snapshot 0 ((mol Q0 2) (mol Q1 1) (mol Q2 1) (mol Q3 1) (mol Q01 0) (mol Q10 1)))\n",
     "seed-13": "(abundance-snapshot 0 ((mol R0 2) (mol R1 1) (mol R2 1) (mol R3 1) (mol R01 0) (mol R10 1)))\n",
+    "seed-17": "(abundance-snapshot 0 ((mol S0 2) (mol S1 1) (mol S2 1) (mol S3 1) (mol S01 0) (mol S10 1)))\n",
 }
 
 RULES = {
@@ -98,12 +99,43 @@ RULES = {
         ("rr6", "R1", "R6", "R16", "None"),
         ("rr7", "R2", "R7", "R27", "None"),
     ],
+    ("seed-17", "random-polymer"): [
+        ("rr0", "S0", "S1", "S01", "S10"),
+        ("rr1", "S2", "S3", "S10", "S01"),
+        ("rr2", "S4", "S5", "S45", "S54"),
+        ("rr3", "S6", "S7", "S54", "S45"),
+        ("rr4", "S8", "S9", "S89", "S2"),
+        ("rr5", "S0", "S5", "S05", "S3"),
+        ("rr6", "S1", "S6", "S16", "S5"),
+        ("rr7", "S2", "S7", "S27", "S9"),
+    ],
+    ("seed-17", "shuffled-catalysts"): [
+        ("rr0", "S0", "S1", "S01", "S2"),
+        ("rr1", "S2", "S3", "S10", "S4"),
+        ("rr2", "S4", "S5", "S45", "S6"),
+        ("rr3", "S6", "S7", "S54", "S8"),
+        ("rr4", "S8", "S9", "S89", "S10"),
+        ("rr5", "S0", "S5", "S05", "S01"),
+        ("rr6", "S1", "S6", "S16", "S45"),
+        ("rr7", "S2", "S7", "S27", "S54"),
+    ],
+    ("seed-17", "no-catalysis"): [
+        ("rr0", "S0", "S1", "S01", "None"),
+        ("rr1", "S2", "S3", "S10", "None"),
+        ("rr2", "S4", "S5", "S45", "None"),
+        ("rr3", "S6", "S7", "S54", "None"),
+        ("rr4", "S8", "S9", "S89", "None"),
+        ("rr5", "S0", "S5", "S05", "None"),
+        ("rr6", "S1", "S6", "S16", "None"),
+        ("rr7", "S2", "S7", "S27", "None"),
+    ],
 }
 
 ACTIVE_PAIRS = {
     ("seed-7", "random-polymer"): {(0, 1)},
     ("seed-11", "random-polymer"): {(0, 1), (2, 3)},
     ("seed-13", "random-polymer"): {(0, 1), (2, 3)},
+    ("seed-17", "random-polymer"): {(0, 1), (2, 3)},
 }
 
 EVENTS = {
@@ -130,7 +162,7 @@ def count_word(count: int) -> str:
 
 def build_specs() -> list[RunSpec]:
     specs: list[RunSpec] = []
-    for seed, count in [("seed-7", 4), ("seed-11", 6), ("seed-13", 8)]:
+    for seed, count in [("seed-7", 4), ("seed-11", 6), ("seed-13", 8), ("seed-17", 8)]:
         for family in ["random-polymer", "shuffled-catalysts", "no-catalysis"]:
             suffix = control_suffix(family)
             if seed == "seed-7":
@@ -174,11 +206,14 @@ def acs_atoms(seed: str, family: str) -> str:
 
 def metric_atoms(spec: RunSpec) -> str:
     active = len(ACTIVE_PAIRS.get((spec.seed, spec.family), set()))
-    return (
+    body = (
         f"(metric active-acs-count {spec.run_id} {active})\n"
         f"(metric control-family {spec.run_id} {spec.family})\n"
         f"(metric rule-count {spec.run_id} {spec.rule_count})\n"
     )
+    if spec.seed == "seed-17":
+        body += f"(metric generation-seam {spec.run_id} seed-to-components)\n"
+    return body
 
 
 def write_file(path: Path, body: str) -> None:

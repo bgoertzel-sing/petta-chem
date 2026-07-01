@@ -215,12 +215,64 @@
 
 !(test (run-record-ids-consistent? (exp02-run-record seed-13-no-catalysis)) True)
 
+!(test (exp02-seed-rule-components seed-17 rr0)
+       (exp02-rule-components seed-17 rr0 S0 S1 S01 S10 S2))
+
+!(test (exp02-rule-components-product (exp02-seed-rule-components seed-17 rr0)) S01)
+
+!(test (exp02-generated-rules-8 seed-17 random-polymer)
+       ((rule rr0 S0 S1 S01 S10)
+        (rule rr1 S2 S3 S10 S01)
+        (rule rr2 S4 S5 S45 S54)
+        (rule rr3 S6 S7 S54 S45)
+        (rule rr4 S8 S9 S89 S2)
+        (rule rr5 S0 S5 S05 S3)
+        (rule rr6 S1 S6 S16 S5)
+        (rule rr7 S2 S7 S27 S9)))
+
+!(test (exp02-generated-rules-8 seed-17 shuffled-catalysts)
+       ((rule rr0 S0 S1 S01 S2)
+        (rule rr1 S2 S3 S10 S4)
+        (rule rr2 S4 S5 S45 S6)
+        (rule rr3 S6 S7 S54 S8)
+        (rule rr4 S8 S9 S89 S10)
+        (rule rr5 S0 S5 S05 S01)
+        (rule rr6 S1 S6 S16 S45)
+        (rule rr7 S2 S7 S27 S54)))
+
+!(test (exp02-seed-17-active-count random-polymer) 2)
+
+!(test (exp02-seed-17-active-count shuffled-catalysts) 0)
+
+!(test (exp02-seed-17-active-count no-catalysis) 0)
+
+!(test (exp02-seed-17-sweep-discriminates?) True)
+
+!(test (run-record-passed? (exp02-run-record seed-17-random)) True)
+
+!(test (run-record-passed? (exp02-run-record seed-17-shuffled)) True)
+
+!(test (run-record-passed? (exp02-run-record seed-17-no-catalysis)) True)
+
+!(test (run-record-ids-consistent? (exp02-run-record seed-17-random)) True)
+
+!(test (run-record-ids-consistent? (exp02-run-record seed-17-shuffled)) True)
+
+!(test (run-record-ids-consistent? (exp02-run-record seed-17-no-catalysis)) True)
+
+!(test (exp02-metrics seed-17-random)
+       ((metric active-acs-count exp02-seed-17-rules-8-random 2)
+        (metric control-family exp02-seed-17-rules-8-random random-polymer)
+        (metric rule-count exp02-seed-17-rules-8-random 8)
+        (metric generation-seam exp02-seed-17-rules-8-random seed-to-components)))
+
 !(test (exp02-systematic-sweep-points)
        ((exp02-sweep-point seed-7 4 (random-polymer shuffled-catalysts no-catalysis))
         (exp02-sweep-point seed-11 6 (random-polymer shuffled-catalysts no-catalysis))
-        (exp02-sweep-point seed-13 8 (random-polymer shuffled-catalysts no-catalysis))))
+        (exp02-sweep-point seed-13 8 (random-polymer shuffled-catalysts no-catalysis))
+        (exp02-sweep-point seed-17 8 (random-polymer shuffled-catalysts no-catalysis))))
 
-!(test (exp02-systematic-sweep-record-count) 9)
+!(test (exp02-systematic-sweep-record-count) 12)
 
 !(test (exp02-systematic-sweep-complete?) True)
 
