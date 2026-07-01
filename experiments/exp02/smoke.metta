@@ -353,6 +353,14 @@
         (active-pair-rate planted-reciprocal-pair-control 4 12)
         (active-pair-rate generated-unplanted-control 0 6)))
 
+!(test (exp02-sweep-kind-summary-report)
+       ((exp02-summary-row planted-reciprocal-pair-control 4 12 4 7 4 (active-pair-rate planted-reciprocal-pair-control 4 12))
+        (exp02-summary-row generated-unplanted-control 2 6 0 0 0 (active-pair-rate generated-unplanted-control 0 6))
+        (exp02-summary-note conservative-reciprocal-product-as-catalyst-pairs-only)
+        (exp02-summary-note no-spontaneous-emergence-claim-yet)))
+
+!(test (exp02-sweep-kind-report-complete?) True)
+
 !(test (exp02-systematic-sweep-points)
        ((exp02-sweep-point seed-7 4 (random-polymer shuffled-catalysts no-catalysis))
         (exp02-sweep-point seed-11 6 (random-polymer shuffled-catalysts no-catalysis))

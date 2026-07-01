@@ -18,8 +18,9 @@ scripts/run_exp02.sh
 - SWI-Prolog: local `projects/omegaclaw/local/swipl-9.3.36`
 - Kernel/config source: `src/chem_exp02.metta`
 - Smoke/run-record source: `experiments/exp02/smoke.metta`
-- `src/chem_exp02.metta` SHA-256: `4acfcdaff0f0f99831fb24d229bdfb980a60dcfae6db231c4e6cba2b90be1a97`
-- `experiments/exp02/smoke.metta` SHA-256: `0774edaca14efcbfd63dc379107c9f994e4390b837b1e995b63f4b972a85ecab`
+- `src/chem_exp02.metta` SHA-256: `a46a05a8b0b6a0653c955707dbafdd2764364ee9405a034567b4ccc8232b7c3f`
+- `experiments/exp02/smoke.metta` SHA-256: `957f8038008d7aef1bfc204c862cb2a988c6a4d3f4542025e86ce4493fe4d7c1`
+- `experiments/exp02_small_sweep_20260630/SUMMARY.md` SHA-256: `859442be159059333d7021127f61142286b8fbe7a7e3d2a13f8ba790f5d139e1`
 - `scripts/write_exp02_contract_files.py` SHA-256: `75811089e2f7c1e32453b87d281293af998769daa01f2881997800d5e711830e`
 - `scripts/test_exp02_contract_files.sh` SHA-256: `ff67e73fcf8fab418f70677a586628032839bc35540bbc9451881f2cf0c7742e`
 
@@ -55,7 +56,7 @@ scripts/run_exp02.sh
 
 ## Sweep-kind active-pair summary
 
-PeTTa `exp02-sweep-kind-summary` atoms now separate planted reciprocal-pair controls from generated-unplanted controls: planted controls have 4/12 family records with active pairs and 7 total active pairs across four random-polymer points; generated-unplanted controls have 0/6 family records with active pairs and 0 total active pairs across seed-19 and seed-23.
+PeTTa `exp02-sweep-kind-summary` and `exp02-sweep-kind-summary-report` atoms now separate planted reciprocal-pair controls from generated-unplanted controls: planted controls have 4/12 family records with active pairs and 7 total active pairs across four random-polymer points; generated-unplanted controls have 0/6 family records with active pairs and 0 total active pairs across seed-19 and seed-23. A concise human-readable table is recorded in `SUMMARY.md`.
 
 ## Exit status
 

@@ -1108,6 +1108,24 @@
     (exp02-sweep-kind-active-pair-rate planted-reciprocal-pair-control 4 12)
     (exp02-sweep-kind-active-pair-rate generated-unplanted-control 0 6)))
 
+(= (make-exp02-summary-row
+      $kind $sweep-points $family-records $active-family-records $active-pair-total $active-random-points $rate)
+   (exp02-summary-row
+      $kind $sweep-points $family-records $active-family-records $active-pair-total $active-random-points $rate))
+
+(= (exp02-sweep-kind-summary-report)
+   ((make-exp02-summary-row planted-reciprocal-pair-control 4 12 4 7 4 (active-pair-rate planted-reciprocal-pair-control 4 12))
+    (make-exp02-summary-row generated-unplanted-control 2 6 0 0 0 (active-pair-rate generated-unplanted-control 0 6))
+    (exp02-summary-note conservative-reciprocal-product-as-catalyst-pairs-only)
+    (exp02-summary-note no-spontaneous-emergence-claim-yet)))
+
+(= (exp02-sweep-kind-report-complete?)
+   (== (exp02-sweep-kind-summary-report)
+       ((exp02-summary-row planted-reciprocal-pair-control 4 12 4 7 4 (active-pair-rate planted-reciprocal-pair-control 4 12))
+        (exp02-summary-row generated-unplanted-control 2 6 0 0 0 (active-pair-rate generated-unplanted-control 0 6))
+        (exp02-summary-note conservative-reciprocal-product-as-catalyst-pairs-only)
+        (exp02-summary-note no-spontaneous-emergence-claim-yet))))
+
 (= (make-exp02-sweep-point $seed $rule-count $families)
    (exp02-sweep-point $seed $rule-count $families))
 
@@ -1166,8 +1184,9 @@
                             (and (exp02-seed-17-sweep-discriminates?)
                                  (and (exp02-seed-19-generated-negative-control?)
                                       (and (exp02-seed-23-generated-negative-control?)
-                                           (== (exp02-sweep-kind-summaries)
-                                               (exp02-sweep-kind-summaries)))))))))))
+                                           (and (== (exp02-sweep-kind-summaries)
+                                                    (exp02-sweep-kind-summaries))
+                                                (exp02-sweep-kind-report-complete?)))))))))))
 
 (= (exp02-broadened-sweep-complete?)
    (and (exp02-parameterized-sweep-complete?)
