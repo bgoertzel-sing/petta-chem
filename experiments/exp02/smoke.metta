@@ -383,15 +383,40 @@
 
 !(test (run-record-ids-consistent? (exp02-run-record seed-29-random)) True)
 
+!(test (exp02-factored-unplanted-rule-components seed-31 rr0)
+       (exp02-rule-components seed-31 rr0 W0 W1 W01 W6 W7))
+
+!(test (exp02-generated-rules-8 seed-31 random-polymer)
+       ((rule rr0 W0 W1 W01 W6)
+        (rule rr1 W2 W3 W23 W8)
+        (rule rr2 W4 W5 W45 W0)
+        (rule rr3 W6 W7 W67 W2)
+        (rule rr4 W8 W9 W89 W4)
+        (rule rr5 W1 W4 W14 W7)
+        (rule rr6 W3 W6 W36 W9)
+        (rule rr7 W5 W8 W58 W1)))
+
+!(test (exp02-seed-31-active-count random-polymer) 0)
+
+!(test (exp02-seed-31-active-count shuffled-catalysts) 0)
+
+!(test (exp02-seed-31-active-count no-catalysis) 0)
+
+!(test (exp02-seed-31-generated-negative-control?) True)
+
+!(test (run-record-passed? (exp02-run-record seed-31-random)) True)
+
+!(test (run-record-ids-consistent? (exp02-run-record seed-31-random)) True)
+
 !(test (exp02-sweep-kind-summaries)
        ((exp02-sweep-kind-summary planted-reciprocal-pair-control 4 12 4 7 4)
-        (exp02-sweep-kind-summary generated-unplanted-control 3 9 0 0 0)
+        (exp02-sweep-kind-summary generated-unplanted-control 4 12 0 0 0)
         (active-pair-rate planted-reciprocal-pair-control 4 12)
-        (active-pair-rate generated-unplanted-control 0 9)))
+        (active-pair-rate generated-unplanted-control 0 12)))
 
 !(test (exp02-sweep-kind-summary-report)
        ((exp02-summary-row planted-reciprocal-pair-control 4 12 4 7 4 (active-pair-rate planted-reciprocal-pair-control 4 12))
-        (exp02-summary-row generated-unplanted-control 3 9 0 0 0 (active-pair-rate generated-unplanted-control 0 9))
+        (exp02-summary-row generated-unplanted-control 4 12 0 0 0 (active-pair-rate generated-unplanted-control 0 12))
         (exp02-summary-note conservative-reciprocal-product-as-catalyst-pairs-only)
         (exp02-summary-note no-spontaneous-emergence-claim-yet)))
 
@@ -404,9 +429,10 @@
         (exp02-sweep-point seed-17 8 (random-polymer shuffled-catalysts no-catalysis))
         (exp02-sweep-point seed-19 8 (random-polymer shuffled-catalysts no-catalysis))
         (exp02-sweep-point seed-23 8 (random-polymer shuffled-catalysts no-catalysis))
-        (exp02-sweep-point seed-29 8 (random-polymer shuffled-catalysts no-catalysis))))
+        (exp02-sweep-point seed-29 8 (random-polymer shuffled-catalysts no-catalysis))
+        (exp02-sweep-point seed-31 8 (random-polymer shuffled-catalysts no-catalysis))))
 
-!(test (exp02-systematic-sweep-record-count) 21)
+!(test (exp02-systematic-sweep-record-count) 24)
 
 !(test (exp02-systematic-sweep-complete?) True)
 

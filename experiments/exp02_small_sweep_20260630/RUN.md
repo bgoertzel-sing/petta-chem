@@ -18,11 +18,11 @@ scripts/run_exp02.sh
 - SWI-Prolog: local `projects/omegaclaw/local/swipl-9.3.36`
 - Kernel/config source: `src/chem_exp02.metta`
 - Smoke/run-record source: `experiments/exp02/smoke.metta`
-- `src/chem_exp02.metta` SHA-256: `a46a05a8b0b6a0653c955707dbafdd2764364ee9405a034567b4ccc8232b7c3f`
-- `experiments/exp02/smoke.metta` SHA-256: `957f8038008d7aef1bfc204c862cb2a988c6a4d3f4542025e86ce4493fe4d7c1`
-- `experiments/exp02_small_sweep_20260630/SUMMARY.md` SHA-256: `859442be159059333d7021127f61142286b8fbe7a7e3d2a13f8ba790f5d139e1`
-- `scripts/write_exp02_contract_files.py` SHA-256: `75811089e2f7c1e32453b87d281293af998769daa01f2881997800d5e711830e`
-- `scripts/test_exp02_contract_files.sh` SHA-256: `ff67e73fcf8fab418f70677a586628032839bc35540bbc9451881f2cf0c7742e`
+- `src/chem_exp02.metta` SHA-256: `4929a9876420c91d60e8a9c91b06e9afcef45ca3f2c8b27844692a23e654be91`
+- `experiments/exp02/smoke.metta` SHA-256: `034599e37cdd5e8ace3ab89ddf3e6cb4ffb2b70852b90d674eb85fc136114b01`
+- `experiments/exp02_small_sweep_20260630/SUMMARY.md` SHA-256: `4126f64df6ce8b30acb56f5dd4c6d7fe19598270cd27872cd32ea3a991eeb71e`
+- `scripts/write_exp02_contract_files.py` SHA-256: `304d9c587c298e48933c3549c51aeb51dfdb71f0cf38b1a3d3af410eb4e2b7f7`
+- `scripts/test_exp02_contract_files.sh` SHA-256: `218b4dfbd7131c5a5a1c20ebe493bfe00a2ba2e353c6925ab1932c158b227743`
 
 ## Seed list
 
@@ -32,6 +32,8 @@ scripts/run_exp02.sh
 - `seed-17` / eight seed-to-component-generated planted reciprocal-pair rules
 - `seed-19` / eight seed-to-component-generated non-planted control rules
 - `seed-23` / eight seed-to-component-generated non-planted control rules
+- `seed-29` / eight factored-template generated non-planted control rules
+- `seed-31` / eight factored-template generated non-planted control rules
 
 ## Run records
 
@@ -56,10 +58,13 @@ scripts/run_exp02.sh
 - `exp02-seed-29-rules-8-random`: seed-29/eight-rule factored-template generated non-planted random-polymer control, active ACS pairs = 0.
 - `exp02-seed-29-rules-8-shuffled`: seed-29/eight-rule factored-template shuffled-catalyst control, active ACS pairs = 0.
 - `exp02-seed-29-rules-8-no-catalysis`: seed-29/eight-rule factored-template no-catalysis control, active ACS pairs = 0.
+- `exp02-seed-31-rules-8-random`: seed-31/eight-rule factored-template generated non-planted random-polymer control, active ACS pairs = 0.
+- `exp02-seed-31-rules-8-shuffled`: seed-31/eight-rule factored-template shuffled-catalyst control, active ACS pairs = 0.
+- `exp02-seed-31-rules-8-no-catalysis`: seed-31/eight-rule factored-template no-catalysis control, active ACS pairs = 0.
 
 ## Sweep-kind active-pair summary
 
-PeTTa `exp02-sweep-kind-summary` and `exp02-sweep-kind-summary-report` atoms now separate planted reciprocal-pair controls from generated-unplanted controls: planted controls have 4/12 family records with active pairs and 7 total active pairs across four random-polymer points; generated-unplanted controls have 0/9 family records with active pairs and 0 total active pairs across seed-19, seed-23, and factored-template seed-29. A concise human-readable table is recorded in `SUMMARY.md`.
+PeTTa `exp02-sweep-kind-summary` and `exp02-sweep-kind-summary-report` atoms now separate planted reciprocal-pair controls from generated-unplanted controls: planted controls have 4/12 family records with active pairs and 7 total active pairs across four random-polymer points; generated-unplanted controls have 0/12 family records with active pairs and 0 total active pairs across seed-19, seed-23, and factored-template seed-29/seed-31. A concise human-readable table is recorded in `SUMMARY.md`.
 
 ## Exit status
 
@@ -67,10 +72,10 @@ PeTTa `exp02-sweep-kind-summary` and `exp02-sweep-kind-summary-report` atoms now
 
 ## Conclusion
 
-The small exp02 sweep passed across seed-7/four-rule, seed-11/six-rule, component-generated seed-13/eight-rule, seed-to-component planted seed-17/eight-rule, and seed-to-component non-planted seed-19/seed-23 and factored-template seed-29 eight-rule parameter points. The planted seed-derived polymer fixtures contain conservative reciprocal product-as-catalyst pairs, while shuffled-catalyst, no-catalysis, and the generated seed-19, seed-23, and seed-29 non-planted random-polymer controls contain zero active ACS pairs. This validates broader exp02 control/run-record plumbing only; larger less-fixture-like sweeps are still needed before making any spontaneous-ACS claim.
+The small exp02 sweep passed across seed-7/four-rule, seed-11/six-rule, component-generated seed-13/eight-rule, seed-to-component planted seed-17/eight-rule, and seed-to-component non-planted seed-19/seed-23 and factored-template seed-29/seed-31 eight-rule parameter points. The planted seed-derived polymer fixtures contain conservative reciprocal product-as-catalyst pairs, while shuffled-catalyst, no-catalysis, and the generated seed-19, seed-23, and seed-29/seed-31 non-planted random-polymer controls contain zero active ACS pairs. This validates broader exp02 control/run-record plumbing only; larger less-fixture-like sweeps are still needed before making any spontaneous-ACS claim.
 ## Serialized run-contract files
 
-After the PeTTa smoke passed, `scripts/write_exp02_contract_files.sh` serializes all twenty-one tested run-contract records into per-run directories:
+After the PeTTa smoke passed, `scripts/write_exp02_contract_files.sh` serializes all twenty-four tested run-contract records into per-run directories:
 
 - `runs/exp02-small-random/`
 - `runs/exp02-small-shuffled/`
@@ -93,5 +98,8 @@ After the PeTTa smoke passed, `scripts/write_exp02_contract_files.sh` serializes
 - `runs/exp02-seed-29-rules-8-random/`
 - `runs/exp02-seed-29-rules-8-shuffled/`
 - `runs/exp02-seed-29-rules-8-no-catalysis/`
+- `runs/exp02-seed-31-rules-8-random/`
+- `runs/exp02-seed-31-rules-8-shuffled/`
+- `runs/exp02-seed-31-rules-8-no-catalysis/`
 
 Each directory follows the v0.1 file convention: `CONFIG.metta`, `MANIFEST.metta`, `EVENTS.metta`, `ABUNDANCES.metta`, `METRICS.metta`, `ACS.metta`, `ABLATIONS.metta`, and `SUMMARY.metta`. The host script only serializes atoms already represented/tested in PeTTa; chemistry and ACS detection remain in `.metta` files.
