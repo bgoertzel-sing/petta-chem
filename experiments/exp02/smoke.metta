@@ -137,3 +137,41 @@
           (run-summary exp02-small-no-catalysis passed no-catalysis-control-has-zero-active-pairs True))))
 
 !(test (exp02-small-sweep-complete?) True)
+
+!(test (exp02-random-polymer-rules seed-11)
+       ((rule rr0 Q0 Q1 Q01 Q10)
+        (rule rr1 Q2 Q3 Q10 Q01)
+        (rule rr2 Q4 Q5 Q45 Q54)
+        (rule rr3 Q6 Q7 Q54 Q45)
+        (rule rr4 Q0 Q5 Q05 Q2)
+        (rule rr5 Q1 Q6 Q16 Q3)))
+
+!(test (exp02-random-active-count-6 seed-11) 2)
+
+!(test (exp02-shuffled-active-count-6 seed-11) 0)
+
+!(test (exp02-no-catalysis-active-count-6 seed-11) 0)
+
+!(test (exp02-seed-11-sweep-discriminates?) True)
+
+!(test (exp02-run-config seed-11-random)
+       (run-config exp02-seed-11-rules-6-random exp02 (seed-11) 1 (candidate-cap 6 1) random-polymer))
+
+!(test (exp02-metrics seed-11-random)
+       ((metric active-acs-count exp02-seed-11-rules-6-random 2)
+        (metric control-family exp02-seed-11-rules-6-random random-polymer)
+        (metric rule-count exp02-seed-11-rules-6-random 6)))
+
+!(test (run-record-passed? (exp02-run-record seed-11-random)) True)
+
+!(test (run-record-passed? (exp02-run-record seed-11-shuffled)) True)
+
+!(test (run-record-passed? (exp02-run-record seed-11-no-catalysis)) True)
+
+!(test (run-record-ids-consistent? (exp02-run-record seed-11-random)) True)
+
+!(test (run-record-ids-consistent? (exp02-run-record seed-11-shuffled)) True)
+
+!(test (run-record-ids-consistent? (exp02-run-record seed-11-no-catalysis)) True)
+
+!(test (exp02-parameterized-sweep-complete?) True)

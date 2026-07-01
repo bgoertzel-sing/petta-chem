@@ -212,3 +212,243 @@
         (and (run-record-passed? (exp02-run-record shuffled))
              (and (run-record-passed? (exp02-run-record no-catalysis))
                   (exp02-small-sweep-discriminates?)))))
+
+; ----- second exp02 parameter point: different seed and rule count -----
+;
+; This extends the sweep beyond the original seed-7/four-rule fixture while
+; keeping the same conservative reciprocal product-as-catalyst ACS criterion.
+; seed-11 uses six generated rules, with two planted-by-seed reciprocal pairs
+; and two distractors; shuffled/no-catalysis controls should still recover zero
+; active pairs.
+
+(= (exp02-random-polymer-rule seed-11 rr0)
+   (rule rr0 Q0 Q1 Q01 Q10))
+
+(= (exp02-random-polymer-rule seed-11 rr1)
+   (rule rr1 Q2 Q3 Q10 Q01))
+
+(= (exp02-random-polymer-rule seed-11 rr2)
+   (rule rr2 Q4 Q5 Q45 Q54))
+
+(= (exp02-random-polymer-rule seed-11 rr3)
+   (rule rr3 Q6 Q7 Q54 Q45))
+
+(= (exp02-random-polymer-rule seed-11 rr4)
+   (rule rr4 Q0 Q5 Q05 Q2))
+
+(= (exp02-random-polymer-rule seed-11 rr5)
+   (rule rr5 Q1 Q6 Q16 Q3))
+
+(= (exp02-random-polymer-rules seed-11)
+   ((exp02-random-polymer-rule seed-11 rr0)
+    (exp02-random-polymer-rule seed-11 rr1)
+    (exp02-random-polymer-rule seed-11 rr2)
+    (exp02-random-polymer-rule seed-11 rr3)
+    (exp02-random-polymer-rule seed-11 rr4)
+    (exp02-random-polymer-rule seed-11 rr5)))
+
+(= (exp02-shuffled-control-rule seed-11 sr0)
+   (rule sr0 Q0 Q1 Q01 Q2))
+
+(= (exp02-shuffled-control-rule seed-11 sr1)
+   (rule sr1 Q2 Q3 Q10 Q4))
+
+(= (exp02-shuffled-control-rule seed-11 sr2)
+   (rule sr2 Q4 Q5 Q45 Q6))
+
+(= (exp02-shuffled-control-rule seed-11 sr3)
+   (rule sr3 Q6 Q7 Q54 Q0))
+
+(= (exp02-shuffled-control-rule seed-11 sr4)
+   (rule sr4 Q0 Q5 Q05 Q10))
+
+(= (exp02-shuffled-control-rule seed-11 sr5)
+   (rule sr5 Q1 Q6 Q16 Q54))
+
+(= (exp02-shuffled-control-rules seed-11)
+   ((exp02-shuffled-control-rule seed-11 sr0)
+    (exp02-shuffled-control-rule seed-11 sr1)
+    (exp02-shuffled-control-rule seed-11 sr2)
+    (exp02-shuffled-control-rule seed-11 sr3)
+    (exp02-shuffled-control-rule seed-11 sr4)
+    (exp02-shuffled-control-rule seed-11 sr5)))
+
+(= (exp02-no-catalysis-control-rule seed-11 nr0)
+   (rule nr0 Q0 Q1 Q01 None))
+
+(= (exp02-no-catalysis-control-rule seed-11 nr1)
+   (rule nr1 Q2 Q3 Q10 None))
+
+(= (exp02-no-catalysis-control-rule seed-11 nr2)
+   (rule nr2 Q4 Q5 Q45 None))
+
+(= (exp02-no-catalysis-control-rule seed-11 nr3)
+   (rule nr3 Q6 Q7 Q54 None))
+
+(= (exp02-no-catalysis-control-rule seed-11 nr4)
+   (rule nr4 Q0 Q5 Q05 None))
+
+(= (exp02-no-catalysis-control-rule seed-11 nr5)
+   (rule nr5 Q1 Q6 Q16 None))
+
+(= (exp02-no-catalysis-control-rules seed-11)
+   ((exp02-no-catalysis-control-rule seed-11 nr0)
+    (exp02-no-catalysis-control-rule seed-11 nr1)
+    (exp02-no-catalysis-control-rule seed-11 nr2)
+    (exp02-no-catalysis-control-rule seed-11 nr3)
+    (exp02-no-catalysis-control-rule seed-11 nr4)
+    (exp02-no-catalysis-control-rule seed-11 nr5)))
+
+(= (exp02-scan-rules-6 ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5))
+   ((scan-rule-pair pair-0-1 $rule-0 $rule-1)
+    (scan-rule-pair pair-0-2 $rule-0 $rule-2)
+    (scan-rule-pair pair-0-3 $rule-0 $rule-3)
+    (scan-rule-pair pair-0-4 $rule-0 $rule-4)
+    (scan-rule-pair pair-0-5 $rule-0 $rule-5)
+    (scan-rule-pair pair-1-2 $rule-1 $rule-2)
+    (scan-rule-pair pair-1-3 $rule-1 $rule-3)
+    (scan-rule-pair pair-1-4 $rule-1 $rule-4)
+    (scan-rule-pair pair-1-5 $rule-1 $rule-5)
+    (scan-rule-pair pair-2-3 $rule-2 $rule-3)
+    (scan-rule-pair pair-2-4 $rule-2 $rule-4)
+    (scan-rule-pair pair-2-5 $rule-2 $rule-5)
+    (scan-rule-pair pair-3-4 $rule-3 $rule-4)
+    (scan-rule-pair pair-3-5 $rule-3 $rule-5)
+    (scan-rule-pair pair-4-5 $rule-4 $rule-5)))
+
+(= (active-acs-count-15
+      ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4
+       $candidate-5 $candidate-6 $candidate-7 $candidate-8 $candidate-9
+       $candidate-10 $candidate-11 $candidate-12 $candidate-13 $candidate-14))
+   (+ (if (== (acs-status $candidate-0) active) 1 0)
+      (+ (if (== (acs-status $candidate-1) active) 1 0)
+         (+ (if (== (acs-status $candidate-2) active) 1 0)
+            (+ (if (== (acs-status $candidate-3) active) 1 0)
+               (+ (if (== (acs-status $candidate-4) active) 1 0)
+                  (+ (if (== (acs-status $candidate-5) active) 1 0)
+                     (+ (if (== (acs-status $candidate-6) active) 1 0)
+                        (+ (if (== (acs-status $candidate-7) active) 1 0)
+                           (+ (if (== (acs-status $candidate-8) active) 1 0)
+                              (+ (if (== (acs-status $candidate-9) active) 1 0)
+                                 (+ (if (== (acs-status $candidate-10) active) 1 0)
+                                    (+ (if (== (acs-status $candidate-11) active) 1 0)
+                                       (+ (if (== (acs-status $candidate-12) active) 1 0)
+                                          (+ (if (== (acs-status $candidate-13) active) 1 0)
+                                             (if (== (acs-status $candidate-14) active) 1 0))))))))))))))))
+
+(= (exp02-random-acs-candidates-6 seed-11)
+   (exp02-scan-rules-6 (exp02-random-polymer-rules seed-11)))
+
+(= (exp02-shuffled-acs-candidates-6 seed-11)
+   (exp02-scan-rules-6 (exp02-shuffled-control-rules seed-11)))
+
+(= (exp02-no-catalysis-acs-candidates-6 seed-11)
+   (exp02-scan-rules-6 (exp02-no-catalysis-control-rules seed-11)))
+
+(= (exp02-random-active-count-6 seed-11)
+   (active-acs-count-15 (exp02-random-acs-candidates-6 seed-11)))
+
+(= (exp02-shuffled-active-count-6 seed-11)
+   (active-acs-count-15 (exp02-shuffled-acs-candidates-6 seed-11)))
+
+(= (exp02-no-catalysis-active-count-6 seed-11)
+   (active-acs-count-15 (exp02-no-catalysis-acs-candidates-6 seed-11)))
+
+(= (exp02-seed-11-sweep-discriminates?)
+   (and (> (exp02-random-active-count-6 seed-11)
+           (exp02-shuffled-active-count-6 seed-11))
+        (> (exp02-random-active-count-6 seed-11)
+           (exp02-no-catalysis-active-count-6 seed-11))))
+
+(= (exp02-run-config seed-11-random)
+   (make-run-config exp02-seed-11-rules-6-random exp02 (seed-11) 1 (candidate-cap 6 1) random-polymer))
+
+(= (exp02-run-config seed-11-shuffled)
+   (make-run-config exp02-seed-11-rules-6-shuffled exp02 (seed-11) 1 (candidate-cap 6 1) shuffled-catalysts))
+
+(= (exp02-run-config seed-11-no-catalysis)
+   (make-run-config exp02-seed-11-rules-6-no-catalysis exp02 (seed-11) 1 (candidate-cap 6 1) no-catalysis))
+
+(= (exp02-run-manifest seed-11-random)
+   (make-run-manifest exp02-seed-11-rules-6-random config-hash-exp02-seed-11-rules-6-random petta-local swi-9-3-36 scripts-run-exp02-sh 0))
+
+(= (exp02-run-manifest seed-11-shuffled)
+   (make-run-manifest exp02-seed-11-rules-6-shuffled config-hash-exp02-seed-11-rules-6-shuffled petta-local swi-9-3-36 scripts-run-exp02-sh 0))
+
+(= (exp02-run-manifest seed-11-no-catalysis)
+   (make-run-manifest exp02-seed-11-rules-6-no-catalysis config-hash-exp02-seed-11-rules-6-no-catalysis petta-local swi-9-3-36 scripts-run-exp02-sh 0))
+
+(= (exp02-metrics seed-11-random)
+   ((metric active-acs-count exp02-seed-11-rules-6-random (exp02-random-active-count-6 seed-11))
+    (metric control-family exp02-seed-11-rules-6-random random-polymer)
+    (metric rule-count exp02-seed-11-rules-6-random 6)))
+
+(= (exp02-metrics seed-11-shuffled)
+   ((metric active-acs-count exp02-seed-11-rules-6-shuffled (exp02-shuffled-active-count-6 seed-11))
+    (metric control-family exp02-seed-11-rules-6-shuffled shuffled-catalysts)
+    (metric rule-count exp02-seed-11-rules-6-shuffled 6)))
+
+(= (exp02-metrics seed-11-no-catalysis)
+   ((metric active-acs-count exp02-seed-11-rules-6-no-catalysis (exp02-no-catalysis-active-count-6 seed-11))
+    (metric control-family exp02-seed-11-rules-6-no-catalysis no-catalysis)
+    (metric rule-count exp02-seed-11-rules-6-no-catalysis 6)))
+
+(= (exp02-run-summary seed-11-random)
+   (make-run-summary exp02-seed-11-rules-6-random passed seed-11-rules-6-random-has-two-active-pairs True))
+
+(= (exp02-run-summary seed-11-shuffled)
+   (make-run-summary exp02-seed-11-rules-6-shuffled passed seed-11-rules-6-shuffled-control-has-zero-active-pairs True))
+
+(= (exp02-run-summary seed-11-no-catalysis)
+   (make-run-summary exp02-seed-11-rules-6-no-catalysis passed seed-11-rules-6-no-catalysis-control-has-zero-active-pairs True))
+
+(= (exp02-run-record seed-11-random)
+   (make-run-record
+     exp02-seed-11-rules-6-random
+     (exp02-run-config seed-11-random)
+     (exp02-run-manifest seed-11-random)
+     ()
+     (exp02-initial-abundances)
+     (exp02-metrics seed-11-random)
+     (exp02-random-acs-candidates-6 seed-11)
+     ()
+     (exp02-run-summary seed-11-random)))
+
+(= (exp02-run-record seed-11-shuffled)
+   (make-run-record
+     exp02-seed-11-rules-6-shuffled
+     (exp02-run-config seed-11-shuffled)
+     (exp02-run-manifest seed-11-shuffled)
+     ()
+     (exp02-initial-abundances)
+     (exp02-metrics seed-11-shuffled)
+     (exp02-shuffled-acs-candidates-6 seed-11)
+     ()
+     (exp02-run-summary seed-11-shuffled)))
+
+(= (exp02-run-record seed-11-no-catalysis)
+   (make-run-record
+     exp02-seed-11-rules-6-no-catalysis
+     (exp02-run-config seed-11-no-catalysis)
+     (exp02-run-manifest seed-11-no-catalysis)
+     ()
+     (exp02-initial-abundances)
+     (exp02-metrics seed-11-no-catalysis)
+     (exp02-no-catalysis-acs-candidates-6 seed-11)
+     ()
+     (exp02-run-summary seed-11-no-catalysis)))
+
+(= (exp02-parameterized-run-records)
+   ((exp02-run-record random)
+    (exp02-run-record shuffled)
+    (exp02-run-record no-catalysis)
+    (exp02-run-record seed-11-random)
+    (exp02-run-record seed-11-shuffled)
+    (exp02-run-record seed-11-no-catalysis)))
+
+(= (exp02-parameterized-sweep-complete?)
+   (and (exp02-small-sweep-complete?)
+        (and (run-record-passed? (exp02-run-record seed-11-random))
+             (and (run-record-passed? (exp02-run-record seed-11-shuffled))
+                  (and (run-record-passed? (exp02-run-record seed-11-no-catalysis))
+                       (exp02-seed-11-sweep-discriminates?))))))
