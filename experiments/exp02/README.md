@@ -1,8 +1,8 @@
 # exp02 — random polymer controls
 
-First systematic deterministic exp02 sweep.  The PeTTa kernel defines explicit `exp02-sweep-point` atoms for seed-7/four rules, seed-11/six rules, component-generated seed-13/eight rules, seed-to-component seed-17/eight rules, and seed-to-component generated non-planted seed-19/eight rules. It compares each with two controls (shuffled catalysts and no catalysis), scans all rule pairs with the conservative exp01 ACS scanner, and records each run in the v0.1 run-contract atom shape.
+First systematic deterministic exp02 sweep.  The PeTTa kernel defines explicit `exp02-sweep-point` atoms for seed-7/four rules, seed-11/six rules, component-generated seed-13/eight rules, seed-to-component seed-17/eight rules, and seed-to-component generated non-planted seed-19 and seed-23/eight-rule points. It compares each with two controls (shuffled catalysts and no catalysis), scans all rule pairs with the conservative exp01 ACS scanner, and records each run in the v0.1 run-contract atom shape.
 
-This is a plumbing/control smoke test, not an emergence claim. Seed-19 is intentionally a generated negative-control point with zero active reciprocal pairs in every family, beginning the separation between planted-by-seed reciprocal-pair controls and broader generated sweeps.
+This is a plumbing/control smoke test, not an emergence claim. Seeds 19 and 23 are intentionally generated negative-control points with zero active reciprocal pairs in every family, beginning the separation between planted-by-seed reciprocal-pair controls and broader generated sweeps.
 
 Run:
 
