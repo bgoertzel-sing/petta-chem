@@ -2,7 +2,7 @@
 
 ## Purpose
 
-First small deterministic exp02 plumbing/control sweep. This is not an emergence claim; it verifies that random-polymer, shuffled-catalyst, and no-catalysis runs can be represented in PeTTa and recorded under the v0.1 run-contract shape across multiple seed/rule-count points, including component-generated and seed-to-component eight-rule families.
+First small deterministic exp02 plumbing/control sweep. This is not an emergence claim; it verifies that random-polymer, shuffled-catalyst, and no-catalysis runs can be represented in PeTTa and recorded under the v0.1 run-contract shape across multiple seed/rule-count points, including component-generated, planted seed-to-component, and generated non-planted eight-rule families.
 
 ## Commands
 
@@ -18,17 +18,18 @@ scripts/run_exp02.sh
 - SWI-Prolog: local `projects/omegaclaw/local/swipl-9.3.36`
 - Kernel/config source: `src/chem_exp02.metta`
 - Smoke/run-record source: `experiments/exp02/smoke.metta`
-- `src/chem_exp02.metta` SHA-256: `ee13658748eb453b973523f057317ec2e0d9ad89b2481402b68870d024da2257`
-- `experiments/exp02/smoke.metta` SHA-256: `73dcdc99bf4fe1c95163311958645c17749dda1f0151528db7ae5d1b2bbd3388`
-- `scripts/write_exp02_contract_files.py` SHA-256: `8ad5865448b3c99f79e64efe2fb30f43823277d900f93820b25e96263e065f47`
-- `scripts/test_exp02_contract_files.sh` SHA-256: `9f0d161eefcf58f9f4843d2710d7ca56541681447ad83cae9ee633102ff57f7d`
+- `src/chem_exp02.metta` SHA-256: `0d132b79483ecc43f7f29fc2f1b581edec1bd7b95392e67b135805f2c4c61ee9`
+- `experiments/exp02/smoke.metta` SHA-256: `a00d84a7e032a4f8eaaab6a578a28189db70f10b5fa551e16d7f04fb07df7749`
+- `scripts/write_exp02_contract_files.py` SHA-256: `2c6e4f552a24dc41b0e76faf9c461191be4f439f058a804ed4e8931eba798ab9`
+- `scripts/test_exp02_contract_files.sh` SHA-256: `90b413458d454db99f9ebb1713176c1effc4bdee702f7bf75afa51eec7f1b95d`
 
 ## Seed list
 
 - `seed-7` / four rules
 - `seed-11` / six rules
 - `seed-13` / eight component-generated rules
-- `seed-17` / eight seed-to-component-generated rules
+- `seed-17` / eight seed-to-component-generated planted reciprocal-pair rules
+- `seed-19` / eight seed-to-component-generated non-planted control rules
 
 ## Run records
 
@@ -44,6 +45,9 @@ scripts/run_exp02.sh
 - `exp02-seed-17-rules-8-random`: seed-17/eight-rule seed-to-component random-polymer family, active ACS pairs = 2.
 - `exp02-seed-17-rules-8-shuffled`: seed-17/eight-rule shuffled-catalyst control, active ACS pairs = 0.
 - `exp02-seed-17-rules-8-no-catalysis`: seed-17/eight-rule no-catalysis control, active ACS pairs = 0.
+- `exp02-seed-19-rules-8-random`: seed-19/eight-rule generated non-planted random-polymer control, active ACS pairs = 0.
+- `exp02-seed-19-rules-8-shuffled`: seed-19/eight-rule shuffled-catalyst control, active ACS pairs = 0.
+- `exp02-seed-19-rules-8-no-catalysis`: seed-19/eight-rule no-catalysis control, active ACS pairs = 0.
 
 ## Exit status
 
@@ -51,10 +55,10 @@ scripts/run_exp02.sh
 
 ## Conclusion
 
-The small exp02 sweep passed across seed-7/four-rule, seed-11/six-rule, component-generated seed-13/eight-rule, and seed-to-component seed-17/eight-rule parameter points. The seed-derived polymer fixtures contain conservative reciprocal product-as-catalyst pairs, while shuffled-catalyst and no-catalysis controls contain zero active ACS pairs. This validates broader exp02 control/run-record plumbing only; larger less-fixture-like sweeps are still needed before making any spontaneous-ACS claim.
+The small exp02 sweep passed across seed-7/four-rule, seed-11/six-rule, component-generated seed-13/eight-rule, seed-to-component planted seed-17/eight-rule, and seed-to-component non-planted seed-19/eight-rule parameter points. The planted seed-derived polymer fixtures contain conservative reciprocal product-as-catalyst pairs, while shuffled-catalyst, no-catalysis, and the generated seed-19 non-planted random-polymer control contain zero active ACS pairs. This validates broader exp02 control/run-record plumbing only; larger less-fixture-like sweeps are still needed before making any spontaneous-ACS claim.
 ## Serialized run-contract files
 
-After the PeTTa smoke passed, `scripts/write_exp02_contract_files.sh` serializes all twelve tested run-contract records into per-run directories:
+After the PeTTa smoke passed, `scripts/write_exp02_contract_files.sh` serializes all fifteen tested run-contract records into per-run directories:
 
 - `runs/exp02-small-random/`
 - `runs/exp02-small-shuffled/`
@@ -68,5 +72,8 @@ After the PeTTa smoke passed, `scripts/write_exp02_contract_files.sh` serializes
 - `runs/exp02-seed-17-rules-8-random/`
 - `runs/exp02-seed-17-rules-8-shuffled/`
 - `runs/exp02-seed-17-rules-8-no-catalysis/`
+- `runs/exp02-seed-19-rules-8-random/`
+- `runs/exp02-seed-19-rules-8-shuffled/`
+- `runs/exp02-seed-19-rules-8-no-catalysis/`
 
 Each directory follows the v0.1 file convention: `CONFIG.metta`, `MANIFEST.metta`, `EVENTS.metta`, `ABUNDANCES.metta`, `METRICS.metta`, `ACS.metta`, `ABLATIONS.metta`, and `SUMMARY.metta`. The host script only serializes atoms already represented/tested in PeTTa; chemistry and ACS detection remain in `.metta` files.
