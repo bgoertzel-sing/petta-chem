@@ -38,3 +38,12 @@ scripts/run_exp02.sh
 ## Conclusion
 
 The first tiny exp02 sweep passed. The seed-derived polymer fixture contains one conservative reciprocal product-as-catalyst pair, while the shuffled-catalyst and no-catalysis controls contain zero active ACS pairs. This validates exp02 control/run-record plumbing only; larger parameterized sweeps are still needed before making any spontaneous-ACS claim.
+## Serialized run-contract files
+
+After the PeTTa smoke passed, `scripts/write_exp02_contract_files.sh` wrote the tested run-contract atoms into per-run directories:
+
+- `runs/exp02-small-random/`
+- `runs/exp02-small-shuffled/`
+- `runs/exp02-small-no-catalysis/`
+
+Each directory follows the v0.1 file convention: `CONFIG.metta`, `MANIFEST.metta`, `EVENTS.metta`, `ABUNDANCES.metta`, `METRICS.metta`, `ACS.metta`, `ABLATIONS.metta`, and `SUMMARY.metta`. The host script only serializes atoms already represented in PeTTa; chemistry and ACS detection remain in `.metta` files.
