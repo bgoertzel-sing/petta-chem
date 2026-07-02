@@ -461,9 +461,35 @@
 
 !(test (run-record-ids-consistent? (exp02-run-record seed-41-random)) True)
 
+
+!(test (exp02-factored-unplanted-rule-components seed-43 rr0)
+       (exp02-rule-components seed-43 rr0 Z0 Z1 Z01 Z6 Z7))
+
+!(test (exp02-generated-rules-8 seed-43 random-polymer)
+       ((rule rr0 Z0 Z1 Z01 Z6)
+        (rule rr1 Z2 Z3 Z23 Z8)
+        (rule rr2 Z4 Z5 Z45 Z0)
+        (rule rr3 Z6 Z7 Z67 Z2)
+        (rule rr4 Z8 Z9 Z89 Z4)
+        (rule rr5 Z1 Z4 Z14 Z7)
+        (rule rr6 Z3 Z6 Z36 Z9)
+        (rule rr7 Z5 Z8 Z58 Z1)))
+
+!(test (exp02-seed-43-active-count random-polymer) 0)
+
+!(test (exp02-seed-43-active-count shuffled-catalysts) 0)
+
+!(test (exp02-seed-43-active-count no-catalysis) 0)
+
+!(test (exp02-seed-43-generated-negative-control?) True)
+
+!(test (run-record-passed? (exp02-run-record seed-43-random)) True)
+
+!(test (run-record-ids-consistent? (exp02-run-record seed-43-random)) True)
+
 !(test (exp02-list-length (exp02-planted-control-records)) 12)
 
-!(test (exp02-list-length (exp02-generated-unplanted-control-records)) 18)
+!(test (exp02-list-length (exp02-generated-unplanted-control-records)) 21)
 
 !(test (exp02-active-family-record-count (exp02-planted-control-records)) 4)
 
@@ -477,13 +503,13 @@
 
 !(test (exp02-sweep-kind-summaries)
        ((exp02-sweep-kind-summary planted-reciprocal-pair-control 4 12 4 7 4)
-        (exp02-sweep-kind-summary generated-unplanted-control 6 18 0 0 0)
+        (exp02-sweep-kind-summary generated-unplanted-control 7 21 0 0 0)
         (active-pair-rate planted-reciprocal-pair-control 4 12)
-        (active-pair-rate generated-unplanted-control 0 18)))
+        (active-pair-rate generated-unplanted-control 0 21)))
 
 !(test (exp02-sweep-kind-summary-report)
        ((exp02-summary-row planted-reciprocal-pair-control 4 12 4 7 4 (active-pair-rate planted-reciprocal-pair-control 4 12))
-        (exp02-summary-row generated-unplanted-control 6 18 0 0 0 (active-pair-rate generated-unplanted-control 0 18))
+        (exp02-summary-row generated-unplanted-control 7 21 0 0 0 (active-pair-rate generated-unplanted-control 0 21))
         (exp02-summary-note conservative-reciprocal-product-as-catalyst-pairs-only)
         (exp02-summary-note no-spontaneous-emergence-claim-yet)))
 
@@ -499,9 +525,10 @@
         (exp02-sweep-point seed-29 8 (random-polymer shuffled-catalysts no-catalysis))
         (exp02-sweep-point seed-31 8 (random-polymer shuffled-catalysts no-catalysis))
         (exp02-sweep-point seed-37 8 (random-polymer shuffled-catalysts no-catalysis))
-        (exp02-sweep-point seed-41 8 (random-polymer shuffled-catalysts no-catalysis))))
+        (exp02-sweep-point seed-41 8 (random-polymer shuffled-catalysts no-catalysis))
+        (exp02-sweep-point seed-43 8 (random-polymer shuffled-catalysts no-catalysis))))
 
-!(test (exp02-systematic-sweep-record-count) 30)
+!(test (exp02-systematic-sweep-record-count) 33)
 
 !(test (exp02-systematic-sweep-complete?) True)
 
