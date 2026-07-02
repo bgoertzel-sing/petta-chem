@@ -1821,6 +1821,109 @@
 (= (exp02-run-record seed-53-no-catalysis)
    (make-run-record exp02-seed-53-rules-8-no-catalysis (exp02-run-config seed-53-no-catalysis) (exp02-run-manifest seed-53-no-catalysis) () (exp02-initial-abundances) (exp02-metrics seed-53-no-catalysis) (exp02-seed-53-acs-candidates no-catalysis) () (exp02-run-summary seed-53-no-catalysis)))
 
+; seed-59 adds the next factored-template generated-unplanted point through
+; the same PeTTa-side token/product dictionary seam.  Only the compact
+; dictionary changes; rule generation, controls, ACS scanning, and run-record
+; construction stay on the shared kernel path.
+
+(= (exp02-seed-token seed-59 0) ZC0)
+(= (exp02-seed-token seed-59 1) ZC1)
+(= (exp02-seed-token seed-59 2) ZC2)
+(= (exp02-seed-token seed-59 3) ZC3)
+(= (exp02-seed-token seed-59 4) ZC4)
+(= (exp02-seed-token seed-59 5) ZC5)
+(= (exp02-seed-token seed-59 6) ZC6)
+(= (exp02-seed-token seed-59 7) ZC7)
+(= (exp02-seed-token seed-59 8) ZC8)
+(= (exp02-seed-token seed-59 9) ZC9)
+
+(= (exp02-seed-product seed-59 01) ZC01)
+(= (exp02-seed-product seed-59 23) ZC23)
+(= (exp02-seed-product seed-59 45) ZC45)
+(= (exp02-seed-product seed-59 67) ZC67)
+(= (exp02-seed-product seed-59 89) ZC89)
+(= (exp02-seed-product seed-59 14) ZC14)
+(= (exp02-seed-product seed-59 36) ZC36)
+(= (exp02-seed-product seed-59 58) ZC58)
+
+(= (exp02-seed-rule-components seed-59 rr0) (exp02-factored-unplanted-rule-components seed-59 rr0))
+(= (exp02-seed-rule-components seed-59 rr1) (exp02-factored-unplanted-rule-components seed-59 rr1))
+(= (exp02-seed-rule-components seed-59 rr2) (exp02-factored-unplanted-rule-components seed-59 rr2))
+(= (exp02-seed-rule-components seed-59 rr3) (exp02-factored-unplanted-rule-components seed-59 rr3))
+(= (exp02-seed-rule-components seed-59 rr4) (exp02-factored-unplanted-rule-components seed-59 rr4))
+(= (exp02-seed-rule-components seed-59 rr5) (exp02-factored-unplanted-rule-components seed-59 rr5))
+(= (exp02-seed-rule-components seed-59 rr6) (exp02-factored-unplanted-rule-components seed-59 rr6))
+(= (exp02-seed-rule-components seed-59 rr7) (exp02-factored-unplanted-rule-components seed-59 rr7))
+
+(= (exp02-seed-59-acs-candidates $family)
+   (exp02-scan-rules-8 (exp02-generated-rules-8 seed-59 $family)))
+
+(= (exp02-seed-59-active-count $family)
+   (active-acs-count-28 (exp02-seed-59-acs-candidates $family)))
+
+(= (exp02-seed-59-generated-negative-control?)
+   (and (== (exp02-seed-59-active-count random-polymer) 0)
+        (and (== (exp02-seed-59-active-count shuffled-catalysts) 0)
+             (== (exp02-seed-59-active-count no-catalysis) 0))))
+
+(= (exp02-run-config seed-59-random)
+   (make-run-config exp02-seed-59-rules-8-random exp02 (seed-59) 1 (candidate-cap 8 1) random-polymer))
+
+(= (exp02-run-config seed-59-shuffled)
+   (make-run-config exp02-seed-59-rules-8-shuffled exp02 (seed-59) 1 (candidate-cap 8 1) shuffled-catalysts))
+
+(= (exp02-run-config seed-59-no-catalysis)
+   (make-run-config exp02-seed-59-rules-8-no-catalysis exp02 (seed-59) 1 (candidate-cap 8 1) no-catalysis))
+
+(= (exp02-run-manifest seed-59-random)
+   (make-run-manifest exp02-seed-59-rules-8-random config-hash-exp02-seed-59-rules-8-random petta-local swi-9-3-36 scripts-run-exp02-sh 0))
+
+(= (exp02-run-manifest seed-59-shuffled)
+   (make-run-manifest exp02-seed-59-rules-8-shuffled config-hash-exp02-seed-59-rules-8-shuffled petta-local swi-9-3-36 scripts-run-exp02-sh 0))
+
+(= (exp02-run-manifest seed-59-no-catalysis)
+   (make-run-manifest exp02-seed-59-rules-8-no-catalysis config-hash-exp02-seed-59-rules-8-no-catalysis petta-local swi-9-3-36 scripts-run-exp02-sh 0))
+
+(= (exp02-metrics seed-59-random)
+   ((metric active-acs-count exp02-seed-59-rules-8-random (exp02-seed-59-active-count random-polymer))
+    (metric control-family exp02-seed-59-rules-8-random random-polymer)
+    (metric rule-count exp02-seed-59-rules-8-random 8)
+    (metric generation-seam exp02-seed-59-rules-8-random factored-seed-template)
+    (metric sweep-kind exp02-seed-59-rules-8-random generated-unplanted-control)))
+
+(= (exp02-metrics seed-59-shuffled)
+   ((metric active-acs-count exp02-seed-59-rules-8-shuffled (exp02-seed-59-active-count shuffled-catalysts))
+    (metric control-family exp02-seed-59-rules-8-shuffled shuffled-catalysts)
+    (metric rule-count exp02-seed-59-rules-8-shuffled 8)
+    (metric generation-seam exp02-seed-59-rules-8-shuffled factored-seed-template)
+    (metric sweep-kind exp02-seed-59-rules-8-shuffled generated-unplanted-control)))
+
+(= (exp02-metrics seed-59-no-catalysis)
+   ((metric active-acs-count exp02-seed-59-rules-8-no-catalysis (exp02-seed-59-active-count no-catalysis))
+    (metric control-family exp02-seed-59-rules-8-no-catalysis no-catalysis)
+    (metric rule-count exp02-seed-59-rules-8-no-catalysis 8)
+    (metric generation-seam exp02-seed-59-rules-8-no-catalysis factored-seed-template)
+    (metric sweep-kind exp02-seed-59-rules-8-no-catalysis generated-unplanted-control)))
+
+(= (exp02-run-summary seed-59-random)
+   (make-run-summary exp02-seed-59-rules-8-random passed seed-59-rules-8-generated-random-has-zero-active-pairs True))
+
+(= (exp02-run-summary seed-59-shuffled)
+   (make-run-summary exp02-seed-59-rules-8-shuffled passed seed-59-rules-8-shuffled-control-has-zero-active-pairs True))
+
+(= (exp02-run-summary seed-59-no-catalysis)
+   (make-run-summary exp02-seed-59-rules-8-no-catalysis passed seed-59-rules-8-no-catalysis-control-has-zero-active-pairs True))
+
+(= (exp02-run-record seed-59-random)
+   (make-run-record exp02-seed-59-rules-8-random (exp02-run-config seed-59-random) (exp02-run-manifest seed-59-random) () (exp02-initial-abundances) (exp02-metrics seed-59-random) (exp02-seed-59-acs-candidates random-polymer) () (exp02-run-summary seed-59-random)))
+
+(= (exp02-run-record seed-59-shuffled)
+   (make-run-record exp02-seed-59-rules-8-shuffled (exp02-run-config seed-59-shuffled) (exp02-run-manifest seed-59-shuffled) () (exp02-initial-abundances) (exp02-metrics seed-59-shuffled) (exp02-seed-59-acs-candidates shuffled-catalysts) () (exp02-run-summary seed-59-shuffled)))
+
+(= (exp02-run-record seed-59-no-catalysis)
+   (make-run-record exp02-seed-59-rules-8-no-catalysis (exp02-run-config seed-59-no-catalysis) (exp02-run-manifest seed-59-no-catalysis) () (exp02-initial-abundances) (exp02-metrics seed-59-no-catalysis) (exp02-seed-59-acs-candidates no-catalysis) () (exp02-run-summary seed-59-no-catalysis)))
+
+
 ; ----- PeTTa-side fold for sweep-kind summaries -----
 ;
 ; The first exp02 summary rows were deliberately explicit.  These helpers move
@@ -1925,7 +2028,10 @@
     (exp02-run-record seed-47-no-catalysis)
     (exp02-run-record seed-53-random)
     (exp02-run-record seed-53-shuffled)
-    (exp02-run-record seed-53-no-catalysis)))
+    (exp02-run-record seed-53-no-catalysis)
+    (exp02-run-record seed-59-random)
+    (exp02-run-record seed-59-shuffled)
+    (exp02-run-record seed-59-no-catalysis)))
 
 (= (make-exp02-sweep-kind-summary
       $kind $sweep-points $family-records $active-family-records $active-pair-total $active-random-points)
@@ -1941,13 +2047,13 @@
 
 (= (exp02-generated-unplanted-control-summary)
    (exp02-fold-sweep-kind-summary
-      generated-unplanted-control 9 (exp02-generated-unplanted-control-records)))
+      generated-unplanted-control 10 (exp02-generated-unplanted-control-records)))
 
 (= (exp02-sweep-kind-summaries)
    ((exp02-planted-control-summary)
     (exp02-generated-unplanted-control-summary)
     (exp02-sweep-kind-active-pair-rate planted-reciprocal-pair-control 4 12)
-    (exp02-sweep-kind-active-pair-rate generated-unplanted-control 0 27)))
+    (exp02-sweep-kind-active-pair-rate generated-unplanted-control 0 30)))
 
 (= (make-exp02-summary-row
       $kind $sweep-points $family-records $active-family-records $active-pair-total $active-random-points $rate)
@@ -2000,7 +2106,7 @@
 (= (exp02-sweep-kind-report-complete?)
    (== (exp02-sweep-kind-summary-report)
        ((exp02-summary-row planted-reciprocal-pair-control 4 12 4 7 4 (active-pair-rate planted-reciprocal-pair-control 4 12))
-        (exp02-summary-row generated-unplanted-control 9 27 0 0 0 (active-pair-rate generated-unplanted-control 0 27))
+        (exp02-summary-row generated-unplanted-control 10 30 0 0 0 (active-pair-rate generated-unplanted-control 0 30))
         (exp02-summary-note conservative-reciprocal-product-as-catalyst-pairs-only)
         (exp02-summary-note no-spontaneous-emergence-claim-yet))))
 
@@ -2032,7 +2138,8 @@
     (make-exp02-sweep-point seed-41 8 (exp02-family-keys))
     (make-exp02-sweep-point seed-43 8 (exp02-family-keys))
     (make-exp02-sweep-point seed-47 8 (exp02-family-keys))
-    (make-exp02-sweep-point seed-53 8 (exp02-family-keys))))
+    (make-exp02-sweep-point seed-53 8 (exp02-family-keys))
+    (make-exp02-sweep-point seed-59 8 (exp02-family-keys))))
 
 (= (exp02-broadened-run-records)
    ((exp02-run-record random)
@@ -2073,16 +2180,19 @@
     (exp02-run-record seed-47-no-catalysis)
     (exp02-run-record seed-53-random)
     (exp02-run-record seed-53-shuffled)
-    (exp02-run-record seed-53-no-catalysis)))
+    (exp02-run-record seed-53-no-catalysis)
+    (exp02-run-record seed-59-random)
+    (exp02-run-record seed-59-shuffled)
+    (exp02-run-record seed-59-no-catalysis)))
 
 (= (exp02-systematic-sweep-run-records)
    (exp02-broadened-run-records))
 
 (= (exp02-systematic-sweep-record-count)
-   39)
+   42)
 
 (= (exp02-systematic-sweep-complete?)
-   (and (== (exp02-systematic-sweep-record-count) 39)
+   (and (== (exp02-systematic-sweep-record-count) 42)
         (and (== (exp02-sweep-point-rule-count (make-exp02-sweep-point seed-13 8 (exp02-family-keys))) 8)
              (and (exp02-small-sweep-discriminates?)
                   (and (exp02-seed-11-sweep-discriminates?)
@@ -2097,7 +2207,8 @@
                                                                (and (exp02-seed-43-generated-negative-control?)
                                                                     (and (exp02-seed-47-generated-negative-control?)
                                                                     (and (exp02-seed-53-generated-negative-control?)
-                                                                         (exp02-sweep-kind-report-complete?)))))))))))))))))
+                                                                    (and (exp02-seed-59-generated-negative-control?)
+                                                                         (exp02-sweep-kind-report-complete?))))))))))))))))))
 
 (= (exp02-broadened-sweep-complete?)
    (and (exp02-parameterized-sweep-complete?)
