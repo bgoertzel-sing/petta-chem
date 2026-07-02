@@ -15,4 +15,4 @@ This is a concise report over the current deterministic PeTTa exp02 sweep. It is
 
 ## PeTTa provenance
 
-The table mirrors tested PeTTa atoms in `src/chem_exp02.metta`: `exp02-sweep-kind-summary`, `active-pair-rate`, and `exp02-sweep-kind-summary-report`.
+The table mirrors tested PeTTa atoms in `src/chem_exp02.metta`: `exp02-fold-sweep-kind-summary` now folds over `run-record` lists to derive family-record counts, active-family counts, active-pair totals, active random-polymer points, `exp02-sweep-kind-summary`, `active-pair-rate`, and `exp02-sweep-kind-summary-report`.

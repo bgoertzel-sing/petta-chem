@@ -1312,6 +1312,97 @@
 (= (exp02-run-record seed-31-no-catalysis)
    (make-run-record exp02-seed-31-rules-8-no-catalysis (exp02-run-config seed-31-no-catalysis) (exp02-run-manifest seed-31-no-catalysis) () (exp02-initial-abundances) (exp02-metrics seed-31-no-catalysis) (exp02-seed-31-acs-candidates no-catalysis) () (exp02-run-summary seed-31-no-catalysis)))
 
+; ----- PeTTa-side fold for sweep-kind summaries -----
+;
+; The first exp02 summary rows were deliberately explicit.  These helpers move
+; the accounting onto tested run-record atoms so larger sweeps can extend record
+; lists without retyping active-family and active-pair totals by hand.
+
+(= (exp02-list-length $items)
+   (if (== $items ())
+       0
+       (+ 1 (exp02-list-length (cdr-atom $items)))))
+
+(= (exp02-metric-name (metric $name $run-id $value))
+   $name)
+
+(= (exp02-metric-value (metric $name $run-id $value))
+   $value)
+
+(= (exp02-find-metric-value $name $metrics)
+   (if (== $metrics ())
+       None
+       (if (== (exp02-metric-name (car-atom $metrics)) $name)
+           (exp02-metric-value (car-atom $metrics))
+           (exp02-find-metric-value $name (cdr-atom $metrics)))))
+
+(= (exp02-run-record-active-count $record)
+   (exp02-find-metric-value active-acs-count (run-record-metrics $record)))
+
+(= (exp02-run-record-control-family $record)
+   (exp02-find-metric-value control-family (run-record-metrics $record)))
+
+(= (exp02-active-family-record? $record)
+   (> (exp02-run-record-active-count $record) 0))
+
+(= (exp02-active-family-record-count $records)
+   (if (== $records ())
+       0
+       (+ (if (exp02-active-family-record? (car-atom $records)) 1 0)
+          (exp02-active-family-record-count (cdr-atom $records)))))
+
+(= (exp02-active-pair-total $records)
+   (if (== $records ())
+       0
+       (+ (exp02-run-record-active-count (car-atom $records))
+          (exp02-active-pair-total (cdr-atom $records)))))
+
+(= (exp02-active-random-point-count $records)
+   (if (== $records ())
+       0
+       (+ (if (and (== (exp02-run-record-control-family (car-atom $records)) random-polymer)
+                   (exp02-active-family-record? (car-atom $records)))
+              1
+              0)
+          (exp02-active-random-point-count (cdr-atom $records)))))
+
+(= (exp02-fold-sweep-kind-summary $kind $sweep-points $records)
+   (make-exp02-sweep-kind-summary
+      $kind
+      $sweep-points
+      (exp02-list-length $records)
+      (exp02-active-family-record-count $records)
+      (exp02-active-pair-total $records)
+      (exp02-active-random-point-count $records)))
+
+(= (exp02-planted-control-records)
+   ((exp02-run-record random)
+    (exp02-run-record shuffled)
+    (exp02-run-record no-catalysis)
+    (exp02-run-record seed-11-random)
+    (exp02-run-record seed-11-shuffled)
+    (exp02-run-record seed-11-no-catalysis)
+    (exp02-run-record seed-13-random)
+    (exp02-run-record seed-13-shuffled)
+    (exp02-run-record seed-13-no-catalysis)
+    (exp02-run-record seed-17-random)
+    (exp02-run-record seed-17-shuffled)
+    (exp02-run-record seed-17-no-catalysis)))
+
+(= (exp02-generated-unplanted-control-records)
+   ((exp02-run-record seed-19-random)
+    (exp02-run-record seed-19-shuffled)
+    (exp02-run-record seed-19-no-catalysis)
+    (exp02-run-record seed-23-random)
+    (exp02-run-record seed-23-shuffled)
+    (exp02-run-record seed-23-no-catalysis)
+    (exp02-run-record seed-29-random)
+    (exp02-run-record seed-29-shuffled)
+    (exp02-run-record seed-29-no-catalysis)
+    (exp02-run-record seed-31-random)
+    (exp02-run-record seed-31-shuffled)
+    (exp02-run-record seed-31-no-catalysis)))
+
 (= (make-exp02-sweep-kind-summary
       $kind $sweep-points $family-records $active-family-records $active-pair-total $active-random-points)
    (exp02-sweep-kind-summary
@@ -1321,10 +1412,12 @@
    (active-pair-rate $kind $active-family-records $family-records))
 
 (= (exp02-planted-control-summary)
-   (make-exp02-sweep-kind-summary planted-reciprocal-pair-control 4 12 4 7 4))
+   (exp02-fold-sweep-kind-summary
+      planted-reciprocal-pair-control 4 (exp02-planted-control-records)))
 
 (= (exp02-generated-unplanted-control-summary)
-   (make-exp02-sweep-kind-summary generated-unplanted-control 4 12 0 0 0))
+   (exp02-fold-sweep-kind-summary
+      generated-unplanted-control 4 (exp02-generated-unplanted-control-records)))
 
 (= (exp02-sweep-kind-summaries)
    ((exp02-planted-control-summary)

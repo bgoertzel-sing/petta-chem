@@ -18,9 +18,9 @@ scripts/run_exp02.sh
 - SWI-Prolog: local `projects/omegaclaw/local/swipl-9.3.36`
 - Kernel/config source: `src/chem_exp02.metta`
 - Smoke/run-record source: `experiments/exp02/smoke.metta`
-- `src/chem_exp02.metta` SHA-256: `4929a9876420c91d60e8a9c91b06e9afcef45ca3f2c8b27844692a23e654be91`
-- `experiments/exp02/smoke.metta` SHA-256: `034599e37cdd5e8ace3ab89ddf3e6cb4ffb2b70852b90d674eb85fc136114b01`
-- `experiments/exp02_small_sweep_20260630/SUMMARY.md` SHA-256: `4126f64df6ce8b30acb56f5dd4c6d7fe19598270cd27872cd32ea3a991eeb71e`
+- `src/chem_exp02.metta` SHA-256: `c1350e1546c9ad92615290ddbdb48a2595caaf2203a44904e4563c4734b4f851`
+- `experiments/exp02/smoke.metta` SHA-256: `bcf7750e4afac076e34c6801960036b77d70db810032cfc053935e300b1c4ab2`
+- `experiments/exp02_small_sweep_20260630/SUMMARY.md` SHA-256: `acde682d1881f7dfbbdbf9fe95aa22e14609aa10b05bbac7050ece8f6534a1ad`
 - `scripts/write_exp02_contract_files.py` SHA-256: `304d9c587c298e48933c3549c51aeb51dfdb71f0cf38b1a3d3af410eb4e2b7f7`
 - `scripts/test_exp02_contract_files.sh` SHA-256: `218b4dfbd7131c5a5a1c20ebe493bfe00a2ba2e353c6925ab1932c158b227743`
 
@@ -64,7 +64,7 @@ scripts/run_exp02.sh
 
 ## Sweep-kind active-pair summary
 
-PeTTa `exp02-sweep-kind-summary` and `exp02-sweep-kind-summary-report` atoms now separate planted reciprocal-pair controls from generated-unplanted controls: planted controls have 4/12 family records with active pairs and 7 total active pairs across four random-polymer points; generated-unplanted controls have 0/12 family records with active pairs and 0 total active pairs across seed-19, seed-23, and factored-template seed-29/seed-31. A concise human-readable table is recorded in `SUMMARY.md`.
+PeTTa `exp02-fold-sweep-kind-summary`, `exp02-sweep-kind-summary`, and `exp02-sweep-kind-summary-report` atoms now separate planted reciprocal-pair controls from generated-unplanted controls while deriving family-record counts, active-family counts, active-pair totals, and active random-polymer points from tested `run-record` lists. The current folded summaries are unchanged scientifically: planted controls have 4/12 family records with active pairs and 7 total active pairs across four random-polymer points; generated-unplanted controls have 0/12 family records with active pairs and 0 total active pairs across seed-19, seed-23, and factored-template seed-29/seed-31. A concise human-readable table is recorded in `SUMMARY.md`.
 
 ## Exit status
 

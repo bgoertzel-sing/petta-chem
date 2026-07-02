@@ -408,6 +408,20 @@
 
 !(test (run-record-ids-consistent? (exp02-run-record seed-31-random)) True)
 
+!(test (exp02-list-length (exp02-planted-control-records)) 12)
+
+!(test (exp02-list-length (exp02-generated-unplanted-control-records)) 12)
+
+!(test (exp02-active-family-record-count (exp02-planted-control-records)) 4)
+
+!(test (exp02-active-pair-total (exp02-planted-control-records)) 7)
+
+!(test (exp02-active-random-point-count (exp02-planted-control-records)) 4)
+
+!(test (exp02-active-family-record-count (exp02-generated-unplanted-control-records)) 0)
+
+!(test (exp02-active-pair-total (exp02-generated-unplanted-control-records)) 0)
+
 !(test (exp02-sweep-kind-summaries)
        ((exp02-sweep-kind-summary planted-reciprocal-pair-control 4 12 4 7 4)
         (exp02-sweep-kind-summary generated-unplanted-control 4 12 0 0 0)
