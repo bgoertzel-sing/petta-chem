@@ -41,6 +41,7 @@ ABUNDANCES_BY_SEED = {
     "seed-79": "(abundance-snapshot 0 ((mol ZH0 2) (mol ZH1 1) (mol ZH2 1) (mol ZH3 1) (mol ZH01 0) (mol ZH23 0)))\n",
     "seed-83": "(abundance-snapshot 0 ((mol ZI0 2) (mol ZI1 1) (mol ZI2 1) (mol ZI3 1) (mol ZI01 0) (mol ZI23 0)))\n",
     "seed-89": "(abundance-snapshot 0 ((mol ZJ0 2) (mol ZJ1 1) (mol ZJ2 1) (mol ZJ3 1) (mol ZJ01 0) (mol ZJ23 0)))\n",
+    "seed-97": "(abundance-snapshot 0 ((mol ZK0 2) (mol ZK1 1) (mol ZK2 1) (mol ZK3 1) (mol ZK01 0) (mol ZK23 0)))\n",
 }
 
 RULES = {
@@ -664,6 +665,36 @@ RULES = {
         ("rr6", "ZJ3", "ZJ6", "ZJ36", "None"),
         ("rr7", "ZJ5", "ZJ8", "ZJ58", "None"),
     ],
+    ("seed-97", "random-polymer"): [
+        ("rr0", "ZK0", "ZK1", "ZK01", "ZK6"),
+        ("rr1", "ZK2", "ZK3", "ZK23", "ZK8"),
+        ("rr2", "ZK4", "ZK5", "ZK45", "ZK0"),
+        ("rr3", "ZK6", "ZK7", "ZK67", "ZK2"),
+        ("rr4", "ZK8", "ZK9", "ZK89", "ZK4"),
+        ("rr5", "ZK1", "ZK4", "ZK14", "ZK7"),
+        ("rr6", "ZK3", "ZK6", "ZK36", "ZK9"),
+        ("rr7", "ZK5", "ZK8", "ZK58", "ZK1"),
+    ],
+    ("seed-97", "shuffled-catalysts"): [
+        ("rr0", "ZK0", "ZK1", "ZK01", "ZK7"),
+        ("rr1", "ZK2", "ZK3", "ZK23", "ZK9"),
+        ("rr2", "ZK4", "ZK5", "ZK45", "ZK1"),
+        ("rr3", "ZK6", "ZK7", "ZK67", "ZK3"),
+        ("rr4", "ZK8", "ZK9", "ZK89", "ZK5"),
+        ("rr5", "ZK1", "ZK4", "ZK14", "ZK8"),
+        ("rr6", "ZK3", "ZK6", "ZK36", "ZK0"),
+        ("rr7", "ZK5", "ZK8", "ZK58", "ZK2"),
+    ],
+    ("seed-97", "no-catalysis"): [
+        ("rr0", "ZK0", "ZK1", "ZK01", "None"),
+        ("rr1", "ZK2", "ZK3", "ZK23", "None"),
+        ("rr2", "ZK4", "ZK5", "ZK45", "None"),
+        ("rr3", "ZK6", "ZK7", "ZK67", "None"),
+        ("rr4", "ZK8", "ZK9", "ZK89", "None"),
+        ("rr5", "ZK1", "ZK4", "ZK14", "None"),
+        ("rr6", "ZK3", "ZK6", "ZK36", "None"),
+        ("rr7", "ZK5", "ZK8", "ZK58", "None"),
+    ],
 
 }
 
@@ -698,7 +729,7 @@ def count_word(count: int) -> str:
 
 def build_specs() -> list[RunSpec]:
     specs: list[RunSpec] = []
-    for seed, count in [("seed-7", 4), ("seed-11", 6), ("seed-13", 8), ("seed-17", 8), ("seed-19", 8), ("seed-23", 8), ("seed-29", 8), ("seed-31", 8), ("seed-37", 8), ("seed-41", 8), ("seed-43", 8), ("seed-47", 8), ("seed-53", 8), ("seed-59", 8), ("seed-61", 8), ("seed-67", 8), ("seed-71", 8), ("seed-73", 8), ("seed-79", 8), ("seed-83", 8), ("seed-89", 8)]:
+    for seed, count in [("seed-7", 4), ("seed-11", 6), ("seed-13", 8), ("seed-17", 8), ("seed-19", 8), ("seed-23", 8), ("seed-29", 8), ("seed-31", 8), ("seed-37", 8), ("seed-41", 8), ("seed-43", 8), ("seed-47", 8), ("seed-53", 8), ("seed-59", 8), ("seed-61", 8), ("seed-67", 8), ("seed-71", 8), ("seed-73", 8), ("seed-79", 8), ("seed-83", 8), ("seed-89", 8), ("seed-97", 8)]:
         for family in ["random-polymer", "shuffled-catalysts", "no-catalysis"]:
             suffix = control_suffix(family)
             if seed == "seed-7":
@@ -752,7 +783,7 @@ def metric_atoms(spec: RunSpec) -> str:
     if spec.seed in {"seed-19", "seed-23"}:
         body += f"(metric generation-seam {spec.run_id} seed-to-components)\n"
         body += f"(metric sweep-kind {spec.run_id} generated-unplanted-control)\n"
-    if spec.seed in {"seed-29", "seed-31", "seed-37", "seed-41", "seed-43", "seed-47", "seed-53", "seed-59", "seed-61", "seed-67", "seed-71", "seed-73", "seed-79", "seed-83", "seed-89"}:
+    if spec.seed in {"seed-29", "seed-31", "seed-37", "seed-41", "seed-43", "seed-47", "seed-53", "seed-59", "seed-61", "seed-67", "seed-71", "seed-73", "seed-79", "seed-83", "seed-89", "seed-97"}:
         body += f"(metric generation-seam {spec.run_id} factored-seed-template)\n"
         body += f"(metric sweep-kind {spec.run_id} generated-unplanted-control)\n"
     return body
