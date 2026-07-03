@@ -945,3 +945,236 @@
              (and (run-record-passed? (exp03-exp02-full-source-run-record seed-13 no-catalysis))
                   (and (exp03-exp02-full-source-controls-discriminate-seed-13?)
                        (exp03-exp02-full-source-replay-ok-seed-13?))))))
+
+; ----- seed-17/eight-rule generated full source-pool dynamic bridge -----
+;
+; This adds a second eight-rule full-source dynamic point using the seed-to-
+; components exp02 generation seam.  The chamber keeps all eight generated
+; rules visible while the same cap/order exposes a bounded rr1/rr0 dynamic
+; window: random-polymer fires rr0 twice over three ticks, while shuffled and
+; no-catalysis controls remain no-op.
+
+(= (seed-number seed-17) 17)
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0-count)
+                      (mol S1 $s1-count)
+                      (mol S01 $product-count)
+                      (mol S10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule rr0 S0 S1 S01 S10) $score))
+   (if (and (> $s0-count 0)
+            (and (> $s1-count 0)
+                 (> $catalyst-count 0)))
+       (let $trace (fire-binary-catalytic
+                     (rule rr0 S0 S1 S01 S10)
+                     (state $tick $seed
+                            (mol S0 $s0-count)
+                            (mol S1 $s1-count)
+                            (mol S01 $product-count)
+                            (mol S10 $catalyst-count)))
+         (chamber $id
+                  (trace-state $trace)
+                  $rules
+                  (append-event $events (trace-event $trace))))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol S0 $s0-count)
+                       (mol S1 $s1-count)
+                       (mol S01 $product-count)
+                       (mol S10 $catalyst-count))
+                $rules
+                $events)))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0-count)
+                      (mol S1 $s1-count)
+                      (mol S01 $product-count)
+                      (mol S10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule rr1 S2 S3 S10 S01) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol S0 $s0-count)
+                   (mol S1 $s1-count)
+                   (mol S01 $product-count)
+                   (mol S10 $catalyst-count))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0-count)
+                      (mol S1 $s1-count)
+                      (mol S01 $product-count)
+                      (mol S10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule rr0 S0 S1 S01 S2) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol S0 $s0-count)
+                   (mol S1 $s1-count)
+                   (mol S01 $product-count)
+                   (mol S10 $catalyst-count))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0-count)
+                      (mol S1 $s1-count)
+                      (mol S01 $product-count)
+                      (mol S10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule rr1 S2 S3 S10 S4) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol S0 $s0-count)
+                   (mol S1 $s1-count)
+                   (mol S01 $product-count)
+                   (mol S10 $catalyst-count))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0-count)
+                      (mol S1 $s1-count)
+                      (mol S01 $product-count)
+                      (mol S10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule rr0 S0 S1 S01 None) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol S0 $s0-count)
+                   (mol S1 $s1-count)
+                   (mol S01 $product-count)
+                   (mol S10 $catalyst-count))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0-count)
+                      (mol S1 $s1-count)
+                      (mol S01 $product-count)
+                      (mol S10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule rr1 S2 S3 S10 None) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol S0 $s0-count)
+                   (mol S1 $s1-count)
+                   (mol S01 $product-count)
+                   (mol S10 $catalyst-count))
+            $rules
+            $events))
+
+(= (exp03-exp02-initial-state seed-17)
+   (state 0 seed-17 (mol S0 2) (mol S1 2) (mol S01 0) (mol S10 1)))
+
+(= (exp03-exp02-full-source-rules seed-17 $family)
+   ((exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr1))
+    (exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr0))
+    (exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr2))
+    (exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr3))
+    (exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr4))
+    (exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr5))
+    (exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr6))
+    (exp02-generated-rule $family (exp02-seed-rule-components seed-17 rr7))))
+
+(= (exp03-exp02-full-source-chamber $family seed-17)
+   (make-chamber (exp03-exp02-full-source $family seed-17)
+                 (exp03-exp02-initial-state seed-17)
+                 (exp03-exp02-full-source-rules seed-17 $family)
+                 ()))
+
+(= (exp03-exp02-full-source-capped-pool $family seed-17)
+   (bounded-candidate-pool
+     (exp00-candidate-cap)
+     (exp03-exp02-full-source-chamber $family seed-17)))
+
+(= (exp03-exp02-full-source-after-3 $family seed-17)
+   (chamber-run-3 (exp03-exp02-full-source-chamber $family seed-17)))
+
+(= (exp03-exp02-full-source-event-count $family seed-17)
+   (event-count (trace-events (exp03-exp02-full-source-after-3 $family seed-17))))
+
+(= (exp03-exp02-full-source-controls-discriminate-seed-17?)
+   (and (> (exp03-exp02-full-source-event-count random-polymer seed-17)
+           (exp03-exp02-full-source-event-count shuffled-catalysts seed-17))
+        (> (exp03-exp02-full-source-event-count random-polymer seed-17)
+           (exp03-exp02-full-source-event-count no-catalysis seed-17))))
+
+(= (exp03-exp02-full-source-replay-ok-seed-17?)
+   (== (exp03-exp02-full-source-after-3 random-polymer seed-17)
+       (chamber-run-1
+         (chamber-run-1
+           (chamber-run-1 (exp03-exp02-full-source-chamber random-polymer seed-17))))))
+
+(= (exp03-exp02-full-source-run-config seed-17 random-polymer)
+   (make-run-config exp03-exp02-seed-17-full-source-random exp03 (seed-17) 3 (candidate-cap 2 1) random-polymer))
+
+(= (exp03-exp02-full-source-run-config seed-17 shuffled-catalysts)
+   (make-run-config exp03-exp02-seed-17-full-source-shuffled exp03 (seed-17) 3 (candidate-cap 2 1) shuffled-catalysts))
+
+(= (exp03-exp02-full-source-run-config seed-17 no-catalysis)
+   (make-run-config exp03-exp02-seed-17-full-source-no-catalysis exp03 (seed-17) 3 (candidate-cap 2 1) no-catalysis))
+
+(= (exp03-exp02-full-source-run-manifest seed-17 random-polymer)
+   (make-run-manifest exp03-exp02-seed-17-full-source-random config-hash-exp03-exp02-seed-17-full-source-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-exp02-full-source-run-manifest seed-17 shuffled-catalysts)
+   (make-run-manifest exp03-exp02-seed-17-full-source-shuffled config-hash-exp03-exp02-seed-17-full-source-shuffled petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-exp02-full-source-run-manifest seed-17 no-catalysis)
+   (make-run-manifest exp03-exp02-seed-17-full-source-no-catalysis config-hash-exp03-exp02-seed-17-full-source-no-catalysis petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-exp02-full-source-metrics seed-17 $family)
+   ((metric dynamic-event-count (run-config-id (exp03-exp02-full-source-run-config seed-17 $family)) (exp03-exp02-full-source-event-count $family seed-17))
+    (metric source-exp02-rule-count (run-config-id (exp03-exp02-full-source-run-config seed-17 $family)) 8)
+    (metric dynamic-candidate-cap (run-config-id (exp03-exp02-full-source-run-config seed-17 $family)) 2)
+    (metric generation-seam (run-config-id (exp03-exp02-full-source-run-config seed-17 $family)) seed-to-components)))
+
+(= (exp03-exp02-full-source-run-summary seed-17 random-polymer)
+   (make-run-summary exp03-exp02-seed-17-full-source-random passed seed-17-full-source-bounded-dynamic-replay-ok True))
+
+(= (exp03-exp02-full-source-run-summary seed-17 shuffled-catalysts)
+   (make-run-summary exp03-exp02-seed-17-full-source-shuffled passed seed-17-shuffled-full-source-control-zero-events True))
+
+(= (exp03-exp02-full-source-run-summary seed-17 no-catalysis)
+   (make-run-summary exp03-exp02-seed-17-full-source-no-catalysis passed seed-17-no-catalysis-full-source-control-zero-events True))
+
+(= (exp03-exp02-full-source-run-record seed-17 $family)
+   (make-run-record
+     (run-config-id (exp03-exp02-full-source-run-config seed-17 $family))
+     (exp03-exp02-full-source-run-config seed-17 $family)
+     (exp03-exp02-full-source-run-manifest seed-17 $family)
+     (trace-events (exp03-exp02-full-source-after-3 $family seed-17))
+     ((state-abundance-snapshot (exp03-exp02-initial-state seed-17))
+      (chamber-abundance-snapshot (exp03-exp02-full-source-after-3 $family seed-17)))
+     (exp03-exp02-full-source-metrics seed-17 $family)
+     (exp02-seed-17-acs-candidates $family)
+     ()
+     (exp03-exp02-full-source-run-summary seed-17 $family)))
+
+(= (exp03-exp02-full-source-run-records-complete-seed-17?)
+   (and (run-record-passed? (exp03-exp02-full-source-run-record seed-17 random-polymer))
+        (and (run-record-passed? (exp03-exp02-full-source-run-record seed-17 shuffled-catalysts))
+             (and (run-record-passed? (exp03-exp02-full-source-run-record seed-17 no-catalysis))
+                  (and (exp03-exp02-full-source-controls-discriminate-seed-17?)
+                       (exp03-exp02-full-source-replay-ok-seed-17?))))))

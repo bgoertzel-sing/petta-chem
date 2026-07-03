@@ -189,3 +189,50 @@
         (abundance-snapshot 3 ((mol R0 2) (mol R1 2) (mol R01 0) (mol R10 1)))))
 
 !(test (exp03-exp02-full-source-run-records-complete-seed-13?) True)
+
+
+!(test (exp03-exp02-full-source-capped-pool random-polymer seed-17)
+       (candidate-pool
+         0
+         ((candidate 0 (rule rr1 S2 S3 S10 S01) 1)
+          (candidate 0 (rule rr0 S0 S1 S01 S10) 1))))
+
+!(test (exp03-exp02-full-source-after-3 random-polymer seed-17)
+       (chamber (exp03-exp02-full-source random-polymer seed-17)
+                (state 3 seed-17 (mol S0 0) (mol S1 0) (mol S01 2) (mol S10 1))
+                ((rule rr1 S2 S3 S10 S01)
+                 (rule rr0 S0 S1 S01 S10)
+                 (rule rr2 S4 S5 S45 S54)
+                 (rule rr3 S6 S7 S54 S45)
+                 (rule rr4 S8 S9 S89 S2)
+                 (rule rr5 S0 S5 S05 S3)
+                 (rule rr6 S1 S6 S16 S5)
+                 (rule rr7 S2 S7 S27 S9))
+                ((event 0 rr0 S0 S1 S01 S10)
+                 (event 2 rr0 S0 S1 S01 S10))))
+
+!(test (exp03-exp02-full-source-event-count random-polymer seed-17) 2)
+
+!(test (exp03-exp02-full-source-event-count shuffled-catalysts seed-17) 0)
+
+!(test (exp03-exp02-full-source-event-count no-catalysis seed-17) 0)
+
+!(test (exp03-exp02-full-source-controls-discriminate-seed-17?) True)
+
+!(test (exp03-exp02-full-source-replay-ok-seed-17?) True)
+
+!(test (run-record-events (exp03-exp02-full-source-run-record seed-17 random-polymer))
+       ((event 0 rr0 S0 S1 S01 S10)
+        (event 2 rr0 S0 S1 S01 S10)))
+
+!(test (run-record-abundances (exp03-exp02-full-source-run-record seed-17 shuffled-catalysts))
+       ((abundance-snapshot 0 ((mol S0 2) (mol S1 2) (mol S01 0) (mol S10 1)))
+        (abundance-snapshot 3 ((mol S0 2) (mol S1 2) (mol S01 0) (mol S10 1)))))
+
+!(test (run-record-metrics (exp03-exp02-full-source-run-record seed-17 random-polymer))
+       ((metric dynamic-event-count exp03-exp02-seed-17-full-source-random 2)
+        (metric source-exp02-rule-count exp03-exp02-seed-17-full-source-random 8)
+        (metric dynamic-candidate-cap exp03-exp02-seed-17-full-source-random 2)
+        (metric generation-seam exp03-exp02-seed-17-full-source-random seed-to-components)))
+
+!(test (exp03-exp02-full-source-run-records-complete-seed-17?) True)
