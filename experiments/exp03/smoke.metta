@@ -148,6 +148,25 @@
        ((event 0 rr0 P0 P1 P01 P10)
         (event 2 rr0 P0 P1 P01 P10)))
 
+!(test (run-record-events (exp03-exp02-full-source-run-record seed-7 shuffled)) ())
+
+!(test (run-record-abundances (exp03-exp02-full-source-run-record seed-7 no-catalysis))
+       ((abundance-snapshot 0 ((mol P0 2) (mol P1 2) (mol P01 0) (mol P10 1)))
+        (abundance-snapshot 3 ((mol P0 2) (mol P1 2) (mol P01 0) (mol P10 1)))))
+
+!(test (run-export-events (exp03-exp02-full-source-run-export seed-7 random))
+       ((event 0 rr0 P0 P1 P01 P10)
+        (event 2 rr0 P0 P1 P01 P10)))
+
+!(test (run-export-metrics (exp03-exp02-full-source-run-export seed-7 shuffled))
+       ((metric dynamic-event-count exp03-exp02-seed-7-full-source-shuffled 0)
+        (metric control-family exp03-exp02-seed-7-full-source-shuffled shuffled-catalysts)
+        (metric source-exp02-rule-count exp03-exp02-seed-7-full-source-shuffled 4)
+        (metric dynamic-candidate-cap exp03-exp02-seed-7-full-source-shuffled 2)))
+
+!(test (run-export-summary (exp03-exp02-full-source-run-export seed-7 no-catalysis))
+       (run-summary exp03-exp02-seed-7-full-source-no-catalysis passed seed-7-no-catalysis-full-source-control-zero-events True))
+
 !(test (exp03-exp02-full-source-run-record-complete?) True)
 
 !(test (exp03-exp02-full-source-capped-pool random-polymer seed-13)
@@ -187,6 +206,8 @@
 !(test (run-record-abundances (exp03-exp02-full-source-run-record seed-13 shuffled-catalysts))
        ((abundance-snapshot 0 ((mol R0 2) (mol R1 2) (mol R01 0) (mol R10 1)))
         (abundance-snapshot 3 ((mol R0 2) (mol R1 2) (mol R01 0) (mol R10 1)))))
+
+!(test (run-export-events (exp03-exp02-full-source-run-export seed-13 no-catalysis)) ())
 
 !(test (exp03-exp02-full-source-run-records-complete-seed-13?) True)
 
@@ -230,6 +251,12 @@
         (abundance-snapshot 3 ((mol S0 2) (mol S1 2) (mol S01 0) (mol S10 1)))))
 
 !(test (run-record-metrics (exp03-exp02-full-source-run-record seed-17 random-polymer))
+       ((metric dynamic-event-count exp03-exp02-seed-17-full-source-random 2)
+        (metric source-exp02-rule-count exp03-exp02-seed-17-full-source-random 8)
+        (metric dynamic-candidate-cap exp03-exp02-seed-17-full-source-random 2)
+        (metric generation-seam exp03-exp02-seed-17-full-source-random seed-to-components)))
+
+!(test (run-export-metrics (exp03-exp02-full-source-run-export seed-17 random-polymer))
        ((metric dynamic-event-count exp03-exp02-seed-17-full-source-random 2)
         (metric source-exp02-rule-count exp03-exp02-seed-17-full-source-random 8)
         (metric dynamic-candidate-cap exp03-exp02-seed-17-full-source-random 2)

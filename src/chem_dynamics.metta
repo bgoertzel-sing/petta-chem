@@ -683,8 +683,20 @@
 (= (exp03-exp02-full-source-run-config seed-7 random)
    (make-run-config exp03-exp02-seed-7-full-source-random exp03 (seed-7) 3 (candidate-cap 2 1) random-polymer))
 
+(= (exp03-exp02-full-source-run-config seed-7 shuffled)
+   (make-run-config exp03-exp02-seed-7-full-source-shuffled exp03 (seed-7) 3 (candidate-cap 2 1) shuffled-catalysts))
+
+(= (exp03-exp02-full-source-run-config seed-7 no-catalysis)
+   (make-run-config exp03-exp02-seed-7-full-source-no-catalysis exp03 (seed-7) 3 (candidate-cap 2 1) no-catalysis))
+
 (= (exp03-exp02-full-source-run-manifest seed-7 random)
    (make-run-manifest exp03-exp02-seed-7-full-source-random config-hash-exp03-exp02-seed-7-full-source-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-exp02-full-source-run-manifest seed-7 shuffled)
+   (make-run-manifest exp03-exp02-seed-7-full-source-shuffled config-hash-exp03-exp02-seed-7-full-source-shuffled petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-exp02-full-source-run-manifest seed-7 no-catalysis)
+   (make-run-manifest exp03-exp02-seed-7-full-source-no-catalysis config-hash-exp03-exp02-seed-7-full-source-no-catalysis petta-local swi-9-3-36 scripts-run-exp03-sh 0))
 
 (= (exp03-exp02-full-source-metrics seed-7 random)
    ((metric dynamic-event-count exp03-exp02-seed-7-full-source-random (exp03-exp02-full-source-event-count random seed-7))
@@ -692,26 +704,92 @@
     (metric source-exp02-rule-count exp03-exp02-seed-7-full-source-random 4)
     (metric dynamic-candidate-cap exp03-exp02-seed-7-full-source-random 2)))
 
+(= (exp03-exp02-full-source-metrics seed-7 shuffled)
+   ((metric dynamic-event-count exp03-exp02-seed-7-full-source-shuffled (exp03-exp02-full-source-event-count shuffled seed-7))
+    (metric control-family exp03-exp02-seed-7-full-source-shuffled shuffled-catalysts)
+    (metric source-exp02-rule-count exp03-exp02-seed-7-full-source-shuffled 4)
+    (metric dynamic-candidate-cap exp03-exp02-seed-7-full-source-shuffled 2)))
+
+(= (exp03-exp02-full-source-metrics seed-7 no-catalysis)
+   ((metric dynamic-event-count exp03-exp02-seed-7-full-source-no-catalysis (exp03-exp02-full-source-event-count no-catalysis seed-7))
+    (metric control-family exp03-exp02-seed-7-full-source-no-catalysis no-catalysis)
+    (metric source-exp02-rule-count exp03-exp02-seed-7-full-source-no-catalysis 4)
+    (metric dynamic-candidate-cap exp03-exp02-seed-7-full-source-no-catalysis 2)))
+
 (= (exp03-exp02-full-source-run-summary seed-7 random)
    (make-run-summary exp03-exp02-seed-7-full-source-random passed seed-7-full-source-bounded-dynamic-replay-ok True))
 
-(= (exp03-exp02-full-source-run-record seed-7 random)
+(= (exp03-exp02-full-source-run-summary seed-7 shuffled)
+   (make-run-summary exp03-exp02-seed-7-full-source-shuffled passed seed-7-shuffled-full-source-control-zero-events True))
+
+(= (exp03-exp02-full-source-run-summary seed-7 no-catalysis)
+   (make-run-summary exp03-exp02-seed-7-full-source-no-catalysis passed seed-7-no-catalysis-full-source-control-zero-events True))
+
+(= (exp03-exp02-full-source-acs-candidates seed-7 random)
+   (exp02-random-acs-candidates seed-7))
+
+(= (exp03-exp02-full-source-acs-candidates seed-7 shuffled)
+   (exp02-shuffled-acs-candidates seed-7))
+
+(= (exp03-exp02-full-source-acs-candidates seed-7 no-catalysis)
+   (exp02-no-catalysis-acs-candidates seed-7))
+
+(= (exp03-exp02-full-source-run-record seed-7 $family)
    (make-run-record
-     (run-config-id (exp03-exp02-full-source-run-config seed-7 random))
-     (exp03-exp02-full-source-run-config seed-7 random)
-     (exp03-exp02-full-source-run-manifest seed-7 random)
-     (trace-events (exp03-exp02-full-source-after-3 random seed-7))
+     (run-config-id (exp03-exp02-full-source-run-config seed-7 $family))
+     (exp03-exp02-full-source-run-config seed-7 $family)
+     (exp03-exp02-full-source-run-manifest seed-7 $family)
+     (trace-events (exp03-exp02-full-source-after-3 $family seed-7))
      ((state-abundance-snapshot (exp03-exp02-initial-state seed-7))
-      (chamber-abundance-snapshot (exp03-exp02-full-source-after-3 random seed-7)))
-     (exp03-exp02-full-source-metrics seed-7 random)
-     (exp02-random-acs-candidates seed-7)
+      (chamber-abundance-snapshot (exp03-exp02-full-source-after-3 $family seed-7)))
+     (exp03-exp02-full-source-metrics seed-7 $family)
+     (exp03-exp02-full-source-acs-candidates seed-7 $family)
      ()
-     (exp03-exp02-full-source-run-summary seed-7 random)))
+     (exp03-exp02-full-source-run-summary seed-7 $family)))
+
+(= (exp03-exp02-full-source-run-records seed-7)
+   ((exp03-exp02-full-source-run-record seed-7 random)
+    (exp03-exp02-full-source-run-record seed-7 shuffled)
+    (exp03-exp02-full-source-run-record seed-7 no-catalysis)))
+
+(= (make-run-export $record)
+   (run-export
+     (run-record-config $record)
+     (run-record-manifest $record)
+     (run-record-events $record)
+     (run-record-abundances $record)
+     (run-record-metrics $record)
+     (run-record-acs-candidates $record)
+     (run-record-ablations $record)
+     (run-record-summary $record)))
+
+(= (run-export-events
+      (run-export $config $manifest $events $abundances $metrics $acs-candidates $ablations $summary))
+   $events)
+
+(= (run-export-metrics
+      (run-export $config $manifest $events $abundances $metrics $acs-candidates $ablations $summary))
+   $metrics)
+
+(= (run-export-summary
+      (run-export $config $manifest $events $abundances $metrics $acs-candidates $ablations $summary))
+   $summary)
+
+(= (exp03-exp02-full-source-run-export seed-7 $family)
+   (make-run-export (exp03-exp02-full-source-run-record seed-7 $family)))
+
+(= (exp03-exp02-full-source-run-export seed-13 $family)
+   (make-run-export (exp03-exp02-full-source-run-record seed-13 $family)))
+
+(= (exp03-exp02-full-source-run-export seed-17 $family)
+   (make-run-export (exp03-exp02-full-source-run-record seed-17 $family)))
 
 (= (exp03-exp02-full-source-run-record-complete?)
    (and (run-record-passed? (exp03-exp02-full-source-run-record seed-7 random))
-        (and (exp03-exp02-full-source-controls-discriminate?)
-             (exp03-exp02-full-source-replay-ok?))))
+        (and (run-record-passed? (exp03-exp02-full-source-run-record seed-7 shuffled))
+             (and (run-record-passed? (exp03-exp02-full-source-run-record seed-7 no-catalysis))
+                  (and (exp03-exp02-full-source-controls-discriminate?)
+                       (exp03-exp02-full-source-replay-ok?))))))
 
 ; ----- seed-13/eight-rule full source-pool dynamic bridge -----
 ;
