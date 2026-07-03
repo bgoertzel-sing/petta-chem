@@ -89,3 +89,31 @@
 !(test (exp03-exp02-event-count no-catalysis seed-7) 0)
 
 !(test (exp03-exp02-dynamic-controls-discriminate?) True)
+
+!(test (exp03-exp02-after-3 random seed-11)
+       (chamber (exp03-exp02 random seed-11)
+                (state 3 seed-11 (mol Q0 0) (mol Q1 0) (mol Q01 2) (mol Q10 1))
+                ((rule rr1 Q2 Q3 Q10 Q01)
+                 (rule rr0 Q0 Q1 Q01 Q10))
+                ((event 0 rr0 Q0 Q1 Q01 Q10)
+                 (event 2 rr0 Q0 Q1 Q01 Q10))))
+
+!(test (exp03-exp02-event-count random seed-11) 2)
+
+!(test (exp03-exp02-event-count shuffled seed-11) 0)
+
+!(test (exp03-exp02-event-count no-catalysis seed-11) 0)
+
+!(test (exp03-exp02-dynamic-controls-discriminate-seed-11?) True)
+
+!(test (run-record-passed? (exp03-exp02-dynamic-run-record seed-11 random)) True)
+
+!(test (run-record-events (exp03-exp02-dynamic-run-record seed-11 random))
+       ((event 0 rr0 Q0 Q1 Q01 Q10)
+        (event 2 rr0 Q0 Q1 Q01 Q10)))
+
+!(test (run-record-abundances (exp03-exp02-dynamic-run-record seed-11 shuffled))
+       ((abundance-snapshot 0 ((mol Q0 2) (mol Q1 2) (mol Q01 0) (mol Q10 1)))
+        (abundance-snapshot 3 ((mol Q0 2) (mol Q1 2) (mol Q01 0) (mol Q10 1)))))
+
+!(test (exp03-exp02-dynamic-run-records-complete-seed-11?) True)
