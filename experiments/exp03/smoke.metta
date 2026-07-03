@@ -149,3 +149,43 @@
         (event 2 rr0 P0 P1 P01 P10)))
 
 !(test (exp03-exp02-full-source-run-record-complete?) True)
+
+!(test (exp03-exp02-full-source-capped-pool random-polymer seed-13)
+       (candidate-pool
+         0
+         ((candidate 0 (rule rr1 R2 R3 R10 R01) 1)
+          (candidate 0 (rule rr0 R0 R1 R01 R10) 1))))
+
+!(test (exp03-exp02-full-source-after-3 random-polymer seed-13)
+       (chamber (exp03-exp02-full-source random-polymer seed-13)
+                (state 3 seed-13 (mol R0 0) (mol R1 0) (mol R01 2) (mol R10 1))
+                ((rule rr1 R2 R3 R10 R01)
+                 (rule rr0 R0 R1 R01 R10)
+                 (rule rr2 R4 R5 R45 R54)
+                 (rule rr3 R6 R7 R54 R45)
+                 (rule rr4 R8 R9 R89 R2)
+                 (rule rr5 R0 R5 R05 R3)
+                 (rule rr6 R1 R6 R16 R5)
+                 (rule rr7 R2 R7 R27 R9))
+                ((event 0 rr0 R0 R1 R01 R10)
+                 (event 2 rr0 R0 R1 R01 R10))))
+
+!(test (exp03-exp02-full-source-event-count random-polymer seed-13) 2)
+
+!(test (exp03-exp02-full-source-event-count shuffled-catalysts seed-13) 0)
+
+!(test (exp03-exp02-full-source-event-count no-catalysis seed-13) 0)
+
+!(test (exp03-exp02-full-source-controls-discriminate-seed-13?) True)
+
+!(test (exp03-exp02-full-source-replay-ok-seed-13?) True)
+
+!(test (run-record-events (exp03-exp02-full-source-run-record seed-13 random-polymer))
+       ((event 0 rr0 R0 R1 R01 R10)
+        (event 2 rr0 R0 R1 R01 R10)))
+
+!(test (run-record-abundances (exp03-exp02-full-source-run-record seed-13 shuffled-catalysts))
+       ((abundance-snapshot 0 ((mol R0 2) (mol R1 2) (mol R01 0) (mol R10 1)))
+        (abundance-snapshot 3 ((mol R0 2) (mol R1 2) (mol R01 0) (mol R10 1)))))
+
+!(test (exp03-exp02-full-source-run-records-complete-seed-13?) True)
