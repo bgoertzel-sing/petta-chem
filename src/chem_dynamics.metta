@@ -1256,3 +1256,89 @@
              (and (run-record-passed? (exp03-exp02-full-source-run-record seed-17 no-catalysis))
                   (and (exp03-exp02-full-source-controls-discriminate-seed-17?)
                        (exp03-exp02-full-source-replay-ok-seed-17?))))))
+
+; ----- compact dynamic aggregate/report over tested full-source exports -----
+;
+; These atoms summarize the current exp03 full-source dynamic evidence across the
+; tested seed-7, seed-13, and seed-17 run-export projections.  The report is a
+; PeTTa-side compact provenance object for smoke tests and human-facing notes: it
+; records random-family event counts, zero-event controls, and the common bounded
+; candidate cap without broadening the chemistry kernel into host code.
+
+(= (make-exp03-dynamic-summary-row $seed $random-events $shuffled-events $no-catalysis-events $candidate-cap $replay-ok?)
+   (exp03-dynamic-summary-row $seed $random-events $shuffled-events $no-catalysis-events $candidate-cap $replay-ok?))
+
+(= (exp03-dynamic-summary-row-seed
+      (exp03-dynamic-summary-row $seed $random-events $shuffled-events $no-catalysis-events $candidate-cap $replay-ok?))
+   $seed)
+
+(= (exp03-dynamic-summary-row-random-events
+      (exp03-dynamic-summary-row $seed $random-events $shuffled-events $no-catalysis-events $candidate-cap $replay-ok?))
+   $random-events)
+
+(= (exp03-dynamic-summary-row-control-zero?
+      (exp03-dynamic-summary-row $seed $random-events 0 0 $candidate-cap $replay-ok?))
+   True)
+
+(= (exp03-dynamic-summary-row-for seed-7)
+   (make-exp03-dynamic-summary-row
+     seed-7
+     (event-count (run-export-events (exp03-exp02-full-source-run-export seed-7 random)))
+     (event-count (run-export-events (exp03-exp02-full-source-run-export seed-7 shuffled)))
+     (event-count (run-export-events (exp03-exp02-full-source-run-export seed-7 no-catalysis)))
+     2
+     (exp03-exp02-full-source-replay-ok?)))
+
+(= (exp03-dynamic-summary-row-for seed-13)
+   (make-exp03-dynamic-summary-row
+     seed-13
+     (event-count (run-export-events (exp03-exp02-full-source-run-export seed-13 random-polymer)))
+     (event-count (run-export-events (exp03-exp02-full-source-run-export seed-13 shuffled-catalysts)))
+     (event-count (run-export-events (exp03-exp02-full-source-run-export seed-13 no-catalysis)))
+     2
+     (exp03-exp02-full-source-replay-ok-seed-13?)))
+
+(= (exp03-dynamic-summary-row-for seed-17)
+   (make-exp03-dynamic-summary-row
+     seed-17
+     (event-count (run-export-events (exp03-exp02-full-source-run-export seed-17 random-polymer)))
+     (event-count (run-export-events (exp03-exp02-full-source-run-export seed-17 shuffled-catalysts)))
+     (event-count (run-export-events (exp03-exp02-full-source-run-export seed-17 no-catalysis)))
+     2
+     (exp03-exp02-full-source-replay-ok-seed-17?)))
+
+(= (exp03-dynamic-summary-rows)
+   ((exp03-dynamic-summary-row-for seed-7)
+    (exp03-dynamic-summary-row-for seed-13)
+    (exp03-dynamic-summary-row-for seed-17)))
+
+(= (exp03-dynamic-aggregate-report-current)
+   (exp03-dynamic-aggregate-report
+     tested-full-source-exports
+     (seeds seed-7 seed-13 seed-17)
+     (family-records 9)
+     (active-random-family-records 3)
+     (zero-event-control-family-records 6)
+     (total-random-events 6)
+     (total-control-events 0)
+     (candidate-cap 2)
+     (rows (exp03-dynamic-summary-rows))))
+
+(= (exp03-dynamic-aggregate-report-control-clean?
+      (exp03-dynamic-aggregate-report
+        tested-full-source-exports
+        (seeds seed-7 seed-13 seed-17)
+        (family-records 9)
+        (active-random-family-records 3)
+        (zero-event-control-family-records 6)
+        (total-random-events 6)
+        (total-control-events 0)
+        (candidate-cap 2)
+        $rows))
+   True)
+
+(= (exp03-dynamic-aggregate-report-complete?)
+   (and (exp03-dynamic-summary-row-control-zero? (exp03-dynamic-summary-row-for seed-7))
+        (and (exp03-dynamic-summary-row-control-zero? (exp03-dynamic-summary-row-for seed-13))
+             (and (exp03-dynamic-summary-row-control-zero? (exp03-dynamic-summary-row-for seed-17))
+                  (exp03-dynamic-aggregate-report-control-clean? (exp03-dynamic-aggregate-report-current))))))

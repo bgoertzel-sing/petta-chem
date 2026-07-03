@@ -263,3 +263,33 @@
         (metric generation-seam exp03-exp02-seed-17-full-source-random seed-to-components)))
 
 !(test (exp03-exp02-full-source-run-records-complete-seed-17?) True)
+
+!(test (exp03-dynamic-summary-row-for seed-7)
+       (exp03-dynamic-summary-row seed-7 2 0 0 2 True))
+
+!(test (exp03-dynamic-summary-row-for seed-13)
+       (exp03-dynamic-summary-row seed-13 2 0 0 2 True))
+
+!(test (exp03-dynamic-summary-row-for seed-17)
+       (exp03-dynamic-summary-row seed-17 2 0 0 2 True))
+
+!(test (exp03-dynamic-summary-rows)
+       ((exp03-dynamic-summary-row seed-7 2 0 0 2 True)
+        (exp03-dynamic-summary-row seed-13 2 0 0 2 True)
+        (exp03-dynamic-summary-row seed-17 2 0 0 2 True)))
+
+!(test (exp03-dynamic-aggregate-report-current)
+       (exp03-dynamic-aggregate-report
+         tested-full-source-exports
+         (seeds seed-7 seed-13 seed-17)
+         (family-records 9)
+         (active-random-family-records 3)
+         (zero-event-control-family-records 6)
+         (total-random-events 6)
+         (total-control-events 0)
+         (candidate-cap 2)
+         (rows ((exp03-dynamic-summary-row seed-7 2 0 0 2 True)
+                (exp03-dynamic-summary-row seed-13 2 0 0 2 True)
+                (exp03-dynamic-summary-row seed-17 2 0 0 2 True)))))
+
+!(test (exp03-dynamic-aggregate-report-complete?) True)
