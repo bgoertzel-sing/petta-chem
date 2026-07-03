@@ -624,3 +624,91 @@
         (and (run-record-passed? (exp03-exp02-dynamic-run-record seed-11 shuffled))
              (and (run-record-passed? (exp03-exp02-dynamic-run-record seed-11 no-catalysis))
                   (exp03-exp02-dynamic-controls-discriminate-seed-11?)))))
+
+; ----- full source-pool dynamic bridge -----
+;
+; This keeps candidate firing bounded to the deterministic two-candidate selector
+; while putting the full seed-7/four-rule exp02 source pool in the chamber.  The
+; first two candidates are deliberately ordered as rr1/rr0 so seed-7 tick-0
+; selects the productive rule, while rr2/rr3 remain visible in the chamber and
+; bounded pool provenance without being eligible for this narrow dynamic tick.
+
+(= (exp03-exp02-full-source-rules seed-7 random)
+   ((exp02-random-polymer-rule seed-7 rr1)
+    (exp02-random-polymer-rule seed-7 rr0)
+    (exp02-random-polymer-rule seed-7 rr2)
+    (exp02-random-polymer-rule seed-7 rr3)))
+
+(= (exp03-exp02-full-source-rules seed-7 shuffled)
+   ((exp02-shuffled-control-rule seed-7 sr1)
+    (exp02-shuffled-control-rule seed-7 sr0)
+    (exp02-shuffled-control-rule seed-7 sr2)
+    (exp02-shuffled-control-rule seed-7 sr3)))
+
+(= (exp03-exp02-full-source-rules seed-7 no-catalysis)
+   ((exp02-no-catalysis-control-rule seed-7 nr1)
+    (exp02-no-catalysis-control-rule seed-7 nr0)
+    (exp02-no-catalysis-control-rule seed-7 nr2)
+    (exp02-no-catalysis-control-rule seed-7 nr3)))
+
+(= (exp03-exp02-full-source-chamber $family seed-7)
+   (make-chamber (exp03-exp02-full-source $family seed-7)
+                 (exp03-exp02-initial-state seed-7)
+                 (exp03-exp02-full-source-rules seed-7 $family)
+                 ()))
+
+(= (exp03-exp02-full-source-capped-pool $family seed-7)
+   (bounded-candidate-pool
+     (exp00-candidate-cap)
+     (exp03-exp02-full-source-chamber $family seed-7)))
+
+(= (exp03-exp02-full-source-after-3 $family seed-7)
+   (chamber-run-3 (exp03-exp02-full-source-chamber $family seed-7)))
+
+(= (exp03-exp02-full-source-event-count $family seed-7)
+   (event-count (trace-events (exp03-exp02-full-source-after-3 $family seed-7))))
+
+(= (exp03-exp02-full-source-controls-discriminate?)
+   (and (> (exp03-exp02-full-source-event-count random seed-7)
+           (exp03-exp02-full-source-event-count shuffled seed-7))
+        (> (exp03-exp02-full-source-event-count random seed-7)
+           (exp03-exp02-full-source-event-count no-catalysis seed-7))))
+
+(= (exp03-exp02-full-source-replay-ok?)
+   (== (exp03-exp02-full-source-after-3 random seed-7)
+       (chamber-run-1
+         (chamber-run-1
+           (chamber-run-1 (exp03-exp02-full-source-chamber random seed-7))))))
+
+(= (exp03-exp02-full-source-run-config seed-7 random)
+   (make-run-config exp03-exp02-seed-7-full-source-random exp03 (seed-7) 3 (candidate-cap 2 1) random-polymer))
+
+(= (exp03-exp02-full-source-run-manifest seed-7 random)
+   (make-run-manifest exp03-exp02-seed-7-full-source-random config-hash-exp03-exp02-seed-7-full-source-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-exp02-full-source-metrics seed-7 random)
+   ((metric dynamic-event-count exp03-exp02-seed-7-full-source-random (exp03-exp02-full-source-event-count random seed-7))
+    (metric control-family exp03-exp02-seed-7-full-source-random random-polymer)
+    (metric source-exp02-rule-count exp03-exp02-seed-7-full-source-random 4)
+    (metric dynamic-candidate-cap exp03-exp02-seed-7-full-source-random 2)))
+
+(= (exp03-exp02-full-source-run-summary seed-7 random)
+   (make-run-summary exp03-exp02-seed-7-full-source-random passed seed-7-full-source-bounded-dynamic-replay-ok True))
+
+(= (exp03-exp02-full-source-run-record seed-7 random)
+   (make-run-record
+     (run-config-id (exp03-exp02-full-source-run-config seed-7 random))
+     (exp03-exp02-full-source-run-config seed-7 random)
+     (exp03-exp02-full-source-run-manifest seed-7 random)
+     (trace-events (exp03-exp02-full-source-after-3 random seed-7))
+     ((state-abundance-snapshot (exp03-exp02-initial-state seed-7))
+      (chamber-abundance-snapshot (exp03-exp02-full-source-after-3 random seed-7)))
+     (exp03-exp02-full-source-metrics seed-7 random)
+     (exp02-random-acs-candidates seed-7)
+     ()
+     (exp03-exp02-full-source-run-summary seed-7 random)))
+
+(= (exp03-exp02-full-source-run-record-complete?)
+   (and (run-record-passed? (exp03-exp02-full-source-run-record seed-7 random))
+        (and (exp03-exp02-full-source-controls-discriminate?)
+             (exp03-exp02-full-source-replay-ok?))))

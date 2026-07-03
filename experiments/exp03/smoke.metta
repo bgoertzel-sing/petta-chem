@@ -117,3 +117,35 @@
         (abundance-snapshot 3 ((mol Q0 2) (mol Q1 2) (mol Q01 0) (mol Q10 1)))))
 
 !(test (exp03-exp02-dynamic-run-records-complete-seed-11?) True)
+
+!(test (exp03-exp02-full-source-capped-pool random seed-7)
+       (candidate-pool
+         0
+         ((candidate 0 (rule rr1 P2 P3 P10 P01) 1)
+          (candidate 0 (rule rr0 P0 P1 P01 P10) 1))))
+
+!(test (exp03-exp02-full-source-after-3 random seed-7)
+       (chamber (exp03-exp02-full-source random seed-7)
+                (state 3 seed-7 (mol P0 0) (mol P1 0) (mol P01 2) (mol P10 1))
+                ((rule rr1 P2 P3 P10 P01)
+                 (rule rr0 P0 P1 P01 P10)
+                 (rule rr2 P0 P3 P03 P2)
+                 (rule rr3 P1 P2 P12 P0))
+                ((event 0 rr0 P0 P1 P01 P10)
+                 (event 2 rr0 P0 P1 P01 P10))))
+
+!(test (exp03-exp02-full-source-event-count random seed-7) 2)
+
+!(test (exp03-exp02-full-source-event-count shuffled seed-7) 0)
+
+!(test (exp03-exp02-full-source-event-count no-catalysis seed-7) 0)
+
+!(test (exp03-exp02-full-source-controls-discriminate?) True)
+
+!(test (exp03-exp02-full-source-replay-ok?) True)
+
+!(test (run-record-events (exp03-exp02-full-source-run-record seed-7 random))
+       ((event 0 rr0 P0 P1 P01 P10)
+        (event 2 rr0 P0 P1 P01 P10)))
+
+!(test (exp03-exp02-full-source-run-record-complete?) True)

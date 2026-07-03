@@ -219,6 +219,15 @@
       (make-candidate-for-rule $tick $rule-1)
       (make-candidate-for-rule $tick $rule-2))))
 
+(= (generate-candidate-pool
+      (chamber $id (state $tick $seed $m0 $m1 $m2 $m3) ($rule-0 $rule-1 $rule-2 $rule-3) $events))
+   (candidate-pool
+     $tick
+     ((make-candidate-for-rule $tick $rule-0)
+      (make-candidate-for-rule $tick $rule-1)
+      (make-candidate-for-rule $tick $rule-2)
+      (make-candidate-for-rule $tick $rule-3))))
+
 (= (bounded-candidate-pool $cap $chamber)
    (candidate-pool
      (candidate-pool-tick (generate-candidate-pool $chamber))
