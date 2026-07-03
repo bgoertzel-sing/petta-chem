@@ -24,6 +24,7 @@ scripts/run_exp01.sh
 scripts/run_contract.sh
 scripts/run_exp02.sh
 scripts/test_exp02_contract_files.sh
+scripts/run_exp03.sh
 ```
 
 `experiments/exp00/smoke.metta` is a deliberately tiny deterministic chemistry spike. It establishes initial molecule/rule/state/candidate/candidate-pool/candidate-cap/event/chamber/metric atom contracts plus a generic bounded binary catalytic transition, candidate applicability checks, nonnegative abundance invariants, chamber-rule-based candidate generation, per-tick candidate caps, and a seed/tick deterministic candidate selector wired into generated chamber ticking before larger stochastic/harness work is added.
@@ -35,3 +36,5 @@ scripts/test_exp02_contract_files.sh
 `experiments/exp02/smoke.metta` runs the first systematic deterministic random-polymer control sweep in PeTTa: seed-7/four-rule, seed-11/six-rule, component-generated seed-13/eight-rule, seed-to-component seed-17/eight-rule, generated non-planted seed-19/seed-23, and factored-template seed-29/seed-31/seed-37/seed-41/seed-43/seed-47/seed-53/seed-59/seed-61/seed-67/seed-71/seed-73/seed-79/seed-83/seed-89/seed-97 eight-rule points are represented as explicit `exp02-sweep-point` atoms, compared with shuffled-catalyst and no-catalysis controls, scanned by the conservative ACS detector, recorded as run-contract records, and summarized by tested `exp02-sweep-kind-summary-report` atoms whose rows derive from folded run-record summaries.
 
 `scripts/write_exp02_contract_files.sh` is a thin host harness that serializes all sixty-six PeTTa-tested exp02 run-contract records into the v0.1 per-run file convention under `experiments/exp02_small_sweep_20260630/runs/`; it does not drive chemistry logic.
+
+`experiments/exp03/smoke.metta` adds deterministic multi-tick soup dynamics over exp00 contracts: a bounded chamber runner accumulates events across ticks, advances through blocked/no-op steps, and now exercises a selectable two-rule pool with one productive rule and one distractor instead of duplicating the productive fixture.

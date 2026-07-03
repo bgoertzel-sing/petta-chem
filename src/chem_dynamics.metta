@@ -3,7 +3,9 @@
 ; This layer extends exp00 without changing its single-tick contracts.  It keeps
 ; the fixed four-molecule state shape and the deterministic two-candidate seam,
 ; but advances chambers through multiple ticks while preserving an accumulated
-; event log.
+; event log.  The smoke fixture now uses a productive rule plus a selectable
+; distractor rule so multi-tick dynamics exercise deterministic candidate choice
+; rather than a duplicated productive candidate.
 
 !(import! &self chem_exp00.metta)
 
@@ -153,8 +155,21 @@
    (state 0 seed-7 (mol A 5) (mol B 5) (mol AB 0) (mol Cat 1)))
 
 (= (exp03-rules)
-   ((exp00-rule r0)
+   ((exp00-rule r1)
     (exp00-rule r0)))
+
+(= (exp03-selected-candidate-at $tick $seed)
+   (selected-candidate-from-list-2
+     (make-chamber exp03
+                   (state $tick $seed
+                          (mol A 5)
+                          (mol B 5)
+                          (mol AB 0)
+                          (mol Cat 1))
+                   (exp03-rules)
+                   ())
+     ((make-candidate-for-rule $tick (exp00-rule r1))
+      (make-candidate-for-rule $tick (exp00-rule r0)))))
 
 (= (exp03-initial-chamber seed-7)
    (make-chamber exp03
@@ -184,3 +199,9 @@
 (= (exp03-replay-5-ok?)
    (== (exp03-after-5 seed-7)
        (exp03-replay-5 seed-7)))
+
+(= (exp03-selectable-rule-pool-ok?)
+   (and (== (exp03-selected-candidate-at 0 seed-7)
+            (candidate 0 (rule r0 A B AB Cat) 1))
+        (== (exp03-selected-candidate-at 1 seed-7)
+            (candidate 1 (rule r1 B Cat BCat A) 1))))
