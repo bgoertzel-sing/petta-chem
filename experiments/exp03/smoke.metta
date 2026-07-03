@@ -1,4 +1,7 @@
 !(import! &self ../../src/chem_exp00.metta)
+!(import! &self ../../src/chem_exp01.metta)
+!(import! &self ../../src/run_contract.metta)
+!(import! &self ../../src/chem_exp02.metta)
 !(import! &self ../../src/chem_dynamics.metta)
 
 !(test (append-event () (event 0 r0 A B AB Cat))
@@ -70,3 +73,19 @@
 !(test (event-count (trace-events (exp03-starved-after-3 seed-7))) 0)
 
 !(test (exp03-replay-5-ok?) True)
+
+!(test (exp03-exp02-after-3 random seed-7)
+       (chamber (exp03-exp02 random)
+                (state 3 seed-7 (mol P0 0) (mol P1 0) (mol P01 2) (mol P10 1))
+                ((rule rr1 P2 P3 P10 P01)
+                 (rule rr0 P0 P1 P01 P10))
+                ((event 0 rr0 P0 P1 P01 P10)
+                 (event 2 rr0 P0 P1 P01 P10))))
+
+!(test (exp03-exp02-event-count random seed-7) 2)
+
+!(test (exp03-exp02-event-count shuffled seed-7) 0)
+
+!(test (exp03-exp02-event-count no-catalysis seed-7) 0)
+
+!(test (exp03-exp02-dynamic-controls-discriminate?) True)

@@ -205,3 +205,172 @@
             (candidate 0 (rule r0 A B AB Cat) 1))
         (== (exp03-selected-candidate-at 1 seed-7)
             (candidate 1 (rule r1 B Cat BCat A) 1))))
+
+; ----- exp03/exp02 bridge: dynamic random/control family smoke -----
+;
+; This fixture keeps the exp03 state intentionally bounded while sourcing rule
+; identities from the exp02 seed-7 random/control families.  It is a first
+; dynamic-plumbing check, not an emergence claim: the random family can fire its
+; rr0 rule under the deterministic selector, while shuffled/no-catalysis controls
+; are carried through the same multi-tick runner as no-op controls.
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol P0 $p0-count)
+                      (mol P1 $p1-count)
+                      (mol P01 $product-count)
+                      (mol P10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule rr0 P0 P1 P01 P10) $score))
+   (if (and (> $p0-count 0)
+            (and (> $p1-count 0)
+                 (> $catalyst-count 0)))
+       (let $trace (fire-binary-catalytic
+                     (rule rr0 P0 P1 P01 P10)
+                     (state $tick $seed
+                            (mol P0 $p0-count)
+                            (mol P1 $p1-count)
+                            (mol P01 $product-count)
+                            (mol P10 $catalyst-count)))
+         (chamber $id
+                  (trace-state $trace)
+                  $rules
+                  (append-event $events (trace-event $trace))))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol P0 $p0-count)
+                       (mol P1 $p1-count)
+                       (mol P01 $product-count)
+                       (mol P10 $catalyst-count))
+                $rules
+                $events)))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol P0 $p0-count)
+                      (mol P1 $p1-count)
+                      (mol P01 $product-count)
+                      (mol P10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule rr1 P2 P3 P10 P01) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol P0 $p0-count)
+                   (mol P1 $p1-count)
+                   (mol P01 $product-count)
+                   (mol P10 $catalyst-count))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol P0 $p0-count)
+                      (mol P1 $p1-count)
+                      (mol P01 $product-count)
+                      (mol P10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule sr0 P0 P1 P01 P2) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol P0 $p0-count)
+                   (mol P1 $p1-count)
+                   (mol P01 $product-count)
+                   (mol P10 $catalyst-count))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol P0 $p0-count)
+                      (mol P1 $p1-count)
+                      (mol P01 $product-count)
+                      (mol P10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule sr1 P2 P3 P10 P0) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol P0 $p0-count)
+                   (mol P1 $p1-count)
+                   (mol P01 $product-count)
+                   (mol P10 $catalyst-count))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol P0 $p0-count)
+                      (mol P1 $p1-count)
+                      (mol P01 $product-count)
+                      (mol P10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule nr0 P0 P1 P01 None) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol P0 $p0-count)
+                   (mol P1 $p1-count)
+                   (mol P01 $product-count)
+                   (mol P10 $catalyst-count))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol P0 $p0-count)
+                      (mol P1 $p1-count)
+                      (mol P01 $product-count)
+                      (mol P10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule nr1 P2 P3 P10 None) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol P0 $p0-count)
+                   (mol P1 $p1-count)
+                   (mol P01 $product-count)
+                   (mol P10 $catalyst-count))
+            $rules
+            $events))
+
+(= (exp03-exp02-initial-state seed-7)
+   (state 0 seed-7 (mol P0 2) (mol P1 2) (mol P01 0) (mol P10 1)))
+
+(= (exp03-exp02-rules random)
+   ((exp02-random-polymer-rule seed-7 rr1)
+    (exp02-random-polymer-rule seed-7 rr0)))
+
+(= (exp03-exp02-rules shuffled)
+   ((exp02-shuffled-control-rule seed-7 sr1)
+    (exp02-shuffled-control-rule seed-7 sr0)))
+
+(= (exp03-exp02-rules no-catalysis)
+   ((exp02-no-catalysis-control-rule seed-7 nr1)
+    (exp02-no-catalysis-control-rule seed-7 nr0)))
+
+(= (exp03-exp02-chamber $family seed-7)
+   (make-chamber (exp03-exp02 $family)
+                 (exp03-exp02-initial-state seed-7)
+                 (exp03-exp02-rules $family)
+                 ()))
+
+(= (exp03-exp02-after-3 $family seed-7)
+   (chamber-run-3 (exp03-exp02-chamber $family seed-7)))
+
+(= (exp03-exp02-event-count $family seed-7)
+   (event-count (trace-events (exp03-exp02-after-3 $family seed-7))))
+
+(= (exp03-exp02-dynamic-controls-discriminate?)
+   (and (> (exp03-exp02-event-count random seed-7)
+           (exp03-exp02-event-count shuffled seed-7))
+        (> (exp03-exp02-event-count random seed-7)
+           (exp03-exp02-event-count no-catalysis seed-7))))

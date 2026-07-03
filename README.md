@@ -37,4 +37,4 @@ scripts/run_exp03.sh
 
 `scripts/write_exp02_contract_files.sh` is a thin host harness that serializes all sixty-six PeTTa-tested exp02 run-contract records into the v0.1 per-run file convention under `experiments/exp02_small_sweep_20260630/runs/`; it does not drive chemistry logic.
 
-`experiments/exp03/smoke.metta` adds deterministic multi-tick soup dynamics over exp00 contracts: a bounded chamber runner accumulates events across ticks, advances through blocked/no-op steps, and now exercises a selectable two-rule pool with one productive rule and one distractor instead of duplicating the productive fixture.
+`experiments/exp03/smoke.metta` adds deterministic multi-tick soup dynamics over exp00 contracts: a bounded chamber runner accumulates events across ticks, advances through blocked/no-op steps, exercises a selectable two-rule pool with one productive rule and one distractor, and now includes a first exp02-style seed-7 random/shuffled/no-catalysis dynamic bridge where the random family produces events while controls remain no-op.
