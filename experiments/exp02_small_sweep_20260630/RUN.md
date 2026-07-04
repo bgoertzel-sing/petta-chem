@@ -18,11 +18,11 @@ scripts/run_exp02.sh
 - SWI-Prolog: local `projects/omegaclaw/local/swipl-9.3.36`
 - Kernel/config source: `src/chem_exp02.metta`
 - Smoke/run-record source: `experiments/exp02/smoke.metta`
-- `src/chem_exp02.metta` SHA-256: `2bea391fec0074255ca00b243b8f7239a8673be4c5a1fd0904a11b6c3664c418`
-- `experiments/exp02/smoke.metta` SHA-256: `c83de44e3e7992f0f7987784c0044afc45152827ce1af54c934739779fca15ee`
-- `experiments/exp02_small_sweep_20260630/SUMMARY.md` SHA-256: `14aeace534a0023c8fd372e03c2be0943b95efd4d99be920e4ad74f50454d325`
-- `scripts/write_exp02_contract_files.py` SHA-256: `0a9176ab9bd7e14fc58386e5922824d69e4f80725f276a043c6708b8751a228e`
-- `scripts/test_exp02_contract_files.sh` SHA-256: `7bb96606961313f722ae917e05c6923a612c0c430417e2e3c94aaca608424481`
+- `src/chem_exp02.metta` SHA-256: `26c68d8c568ab8256891b5a83429511ee7f1150dc18b1e61eb5b677af96a1b4e`
+- `experiments/exp02/smoke.metta` SHA-256: `5301895bb63d41663c0697430a1b8cabccc530761b4f966da1f0e83c20befee0`
+- `experiments/exp02_small_sweep_20260630/SUMMARY.md` SHA-256: `d62da9aa63afea030c82679f45d65dfd5e71a624310402289400b560fa63a80d`
+- `scripts/write_exp02_contract_files.py` SHA-256: `57b20bff01195ff8bb7ee012387440905b5246f4ce9ad52f1af7d9e14d115bee`
+- `scripts/test_exp02_contract_files.sh` SHA-256: `d30582c403b9c8dda80d0e2e1ae48f7f86974e341bcd95f1e2940b8b9320d49e`
 
 ## Seed list
 
@@ -51,6 +51,7 @@ scripts/run_exp02.sh
 - `seed-101` / eight factored-template generated non-planted control rules
 - `seed-103` / eight factored-template generated non-planted control rules
 - `seed-107` / eight factored-template generated non-planted control rules
+- `seed-109` / eight factored-template generated non-planted control rules
 
 ## Run records
 
@@ -129,10 +130,13 @@ scripts/run_exp02.sh
 - `exp02-seed-107-rules-8-random`: seed-107/eight-rule factored-template generated non-planted random-polymer control, active ACS pairs = 0.
 - `exp02-seed-107-rules-8-shuffled`: seed-107/eight-rule factored-template shuffled-catalyst control, active ACS pairs = 0.
 - `exp02-seed-107-rules-8-no-catalysis`: seed-107/eight-rule factored-template no-catalysis control, active ACS pairs = 0.
+- `exp02-seed-109-rules-8-random`: seed-109/eight-rule factored-template generated non-planted random-polymer control, active ACS pairs = 0.
+- `exp02-seed-109-rules-8-shuffled`: seed-109/eight-rule factored-template shuffled-catalyst control, active ACS pairs = 0.
+- `exp02-seed-109-rules-8-no-catalysis`: seed-109/eight-rule factored-template no-catalysis control, active ACS pairs = 0.
 
 ## Sweep-kind active-pair summary
 
-PeTTa `exp02-fold-sweep-kind-summary`, `exp02-sweep-kind-summary`, and `exp02-sweep-kind-summary-report` atoms now separate planted reciprocal-pair controls from generated-unplanted controls while deriving family-record counts, active-family counts, active-pair totals, and active random-polymer points from tested `run-record` lists. The current folded summaries are unchanged scientifically: planted controls have 4/12 family records with active pairs and 7 total active pairs across four random-polymer points; generated-unplanted controls have 0/63 family records with active pairs and 0 total active pairs across seed-19, seed-23, and factored-template seed-29/seed-31/seed-37/seed-41/seed-43/seed-47/seed-53/seed-59/seed-61/seed-67/seed-71/seed-73/seed-79/seed-83/seed-89/seed-97/seed-101/seed-103/seed-107. The human-readable report rows are now derived from those folded summary atoms. A concise human-readable table is recorded in `SUMMARY.md`.
+PeTTa `exp02-fold-sweep-kind-summary`, `exp02-sweep-kind-summary`, and `exp02-sweep-kind-summary-report` atoms now separate planted reciprocal-pair controls from generated-unplanted controls while deriving family-record counts, active-family counts, active-pair totals, and active random-polymer points from tested `run-record` lists. The current folded summaries are unchanged scientifically: planted controls have 4/12 family records with active pairs and 7 total active pairs across four random-polymer points; generated-unplanted controls have 0/66 family records with active pairs and 0 total active pairs across seed-19, seed-23, and factored-template seed-29/seed-31/seed-37/seed-41/seed-43/seed-47/seed-53/seed-59/seed-61/seed-67/seed-71/seed-73/seed-79/seed-83/seed-89/seed-97/seed-101/seed-103/seed-107/seed-109. The human-readable report rows are now derived from those folded summary atoms. A concise human-readable table is recorded in `SUMMARY.md`.
 
 ## Exit status
 
@@ -140,7 +144,7 @@ PeTTa `exp02-fold-sweep-kind-summary`, `exp02-sweep-kind-summary`, and `exp02-sw
 
 ## Conclusion
 
-The small exp02 sweep passed across seed-7/four-rule, seed-11/six-rule, component-generated seed-13/eight-rule, seed-to-component planted seed-17/eight-rule, and seed-to-component non-planted seed-19/seed-23 and factored-template seed-29/seed-31/seed-37/seed-41/seed-43/seed-47/seed-53/seed-59/seed-61/seed-67/seed-71/seed-73/seed-79/seed-83/seed-89/seed-97/seed-101/seed-103/seed-107 eight-rule parameter points. The planted seed-derived polymer fixtures contain conservative reciprocal product-as-catalyst pairs, while shuffled-catalyst, no-catalysis, and the generated seed-19, seed-23, and seed-29/seed-31/seed-37/seed-41/seed-43/seed-47/seed-53/seed-59/seed-61/seed-67/seed-71/seed-73/seed-79/seed-83/seed-89/seed-97/seed-101/seed-103/seed-107 non-planted random-polymer controls contain zero active ACS pairs. This validates broader exp02 control/run-record plumbing only; larger less-fixture-like sweeps are still needed before making any spontaneous-ACS claim.
+The small exp02 sweep passed across seed-7/four-rule, seed-11/six-rule, component-generated seed-13/eight-rule, seed-to-component planted seed-17/eight-rule, and seed-to-component non-planted seed-19/seed-23 and factored-template seed-29/seed-31/seed-37/seed-41/seed-43/seed-47/seed-53/seed-59/seed-61/seed-67/seed-71/seed-73/seed-79/seed-83/seed-89/seed-97/seed-101/seed-103/seed-107/seed-109 eight-rule parameter points. The planted seed-derived polymer fixtures contain conservative reciprocal product-as-catalyst pairs, while shuffled-catalyst, no-catalysis, and the generated seed-19, seed-23, and seed-29/seed-31/seed-37/seed-41/seed-43/seed-47/seed-53/seed-59/seed-61/seed-67/seed-71/seed-73/seed-79/seed-83/seed-89/seed-97/seed-101/seed-103/seed-107/seed-109 non-planted random-polymer controls contain zero active ACS pairs. This validates broader exp02 control/run-record plumbing only; larger less-fixture-like sweeps are still needed before making any spontaneous-ACS claim.
 ## Serialized run-contract files
 
 After the PeTTa smoke passed, `scripts/write_exp02_contract_files.sh` serializes all sixty-six tested run-contract records into per-run directories:
@@ -220,5 +224,8 @@ After the PeTTa smoke passed, `scripts/write_exp02_contract_files.sh` serializes
 - `runs/exp02-seed-107-rules-8-random/`
 - `runs/exp02-seed-107-rules-8-shuffled/`
 - `runs/exp02-seed-107-rules-8-no-catalysis/`
+- `runs/exp02-seed-109-rules-8-random/`
+- `runs/exp02-seed-109-rules-8-shuffled/`
+- `runs/exp02-seed-109-rules-8-no-catalysis/`
 
 Each directory follows the v0.1 file convention: `CONFIG.metta`, `MANIFEST.metta`, `EVENTS.metta`, `ABUNDANCES.metta`, `METRICS.metta`, `ACS.metta`, `ABLATIONS.metta`, and `SUMMARY.metta`. The host script only serializes atoms already represented/tested in PeTTa; chemistry and ACS detection remain in `.metta` files.
