@@ -10,7 +10,7 @@ This is a concise report over the current deterministic PeTTa exp02 sweep. It is
 ## Interpretation
 
 - The planted reciprocal-pair controls still discriminate random-polymer fixtures from shuffled-catalyst and no-catalysis controls.
-- The generated-unplanted seed-to-component controls, seed-19/seed-23, and factored-template seed-29/seed-31/seed-37/seed-41/seed-43/seed-47/seed-53/seed-59/seed-61/seed-67/seed-71/seed-73/seed-79/seed-83/seed-89/seed-97/seed-101, remain negative across random-polymer, shuffled-catalyst, and no-catalysis families.
+- The generated-unplanted seed-to-component controls, seed-19/seed-23, and factored-template seed-29/seed-31/seed-37/seed-41/seed-43/seed-47/seed-53/seed-59/seed-61/seed-67/seed-71/seed-73/seed-79/seed-83/seed-89/seed-97/seed-101/seed-103/seed-103, remain negative across random-polymer, shuffled-catalyst, and no-catalysis families.
 - Larger generated sweeps with still more compact seed schemas are still needed before claiming non-planted ACS emergence.
 
 ## PeTTa provenance
