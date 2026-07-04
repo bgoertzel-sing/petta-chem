@@ -919,7 +919,7 @@
 
 !(test (exp02-list-length (exp02-planted-control-records)) 12)
 
-!(test (exp02-list-length (exp02-generated-unplanted-control-records)) 72)
+!(test (exp02-list-length (exp02-generated-unplanted-control-records)) 75)
 
 !(test (exp02-active-family-record-count (exp02-planted-control-records)) 4)
 
@@ -933,13 +933,13 @@
 
 !(test (exp02-sweep-kind-summaries)
        ((exp02-sweep-kind-summary planted-reciprocal-pair-control 4 12 4 7 4)
-        (exp02-sweep-kind-summary generated-unplanted-control 24 72 0 0 0)
+        (exp02-sweep-kind-summary generated-unplanted-control 25 75 0 0 0)
         (active-pair-rate planted-reciprocal-pair-control 4 12)
-        (active-pair-rate generated-unplanted-control 0 72)))
+        (active-pair-rate generated-unplanted-control 0 75)))
 
 !(test (exp02-sweep-kind-summary-report)
        ((exp02-summary-row planted-reciprocal-pair-control 4 12 4 7 4 (active-pair-rate planted-reciprocal-pair-control 4 12))
-        (exp02-summary-row generated-unplanted-control 24 72 0 0 0 (active-pair-rate generated-unplanted-control 0 72))
+        (exp02-summary-row generated-unplanted-control 25 75 0 0 0 (active-pair-rate generated-unplanted-control 0 75))
         (exp02-summary-note conservative-reciprocal-product-as-catalyst-pairs-only)
         (exp02-summary-note no-spontaneous-emergence-claim-yet)))
 
@@ -973,9 +973,10 @@
         (exp02-sweep-point seed-107 8 (random-polymer shuffled-catalysts no-catalysis))
         (exp02-sweep-point seed-109 8 (random-polymer shuffled-catalysts no-catalysis))
         (exp02-sweep-point seed-113 8 (random-polymer shuffled-catalysts no-catalysis))
-        (exp02-sweep-point seed-127 8 (random-polymer shuffled-catalysts no-catalysis))))
+        (exp02-sweep-point seed-127 8 (random-polymer shuffled-catalysts no-catalysis))
+        (exp02-sweep-point seed-131 8 (random-polymer shuffled-catalysts no-catalysis))))
 
-!(test (exp02-systematic-sweep-record-count) 84)
+!(test (exp02-systematic-sweep-record-count) 87)
 
 !(test (exp02-systematic-sweep-complete?) True)
 

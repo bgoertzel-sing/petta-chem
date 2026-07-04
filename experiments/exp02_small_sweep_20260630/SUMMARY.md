@@ -5,7 +5,7 @@ This is a concise report over the current deterministic PeTTa exp02 sweep. It is
 | Sweep kind | Sweep points | Family records | Family records with active pairs | Total active pairs | Random-polymer points active | Active-family-record rate |
 |---|---:|---:|---:|---:|---:|---|
 | planted-reciprocal-pair-control | 4 | 12 | 4 | 7 | 4 | 4/12 |
-| generated-unplanted-control | 24 | 72 | 0 | 0 | 0 | 0/72 |
+| generated-unplanted-control | 25 | 75 | 0 | 0 | 0 | 0/75 |
 
 ## Interpretation
 

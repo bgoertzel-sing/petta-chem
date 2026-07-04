@@ -93,6 +93,9 @@ expected_runs=(
   exp02-seed-127-rules-8-random
   exp02-seed-127-rules-8-shuffled
   exp02-seed-127-rules-8-no-catalysis
+  exp02-seed-131-rules-8-random
+  exp02-seed-131-rules-8-shuffled
+  exp02-seed-131-rules-8-no-catalysis
 )
 
 for run_id in "${expected_runs[@]}"; do
