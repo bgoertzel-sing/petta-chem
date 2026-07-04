@@ -46,6 +46,7 @@ ABUNDANCES_BY_SEED = {
     "seed-103": "(abundance-snapshot 0 ((mol ZM0 2) (mol ZM1 1) (mol ZM2 1) (mol ZM3 1) (mol ZM01 0) (mol ZM23 0)))\n",
     "seed-107": "(abundance-snapshot 0 ((mol ZN0 2) (mol ZN1 1) (mol ZN2 1) (mol ZN3 1) (mol ZN01 0) (mol ZN23 0)))\n",
     "seed-109": "(abundance-snapshot 0 ((mol ZO0 2) (mol ZO1 1) (mol ZO2 1) (mol ZO3 1) (mol ZO01 0) (mol ZO23 0)))\n",
+    "seed-113": "(abundance-snapshot 0 ((mol ZP0 2) (mol ZP1 1) (mol ZP2 1) (mol ZP3 1) (mol ZP01 0) (mol ZP23 0)))\n",
 }
 
 RULES = {
@@ -819,6 +820,36 @@ RULES = {
         ("rr6", "ZO3", "ZO6", "ZO36", "None"),
         ("rr7", "ZO5", "ZO8", "ZO58", "None"),
     ],
+    ("seed-113", "random-polymer"): [
+        ("rr0", "ZP0", "ZP1", "ZP01", "ZP6"),
+        ("rr1", "ZP2", "ZP3", "ZP23", "ZP8"),
+        ("rr2", "ZP4", "ZP5", "ZP45", "ZP0"),
+        ("rr3", "ZP6", "ZP7", "ZP67", "ZP2"),
+        ("rr4", "ZP8", "ZP9", "ZP89", "ZP4"),
+        ("rr5", "ZP1", "ZP4", "ZP14", "ZP7"),
+        ("rr6", "ZP3", "ZP6", "ZP36", "ZP9"),
+        ("rr7", "ZP5", "ZP8", "ZP58", "ZP1"),
+    ],
+    ("seed-113", "shuffled-catalysts"): [
+        ("rr0", "ZP0", "ZP1", "ZP01", "ZP7"),
+        ("rr1", "ZP2", "ZP3", "ZP23", "ZP9"),
+        ("rr2", "ZP4", "ZP5", "ZP45", "ZP1"),
+        ("rr3", "ZP6", "ZP7", "ZP67", "ZP3"),
+        ("rr4", "ZP8", "ZP9", "ZP89", "ZP5"),
+        ("rr5", "ZP1", "ZP4", "ZP14", "ZP8"),
+        ("rr6", "ZP3", "ZP6", "ZP36", "ZP0"),
+        ("rr7", "ZP5", "ZP8", "ZP58", "ZP2"),
+    ],
+    ("seed-113", "no-catalysis"): [
+        ("rr0", "ZP0", "ZP1", "ZP01", "None"),
+        ("rr1", "ZP2", "ZP3", "ZP23", "None"),
+        ("rr2", "ZP4", "ZP5", "ZP45", "None"),
+        ("rr3", "ZP6", "ZP7", "ZP67", "None"),
+        ("rr4", "ZP8", "ZP9", "ZP89", "None"),
+        ("rr5", "ZP1", "ZP4", "ZP14", "None"),
+        ("rr6", "ZP3", "ZP6", "ZP36", "None"),
+        ("rr7", "ZP5", "ZP8", "ZP58", "None"),
+    ],
 
 }
 
@@ -853,7 +884,7 @@ def count_word(count: int) -> str:
 
 def build_specs() -> list[RunSpec]:
     specs: list[RunSpec] = []
-    for seed, count in [("seed-7", 4), ("seed-11", 6), ("seed-13", 8), ("seed-17", 8), ("seed-19", 8), ("seed-23", 8), ("seed-29", 8), ("seed-31", 8), ("seed-37", 8), ("seed-41", 8), ("seed-43", 8), ("seed-47", 8), ("seed-53", 8), ("seed-59", 8), ("seed-61", 8), ("seed-67", 8), ("seed-71", 8), ("seed-73", 8), ("seed-79", 8), ("seed-83", 8), ("seed-89", 8), ("seed-97", 8), ("seed-101", 8), ("seed-103", 8), ("seed-107", 8), ("seed-109", 8)]:
+    for seed, count in [("seed-7", 4), ("seed-11", 6), ("seed-13", 8), ("seed-17", 8), ("seed-19", 8), ("seed-23", 8), ("seed-29", 8), ("seed-31", 8), ("seed-37", 8), ("seed-41", 8), ("seed-43", 8), ("seed-47", 8), ("seed-53", 8), ("seed-59", 8), ("seed-61", 8), ("seed-67", 8), ("seed-71", 8), ("seed-73", 8), ("seed-79", 8), ("seed-83", 8), ("seed-89", 8), ("seed-97", 8), ("seed-101", 8), ("seed-103", 8), ("seed-107", 8), ("seed-109", 8), ("seed-113", 8)]:
         for family in ["random-polymer", "shuffled-catalysts", "no-catalysis"]:
             suffix = control_suffix(family)
             if seed == "seed-7":
@@ -907,7 +938,7 @@ def metric_atoms(spec: RunSpec) -> str:
     if spec.seed in {"seed-19", "seed-23"}:
         body += f"(metric generation-seam {spec.run_id} seed-to-components)\n"
         body += f"(metric sweep-kind {spec.run_id} generated-unplanted-control)\n"
-    if spec.seed in {"seed-29", "seed-31", "seed-37", "seed-41", "seed-43", "seed-47", "seed-53", "seed-59", "seed-61", "seed-67", "seed-71", "seed-73", "seed-79", "seed-83", "seed-89", "seed-97", "seed-101", "seed-103", "seed-107", "seed-109"}:
+    if spec.seed in {"seed-29", "seed-31", "seed-37", "seed-41", "seed-43", "seed-47", "seed-53", "seed-59", "seed-61", "seed-67", "seed-71", "seed-73", "seed-79", "seed-83", "seed-89", "seed-97", "seed-101", "seed-103", "seed-107", "seed-109", "seed-113"}:
         body += f"(metric generation-seam {spec.run_id} factored-seed-template)\n"
         body += f"(metric sweep-kind {spec.run_id} generated-unplanted-control)\n"
     return body

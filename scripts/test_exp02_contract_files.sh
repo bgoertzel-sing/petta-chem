@@ -87,6 +87,9 @@ expected_runs=(
   exp02-seed-109-rules-8-random
   exp02-seed-109-rules-8-shuffled
   exp02-seed-109-rules-8-no-catalysis
+  exp02-seed-113-rules-8-random
+  exp02-seed-113-rules-8-shuffled
+  exp02-seed-113-rules-8-no-catalysis
 )
 
 for run_id in "${expected_runs[@]}"; do
@@ -222,3 +225,8 @@ grep -Fq '(acs-candidate pair-0-1 ((rule rr0 ZN0 ZN1 ZN01 ZN6) (rule rr1 ZN2 ZN3
 grep -Fq '(metric generation-seam exp02-seed-109-rules-8-random factored-seed-template)'   "$TMP_DIR/exp02-seed-109-rules-8-random/METRICS.metta"
 grep -Fq '(metric active-acs-count exp02-seed-109-rules-8-random 0)'   "$TMP_DIR/exp02-seed-109-rules-8-random/METRICS.metta"
 grep -Fq '(acs-candidate pair-0-1 ((rule rr0 ZO0 ZO1 ZO01 ZO6) (rule rr1 ZO2 ZO3 ZO23 ZO8)) (ZO01 ZO23) (ZO6 ZO8) rejected)'   "$TMP_DIR/exp02-seed-109-rules-8-random/ACS.metta"
+
+
+grep -Fq '(metric generation-seam exp02-seed-113-rules-8-random factored-seed-template)'   "$TMP_DIR/exp02-seed-113-rules-8-random/METRICS.metta"
+grep -Fq '(metric active-acs-count exp02-seed-113-rules-8-random 0)'   "$TMP_DIR/exp02-seed-113-rules-8-random/METRICS.metta"
+grep -Fq '(acs-candidate pair-0-1 ((rule rr0 ZP0 ZP1 ZP01 ZP6) (rule rr1 ZP2 ZP3 ZP23 ZP8)) (ZP01 ZP23) (ZP6 ZP8) rejected)'   "$TMP_DIR/exp02-seed-113-rules-8-random/ACS.metta"

@@ -18,11 +18,11 @@ scripts/run_exp02.sh
 - SWI-Prolog: local `projects/omegaclaw/local/swipl-9.3.36`
 - Kernel/config source: `src/chem_exp02.metta`
 - Smoke/run-record source: `experiments/exp02/smoke.metta`
-- `src/chem_exp02.metta` SHA-256: `26c68d8c568ab8256891b5a83429511ee7f1150dc18b1e61eb5b677af96a1b4e`
-- `experiments/exp02/smoke.metta` SHA-256: `5301895bb63d41663c0697430a1b8cabccc530761b4f966da1f0e83c20befee0`
-- `experiments/exp02_small_sweep_20260630/SUMMARY.md` SHA-256: `d62da9aa63afea030c82679f45d65dfd5e71a624310402289400b560fa63a80d`
-- `scripts/write_exp02_contract_files.py` SHA-256: `57b20bff01195ff8bb7ee012387440905b5246f4ce9ad52f1af7d9e14d115bee`
-- `scripts/test_exp02_contract_files.sh` SHA-256: `d30582c403b9c8dda80d0e2e1ae48f7f86974e341bcd95f1e2940b8b9320d49e`
+- `src/chem_exp02.metta` SHA-256: `dd66e8a842019b5c7f8eafaf6ed08d3b096b99d4a64f409b3fd6b5fee093e690`
+- `experiments/exp02/smoke.metta` SHA-256: `7fe4376b9f9868c6b56ad64d0edd0894396b21addc902019102bb5903bc96aae`
+- `experiments/exp02_small_sweep_20260630/SUMMARY.md` SHA-256: `e5ecd738f7484dbe22bd029a63469c5b08653dea27b193338897004b3560bfb1`
+- `scripts/write_exp02_contract_files.py` SHA-256: `343c0e277754d4713836d41bf19972778cd5840621b2cbf97c53ebd4c479b1f6`
+- `scripts/test_exp02_contract_files.sh` SHA-256: `ffe09258f6895f3e78c3de136e02a8690437c840268ae3ac8a03ac301386e04e`
 
 ## Seed list
 
@@ -52,6 +52,7 @@ scripts/run_exp02.sh
 - `seed-103` / eight factored-template generated non-planted control rules
 - `seed-107` / eight factored-template generated non-planted control rules
 - `seed-109` / eight factored-template generated non-planted control rules
+- `seed-113` / eight factored-template generated non-planted control rules
 
 ## Run records
 
@@ -133,6 +134,9 @@ scripts/run_exp02.sh
 - `exp02-seed-109-rules-8-random`: seed-109/eight-rule factored-template generated non-planted random-polymer control, active ACS pairs = 0.
 - `exp02-seed-109-rules-8-shuffled`: seed-109/eight-rule factored-template shuffled-catalyst control, active ACS pairs = 0.
 - `exp02-seed-109-rules-8-no-catalysis`: seed-109/eight-rule factored-template no-catalysis control, active ACS pairs = 0.
+- `exp02-seed-113-rules-8-random`: seed-113/eight-rule factored-template generated non-planted random-polymer control, active ACS pairs = 0.
+- `exp02-seed-113-rules-8-shuffled`: seed-113/eight-rule factored-template shuffled-catalyst control, active ACS pairs = 0.
+- `exp02-seed-113-rules-8-no-catalysis`: seed-113/eight-rule factored-template no-catalysis control, active ACS pairs = 0.
 
 ## Sweep-kind active-pair summary
 
