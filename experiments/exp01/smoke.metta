@@ -162,3 +162,78 @@
 !(test (ablation-drop (exp01-ablate-rp0)) 1)
 
 !(test (exp01-ablation-drop-positive?) True)
+
+; ----- 3-rule catalytic cycle scanner smoke tests -----
+
+!(test (product-catalyst-closed-3?
+         (exp01-planted-triple-rule tc0)
+         (exp01-planted-triple-rule tc1)
+         (exp01-planted-triple-rule tc2))
+       True)
+
+!(test (exp01-triple-closure-ok?) True)
+
+!(test (acs-status-for-triple
+         (exp01-planted-triple-rule tc0)
+         (exp01-planted-triple-rule tc1)
+         (exp01-planted-triple-rule tc2))
+       active)
+
+!(test (acs-status-for-triple
+         (exp01-planted-triple-rule tc0)
+         (exp01-planted-triple-rule tc1)
+         (exp01-triple-distractor-rule td0))
+       rejected)
+
+!(test (exp01-triple-distractor-rejected?) True)
+
+!(test (scan-rule-triple triple-0-1-2
+                         (exp01-planted-triple-rule tc0)
+                         (exp01-planted-triple-rule tc1)
+                         (exp01-planted-triple-rule tc2))
+       (acs-candidate
+         triple-0-1-2
+         ((rule tc0 TF0 TB0 TC1 TC0)
+          (rule tc1 TF1 TB1 TC2 TC1)
+          (rule tc2 TF2 TB2 TC0 TC2))
+         (TC1 TC2 TC0)
+         (TC0 TC1 TC2)
+         active))
+
+!(test (exp01-scanned-triples)
+       ((acs-candidate
+          triple-0-1-2
+          ((rule tc0 TF0 TB0 TC1 TC0)
+           (rule tc1 TF1 TB1 TC2 TC1)
+           (rule td0 TF3 TB3 TNone TNone))
+          (TC1 TC2 TNone)
+          (TC0 TC1 TNone)
+          rejected)
+        (acs-candidate
+          triple-0-1-3
+          ((rule tc0 TF0 TB0 TC1 TC0)
+           (rule tc1 TF1 TB1 TC2 TC1)
+           (rule tc2 TF2 TB2 TC0 TC2))
+          (TC1 TC2 TC0)
+          (TC0 TC1 TC2)
+          active)
+        (acs-candidate
+          triple-0-2-3
+          ((rule tc0 TF0 TB0 TC1 TC0)
+           (rule td0 TF3 TB3 TNone TNone)
+           (rule tc2 TF2 TB2 TC0 TC2))
+          (TC1 TNone TC0)
+          (TC0 TNone TC2)
+          rejected)
+        (acs-candidate
+          triple-1-2-3
+          ((rule tc1 TF1 TB1 TC2 TC1)
+           (rule td0 TF3 TB3 TNone TNone)
+           (rule tc2 TF2 TB2 TC0 TC2))
+          (TC2 TNone TC0)
+          (TC1 TNone TC2)
+          rejected)))
+
+!(test (exp01-recovered-triple-active-count) 1)
+
+!(test (exp01-triple-recovered?) True)

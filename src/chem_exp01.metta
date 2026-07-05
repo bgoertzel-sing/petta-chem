@@ -146,6 +146,61 @@
    (and (== $product-0 $catalyst-1)
         (== $product-1 $catalyst-0)))
 
+; 3-rule catalytic cycle closure: product(r0) = catalyst(r1),
+; product(r1) = catalyst(r2), product(r2) = catalyst(r0).
+; This is the natural generalization of the pair scanner to RAF-like
+; 3-cycles, enabling detection of longer autocatalytic structures
+; that the pair-only scanner would miss.
+
+(= (product-catalyst-closed-3?
+      (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2))
+   (and (== $product-0 $catalyst-1)
+        (and (== $product-1 $catalyst-2)
+             (== $product-2 $catalyst-0))))
+
+(= (useful-acs-3?
+      $rule-0
+      $rule-1
+      $rule-2)
+   (product-catalyst-closed-3? $rule-0 $rule-1 $rule-2))
+
+(= (acs-status-for-triple $rule-0 $rule-1 $rule-2)
+   (if (useful-acs-3? $rule-0 $rule-1 $rule-2)
+       active
+       rejected))
+
+(= (scan-rule-triple
+      $id
+      (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2))
+   (make-acs-candidate
+     $id
+     ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2))
+     ($product-0 $product-1 $product-2)
+     ($catalyst-0 $catalyst-1 $catalyst-2)
+     (acs-status-for-triple
+       (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2))))
+
+; Scan all C(4,3)=4 triples from a 4-rule list.
+(= (scan-rule-triples-4 ($rule-0 $rule-1 $rule-2 $rule-3))
+   ((scan-rule-triple triple-0-1-2 $rule-0 $rule-1 $rule-2)
+    (scan-rule-triple triple-0-1-3 $rule-0 $rule-1 $rule-3)
+    (scan-rule-triple triple-0-2-3 $rule-0 $rule-2 $rule-3)
+    (scan-rule-triple triple-1-2-3 $rule-1 $rule-2 $rule-3)))
+
+(= (active-triple-count-4 ($c0 $c1 $c2 $c3))
+   (+ (if (== (acs-status $c0) active) 1 0)
+   (+ (if (== (acs-status $c1) active) 1 0)
+   (+ (if (== (acs-status $c2) active) 1 0)
+      (if (== (acs-status $c3) active) 1 0)))))
+
 (= (non-catalytic-cycle-2?
       (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1))
@@ -299,3 +354,51 @@
 
 (= (exp01-ablation-drop-positive?)
    (> (ablation-drop (exp01-ablate-rp0)) 0))
+
+; ----- planted 3-rule catalytic cycle fixture with distractors -----
+;
+; Three rules form a catalytic 3-cycle: tc0 produces TC1 which catalyzes
+; tc1, tc1 produces TC2 which catalyzes tc2, tc2 produces TC0 which
+; catalyzes tc0.  A distractor rule td0 does not participate in any cycle.
+; This validates that the triple scanner recovers planted 3-cycles and
+; rejects non-cycles, generalizing the pair scanner to RAF-like closure.
+
+(= (exp01-planted-triple-rule tc0)
+   (rule tc0 TF0 TB0 TC1 TC0))
+
+(= (exp01-planted-triple-rule tc1)
+   (rule tc1 TF1 TB1 TC2 TC1))
+
+(= (exp01-planted-triple-rule tc2)
+   (rule tc2 TF2 TB2 TC0 TC2))
+
+(= (exp01-triple-distractor-rule td0)
+   (rule td0 TF3 TB3 TNone TNone))
+
+(= (exp01-triple-rules-with-distractors)
+   ((exp01-planted-triple-rule tc0)
+    (exp01-planted-triple-rule tc1)
+    (exp01-triple-distractor-rule td0)
+    (exp01-planted-triple-rule tc2)))
+
+(= (exp01-triple-closure-ok?)
+   (product-catalyst-closed-3?
+     (exp01-planted-triple-rule tc0)
+     (exp01-planted-triple-rule tc1)
+     (exp01-planted-triple-rule tc2)))
+
+(= (exp01-triple-distractor-rejected?)
+   (== (useful-acs-3?
+         (exp01-planted-triple-rule tc0)
+         (exp01-planted-triple-rule tc1)
+         (exp01-triple-distractor-rule td0))
+       False))
+
+(= (exp01-scanned-triples)
+   (scan-rule-triples-4 (exp01-triple-rules-with-distractors)))
+
+(= (exp01-recovered-triple-active-count)
+   (active-triple-count-4 (exp01-scanned-triples)))
+
+(= (exp01-triple-recovered?)
+   (== (exp01-recovered-triple-active-count) 1))
