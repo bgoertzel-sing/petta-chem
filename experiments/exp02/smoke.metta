@@ -1400,3 +1400,43 @@
 !(test (exp02-triple-active-count-8 seed-37 random-polymer) 0)
 
 !(test (exp02-triple-active-count-8 seed-211 random-polymer) 0)
+
+; Comprehensive 3-rule catalytic cycle scan across ALL 40 generated-unplanted seeds.
+; The fold computes total active triples across all seeds and families.
+; Expected: 0 active triples across all 40 seeds * 3 families = 120 family records.
+
+!(test (exp02-generated-unplanted-seed-count) 40)
+
+!(test (exp02-generated-unplanted-triple-total) 0)
+
+; Planted 3-cycle fixture should have exactly 1 active triple (control case).
+!(test (exp02-planted-triple-active-count) 1)
+
+; Seed-13 planted reciprocal-pair control should have 0 active triples across all families.
+!(test (exp02-seed-13-triple-active-count random-polymer) 0)
+
+!(test (exp02-seed-13-triple-active-count shuffled-catalysts) 0)
+
+!(test (exp02-seed-13-triple-active-count no-catalysis) 0)
+
+; Spot-checks: a sample of individual generated-unplanted seeds should all have 0
+; active triples across all three families.
+!(test (exp02-triple-active-count-8 seed-19 random-polymer) 0)
+
+!(test (exp02-triple-active-count-8 seed-19 shuffled-catalysts) 0)
+
+!(test (exp02-triple-active-count-8 seed-19 no-catalysis) 0)
+
+!(test (exp02-triple-active-count-8 seed-41 random-polymer) 0)
+
+!(test (exp02-triple-active-count-8 seed-67 random-polymer) 0)
+
+!(test (exp02-triple-active-count-8 seed-97 no-catalysis) 0)
+
+!(test (exp02-triple-active-count-8 seed-113 shuffled-catalysts) 0)
+
+!(test (exp02-triple-active-count-8 seed-139 random-polymer) 0)
+
+!(test (exp02-triple-active-count-8 seed-167 no-catalysis) 0)
+
+!(test (exp02-triple-active-count-8 seed-199 shuffled-catalysts) 0)

@@ -5694,3 +5694,57 @@
                                                                (and (run-record-passed? (exp02-run-record seed-23-no-catalysis))
                                                                     (and (run-record-passed? (exp02-run-record seed-31-random))
                                                                          (exp02-systematic-sweep-complete?))))))))))))))))
+
+; Comprehensive 3-rule catalytic cycle scanning across all
+; generated-unplanted 8-rule seeds.  Each seed has three families
+; (random-polymer, shuffled-catalysts, no-catalysis).  The fold
+; computes the total active triple count across all seeds/families,
+; verifying that the conservative pair scanner's zero-active result
+; extends to 3-rule cycles for the entire generated-unplanted batch.
+
+(= (exp02-generated-unplanted-seeds-8)
+   (seed-19 seed-23 seed-29 seed-31 seed-37 seed-41 seed-43 seed-47
+    seed-53 seed-59 seed-61 seed-67 seed-71 seed-73 seed-79 seed-83
+    seed-89 seed-97 seed-101 seed-103 seed-107 seed-109 seed-113
+    seed-127 seed-131 seed-137 seed-139 seed-149 seed-151 seed-157
+    seed-163 seed-167 seed-173 seed-179 seed-181 seed-191 seed-193
+    seed-197 seed-199 seed-211))
+
+(= (exp02-seed-triple-total $seed)
+   (+ (exp02-triple-active-count-8 $seed random-polymer)
+    (+ (exp02-triple-active-count-8 $seed shuffled-catalysts)
+       (exp02-triple-active-count-8 $seed no-catalysis))))
+
+(= (exp02-fold-seed-triple-total $seeds)
+   (if (== $seeds ())
+       0
+       (+ (exp02-seed-triple-total (car-atom $seeds))
+          (exp02-fold-seed-triple-total (cdr-atom $seeds)))))
+
+(= (exp02-generated-unplanted-triple-total)
+   (exp02-fold-seed-triple-total (exp02-generated-unplanted-seeds-8)))
+
+(= (exp02-generated-unplanted-seed-count)
+   (exp02-list-length (exp02-generated-unplanted-seeds-8)))
+
+(= (exp02-triple-scan-summary
+      $kind $sweep-points $seeds-scanned $active-triple-total)
+   (triple-scan-summary
+      $kind $sweep-points $seeds-scanned $active-triple-total))
+
+(= (exp02-generated-unplanted-triple-summary)
+   (exp02-triple-scan-summary
+      generated-unplanted-control
+      40
+      (exp02-generated-unplanted-seed-count)
+      (exp02-generated-unplanted-triple-total)))
+
+; Planted 3-cycle fixture should have exactly 1 active triple.
+; Seed-13 planted reciprocal-pair control should have 0 active triples.
+
+(= (exp02-planted-triple-summary)
+   (exp02-triple-scan-summary
+      planted-reciprocal-pair-control
+      1
+      1
+      (exp02-planted-triple-active-count)))
