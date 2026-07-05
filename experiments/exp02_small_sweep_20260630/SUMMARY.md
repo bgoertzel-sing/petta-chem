@@ -1,16 +1,16 @@
-# exp02 sweep-kind summary — 2026-07-02
+# exp02 sweep-kind summary — 2026-07-05
 
 This is a concise report over the current deterministic PeTTa exp02 sweep. It is **not** a spontaneous-emergence claim; the scanner is still the conservative reciprocal product-as-catalyst pair criterion.
 
 | Sweep kind | Sweep points | Family records | Family records with active pairs | Total active pairs | Random-polymer points active | Active-family-record rate |
 |---|---:|---:|---:|---:|---:|---|
 | planted-reciprocal-pair-control | 4 | 12 | 4 | 7 | 4 | 4/12 |
-| generated-unplanted-control | 36 | 108 | 0 | 0 | 0 | 0/108 |
+| generated-unplanted-control | 40 | 120 | 0 | 0 | 0 | 0/120 |
 
 ## Interpretation
 
 - The planted reciprocal-pair controls still discriminate random-polymer fixtures from shuffled-catalyst and no-catalysis controls.
-- The generated-unplanted seed-to-component controls, seed-19/seed-23, and factored-template seed-29/seed-31/seed-37/seed-41/seed-43/seed-47/seed-53/seed-59/seed-61/seed-67/seed-71/seed-73/seed-79/seed-83/seed-89/seed-97/seed-101/seed-103/seed-107/seed-109/seed-113/seed-127/seed-131/seed-137/seed-139/seed-149/seed-151/seed-157/seed-163/seed-167, seed-173, seed-179, seed-181, and seed-191, remain negative across random-polymer, shuffled-catalyst, and no-catalysis families.
+- The generated-unplanted seed-to-component controls, seed-19/seed-23, and factored-template seed-29/seed-31/seed-37/seed-41/seed-43/seed-47/seed-53/seed-59/seed-61/seed-67/seed-71/seed-73/seed-79/seed-83/seed-89/seed-97/seed-101/seed-103/seed-107/seed-109/seed-113/seed-127/seed-131/seed-137/seed-139/seed-149/seed-151/seed-157/seed-163/seed-167, seed-173, seed-179, seed-181, seed-191, seed-193, seed-197, seed-199, and seed-211 remain negative across random-polymer, shuffled-catalyst, and no-catalysis families.
 - Larger generated sweeps with still more compact seed schemas are still needed before claiming non-planted ACS emergence.
 
 ## PeTTa provenance
