@@ -1363,3 +1363,40 @@
 !(test (exp02-systematic-sweep-complete?) True)
 
 !(test (exp02-broadened-sweep-complete?) True)
+
+; ----- 3-rule catalytic cycle (triple) scanning over 8-rule families -----
+
+; The planted 3-cycle fixture has exactly 1 active triple (ptc0→ptc1→ptc2).
+!(test (exp02-planted-triple-active-count) 1)
+
+; The planted fixture should have 56 scanned triples total.
+!(test (exp02-list-length (exp02-planted-triple-acs-candidates)) 56)
+
+; Seed-13 random-polymer has 2 active pairs but should have 0 active triples.
+!(test (exp02-seed-13-triple-active-count random-polymer) 0)
+
+; Seed-13 controls should also have 0 active triples.
+!(test (exp02-seed-13-triple-active-count shuffled-catalysts) 0)
+
+!(test (exp02-seed-13-triple-active-count no-catalysis) 0)
+
+; Seed-29 generated-unplanted should have 0 active triples.
+!(test (exp02-triple-active-count-8 seed-29 random-polymer) 0)
+
+!(test (exp02-triple-active-count-8 seed-29 shuffled-catalysts) 0)
+
+!(test (exp02-triple-active-count-8 seed-29 no-catalysis) 0)
+
+; Seed-17 generated-unplanted should have 0 active triples.
+!(test (exp02-triple-active-count-8 seed-17 random-polymer) 0)
+
+!(test (exp02-triple-active-count-8 seed-17 shuffled-catalysts) 0)
+
+!(test (exp02-triple-active-count-8 seed-17 no-catalysis) 0)
+
+; Triple scanning should not find any active 3-cycles in generated-unplanted controls.
+!(test (exp02-triple-active-count-8 seed-31 random-polymer) 0)
+
+!(test (exp02-triple-active-count-8 seed-37 random-polymer) 0)
+
+!(test (exp02-triple-active-count-8 seed-211 random-polymer) 0)

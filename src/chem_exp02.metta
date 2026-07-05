@@ -593,6 +593,130 @@
    (+ (if (== (acs-status $candidate-26) active) 1 0)
    (if (== (acs-status $candidate-27) active) 1 0)))))))))))))))))))))))))))))
 
+(= (exp02-active-triple-count $candidates)
+   (if (== $candidates ())
+       0
+       (+ (if (== (acs-status (car-atom $candidates)) active) 1 0)
+          (exp02-active-triple-count (cdr-atom $candidates)))))
+
+; Scan all C(8,3)=56 triples from an 8-rule list for 3-rule catalytic
+; cycles (product(r0)=catalyst(r1), product(r1)=catalyst(r2),
+; product(r2)=catalyst(r0)).  This generalizes the pair scanner to
+; detect longer autocatalytic structures that reciprocal-pair scanning
+; would miss.
+
+(= (exp02-scan-triples-8 ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7))
+   (
+; triples starting with rule-0
+(scan-rule-triple triple-0-1-2 $rule-0 $rule-1 $rule-2)
+    (scan-rule-triple triple-0-1-3 $rule-0 $rule-1 $rule-3)
+    (scan-rule-triple triple-0-1-4 $rule-0 $rule-1 $rule-4)
+    (scan-rule-triple triple-0-1-5 $rule-0 $rule-1 $rule-5)
+    (scan-rule-triple triple-0-1-6 $rule-0 $rule-1 $rule-6)
+    (scan-rule-triple triple-0-1-7 $rule-0 $rule-1 $rule-7)
+    (scan-rule-triple triple-0-2-3 $rule-0 $rule-2 $rule-3)
+    (scan-rule-triple triple-0-2-4 $rule-0 $rule-2 $rule-4)
+    (scan-rule-triple triple-0-2-5 $rule-0 $rule-2 $rule-5)
+    (scan-rule-triple triple-0-2-6 $rule-0 $rule-2 $rule-6)
+    (scan-rule-triple triple-0-2-7 $rule-0 $rule-2 $rule-7)
+    (scan-rule-triple triple-0-3-4 $rule-0 $rule-3 $rule-4)
+    (scan-rule-triple triple-0-3-5 $rule-0 $rule-3 $rule-5)
+    (scan-rule-triple triple-0-3-6 $rule-0 $rule-3 $rule-6)
+    (scan-rule-triple triple-0-3-7 $rule-0 $rule-3 $rule-7)
+    (scan-rule-triple triple-0-4-5 $rule-0 $rule-4 $rule-5)
+    (scan-rule-triple triple-0-4-6 $rule-0 $rule-4 $rule-6)
+    (scan-rule-triple triple-0-4-7 $rule-0 $rule-4 $rule-7)
+    (scan-rule-triple triple-0-5-6 $rule-0 $rule-5 $rule-6)
+    (scan-rule-triple triple-0-5-7 $rule-0 $rule-5 $rule-7)
+    (scan-rule-triple triple-0-6-7 $rule-0 $rule-6 $rule-7)
+; triples starting with rule-1
+    (scan-rule-triple triple-1-2-3 $rule-1 $rule-2 $rule-3)
+    (scan-rule-triple triple-1-2-4 $rule-1 $rule-2 $rule-4)
+    (scan-rule-triple triple-1-2-5 $rule-1 $rule-2 $rule-5)
+    (scan-rule-triple triple-1-2-6 $rule-1 $rule-2 $rule-6)
+    (scan-rule-triple triple-1-2-7 $rule-1 $rule-2 $rule-7)
+    (scan-rule-triple triple-1-3-4 $rule-1 $rule-3 $rule-4)
+    (scan-rule-triple triple-1-3-5 $rule-1 $rule-3 $rule-5)
+    (scan-rule-triple triple-1-3-6 $rule-1 $rule-3 $rule-6)
+    (scan-rule-triple triple-1-3-7 $rule-1 $rule-3 $rule-7)
+    (scan-rule-triple triple-1-4-5 $rule-1 $rule-4 $rule-5)
+    (scan-rule-triple triple-1-4-6 $rule-1 $rule-4 $rule-6)
+    (scan-rule-triple triple-1-4-7 $rule-1 $rule-4 $rule-7)
+    (scan-rule-triple triple-1-5-6 $rule-1 $rule-5 $rule-6)
+    (scan-rule-triple triple-1-5-7 $rule-1 $rule-5 $rule-7)
+    (scan-rule-triple triple-1-6-7 $rule-1 $rule-6 $rule-7)
+; triples starting with rule-2
+    (scan-rule-triple triple-2-3-4 $rule-2 $rule-3 $rule-4)
+    (scan-rule-triple triple-2-3-5 $rule-2 $rule-3 $rule-5)
+    (scan-rule-triple triple-2-3-6 $rule-2 $rule-3 $rule-6)
+    (scan-rule-triple triple-2-3-7 $rule-2 $rule-3 $rule-7)
+    (scan-rule-triple triple-2-4-5 $rule-2 $rule-4 $rule-5)
+    (scan-rule-triple triple-2-4-6 $rule-2 $rule-4 $rule-6)
+    (scan-rule-triple triple-2-4-7 $rule-2 $rule-4 $rule-7)
+    (scan-rule-triple triple-2-5-6 $rule-2 $rule-5 $rule-6)
+    (scan-rule-triple triple-2-5-7 $rule-2 $rule-5 $rule-7)
+    (scan-rule-triple triple-2-6-7 $rule-2 $rule-6 $rule-7)
+; triples starting with rule-3
+    (scan-rule-triple triple-3-4-5 $rule-3 $rule-4 $rule-5)
+    (scan-rule-triple triple-3-4-6 $rule-3 $rule-4 $rule-6)
+    (scan-rule-triple triple-3-4-7 $rule-3 $rule-4 $rule-7)
+    (scan-rule-triple triple-3-5-6 $rule-3 $rule-5 $rule-6)
+    (scan-rule-triple triple-3-5-7 $rule-3 $rule-5 $rule-7)
+    (scan-rule-triple triple-3-6-7 $rule-3 $rule-6 $rule-7)
+; triples starting with rule-4
+    (scan-rule-triple triple-4-5-6 $rule-4 $rule-5 $rule-6)
+    (scan-rule-triple triple-4-5-7 $rule-4 $rule-5 $rule-7)
+    (scan-rule-triple triple-4-6-7 $rule-4 $rule-6 $rule-7)
+; triples starting with rule-5
+    (scan-rule-triple triple-5-6-7 $rule-5 $rule-6 $rule-7)))
+
+(= (exp02-triple-acs-candidates-8 $seed $family)
+   (exp02-scan-triples-8 (exp02-generated-rules-8 $seed $family)))
+
+(= (exp02-triple-active-count-8 $seed $family)
+   (exp02-active-triple-count
+     (exp02-triple-acs-candidates-8 $seed $family)))
+
+(= (exp02-seed-13-triple-acs-candidates $family)
+   (exp02-scan-triples-8 (exp02-seed-13-rules $family)))
+
+(= (exp02-seed-13-triple-active-count $family)
+   (exp02-active-triple-count
+     (exp02-seed-13-triple-acs-candidates $family)))
+
+; Planted 3-rule catalytic cycle fixture in 8-rule format:
+;   ptc0: A + B → TX, cat TZ   (product TX = catalyst of ptc1)
+;   ptc1: C + D → TY, cat TX   (product TY = catalyst of ptc2)
+;   ptc2: E + F → TZ, cat TY   (product TZ = catalyst of ptc0)
+; Five distractor rules (ptd3-ptd7) break reciprocal pairs but preserve
+; the 3-cycle for triple scanning.
+
+(= (exp02-planted-triple-rule ptc0) (rule ptc0 TA TB TX TZ))
+(= (exp02-planted-triple-rule ptc1) (rule ptc1 TC TD TY TX))
+(= (exp02-planted-triple-rule ptc2) (rule ptc2 TE TF TZ TY))
+(= (exp02-planted-triple-rule ptd3) (rule ptd3 TG TH T3 Q0))
+(= (exp02-planted-triple-rule ptd4) (rule ptd4 TI TJ T4 Q1))
+(= (exp02-planted-triple-rule ptd5) (rule ptd5 TK TL T5 Q2))
+(= (exp02-planted-triple-rule ptd6) (rule ptd6 TM TN T6 Q3))
+(= (exp02-planted-triple-rule ptd7) (rule ptd7 TO TP T7 Q4))
+
+(= (exp02-planted-triple-rules)
+   ((exp02-planted-triple-rule ptc0)
+    (exp02-planted-triple-rule ptc1)
+    (exp02-planted-triple-rule ptc2)
+    (exp02-planted-triple-rule ptd3)
+    (exp02-planted-triple-rule ptd4)
+    (exp02-planted-triple-rule ptd5)
+    (exp02-planted-triple-rule ptd6)
+    (exp02-planted-triple-rule ptd7)))
+
+(= (exp02-planted-triple-acs-candidates)
+   (exp02-scan-triples-8 (exp02-planted-triple-rules)))
+
+(= (exp02-planted-triple-active-count)
+   (exp02-active-triple-count
+     (exp02-planted-triple-acs-candidates)))
+
 (= (exp02-seed-13-acs-candidates $family)
    (exp02-scan-rules-8 (exp02-seed-13-rules $family)))
 
