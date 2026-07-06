@@ -632,3 +632,60 @@
 !(test (exp03-exp02-longest-run-records-complete? seed-13) True)
 
 !(test (exp03-dynamic-aggregate-report-complete?) True)
+
+; ---- Cap-3 bridge tests (seed-13, 15-tick, candidate cap 3) ----
+;
+; Cap 3 extends the per-tick pool from 2 to 3 candidates.  The deterministic
+; selector cycles (13+tick)%3 = 1,2,0,1,2,0,... so rr0 (position 1) fires
+; at ticks 0,3,6,9,12 for 5 productive events; rr2 (position 2) and rr1
+; (position 0) are distractors.  Controls remain zero-event.
+
+!(test (exp03-cap3-event-count random-polymer seed-13) 5)
+!(test (exp03-cap3-event-count shuffled-catalysts seed-13) 0)
+!(test (exp03-cap3-event-count no-catalysis seed-13) 0)
+
+!(test (exp03-cap3-tick random-polymer seed-13) 15)
+!(test (exp03-cap3-tick shuffled-catalysts seed-13) 15)
+!(test (exp03-cap3-tick no-catalysis seed-13) 15)
+
+!(test (exp03-cap3-abundances random-polymer seed-13)
+       (abundance-snapshot 15 ((mol R0 0) (mol R1 0) (mol R01 5) (mol R10 1))))
+
+!(test (exp03-cap3-abundances shuffled-catalysts seed-13)
+       (abundance-snapshot 15 ((mol R0 5) (mol R1 5) (mol R01 0) (mol R10 1))))
+
+!(test (exp03-cap3-abundances no-catalysis seed-13)
+       (abundance-snapshot 15 ((mol R0 5) (mol R1 5) (mol R01 0) (mol R10 1))))
+
+!(test (exp03-cap3-reactant-exhausted? seed-13) True)
+!(test (exp03-cap3-controls-discriminate? seed-13) True)
+!(test (exp03-cap3-replay-ok? random-polymer seed-13) True)
+!(test (exp03-cap3-replay-ok? shuffled-catalysts seed-13) True)
+!(test (exp03-cap3-replay-ok? no-catalysis seed-13) True)
+
+!(test (trace-events (exp03-cap3-after-15 random-polymer seed-13))
+       ((event 0 rr0 R0 R1 R01 R10)
+        (event 3 rr0 R0 R1 R01 R10)
+        (event 6 rr0 R0 R1 R01 R10)
+        (event 9 rr0 R0 R1 R01 R10)
+        (event 12 rr0 R0 R1 R01 R10)))
+
+!(test (trace-events (exp03-cap3-after-15 shuffled-catalysts seed-13)) ())
+!(test (trace-events (exp03-cap3-after-15 no-catalysis seed-13)) ())
+
+!(test (run-record-events (exp03-cap3-run-record seed-13 random-polymer))
+       ((event 0 rr0 R0 R1 R01 R10)
+        (event 3 rr0 R0 R1 R01 R10)
+        (event 6 rr0 R0 R1 R01 R10)
+        (event 9 rr0 R0 R1 R01 R10)
+        (event 12 rr0 R0 R1 R01 R10)))
+
+!(test (run-record-abundances (exp03-cap3-run-record seed-13 random-polymer))
+       ((abundance-snapshot 0 ((mol R0 5) (mol R1 5) (mol R01 0) (mol R10 1)))
+        (abundance-snapshot 15 ((mol R0 0) (mol R1 0) (mol R01 5) (mol R10 1)))))
+
+!(test (run-record-abundances (exp03-cap3-run-record seed-13 shuffled-catalysts))
+       ((abundance-snapshot 0 ((mol R0 5) (mol R1 5) (mol R01 0) (mol R10 1)))
+        (abundance-snapshot 15 ((mol R0 5) (mol R1 5) (mol R01 0) (mol R10 1)))))
+
+!(test (exp03-cap3-run-records-complete? seed-13) True)

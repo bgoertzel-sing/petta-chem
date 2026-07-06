@@ -165,6 +165,17 @@
        $candidate-0
        $candidate-1))
 
+; 3-candidate deterministic seam for cap-3 pools.
+(= (seeded-choice-3 $seed $tick)
+   (#mod (+ (seed-number $seed) $tick) 3))
+
+(= (select-candidate-3 $seed $tick $candidate-0 $candidate-1 $candidate-2)
+   (if (== (seeded-choice-3 $seed $tick) 0)
+       $candidate-0
+       (if (== (seeded-choice-3 $seed $tick) 1)
+           $candidate-1
+           $candidate-2)))
+
 (= (cap-candidate-pool 0 (candidate-pool $tick $candidates))
    ())
 
@@ -199,6 +210,12 @@
    ($candidate-0 $candidate-1 $candidate-2))
 
 (= (cap-candidate-pool 3 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3)))
+   ($candidate-0 $candidate-1 $candidate-2))
+
+(= (cap-candidate-pool 3 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5)))
+   ($candidate-0 $candidate-1 $candidate-2))
+
+(= (cap-candidate-pool 3 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6 $candidate-7)))
    ($candidate-0 $candidate-1 $candidate-2))
 
 (= (cap-candidate-pool 4 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3)))
@@ -356,6 +373,25 @@
          $chamber
          (candidate-pool-candidates $candidate-pool)))))
 
+; 3-candidate deterministic selection from a bounded pool.
+(= (selected-candidate-from-list-3
+      (chamber $id $state $rules $events)
+      ($candidate-0 $candidate-1 $candidate-2))
+   (select-candidate-3
+     (state-seed $state)
+     (state-tick $state)
+     $candidate-0
+     $candidate-1
+     $candidate-2))
+
+(= (chamber-tick-generated-3 $cap $chamber)
+   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
+     (chamber-tick-with-candidate
+       $chamber
+       (selected-candidate-from-list-3
+         $chamber
+         (candidate-pool-candidates $candidate-pool)))))
+
 ; ----- exp00 fixture -----
 
 (= (exp00-rule r0)
@@ -386,6 +422,9 @@
 
 (= (exp00-candidate-cap)
    (make-candidate-cap 2 1))
+
+(= (exp00-candidate-cap-3)
+   (make-candidate-cap 3 1))
 
 (= (exp00-generated-candidate-pool $seed)
    (generate-candidate-pool (exp00-initial-chamber $seed)))
