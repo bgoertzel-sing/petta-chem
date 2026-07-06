@@ -1361,6 +1361,111 @@
                   (and (exp03-exp02-full-source-controls-discriminate-seed-17?)
                        (exp03-exp02-full-source-replay-ok-seed-17?))))))
 
+; ----- 10-tick exp02-family dynamic bridge (seed-7) -----
+;
+; This extends the seed-7 exp02-family bridge from 3 ticks to 10 ticks with
+; higher initial abundances (P0=5, P1=5).  The productive rr0 rule fires at
+; even ticks (0,2,4,6,8) for 5 events before reactant exhaustion at tick 8.
+; Shuffled/no-catalysis controls remain zero-event over the same 10-tick horizon.
+; This connects the longer multi-tick evolution fixtures to the exp02-style
+; family bridge structure.
+
+(= (exp03-exp02-longer-initial-state seed-7)
+   (state 0 seed-7 (mol P0 5) (mol P1 5) (mol P01 0) (mol P10 1)))
+
+(= (exp03-exp02-longer-chamber $family seed-7)
+   (make-chamber (exp03-exp02-longer $family seed-7)
+                 (exp03-exp02-longer-initial-state seed-7)
+                 (exp03-exp02-rules $family)
+                 ()))
+
+(= (exp03-exp02-longer-after-10 $family seed-7)
+   (chamber-run-10 (exp03-exp02-longer-chamber $family seed-7)))
+
+(= (exp03-exp02-longer-event-count $family seed-7)
+   (event-count (trace-events (exp03-exp02-longer-after-10 $family seed-7))))
+
+(= (exp03-exp02-longer-tick $family seed-7)
+   (state-tick (chamber-state (exp03-exp02-longer-after-10 $family seed-7))))
+
+(= (exp03-exp02-longer-abundances $family seed-7)
+   (chamber-abundance-snapshot (exp03-exp02-longer-after-10 $family seed-7)))
+
+(= (exp03-exp02-longer-replay-10 $family seed-7)
+   (chamber-run-5 (chamber-run-5 (exp03-exp02-longer-chamber $family seed-7))))
+
+(= (exp03-exp02-longer-replay-ok? $family seed-7)
+   (== (exp03-exp02-longer-after-10 $family seed-7)
+       (exp03-exp02-longer-replay-10 $family seed-7)))
+
+(= (exp03-exp02-longer-reactant-exhausted? seed-7)
+   (== (exp03-exp02-longer-abundances random seed-7)
+       (abundance-snapshot 10 ((mol P0 0) (mol P1 0) (mol P01 5) (mol P10 1)))))
+
+(= (exp03-exp02-longer-controls-discriminate? seed-7)
+   (and (> (exp03-exp02-longer-event-count random seed-7)
+           (exp03-exp02-longer-event-count shuffled seed-7))
+        (> (exp03-exp02-longer-event-count random seed-7)
+           (exp03-exp02-longer-event-count no-catalysis seed-7))))
+
+(= (exp03-exp02-longer-run-config seed-7 random)
+   (make-run-config exp03-exp02-seed-7-longer-random exp03 (seed-7) 10 (candidate-cap 2 1) random-polymer))
+
+(= (exp03-exp02-longer-run-config seed-7 shuffled)
+   (make-run-config exp03-exp02-seed-7-longer-shuffled exp03 (seed-7) 10 (candidate-cap 2 1) shuffled-catalysts))
+
+(= (exp03-exp02-longer-run-config seed-7 no-catalysis)
+   (make-run-config exp03-exp02-seed-7-longer-no-catalysis exp03 (seed-7) 10 (candidate-cap 2 1) no-catalysis))
+
+(= (exp03-exp02-longer-run-manifest seed-7 random)
+   (make-run-manifest exp03-exp02-seed-7-longer-random config-hash-exp03-exp02-seed-7-longer-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-exp02-longer-run-manifest seed-7 shuffled)
+   (make-run-manifest exp03-exp02-seed-7-longer-shuffled config-hash-exp03-exp02-seed-7-longer-shuffled petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-exp02-longer-run-manifest seed-7 no-catalysis)
+   (make-run-manifest exp03-exp02-seed-7-longer-no-catalysis config-hash-exp03-exp02-seed-7-longer-no-catalysis petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-exp02-longer-metrics seed-7 $family)
+   ((metric dynamic-event-count (run-config-id (exp03-exp02-longer-run-config seed-7 $family)) (exp03-exp02-longer-event-count $family seed-7))
+    (metric dynamic-tick-count (run-config-id (exp03-exp02-longer-run-config seed-7 $family)) 10)
+    (metric source-exp02-rule-count (run-config-id (exp03-exp02-longer-run-config seed-7 $family)) 2)
+    (metric dynamic-candidate-cap (run-config-id (exp03-exp02-longer-run-config seed-7 $family)) 2)))
+
+(= (exp03-exp02-longer-run-summary seed-7 random)
+   (make-run-summary exp03-exp02-seed-7-longer-random passed seed-7-longer-dynamic-produces-events True))
+
+(= (exp03-exp02-longer-run-summary seed-7 shuffled)
+   (make-run-summary exp03-exp02-seed-7-longer-shuffled passed seed-7-longer-shuffled-control-zero-events True))
+
+(= (exp03-exp02-longer-run-summary seed-7 no-catalysis)
+   (make-run-summary exp03-exp02-seed-7-longer-no-catalysis passed seed-7-longer-no-catalysis-control-zero-events True))
+
+(= (exp03-exp02-longer-run-record seed-7 $family)
+   (make-run-record
+     (run-config-id (exp03-exp02-longer-run-config seed-7 $family))
+     (exp03-exp02-longer-run-config seed-7 $family)
+     (exp03-exp02-longer-run-manifest seed-7 $family)
+     (trace-events (exp03-exp02-longer-after-10 $family seed-7))
+     ((state-abundance-snapshot (exp03-exp02-longer-initial-state seed-7))
+      (chamber-abundance-snapshot (exp03-exp02-longer-after-10 $family seed-7)))
+     (exp03-exp02-longer-metrics seed-7 $family)
+     (exp02-random-acs-candidates seed-7)
+     ()
+     (exp03-exp02-longer-run-summary seed-7 $family)))
+
+(= (exp03-exp02-longer-run-records seed-7)
+   ((exp03-exp02-longer-run-record seed-7 random)
+    (exp03-exp02-longer-run-record seed-7 shuffled)
+    (exp03-exp02-longer-run-record seed-7 no-catalysis)))
+
+(= (exp03-exp02-longer-run-records-complete? seed-7)
+   (and (run-record-passed? (exp03-exp02-longer-run-record seed-7 random))
+        (and (run-record-passed? (exp03-exp02-longer-run-record seed-7 shuffled))
+             (and (run-record-passed? (exp03-exp02-longer-run-record seed-7 no-catalysis))
+                  (and (exp03-exp02-longer-controls-discriminate? seed-7)
+                       (exp03-exp02-longer-replay-ok? random seed-7))))))
+
 ; ----- compact dynamic aggregate/report over tested full-source exports -----
 ;
 ; These atoms summarize the current exp03 full-source dynamic evidence across the

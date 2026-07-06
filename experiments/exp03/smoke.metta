@@ -338,4 +338,65 @@
                 (exp03-dynamic-summary-row seed-13 2 0 0 2 True)
                 (exp03-dynamic-summary-row seed-17 2 0 0 2 True)))))
 
+; ----- 10-tick exp02-family bridge tests (seed-7) -----
+
+!(test (exp03-exp02-longer-event-count random seed-7) 5)
+
+!(test (exp03-exp02-longer-event-count shuffled seed-7) 0)
+
+!(test (exp03-exp02-longer-event-count no-catalysis seed-7) 0)
+
+!(test (exp03-exp02-longer-tick random seed-7) 10)
+
+!(test (exp03-exp02-longer-tick shuffled seed-7) 10)
+
+!(test (exp03-exp02-longer-tick no-catalysis seed-7) 10)
+
+!(test (exp03-exp02-longer-abundances random seed-7)
+       (abundance-snapshot 10 ((mol P0 0) (mol P1 0) (mol P01 5) (mol P10 1))))
+
+!(test (exp03-exp02-longer-abundances shuffled seed-7)
+       (abundance-snapshot 10 ((mol P0 5) (mol P1 5) (mol P01 0) (mol P10 1))))
+
+!(test (exp03-exp02-longer-abundances no-catalysis seed-7)
+       (abundance-snapshot 10 ((mol P0 5) (mol P1 5) (mol P01 0) (mol P10 1))))
+
+!(test (exp03-exp02-longer-reactant-exhausted? seed-7) True)
+
+!(test (exp03-exp02-longer-replay-ok? random seed-7) True)
+
+!(test (exp03-exp02-longer-replay-ok? shuffled seed-7) True)
+
+!(test (exp03-exp02-longer-replay-ok? no-catalysis seed-7) True)
+
+!(test (exp03-exp02-longer-controls-discriminate? seed-7) True)
+
+!(test (trace-events (exp03-exp02-longer-after-10 random seed-7))
+       ((event 0 rr0 P0 P1 P01 P10)
+        (event 2 rr0 P0 P1 P01 P10)
+        (event 4 rr0 P0 P1 P01 P10)
+        (event 6 rr0 P0 P1 P01 P10)
+        (event 8 rr0 P0 P1 P01 P10)))
+
+!(test (trace-events (exp03-exp02-longer-after-10 shuffled seed-7)) ())
+
+!(test (trace-events (exp03-exp02-longer-after-10 no-catalysis seed-7)) ())
+
+!(test (run-record-events (exp03-exp02-longer-run-record seed-7 random))
+       ((event 0 rr0 P0 P1 P01 P10)
+        (event 2 rr0 P0 P1 P01 P10)
+        (event 4 rr0 P0 P1 P01 P10)
+        (event 6 rr0 P0 P1 P01 P10)
+        (event 8 rr0 P0 P1 P01 P10)))
+
+!(test (run-record-abundances (exp03-exp02-longer-run-record seed-7 random))
+       ((abundance-snapshot 0 ((mol P0 5) (mol P1 5) (mol P01 0) (mol P10 1)))
+        (abundance-snapshot 10 ((mol P0 0) (mol P1 0) (mol P01 5) (mol P10 1)))))
+
+!(test (run-record-abundances (exp03-exp02-longer-run-record seed-7 shuffled))
+       ((abundance-snapshot 0 ((mol P0 5) (mol P1 5) (mol P01 0) (mol P10 1)))
+        (abundance-snapshot 10 ((mol P0 5) (mol P1 5) (mol P01 0) (mol P10 1)))))
+
+!(test (exp03-exp02-longer-run-records-complete? seed-7) True)
+
 !(test (exp03-dynamic-aggregate-report-complete?) True)
