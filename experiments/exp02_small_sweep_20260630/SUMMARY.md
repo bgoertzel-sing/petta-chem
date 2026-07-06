@@ -13,6 +13,20 @@ This is a concise report over the current deterministic PeTTa exp02 sweep. It is
 - The generated-unplanted seed-to-component controls, seed-19/seed-23, and factored-template seed-29/seed-31/seed-37/seed-41/seed-43/seed-47/seed-53/seed-59/seed-61/seed-67/seed-71/seed-73/seed-79/seed-83/seed-89/seed-97/seed-101/seed-103/seed-107/seed-109/seed-113/seed-127/seed-131/seed-137/seed-139/seed-149/seed-151/seed-157/seed-163/seed-167, seed-173, seed-179, seed-181, seed-191, seed-193, seed-197, seed-199, and seed-211 remain negative across random-polymer, shuffled-catalyst, and no-catalysis families.
 - Larger generated sweeps with still more compact seed schemas are still needed before claiming non-planted ACS emergence.
 
+## 3-rule catalytic cycle (triple) scanning
+
+The 3-rule scanner (`product-catalyst-closed-3?`) checks product(r0)=catalyst(r1), product(r1)=catalyst(r2), product(r2)=catalyst(r0). This generalizes the pair scanner to RAF-like 3-cycles that reciprocal-pair scanning would miss.
+
+| Sweep kind | Seeds scanned | Family records | Active triples |
+|---|---:|---:|---:|
+| planted-reciprocal-pair-control | 1 | 3 (seed-13) | 0 |
+| planted-3-cycle fixture | 1 | 1 | 1 |
+| generated-unplanted-control | 40 | 120 | 0 |
+
+- The planted 3-cycle fixture (ptc0→ptc1→ptc2) validates the scanner recovers exactly 1 active triple out of C(8,3)=56 candidates.
+- Seed-13 planted reciprocal-pair control has 2 active pairs but 0 active triples, confirming pair closure does not imply 3-cycle closure.
+- All 40 generated-unplanted seeds × 3 families = 120 family records scan to 0 active triples, confirming the conservative pair scanner's zero-active result extends to 3-rule catalytic cycles.
+
 ## PeTTa provenance
 
-The table mirrors tested PeTTa atoms in `src/chem_exp02.metta`: `exp02-fold-sweep-kind-summary` folds over `run-record` lists to derive family-record counts, active-family counts, active-pair totals, active random-polymer points, and `exp02-sweep-kind-summary`; `exp02-sweep-kind-summary-report` now builds its rows from those folded summaries.
+The table mirrors tested PeTTa atoms in `src/chem_exp02.metta`: `exp02-fold-sweep-kind-summary` folds over `run-record` lists to derive family-record counts, active-family counts, active-pair totals, active random-polymer points, and `exp02-sweep-kind-summary`; `exp02-sweep-kind-summary-report` now builds its rows from those folded summaries. Triple-scan summaries use `exp02-triple-scan-summary`, `exp02-generated-unplanted-triple-summary`, and `exp02-planted-triple-summary`.

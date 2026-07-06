@@ -5748,3 +5748,175 @@
       1
       1
       (exp02-planted-triple-active-count)))
+
+; ----- 4-rule catalytic cycle scanning over 8-rule families -----
+;
+; 4-rule catalytic cycle closure: product(r0)=catalyst(r1),
+; product(r1)=catalyst(r2), product(r2)=catalyst(r3),
+; product(r3)=catalyst(r0). This generalizes the triple scanner
+; to detect 4-rule RAF-like cycles that pair/triple scanning
+; would miss.
+;
+; Uses product-catalyst-closed-4?, useful-acs-4?,
+; acs-status-for-quadruple, and scan-rule-quadruple from
+; src/chem_exp01.metta.
+
+(= (exp02-scan-quadruples-8 ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7))
+   (
+(scan-rule-quadruple quadruple-0-1-2-3 $rule-0 $rule-1 $rule-2 $rule-3)
+    (scan-rule-quadruple quadruple-0-1-2-4 $rule-0 $rule-1 $rule-2 $rule-4)
+    (scan-rule-quadruple quadruple-0-1-2-5 $rule-0 $rule-1 $rule-2 $rule-5)
+    (scan-rule-quadruple quadruple-0-1-2-6 $rule-0 $rule-1 $rule-2 $rule-6)
+    (scan-rule-quadruple quadruple-0-1-2-7 $rule-0 $rule-1 $rule-2 $rule-7)
+    (scan-rule-quadruple quadruple-0-1-3-4 $rule-0 $rule-1 $rule-3 $rule-4)
+    (scan-rule-quadruple quadruple-0-1-3-5 $rule-0 $rule-1 $rule-3 $rule-5)
+    (scan-rule-quadruple quadruple-0-1-3-6 $rule-0 $rule-1 $rule-3 $rule-6)
+    (scan-rule-quadruple quadruple-0-1-3-7 $rule-0 $rule-1 $rule-3 $rule-7)
+    (scan-rule-quadruple quadruple-0-1-4-5 $rule-0 $rule-1 $rule-4 $rule-5)
+    (scan-rule-quadruple quadruple-0-1-4-6 $rule-0 $rule-1 $rule-4 $rule-6)
+    (scan-rule-quadruple quadruple-0-1-4-7 $rule-0 $rule-1 $rule-4 $rule-7)
+    (scan-rule-quadruple quadruple-0-1-5-6 $rule-0 $rule-1 $rule-5 $rule-6)
+    (scan-rule-quadruple quadruple-0-1-5-7 $rule-0 $rule-1 $rule-5 $rule-7)
+    (scan-rule-quadruple quadruple-0-1-6-7 $rule-0 $rule-1 $rule-6 $rule-7)
+    (scan-rule-quadruple quadruple-0-2-3-4 $rule-0 $rule-2 $rule-3 $rule-4)
+    (scan-rule-quadruple quadruple-0-2-3-5 $rule-0 $rule-2 $rule-3 $rule-5)
+    (scan-rule-quadruple quadruple-0-2-3-6 $rule-0 $rule-2 $rule-3 $rule-6)
+    (scan-rule-quadruple quadruple-0-2-3-7 $rule-0 $rule-2 $rule-3 $rule-7)
+    (scan-rule-quadruple quadruple-0-2-4-5 $rule-0 $rule-2 $rule-4 $rule-5)
+    (scan-rule-quadruple quadruple-0-2-4-6 $rule-0 $rule-2 $rule-4 $rule-6)
+    (scan-rule-quadruple quadruple-0-2-4-7 $rule-0 $rule-2 $rule-4 $rule-7)
+    (scan-rule-quadruple quadruple-0-2-5-6 $rule-0 $rule-2 $rule-5 $rule-6)
+    (scan-rule-quadruple quadruple-0-2-5-7 $rule-0 $rule-2 $rule-5 $rule-7)
+    (scan-rule-quadruple quadruple-0-2-6-7 $rule-0 $rule-2 $rule-6 $rule-7)
+    (scan-rule-quadruple quadruple-0-3-4-5 $rule-0 $rule-3 $rule-4 $rule-5)
+    (scan-rule-quadruple quadruple-0-3-4-6 $rule-0 $rule-3 $rule-4 $rule-6)
+    (scan-rule-quadruple quadruple-0-3-4-7 $rule-0 $rule-3 $rule-4 $rule-7)
+    (scan-rule-quadruple quadruple-0-3-5-6 $rule-0 $rule-3 $rule-5 $rule-6)
+    (scan-rule-quadruple quadruple-0-3-5-7 $rule-0 $rule-3 $rule-5 $rule-7)
+    (scan-rule-quadruple quadruple-0-3-6-7 $rule-0 $rule-3 $rule-6 $rule-7)
+    (scan-rule-quadruple quadruple-0-4-5-6 $rule-0 $rule-4 $rule-5 $rule-6)
+    (scan-rule-quadruple quadruple-0-4-5-7 $rule-0 $rule-4 $rule-5 $rule-7)
+    (scan-rule-quadruple quadruple-0-4-6-7 $rule-0 $rule-4 $rule-6 $rule-7)
+    (scan-rule-quadruple quadruple-0-5-6-7 $rule-0 $rule-5 $rule-6 $rule-7)
+    (scan-rule-quadruple quadruple-1-2-3-4 $rule-1 $rule-2 $rule-3 $rule-4)
+    (scan-rule-quadruple quadruple-1-2-3-5 $rule-1 $rule-2 $rule-3 $rule-5)
+    (scan-rule-quadruple quadruple-1-2-3-6 $rule-1 $rule-2 $rule-3 $rule-6)
+    (scan-rule-quadruple quadruple-1-2-3-7 $rule-1 $rule-2 $rule-3 $rule-7)
+    (scan-rule-quadruple quadruple-1-2-4-5 $rule-1 $rule-2 $rule-4 $rule-5)
+    (scan-rule-quadruple quadruple-1-2-4-6 $rule-1 $rule-2 $rule-4 $rule-6)
+    (scan-rule-quadruple quadruple-1-2-4-7 $rule-1 $rule-2 $rule-4 $rule-7)
+    (scan-rule-quadruple quadruple-1-2-5-6 $rule-1 $rule-2 $rule-5 $rule-6)
+    (scan-rule-quadruple quadruple-1-2-5-7 $rule-1 $rule-2 $rule-5 $rule-7)
+    (scan-rule-quadruple quadruple-1-2-6-7 $rule-1 $rule-2 $rule-6 $rule-7)
+    (scan-rule-quadruple quadruple-1-3-4-5 $rule-1 $rule-3 $rule-4 $rule-5)
+    (scan-rule-quadruple quadruple-1-3-4-6 $rule-1 $rule-3 $rule-4 $rule-6)
+    (scan-rule-quadruple quadruple-1-3-4-7 $rule-1 $rule-3 $rule-4 $rule-7)
+    (scan-rule-quadruple quadruple-1-3-5-6 $rule-1 $rule-3 $rule-5 $rule-6)
+    (scan-rule-quadruple quadruple-1-3-5-7 $rule-1 $rule-3 $rule-5 $rule-7)
+    (scan-rule-quadruple quadruple-1-3-6-7 $rule-1 $rule-3 $rule-6 $rule-7)
+    (scan-rule-quadruple quadruple-1-4-5-6 $rule-1 $rule-4 $rule-5 $rule-6)
+    (scan-rule-quadruple quadruple-1-4-5-7 $rule-1 $rule-4 $rule-5 $rule-7)
+    (scan-rule-quadruple quadruple-1-4-6-7 $rule-1 $rule-4 $rule-6 $rule-7)
+    (scan-rule-quadruple quadruple-1-5-6-7 $rule-1 $rule-5 $rule-6 $rule-7)
+    (scan-rule-quadruple quadruple-2-3-4-5 $rule-2 $rule-3 $rule-4 $rule-5)
+    (scan-rule-quadruple quadruple-2-3-4-6 $rule-2 $rule-3 $rule-4 $rule-6)
+    (scan-rule-quadruple quadruple-2-3-4-7 $rule-2 $rule-3 $rule-4 $rule-7)
+    (scan-rule-quadruple quadruple-2-3-5-6 $rule-2 $rule-3 $rule-5 $rule-6)
+    (scan-rule-quadruple quadruple-2-3-5-7 $rule-2 $rule-3 $rule-5 $rule-7)
+    (scan-rule-quadruple quadruple-2-3-6-7 $rule-2 $rule-3 $rule-6 $rule-7)
+    (scan-rule-quadruple quadruple-2-4-5-6 $rule-2 $rule-4 $rule-5 $rule-6)
+    (scan-rule-quadruple quadruple-2-4-5-7 $rule-2 $rule-4 $rule-5 $rule-7)
+    (scan-rule-quadruple quadruple-2-4-6-7 $rule-2 $rule-4 $rule-6 $rule-7)
+    (scan-rule-quadruple quadruple-2-5-6-7 $rule-2 $rule-5 $rule-6 $rule-7)
+    (scan-rule-quadruple quadruple-3-4-5-6 $rule-3 $rule-4 $rule-5 $rule-6)
+    (scan-rule-quadruple quadruple-3-4-5-7 $rule-3 $rule-4 $rule-5 $rule-7)
+    (scan-rule-quadruple quadruple-3-4-6-7 $rule-3 $rule-4 $rule-6 $rule-7)
+    (scan-rule-quadruple quadruple-3-5-6-7 $rule-3 $rule-5 $rule-6 $rule-7)
+    (scan-rule-quadruple quadruple-4-5-6-7 $rule-4 $rule-5 $rule-6 $rule-7)
+))
+
+(= (exp02-active-quadruple-count $candidates)
+   (if (== $candidates ())
+       0
+       (+ (if (== (acs-status (car-atom $candidates)) active) 1 0)
+          (exp02-active-quadruple-count (cdr-atom $candidates)))))
+
+(= (exp02-quadruple-acs-candidates-8 $seed $family)
+   (exp02-scan-quadruples-8 (exp02-generated-rules-8 $seed $family)))
+
+(= (exp02-quadruple-active-count-8 $seed $family)
+   (exp02-active-quadruple-count
+     (exp02-quadruple-acs-candidates-8 $seed $family)))
+
+(= (exp02-seed-13-quadruple-acs-candidates $family)
+   (exp02-scan-quadruples-8 (exp02-seed-13-rules $family)))
+
+(= (exp02-seed-13-quadruple-active-count $family)
+   (exp02-active-quadruple-count
+     (exp02-seed-13-quadruple-acs-candidates $family)))
+
+(= (exp02-planted-quadruple-rule pqc0) (rule pqc0 QA QB QX QW))
+(= (exp02-planted-quadruple-rule pqc1) (rule pqc1 QC QD QY QX))
+(= (exp02-planted-quadruple-rule pqc2) (rule pqc2 QE QF QZ QY))
+(= (exp02-planted-quadruple-rule pqc3) (rule pqc3 QG QH QW QZ))
+(= (exp02-planted-quadruple-rule pqd4) (rule pqd4 QI QJ Q4 R0))
+(= (exp02-planted-quadruple-rule pqd5) (rule pqd5 QK QL Q5 R1))
+(= (exp02-planted-quadruple-rule pqd6) (rule pqd6 QM QN Q6 R2))
+(= (exp02-planted-quadruple-rule pqd7) (rule pqd7 QO QP Q7 R3))
+
+(= (exp02-planted-quadruple-rules)
+   ((exp02-planted-quadruple-rule pqc0)
+    (exp02-planted-quadruple-rule pqc1)
+    (exp02-planted-quadruple-rule pqc2)
+    (exp02-planted-quadruple-rule pqc3)
+    (exp02-planted-quadruple-rule pqd4)
+    (exp02-planted-quadruple-rule pqd5)
+    (exp02-planted-quadruple-rule pqd6)
+    (exp02-planted-quadruple-rule pqd7)))
+
+(= (exp02-planted-quadruple-acs-candidates)
+   (exp02-scan-quadruples-8 (exp02-planted-quadruple-rules)))
+
+(= (exp02-planted-quadruple-active-count)
+   (exp02-active-quadruple-count
+     (exp02-planted-quadruple-acs-candidates)))
+
+; Comprehensive 4-rule catalytic cycle scanning across all
+; generated-unplanted 8-rule seeds. Each seed has three families
+; (random-polymer, shuffled-catalysts, no-catalysis). The fold
+; computes the total active quadruple count across all seeds/families,
+; verifying that the conservative pair/triple scanner's zero-active
+; result extends to 4-rule cycles for the entire generated-unplanted batch.
+
+(= (exp02-seed-quadruple-total $seed)
+   (+ (exp02-quadruple-active-count-8 $seed random-polymer)
+    (+ (exp02-quadruple-active-count-8 $seed shuffled-catalysts)
+       (exp02-quadruple-active-count-8 $seed no-catalysis))))
+
+(= (exp02-fold-seed-quadruple-total $seeds)
+   (if (== $seeds ())
+       0
+       (+ (exp02-seed-quadruple-total (car-atom $seeds))
+          (exp02-fold-seed-quadruple-total (cdr-atom $seeds)))))
+
+(= (exp02-generated-unplanted-quadruple-total)
+   (exp02-fold-seed-quadruple-total (exp02-generated-unplanted-seeds-8)))
+
+(= (exp02-quadruple-scan-summary
+      $kind $sweep-points $seeds-scanned $active-quadruple-total)
+   (quadruple-scan-summary
+      $kind $sweep-points $seeds-scanned $active-quadruple-total))
+
+(= (exp02-generated-unplanted-quadruple-summary)
+   (exp02-quadruple-scan-summary
+      generated-unplanted-control
+      40
+      (exp02-generated-unplanted-seed-count)
+      (exp02-generated-unplanted-quadruple-total)))
+
+(= (exp02-planted-quadruple-summary)
+   (exp02-quadruple-scan-summary
+      planted-4-cycle-fixture
+      1
+      1
+      (exp02-planted-quadruple-active-count)))

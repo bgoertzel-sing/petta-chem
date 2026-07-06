@@ -1440,3 +1440,55 @@
 !(test (exp02-triple-active-count-8 seed-167 no-catalysis) 0)
 
 !(test (exp02-triple-active-count-8 seed-199 shuffled-catalysts) 0)
+
+; ----- 4-rule catalytic cycle (quadruple) scanning over 8-rule families -----
+
+; The planted 4-cycle fixture has exactly 1 active quadruple (pqc0→pqc1→pqc2→pqc3).
+!(test (exp02-planted-quadruple-active-count) 1)
+
+; The planted fixture should have 70 scanned quadruples total.
+!(test (exp02-list-length (exp02-planted-quadruple-acs-candidates)) 70)
+
+; Seed-13 random-polymer has 2 active pairs but should have 0 active quadruples.
+!(test (exp02-seed-13-quadruple-active-count random-polymer) 0)
+
+; Seed-13 controls should also have 0 active quadruples.
+!(test (exp02-seed-13-quadruple-active-count shuffled-catalysts) 0)
+
+!(test (exp02-seed-13-quadruple-active-count no-catalysis) 0)
+
+; Quadruple scanning should not find any active 4-cycles in generated-unplanted controls.
+!(test (exp02-quadruple-active-count-8 seed-29 random-polymer) 0)
+
+!(test (exp02-quadruple-active-count-8 seed-17 random-polymer) 0)
+
+!(test (exp02-quadruple-active-count-8 seed-211 random-polymer) 0)
+
+; Comprehensive 4-rule catalytic cycle scan across ALL 40 generated-unplanted seeds.
+; Expected: 0 active quadruples across all 40 seeds * 3 families = 120 family records.
+!(test (exp02-generated-unplanted-quadruple-total) 0)
+
+; Planted 4-cycle fixture should have exactly 1 active quadruple (control case).
+!(test (exp02-planted-quadruple-active-count) 1)
+
+; Spot-checks: a sample of individual generated-unplanted seeds should all have 0
+; active quadruples across all three families.
+!(test (exp02-quadruple-active-count-8 seed-19 random-polymer) 0)
+
+!(test (exp02-quadruple-active-count-8 seed-19 shuffled-catalysts) 0)
+
+!(test (exp02-quadruple-active-count-8 seed-19 no-catalysis) 0)
+
+!(test (exp02-quadruple-active-count-8 seed-41 random-polymer) 0)
+
+!(test (exp02-quadruple-active-count-8 seed-67 random-polymer) 0)
+
+!(test (exp02-quadruple-active-count-8 seed-97 no-catalysis) 0)
+
+!(test (exp02-quadruple-active-count-8 seed-113 shuffled-catalysts) 0)
+
+!(test (exp02-quadruple-active-count-8 seed-139 random-polymer) 0)
+
+!(test (exp02-quadruple-active-count-8 seed-167 no-catalysis) 0)
+
+!(test (exp02-quadruple-active-count-8 seed-199 shuffled-catalysts) 0)

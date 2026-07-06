@@ -402,3 +402,123 @@
 
 (= (exp01-triple-recovered?)
    (== (exp01-recovered-triple-active-count) 1))
+
+; ----- 4-rule catalytic cycle scanner -----
+;
+; 4-rule catalytic cycle closure: product(r0) = catalyst(r1),
+; product(r1) = catalyst(r2), product(r2) = catalyst(r3),
+; product(r3) = catalyst(r0).  This generalizes the triple scanner
+; to RAF-like 4-cycles, enabling detection of longer autocatalytic
+; structures that pair/triple scanning would miss.
+
+(= (product-catalyst-closed-4?
+      (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+      (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3))
+   (and (== $product-0 $catalyst-1)
+        (and (== $product-1 $catalyst-2)
+        (and (== $product-2 $catalyst-3)
+             (== $product-3 $catalyst-0)))))
+
+(= (useful-acs-4?
+      $rule-0
+      $rule-1
+      $rule-2
+      $rule-3)
+   (product-catalyst-closed-4? $rule-0 $rule-1 $rule-2 $rule-3))
+
+(= (acs-status-for-quadruple $rule-0 $rule-1 $rule-2 $rule-3)
+   (if (useful-acs-4? $rule-0 $rule-1 $rule-2 $rule-3)
+       active
+       rejected))
+
+(= (scan-rule-quadruple
+      $id
+      (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+      (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3))
+   (make-acs-candidate
+     $id
+     ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+      (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3))
+     ($product-0 $product-1 $product-2 $product-3)
+     ($catalyst-0 $catalyst-1 $catalyst-2 $catalyst-3)
+     (acs-status-for-quadruple
+       (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+       (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3))))
+
+; Scan all C(5,4)=5 quadruples from a 5-rule list.
+(= (scan-rule-quadruples-5 ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4))
+   ((scan-rule-quadruple quadruple-0-1-2-3 $rule-0 $rule-1 $rule-2 $rule-3)
+    (scan-rule-quadruple quadruple-0-1-2-4 $rule-0 $rule-1 $rule-2 $rule-4)
+    (scan-rule-quadruple quadruple-0-1-3-4 $rule-0 $rule-1 $rule-3 $rule-4)
+    (scan-rule-quadruple quadruple-0-2-3-4 $rule-0 $rule-2 $rule-3 $rule-4)
+    (scan-rule-quadruple quadruple-1-2-3-4 $rule-1 $rule-2 $rule-3 $rule-4)))
+
+(= (active-quadruple-count-5 ($c0 $c1 $c2 $c3 $c4))
+   (+ (if (== (acs-status $c0) active) 1 0)
+   (+ (if (== (acs-status $c1) active) 1 0)
+   (+ (if (== (acs-status $c2) active) 1 0)
+   (+ (if (== (acs-status $c3) active) 1 0)
+      (if (== (acs-status $c4) active) 1 0))))))
+
+; ----- planted 4-rule catalytic cycle fixture with distractors -----
+;
+; Four rules form a catalytic 4-cycle: qc0 produces QC1 which catalyzes
+; qc1, qc1 produces QC2 which catalyzes qc2, qc2 produces QC3 which
+; catalyzes qc3, qc3 produces QC0 which catalyzes qc0.  A distractor
+; rule qd0 does not participate in any cycle.  This validates that the
+; quadruple scanner recovers planted 4-cycles and rejects non-cycles,
+; generalizing the triple scanner to RAF-like 4-closure.
+
+(= (exp01-planted-quadruple-rule qc0)
+   (rule qc0 QF0 QB0 QC1 QC0))
+
+(= (exp01-planted-quadruple-rule qc1)
+   (rule qc1 QF1 QB1 QC2 QC1))
+
+(= (exp01-planted-quadruple-rule qc2)
+   (rule qc2 QF2 QB2 QC3 QC2))
+
+(= (exp01-planted-quadruple-rule qc3)
+   (rule qc3 QF3 QB3 QC0 QC3))
+
+(= (exp01-quadruple-distractor-rule qd0)
+   (rule qd0 QF4 QB4 QNone QNone))
+
+(= (exp01-quadruple-rules-with-distractors)
+   ((exp01-planted-quadruple-rule qc0)
+    (exp01-planted-quadruple-rule qc1)
+    (exp01-quadruple-distractor-rule qd0)
+    (exp01-planted-quadruple-rule qc2)
+    (exp01-planted-quadruple-rule qc3)))
+
+(= (exp01-quadruple-closure-ok?)
+   (product-catalyst-closed-4?
+     (exp01-planted-quadruple-rule qc0)
+     (exp01-planted-quadruple-rule qc1)
+     (exp01-planted-quadruple-rule qc2)
+     (exp01-planted-quadruple-rule qc3)))
+
+(= (exp01-quadruple-distractor-rejected?)
+   (== (useful-acs-4?
+         (exp01-planted-quadruple-rule qc0)
+         (exp01-planted-quadruple-rule qc1)
+         (exp01-quadruple-distractor-rule qd0)
+         (exp01-planted-quadruple-rule qc3))
+       False))
+
+(= (exp01-scanned-quadruples)
+   (scan-rule-quadruples-5 (exp01-quadruple-rules-with-distractors)))
+
+(= (exp01-recovered-quadruple-active-count)
+   (active-quadruple-count-5 (exp01-scanned-quadruples)))
+
+(= (exp01-quadruple-recovered?)
+   (== (exp01-recovered-quadruple-active-count) 1))

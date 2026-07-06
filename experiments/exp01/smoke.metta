@@ -237,3 +237,96 @@
 !(test (exp01-recovered-triple-active-count) 1)
 
 !(test (exp01-triple-recovered?) True)
+
+; ----- 4-rule catalytic cycle scanner smoke tests -----
+
+!(test (product-catalyst-closed-4?
+         (exp01-planted-quadruple-rule qc0)
+         (exp01-planted-quadruple-rule qc1)
+         (exp01-planted-quadruple-rule qc2)
+         (exp01-planted-quadruple-rule qc3))
+       True)
+
+!(test (exp01-quadruple-closure-ok?) True)
+
+!(test (acs-status-for-quadruple
+         (exp01-planted-quadruple-rule qc0)
+         (exp01-planted-quadruple-rule qc1)
+         (exp01-planted-quadruple-rule qc2)
+         (exp01-planted-quadruple-rule qc3))
+       active)
+
+!(test (acs-status-for-quadruple
+         (exp01-planted-quadruple-rule qc0)
+         (exp01-planted-quadruple-rule qc1)
+         (exp01-quadruple-distractor-rule qd0)
+         (exp01-planted-quadruple-rule qc3))
+       rejected)
+
+!(test (exp01-quadruple-distractor-rejected?) True)
+
+!(test (scan-rule-quadruple quadruple-0-1-2-3
+                         (exp01-planted-quadruple-rule qc0)
+                         (exp01-planted-quadruple-rule qc1)
+                         (exp01-planted-quadruple-rule qc2)
+                         (exp01-planted-quadruple-rule qc3))
+       (acs-candidate
+         quadruple-0-1-2-3
+         ((rule qc0 QF0 QB0 QC1 QC0)
+          (rule qc1 QF1 QB1 QC2 QC1)
+          (rule qc2 QF2 QB2 QC3 QC2)
+          (rule qc3 QF3 QB3 QC0 QC3))
+         (QC1 QC2 QC3 QC0)
+         (QC0 QC1 QC2 QC3)
+         active))
+
+!(test (exp01-scanned-quadruples)
+       ((acs-candidate
+          quadruple-0-1-2-3
+          ((rule qc0 QF0 QB0 QC1 QC0)
+           (rule qc1 QF1 QB1 QC2 QC1)
+           (rule qd0 QF4 QB4 QNone QNone)
+           (rule qc2 QF2 QB2 QC3 QC2))
+          (QC1 QC2 QNone QC3)
+          (QC0 QC1 QNone QC2)
+          rejected)
+        (acs-candidate
+          quadruple-0-1-2-4
+          ((rule qc0 QF0 QB0 QC1 QC0)
+           (rule qc1 QF1 QB1 QC2 QC1)
+           (rule qd0 QF4 QB4 QNone QNone)
+           (rule qc3 QF3 QB3 QC0 QC3))
+          (QC1 QC2 QNone QC0)
+          (QC0 QC1 QNone QC3)
+          rejected)
+        (acs-candidate
+          quadruple-0-1-3-4
+          ((rule qc0 QF0 QB0 QC1 QC0)
+           (rule qc1 QF1 QB1 QC2 QC1)
+           (rule qc2 QF2 QB2 QC3 QC2)
+           (rule qc3 QF3 QB3 QC0 QC3))
+          (QC1 QC2 QC3 QC0)
+          (QC0 QC1 QC2 QC3)
+          active)
+        (acs-candidate
+          quadruple-0-2-3-4
+          ((rule qc0 QF0 QB0 QC1 QC0)
+           (rule qd0 QF4 QB4 QNone QNone)
+           (rule qc2 QF2 QB2 QC3 QC2)
+           (rule qc3 QF3 QB3 QC0 QC3))
+          (QC1 QNone QC3 QC0)
+          (QC0 QNone QC2 QC3)
+          rejected)
+        (acs-candidate
+          quadruple-1-2-3-4
+          ((rule qc1 QF1 QB1 QC2 QC1)
+           (rule qd0 QF4 QB4 QNone QNone)
+           (rule qc2 QF2 QB2 QC3 QC2)
+           (rule qc3 QF3 QB3 QC0 QC3))
+          (QC2 QNone QC3 QC0)
+          (QC1 QNone QC2 QC3)
+          rejected)))
+
+!(test (exp01-recovered-quadruple-active-count) 1)
+
+!(test (exp01-quadruple-recovered?) True)
