@@ -1466,6 +1466,222 @@
                   (and (exp03-exp02-longer-controls-discriminate? seed-7)
                        (exp03-exp02-longer-replay-ok? random seed-7))))))
 
+; ----- 10-tick exp02-family dynamic bridge (seed-13) -----
+;
+; This extends the seed-13 full-source exp02-family bridge from 3 ticks to 10
+; ticks with higher initial abundances (R0=5, R1=5).  The productive rr0 rule
+; fires at even ticks (0,2,4,6,8) for 5 events before reactant exhaustion at
+; tick 8.  Shuffled/no-catalysis controls remain zero-event over the same 10-tick
+; horizon.  The chamber carries all eight seed-13 source rules; the candidate
+; cap bounds each tick to the first two candidates (rr1/rr0), preserving the
+; deterministic seed/tick alternation pattern (seed-13: (13+tick)%2 = 1 at even
+; ticks → rr0 productive; 0 at odd ticks → rr1 distractor).
+
+(= (exp03-exp02-longer-initial-state seed-13)
+   (state 0 seed-13 (mol R0 5) (mol R1 5) (mol R01 0) (mol R10 1)))
+
+(= (exp03-exp02-longer-chamber $family seed-13)
+   (make-chamber (exp03-exp02-longer $family seed-13)
+                 (exp03-exp02-longer-initial-state seed-13)
+                 (exp03-exp02-full-source-rules seed-13 $family)
+                 ()))
+
+(= (exp03-exp02-longer-after-10 $family seed-13)
+   (chamber-run-10 (exp03-exp02-longer-chamber $family seed-13)))
+
+(= (exp03-exp02-longer-event-count $family seed-13)
+   (event-count (trace-events (exp03-exp02-longer-after-10 $family seed-13))))
+
+(= (exp03-exp02-longer-tick $family seed-13)
+   (state-tick (chamber-state (exp03-exp02-longer-after-10 $family seed-13))))
+
+(= (exp03-exp02-longer-abundances $family seed-13)
+   (chamber-abundance-snapshot (exp03-exp02-longer-after-10 $family seed-13)))
+
+(= (exp03-exp02-longer-replay-10 $family seed-13)
+   (chamber-run-5 (chamber-run-5 (exp03-exp02-longer-chamber $family seed-13))))
+
+(= (exp03-exp02-longer-replay-ok? $family seed-13)
+   (== (exp03-exp02-longer-after-10 $family seed-13)
+       (exp03-exp02-longer-replay-10 $family seed-13)))
+
+(= (exp03-exp02-longer-reactant-exhausted? seed-13)
+   (== (exp03-exp02-longer-abundances random-polymer seed-13)
+       (abundance-snapshot 10 ((mol R0 0) (mol R1 0) (mol R01 5) (mol R10 1)))))
+
+(= (exp03-exp02-longer-controls-discriminate? seed-13)
+   (and (> (exp03-exp02-longer-event-count random-polymer seed-13)
+           (exp03-exp02-longer-event-count shuffled-catalysts seed-13))
+        (> (exp03-exp02-longer-event-count random-polymer seed-13)
+           (exp03-exp02-longer-event-count no-catalysis seed-13))))
+
+(= (exp03-exp02-longer-run-config seed-13 random-polymer)
+   (make-run-config exp03-exp02-seed-13-longer-random exp03 (seed-13) 10 (candidate-cap 2 1) random-polymer))
+
+(= (exp03-exp02-longer-run-config seed-13 shuffled-catalysts)
+   (make-run-config exp03-exp02-seed-13-longer-shuffled exp03 (seed-13) 10 (candidate-cap 2 1) shuffled-catalysts))
+
+(= (exp03-exp02-longer-run-config seed-13 no-catalysis)
+   (make-run-config exp03-exp02-seed-13-longer-no-catalysis exp03 (seed-13) 10 (candidate-cap 2 1) no-catalysis))
+
+(= (exp03-exp02-longer-run-manifest seed-13 random-polymer)
+   (make-run-manifest exp03-exp02-seed-13-longer-random config-hash-exp03-exp02-seed-13-longer-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-exp02-longer-run-manifest seed-13 shuffled-catalysts)
+   (make-run-manifest exp03-exp02-seed-13-longer-shuffled config-hash-exp03-exp02-seed-13-longer-shuffled petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-exp02-longer-run-manifest seed-13 no-catalysis)
+   (make-run-manifest exp03-exp02-seed-13-longer-no-catalysis config-hash-exp03-exp02-seed-13-longer-no-catalysis petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-exp02-longer-metrics seed-13 $family)
+   ((metric dynamic-event-count (run-config-id (exp03-exp02-longer-run-config seed-13 $family)) (exp03-exp02-longer-event-count $family seed-13))
+    (metric dynamic-tick-count (run-config-id (exp03-exp02-longer-run-config seed-13 $family)) 10)
+    (metric source-exp02-rule-count (run-config-id (exp03-exp02-longer-run-config seed-13 $family)) 8)
+    (metric dynamic-candidate-cap (run-config-id (exp03-exp02-longer-run-config seed-13 $family)) 2)))
+
+(= (exp03-exp02-longer-run-summary seed-13 random-polymer)
+   (make-run-summary exp03-exp02-seed-13-longer-random passed seed-13-longer-dynamic-produces-events True))
+
+(= (exp03-exp02-longer-run-summary seed-13 shuffled-catalysts)
+   (make-run-summary exp03-exp02-seed-13-longer-shuffled passed seed-13-longer-shuffled-control-zero-events True))
+
+(= (exp03-exp02-longer-run-summary seed-13 no-catalysis)
+   (make-run-summary exp03-exp02-seed-13-longer-no-catalysis passed seed-13-longer-no-catalysis-control-zero-events True))
+
+(= (exp03-exp02-longer-run-record seed-13 $family)
+   (make-run-record
+     (run-config-id (exp03-exp02-longer-run-config seed-13 $family))
+     (exp03-exp02-longer-run-config seed-13 $family)
+     (exp03-exp02-longer-run-manifest seed-13 $family)
+     (trace-events (exp03-exp02-longer-after-10 $family seed-13))
+     ((state-abundance-snapshot (exp03-exp02-longer-initial-state seed-13))
+      (chamber-abundance-snapshot (exp03-exp02-longer-after-10 $family seed-13)))
+     (exp03-exp02-longer-metrics seed-13 $family)
+     (exp02-seed-13-acs-candidates $family)
+     ()
+     (exp03-exp02-longer-run-summary seed-13 $family)))
+
+(= (exp03-exp02-longer-run-records seed-13)
+   ((exp03-exp02-longer-run-record seed-13 random-polymer)
+    (exp03-exp02-longer-run-record seed-13 shuffled-catalysts)
+    (exp03-exp02-longer-run-record seed-13 no-catalysis)))
+
+(= (exp03-exp02-longer-run-records-complete? seed-13)
+   (and (run-record-passed? (exp03-exp02-longer-run-record seed-13 random-polymer))
+        (and (run-record-passed? (exp03-exp02-longer-run-record seed-13 shuffled-catalysts))
+             (and (run-record-passed? (exp03-exp02-longer-run-record seed-13 no-catalysis))
+                  (and (exp03-exp02-longer-controls-discriminate? seed-13)
+                       (exp03-exp02-longer-replay-ok? random-polymer seed-13))))))
+
+; ----- 10-tick exp02-family dynamic bridge (seed-17) -----
+;
+; This extends the seed-17 full-source exp02-family bridge from 3 ticks to 10
+; ticks with higher initial abundances (S0=5, S1=5).  The productive rr0 rule
+; fires at even ticks (0,2,4,6,8) for 5 events before reactant exhaustion at
+; tick 8.  Shuffled/no-catalysis controls remain zero-event over the same 10-tick
+; horizon.  The chamber carries all eight seed-17 generated source rules; the
+; candidate cap bounds each tick to the first two candidates (rr1/rr0),
+; preserving the deterministic seed/tick alternation pattern (seed-17:
+; (17+tick)%2 = 1 at even ticks → rr0 productive; 0 at odd ticks → rr1
+; distractor).
+
+(= (exp03-exp02-longer-initial-state seed-17)
+   (state 0 seed-17 (mol S0 5) (mol S1 5) (mol S01 0) (mol S10 1)))
+
+(= (exp03-exp02-longer-chamber $family seed-17)
+   (make-chamber (exp03-exp02-longer $family seed-17)
+                 (exp03-exp02-longer-initial-state seed-17)
+                 (exp03-exp02-full-source-rules seed-17 $family)
+                 ()))
+
+(= (exp03-exp02-longer-after-10 $family seed-17)
+   (chamber-run-10 (exp03-exp02-longer-chamber $family seed-17)))
+
+(= (exp03-exp02-longer-event-count $family seed-17)
+   (event-count (trace-events (exp03-exp02-longer-after-10 $family seed-17))))
+
+(= (exp03-exp02-longer-tick $family seed-17)
+   (state-tick (chamber-state (exp03-exp02-longer-after-10 $family seed-17))))
+
+(= (exp03-exp02-longer-abundances $family seed-17)
+   (chamber-abundance-snapshot (exp03-exp02-longer-after-10 $family seed-17)))
+
+(= (exp03-exp02-longer-replay-10 $family seed-17)
+   (chamber-run-5 (chamber-run-5 (exp03-exp02-longer-chamber $family seed-17))))
+
+(= (exp03-exp02-longer-replay-ok? $family seed-17)
+   (== (exp03-exp02-longer-after-10 $family seed-17)
+       (exp03-exp02-longer-replay-10 $family seed-17)))
+
+(= (exp03-exp02-longer-reactant-exhausted? seed-17)
+   (== (exp03-exp02-longer-abundances random-polymer seed-17)
+       (abundance-snapshot 10 ((mol S0 0) (mol S1 0) (mol S01 5) (mol S10 1)))))
+
+(= (exp03-exp02-longer-controls-discriminate? seed-17)
+   (and (> (exp03-exp02-longer-event-count random-polymer seed-17)
+           (exp03-exp02-longer-event-count shuffled-catalysts seed-17))
+        (> (exp03-exp02-longer-event-count random-polymer seed-17)
+           (exp03-exp02-longer-event-count no-catalysis seed-17))))
+
+(= (exp03-exp02-longer-run-config seed-17 random-polymer)
+   (make-run-config exp03-exp02-seed-17-longer-random exp03 (seed-17) 10 (candidate-cap 2 1) random-polymer))
+
+(= (exp03-exp02-longer-run-config seed-17 shuffled-catalysts)
+   (make-run-config exp03-exp02-seed-17-longer-shuffled exp03 (seed-17) 10 (candidate-cap 2 1) shuffled-catalysts))
+
+(= (exp03-exp02-longer-run-config seed-17 no-catalysis)
+   (make-run-config exp03-exp02-seed-17-longer-no-catalysis exp03 (seed-17) 10 (candidate-cap 2 1) no-catalysis))
+
+(= (exp03-exp02-longer-run-manifest seed-17 random-polymer)
+   (make-run-manifest exp03-exp02-seed-17-longer-random config-hash-exp03-exp02-seed-17-longer-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-exp02-longer-run-manifest seed-17 shuffled-catalysts)
+   (make-run-manifest exp03-exp02-seed-17-longer-shuffled config-hash-exp03-exp02-seed-17-longer-shuffled petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-exp02-longer-run-manifest seed-17 no-catalysis)
+   (make-run-manifest exp03-exp02-seed-17-longer-no-catalysis config-hash-exp03-exp02-seed-17-longer-no-catalysis petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-exp02-longer-metrics seed-17 $family)
+   ((metric dynamic-event-count (run-config-id (exp03-exp02-longer-run-config seed-17 $family)) (exp03-exp02-longer-event-count $family seed-17))
+    (metric dynamic-tick-count (run-config-id (exp03-exp02-longer-run-config seed-17 $family)) 10)
+    (metric source-exp02-rule-count (run-config-id (exp03-exp02-longer-run-config seed-17 $family)) 8)
+    (metric dynamic-candidate-cap (run-config-id (exp03-exp02-longer-run-config seed-17 $family)) 2)
+    (metric generation-seam (run-config-id (exp03-exp02-longer-run-config seed-17 $family)) seed-to-components)))
+
+(= (exp03-exp02-longer-run-summary seed-17 random-polymer)
+   (make-run-summary exp03-exp02-seed-17-longer-random passed seed-17-longer-dynamic-produces-events True))
+
+(= (exp03-exp02-longer-run-summary seed-17 shuffled-catalysts)
+   (make-run-summary exp03-exp02-seed-17-longer-shuffled passed seed-17-longer-shuffled-control-zero-events True))
+
+(= (exp03-exp02-longer-run-summary seed-17 no-catalysis)
+   (make-run-summary exp03-exp02-seed-17-longer-no-catalysis passed seed-17-longer-no-catalysis-control-zero-events True))
+
+(= (exp03-exp02-longer-run-record seed-17 $family)
+   (make-run-record
+     (run-config-id (exp03-exp02-longer-run-config seed-17 $family))
+     (exp03-exp02-longer-run-config seed-17 $family)
+     (exp03-exp02-longer-run-manifest seed-17 $family)
+     (trace-events (exp03-exp02-longer-after-10 $family seed-17))
+     ((state-abundance-snapshot (exp03-exp02-longer-initial-state seed-17))
+      (chamber-abundance-snapshot (exp03-exp02-longer-after-10 $family seed-17)))
+     (exp03-exp02-longer-metrics seed-17 $family)
+     (exp02-seed-17-acs-candidates $family)
+     ()
+     (exp03-exp02-longer-run-summary seed-17 $family)))
+
+(= (exp03-exp02-longer-run-records seed-17)
+   ((exp03-exp02-longer-run-record seed-17 random-polymer)
+    (exp03-exp02-longer-run-record seed-17 shuffled-catalysts)
+    (exp03-exp02-longer-run-record seed-17 no-catalysis)))
+
+(= (exp03-exp02-longer-run-records-complete? seed-17)
+   (and (run-record-passed? (exp03-exp02-longer-run-record seed-17 random-polymer))
+        (and (run-record-passed? (exp03-exp02-longer-run-record seed-17 shuffled-catalysts))
+             (and (run-record-passed? (exp03-exp02-longer-run-record seed-17 no-catalysis))
+                  (and (exp03-exp02-longer-controls-discriminate? seed-17)
+                       (exp03-exp02-longer-replay-ok? random-polymer seed-17))))))
+
 ; ----- compact dynamic aggregate/report over tested full-source exports -----
 ;
 ; These atoms summarize the current exp03 full-source dynamic evidence across the
