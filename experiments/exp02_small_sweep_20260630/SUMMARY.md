@@ -51,6 +51,18 @@ The 5-rule scanner (`product-catalyst-closed-5?`) checks product(r0)=catalyst(r1
 - The planted 5-cycle fixture (pqq0→pqq1→pqq2→pqq3→pqq4) validates the scanner recovers exactly 1 active quintuple out of C(8,5)=56 candidates.
 - All 40 generated-unplanted seeds × 3 families = 120 family records scan to 0 active quintuples, confirming the pair/triple/quadruple scanner's zero-active result extends to 5-rule catalytic cycles.
 
+## 6-rule catalytic cycle (sextuple) scanning
+
+The 6-rule scanner (`product-catalyst-closed-6?`) checks product(r0)=catalyst(r1), product(r1)=catalyst(r2), product(r2)=catalyst(r3), product(r3)=catalyst(r4), product(r4)=catalyst(r5), product(r5)=catalyst(r0). This generalizes the quintuple scanner to RAF-like 6-cycles.
+
+| Sweep kind | Seeds scanned | Family records | Active sextuples |
+|---|---:|---:|---:|
+| planted-6-cycle fixture | 1 | 1 | 1 |
+| generated-unplanted-control | 40 | 120 | 0 |
+
+- The planted 6-cycle fixture (psq0→psq1→psq2→psq3→psq4→psq5) validates the scanner recovers exactly 1 active sextuple out of C(8,6)=28 candidates.
+- All 40 generated-unplanted seeds × 3 families = 120 family records scan to 0 active sextuples, confirming the pair/triple/quadruple/quintuple scanner's zero-active result extends to 6-rule catalytic cycles.
+
 ## PeTTa provenance
 
-The table mirrors tested PeTTa atoms in `src/chem_exp02.metta`: `exp02-fold-sweep-kind-summary` folds over `run-record` lists to derive family-record counts, active-family counts, active-pair totals, active random-polymer points, and `exp02-sweep-kind-summary`; `exp02-sweep-kind-summary-report` now builds its rows from those folded summaries. Triple-scan summaries use `exp02-triple-scan-summary`, `exp02-generated-unplanted-triple-summary`, and `exp02-planted-triple-summary`. Quadruple-scan summaries use `exp02-quadruple-scan-summary`, `exp02-generated-unplanted-quadruple-summary`, and `exp02-planted-quadruple-summary`. Quintuple-scan summaries use `exp02-quintuple-scan-summary`, `exp02-generated-unplanted-quintuple-summary`, and `exp02-planted-quintuple-summary`.
+The table mirrors tested PeTTa atoms in `src/chem_exp02.metta`: `exp02-fold-sweep-kind-summary` folds over `run-record` lists to derive family-record counts, active-family counts, active-pair totals, active random-polymer points, and `exp02-sweep-kind-summary`; `exp02-sweep-kind-summary-report` now builds its rows from those folded summaries. Triple-scan summaries use `exp02-triple-scan-summary`, `exp02-generated-unplanted-triple-summary`, and `exp02-planted-triple-summary`. Quadruple-scan summaries use `exp02-quadruple-scan-summary`, `exp02-generated-unplanted-quadruple-summary`, and `exp02-planted-quadruple-summary`. Quintuple-scan summaries use `exp02-quintuple-scan-summary`, `exp02-generated-unplanted-quintuple-summary`, and `exp02-planted-quintuple-summary`. Sextuple-scan summaries use `exp02-sextuple-scan-summary`, `exp02-generated-unplanted-sextuple-summary`, and `exp02-planted-sextuple-summary`.

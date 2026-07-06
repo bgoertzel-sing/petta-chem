@@ -6074,3 +6074,123 @@
       1
       1
       (exp02-planted-quintuple-active-count)))
+
+; ----- 6-rule catalytic cycle (sextuple) scanning over 8-rule families -----
+;
+; Uses product-catalyst-closed-6?, useful-acs-6?,
+; acs-status-for-sextuple, and scan-rule-sextuple from
+; src/chem_exp01.metta.  Enumerates all C(8,6)=28 sextuples.
+
+(= (exp02-scan-sextuples-8 ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7))
+   ((scan-rule-sextuple sextuple-0-1-2-3-4-5 $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5)
+    (scan-rule-sextuple sextuple-0-1-2-3-4-6 $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-6)
+    (scan-rule-sextuple sextuple-0-1-2-3-4-7 $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-7)
+    (scan-rule-sextuple sextuple-0-1-2-3-5-6 $rule-0 $rule-1 $rule-2 $rule-3 $rule-5 $rule-6)
+    (scan-rule-sextuple sextuple-0-1-2-3-5-7 $rule-0 $rule-1 $rule-2 $rule-3 $rule-5 $rule-7)
+    (scan-rule-sextuple sextuple-0-1-2-3-6-7 $rule-0 $rule-1 $rule-2 $rule-3 $rule-6 $rule-7)
+    (scan-rule-sextuple sextuple-0-1-2-4-5-6 $rule-0 $rule-1 $rule-2 $rule-4 $rule-5 $rule-6)
+    (scan-rule-sextuple sextuple-0-1-2-4-5-7 $rule-0 $rule-1 $rule-2 $rule-4 $rule-5 $rule-7)
+    (scan-rule-sextuple sextuple-0-1-2-4-6-7 $rule-0 $rule-1 $rule-2 $rule-4 $rule-6 $rule-7)
+    (scan-rule-sextuple sextuple-0-1-2-5-6-7 $rule-0 $rule-1 $rule-2 $rule-5 $rule-6 $rule-7)
+    (scan-rule-sextuple sextuple-0-1-3-4-5-6 $rule-0 $rule-1 $rule-3 $rule-4 $rule-5 $rule-6)
+    (scan-rule-sextuple sextuple-0-1-3-4-5-7 $rule-0 $rule-1 $rule-3 $rule-4 $rule-5 $rule-7)
+    (scan-rule-sextuple sextuple-0-1-3-4-6-7 $rule-0 $rule-1 $rule-3 $rule-4 $rule-6 $rule-7)
+    (scan-rule-sextuple sextuple-0-1-3-5-6-7 $rule-0 $rule-1 $rule-3 $rule-5 $rule-6 $rule-7)
+    (scan-rule-sextuple sextuple-0-1-4-5-6-7 $rule-0 $rule-1 $rule-4 $rule-5 $rule-6 $rule-7)
+    (scan-rule-sextuple sextuple-0-2-3-4-5-6 $rule-0 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6)
+    (scan-rule-sextuple sextuple-0-2-3-4-5-7 $rule-0 $rule-2 $rule-3 $rule-4 $rule-5 $rule-7)
+    (scan-rule-sextuple sextuple-0-2-3-4-6-7 $rule-0 $rule-2 $rule-3 $rule-4 $rule-6 $rule-7)
+    (scan-rule-sextuple sextuple-0-2-3-5-6-7 $rule-0 $rule-2 $rule-3 $rule-5 $rule-6 $rule-7)
+    (scan-rule-sextuple sextuple-0-2-4-5-6-7 $rule-0 $rule-2 $rule-4 $rule-5 $rule-6 $rule-7)
+    (scan-rule-sextuple sextuple-0-3-4-5-6-7 $rule-0 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7)
+    (scan-rule-sextuple sextuple-1-2-3-4-5-6 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6)
+    (scan-rule-sextuple sextuple-1-2-3-4-5-7 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-7)
+    (scan-rule-sextuple sextuple-1-2-3-4-6-7 $rule-1 $rule-2 $rule-3 $rule-4 $rule-6 $rule-7)
+    (scan-rule-sextuple sextuple-1-2-3-5-6-7 $rule-1 $rule-2 $rule-3 $rule-5 $rule-6 $rule-7)
+    (scan-rule-sextuple sextuple-1-2-4-5-6-7 $rule-1 $rule-2 $rule-4 $rule-5 $rule-6 $rule-7)
+    (scan-rule-sextuple sextuple-1-3-4-5-6-7 $rule-1 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7)
+    (scan-rule-sextuple sextuple-2-3-4-5-6-7 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7)))
+
+(= (exp02-active-sextuple-count $candidates)
+   (if (== $candidates ())
+       0
+       (+ (if (== (acs-status (car-atom $candidates)) active) 1 0)
+          (exp02-active-sextuple-count (cdr-atom $candidates)))))
+
+(= (exp02-sextuple-acs-candidates-8 $seed $family)
+   (exp02-scan-sextuples-8 (exp02-generated-rules-8 $seed $family)))
+
+(= (exp02-sextuple-active-count-8 $seed $family)
+   (exp02-active-sextuple-count
+     (exp02-sextuple-acs-candidates-8 $seed $family)))
+
+(= (exp02-seed-13-sextuple-acs-candidates $family)
+   (exp02-scan-sextuples-8 (exp02-seed-13-rules $family)))
+
+(= (exp02-seed-13-sextuple-active-count $family)
+   (exp02-active-sextuple-count
+     (exp02-seed-13-sextuple-acs-candidates $family)))
+
+; Planted 6-cycle fixture in 8-rule format:
+; psq0->psq1->psq2->psq3->psq4->psq5->psq0, plus 2 distractor rules.
+(= (exp02-planted-sextuple-rule psq0) (rule psq0 QA QB QX QW))
+(= (exp02-planted-sextuple-rule psq1) (rule psq1 QC QD QY QX))
+(= (exp02-planted-sextuple-rule psq2) (rule psq2 QE QF QZ QY))
+(= (exp02-planted-sextuple-rule psq3) (rule psq3 QG QH QV QZ))
+(= (exp02-planted-sextuple-rule psq4) (rule psq4 QI QJ QU QV))
+(= (exp02-planted-sextuple-rule psq5) (rule psq5 QK QL QW QU))
+(= (exp02-planted-sextuple-rule psd6) (rule psd6 QM QN Q6 R0))
+(= (exp02-planted-sextuple-rule psd7) (rule psd7 QO QP Q7 R1))
+
+(= (exp02-planted-sextuple-rules)
+   ((exp02-planted-sextuple-rule psq0)
+    (exp02-planted-sextuple-rule psq1)
+    (exp02-planted-sextuple-rule psq2)
+    (exp02-planted-sextuple-rule psq3)
+    (exp02-planted-sextuple-rule psq4)
+    (exp02-planted-sextuple-rule psq5)
+    (exp02-planted-sextuple-rule psd6)
+    (exp02-planted-sextuple-rule psd7)))
+
+(= (exp02-planted-sextuple-acs-candidates)
+   (exp02-scan-sextuples-8 (exp02-planted-sextuple-rules)))
+
+(= (exp02-planted-sextuple-active-count)
+   (exp02-active-sextuple-count
+     (exp02-planted-sextuple-acs-candidates)))
+
+; Comprehensive 6-rule catalytic cycle scanning across all
+; generated-unplanted 8-rule seeds.
+
+(= (exp02-seed-sextuple-total $seed)
+   (+ (exp02-sextuple-active-count-8 $seed random-polymer)
+    (+ (exp02-sextuple-active-count-8 $seed shuffled-catalysts)
+       (exp02-sextuple-active-count-8 $seed no-catalysis))))
+
+(= (exp02-fold-seed-sextuple-total $seeds)
+   (if (== $seeds ())
+       0
+       (+ (exp02-seed-sextuple-total (car-atom $seeds))
+          (exp02-fold-seed-sextuple-total (cdr-atom $seeds)))))
+
+(= (exp02-generated-unplanted-sextuple-total)
+   (exp02-fold-seed-sextuple-total (exp02-generated-unplanted-seeds-8)))
+
+(= (exp02-sextuple-scan-summary
+      $kind $sweep-points $seeds-scanned $active-sextuple-total)
+   (sextuple-scan-summary
+      $kind $sweep-points $seeds-scanned $active-sextuple-total))
+
+(= (exp02-generated-unplanted-sextuple-summary)
+   (exp02-sextuple-scan-summary
+      generated-unplanted-control
+      40
+      (exp02-generated-unplanted-seed-count)
+      (exp02-generated-unplanted-sextuple-total)))
+
+(= (exp02-planted-sextuple-summary)
+   (exp02-sextuple-scan-summary
+      planted-6-cycle-fixture
+      1
+      1
+      (exp02-planted-sextuple-active-count)))

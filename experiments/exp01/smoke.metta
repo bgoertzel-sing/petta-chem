@@ -370,3 +370,46 @@
 !(test (exp01-recovered-quintuple-active-count) 1)
 
 !(test (exp01-quintuple-recovered?) True)
+
+; ----- 6-rule catalytic cycle (sextuple) scanner tests -----
+
+; The planted 6-cycle should be detected as closed.
+!(test (exp01-sextuple-closure-ok?) True)
+
+; A sextuple containing the distractor should not be a useful ACS.
+!(test (acs-status-for-sextuple
+         (exp01-planted-sextuple-rule sc0)
+         (exp01-planted-sextuple-rule sc1)
+         (exp01-sextuple-distractor-rule sd0)
+         (exp01-planted-sextuple-rule sc3)
+         (exp01-planted-sextuple-rule sc4)
+         (exp01-planted-sextuple-rule sc5))
+       rejected)
+
+; Distractor rejection check.
+!(test (exp01-sextuple-distractor-rejected?) True)
+
+; Single scan-rule-sextuple on the active 6-cycle produces correct structure.
+!(test (scan-rule-sextuple sextuple-active
+                          (exp01-planted-sextuple-rule sc0)
+                          (exp01-planted-sextuple-rule sc1)
+                          (exp01-planted-sextuple-rule sc2)
+                          (exp01-planted-sextuple-rule sc3)
+                          (exp01-planted-sextuple-rule sc4)
+                          (exp01-planted-sextuple-rule sc5))
+       (acs-candidate
+         sextuple-active
+         ((exp01-planted-sextuple-rule sc0)
+          (exp01-planted-sextuple-rule sc1)
+          (exp01-planted-sextuple-rule sc2)
+          (exp01-planted-sextuple-rule sc3)
+          (exp01-planted-sextuple-rule sc4)
+          (exp01-planted-sextuple-rule sc5))
+         (SC1 SC2 SC3 SC4 SC5 SC0)
+         (SC0 SC1 SC2 SC3 SC4 SC5)
+         active))
+
+; Exactly 1 active sextuple among the 7.
+!(test (exp01-recovered-sextuple-active-count) 1)
+
+!(test (exp01-sextuple-recovered?) True)

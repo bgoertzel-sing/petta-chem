@@ -655,3 +655,151 @@
 
 (= (exp01-quintuple-recovered?)
    (== (exp01-recovered-quintuple-active-count) 1))
+
+; ----- 6-rule catalytic cycle (sextuple) scanner -----
+;
+; Detects RAF-like 6-cycles: product(r0) = catalyst(r1),
+; product(r1) = catalyst(r2), product(r2) = catalyst(r3),
+; product(r3) = catalyst(r4), product(r4) = catalyst(r5),
+; product(r5) = catalyst(r0).
+; This generalizes the quintuple scanner to 6-rule closure,
+; enabling detection of longer autocatalytic structures.
+
+(= (product-catalyst-closed-6?
+      (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+      (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+      (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)
+      (rule $id-5 $a-5 $b-5 $product-5 $catalyst-5))
+   (and (== $product-0 $catalyst-1)
+        (and (== $product-1 $catalyst-2)
+        (and (== $product-2 $catalyst-3)
+        (and (== $product-3 $catalyst-4)
+        (and (== $product-4 $catalyst-5)
+             (== $product-5 $catalyst-0)))))))
+
+(= (useful-acs-6?
+      $rule-0
+      $rule-1
+      $rule-2
+      $rule-3
+      $rule-4
+      $rule-5)
+   (product-catalyst-closed-6? $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5))
+
+(= (acs-status-for-sextuple $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5)
+   (if (useful-acs-6? $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5)
+       active
+       rejected))
+
+(= (scan-rule-sextuple
+      $id
+      (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+      (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+      (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)
+      (rule $id-5 $a-5 $b-5 $product-5 $catalyst-5))
+   (make-acs-candidate
+     $id
+     ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+      (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+      (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)
+      (rule $id-5 $a-5 $b-5 $product-5 $catalyst-5))
+     ($product-0 $product-1 $product-2 $product-3 $product-4 $product-5)
+     ($catalyst-0 $catalyst-1 $catalyst-2 $catalyst-3 $catalyst-4 $catalyst-5)
+     (acs-status-for-sextuple
+       (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+       (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+       (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)
+       (rule $id-5 $a-5 $b-5 $product-5 $catalyst-5))))
+
+; Scan all C(7,6)=7 sextuples from a 7-rule list.
+(= (scan-rule-sextuples-7 ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6))
+   ((scan-rule-sextuple sextuple-0-1-2-3-4-5 $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5)
+    (scan-rule-sextuple sextuple-0-1-2-3-4-6 $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-6)
+    (scan-rule-sextuple sextuple-0-1-2-3-5-6 $rule-0 $rule-1 $rule-2 $rule-3 $rule-5 $rule-6)
+    (scan-rule-sextuple sextuple-0-1-2-4-5-6 $rule-0 $rule-1 $rule-2 $rule-4 $rule-5 $rule-6)
+    (scan-rule-sextuple sextuple-0-1-3-4-5-6 $rule-0 $rule-1 $rule-3 $rule-4 $rule-5 $rule-6)
+    (scan-rule-sextuple sextuple-0-2-3-4-5-6 $rule-0 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6)
+    (scan-rule-sextuple sextuple-1-2-3-4-5-6 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6)))
+
+(= (active-sextuple-count-7 ($c0 $c1 $c2 $c3 $c4 $c5 $c6))
+   (+ (if (== (acs-status $c0) active) 1 0)
+   (+ (if (== (acs-status $c1) active) 1 0)
+   (+ (if (== (acs-status $c2) active) 1 0)
+   (+ (if (== (acs-status $c3) active) 1 0)
+   (+ (if (== (acs-status $c4) active) 1 0)
+   (+ (if (== (acs-status $c5) active) 1 0)
+      (if (== (acs-status $c6) active) 1 0))))))))
+
+; ----- planted 6-rule catalytic cycle fixture with distractors -----
+;
+; Six rules form a catalytic 6-cycle: sc0 produces SC1 which
+; catalyzes sc1, sc1 produces SC2 which catalyzes sc2, sc2 produces
+; SC3 which catalyzes sc3, sc3 produces SC4 which catalyzes sc4,
+; sc4 produces SC5 which catalyzes sc5, sc5 produces SC0 which
+; catalyzes sc0.  A distractor rule sd0 does not participate.
+
+(= (exp01-planted-sextuple-rule sc0)
+   (rule sc0 SF0 SB0 SC1 SC0))
+
+(= (exp01-planted-sextuple-rule sc1)
+   (rule sc1 SF1 SB1 SC2 SC1))
+
+(= (exp01-planted-sextuple-rule sc2)
+   (rule sc2 SF2 SB2 SC3 SC2))
+
+(= (exp01-planted-sextuple-rule sc3)
+   (rule sc3 SF3 SB3 SC4 SC3))
+
+(= (exp01-planted-sextuple-rule sc4)
+   (rule sc4 SF4 SB4 SC5 SC4))
+
+(= (exp01-planted-sextuple-rule sc5)
+   (rule sc5 SF5 SB5 SC0 SC5))
+
+(= (exp01-sextuple-distractor-rule sd0)
+   (rule sd0 SF6 SB6 SNone SNone))
+
+(= (exp01-sextuple-rules-with-distractors)
+   ((exp01-planted-sextuple-rule sc0)
+    (exp01-planted-sextuple-rule sc1)
+    (exp01-sextuple-distractor-rule sd0)
+    (exp01-planted-sextuple-rule sc2)
+    (exp01-planted-sextuple-rule sc3)
+    (exp01-planted-sextuple-rule sc4)
+    (exp01-planted-sextuple-rule sc5)))
+
+(= (exp01-sextuple-closure-ok?)
+   (product-catalyst-closed-6?
+     (exp01-planted-sextuple-rule sc0)
+     (exp01-planted-sextuple-rule sc1)
+     (exp01-planted-sextuple-rule sc2)
+     (exp01-planted-sextuple-rule sc3)
+     (exp01-planted-sextuple-rule sc4)
+     (exp01-planted-sextuple-rule sc5)))
+
+(= (exp01-sextuple-distractor-rejected?)
+   (== (useful-acs-6?
+         (exp01-planted-sextuple-rule sc0)
+         (exp01-planted-sextuple-rule sc1)
+         (exp01-sextuple-distractor-rule sd0)
+         (exp01-planted-sextuple-rule sc3)
+         (exp01-planted-sextuple-rule sc4)
+         (exp01-planted-sextuple-rule sc5))
+       False))
+
+(= (exp01-scanned-sextuples)
+   (scan-rule-sextuples-7 (exp01-sextuple-rules-with-distractors)))
+
+(= (exp01-recovered-sextuple-active-count)
+   (active-sextuple-count-7 (exp01-scanned-sextuples)))
+
+(= (exp01-sextuple-recovered?)
+   (== (exp01-recovered-sextuple-active-count) 1))
