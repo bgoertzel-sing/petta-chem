@@ -1592,3 +1592,53 @@
 !(test (exp02-sextuple-active-count-8 seed-167 no-catalysis) 0)
 
 !(test (exp02-sextuple-active-count-8 seed-199 shuffled-catalysts) 0)
+
+; ----- 7-rule catalytic cycle (septuple) scanning over 8-rule families -----
+
+; The planted 7-cycle fixture has exactly 1 active septuple (psp0->psp1->psp2->psp3->psp4->psp5->psp6).
+!(test (exp02-planted-septuple-active-count) 1)
+
+; The planted fixture should have 8 scanned septuples total (C(8,7)=8).
+!(test (exp02-list-length (exp02-planted-septuple-acs-candidates)) 8)
+
+; Seed-13 random-polymer has 2 active pairs but should have 0 active septuples.
+!(test (exp02-seed-13-septuple-active-count random-polymer) 0)
+
+; Seed-13 controls should also have 0 active septuples.
+!(test (exp02-seed-13-septuple-active-count shuffled-catalysts) 0)
+
+!(test (exp02-seed-13-septuple-active-count no-catalysis) 0)
+
+; Generated-unplanted spot-checks.
+!(test (exp02-septuple-active-count-8 seed-29 random-polymer) 0)
+
+!(test (exp02-septuple-active-count-8 seed-17 random-polymer) 0)
+
+!(test (exp02-septuple-active-count-8 seed-211 random-polymer) 0)
+
+; Expected: 0 active septuples across all 40 seeds * 3 families = 120 family records.
+!(test (exp02-generated-unplanted-septuple-total) 0)
+
+; Planted 7-cycle fixture should have exactly 1 active septuple (control case).
+!(test (exp02-planted-septuple-active-count) 1)
+
+; Additional spot-checks across representative seeds.
+!(test (exp02-septuple-active-count-8 seed-19 random-polymer) 0)
+
+!(test (exp02-septuple-active-count-8 seed-19 shuffled-catalysts) 0)
+
+!(test (exp02-septuple-active-count-8 seed-19 no-catalysis) 0)
+
+!(test (exp02-septuple-active-count-8 seed-41 random-polymer) 0)
+
+!(test (exp02-septuple-active-count-8 seed-67 random-polymer) 0)
+
+!(test (exp02-septuple-active-count-8 seed-97 no-catalysis) 0)
+
+!(test (exp02-septuple-active-count-8 seed-113 shuffled-catalysts) 0)
+
+!(test (exp02-septuple-active-count-8 seed-139 random-polymer) 0)
+
+!(test (exp02-septuple-active-count-8 seed-167 no-catalysis) 0)
+
+!(test (exp02-septuple-active-count-8 seed-199 shuffled-catalysts) 0)

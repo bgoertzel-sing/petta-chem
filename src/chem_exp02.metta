@@ -6194,3 +6194,105 @@
       1
       1
       (exp02-planted-sextuple-active-count)))
+
+; ----- 7-rule catalytic cycle (septuple) scanning over 8-rule families -----
+;
+; Uses product-catalyst-closed-7?, useful-acs-7?,
+; acs-status-for-septuple, and scan-rule-septuple from
+; src/chem_exp01.metta.  Enumerates all C(8,7)=8 septuples.
+
+(= (exp02-scan-septuples-8 ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7))
+   ((scan-rule-septuple septuple-0-1-2-3-4-5-6 $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6)
+    (scan-rule-septuple septuple-0-1-2-3-4-5-7 $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-7)
+    (scan-rule-septuple septuple-0-1-2-3-4-6-7 $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-6 $rule-7)
+    (scan-rule-septuple septuple-0-1-2-3-5-6-7 $rule-0 $rule-1 $rule-2 $rule-3 $rule-5 $rule-6 $rule-7)
+    (scan-rule-septuple septuple-0-1-2-4-5-6-7 $rule-0 $rule-1 $rule-2 $rule-4 $rule-5 $rule-6 $rule-7)
+    (scan-rule-septuple septuple-0-1-3-4-5-6-7 $rule-0 $rule-1 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7)
+    (scan-rule-septuple septuple-0-2-3-4-5-6-7 $rule-0 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7)
+    (scan-rule-septuple septuple-1-2-3-4-5-6-7 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7)))
+
+(= (exp02-active-septuple-count $candidates)
+   (if (== $candidates ())
+       0
+       (+ (if (== (acs-status (car-atom $candidates)) active) 1 0)
+          (exp02-active-septuple-count (cdr-atom $candidates)))))
+
+(= (exp02-septuple-acs-candidates-8 $seed $family)
+   (exp02-scan-septuples-8 (exp02-generated-rules-8 $seed $family)))
+
+(= (exp02-septuple-active-count-8 $seed $family)
+   (exp02-active-septuple-count
+     (exp02-septuple-acs-candidates-8 $seed $family)))
+
+(= (exp02-seed-13-septuple-acs-candidates $family)
+   (exp02-scan-septuples-8 (exp02-seed-13-rules $family)))
+
+(= (exp02-seed-13-septuple-active-count $family)
+   (exp02-active-septuple-count
+     (exp02-seed-13-septuple-acs-candidates $family)))
+
+; ----- planted 7-cycle fixture in 8-rule format -----
+;
+; Seven rules form a catalytic 7-cycle (psp0→psp1→psp2→psp3→psp4→psp5→psp6→psp0)
+; with one distractor rule (psd8).
+
+(= (exp02-planted-septuple-rule psp0) (rule psp0 QA QB QX QW))
+(= (exp02-planted-septuple-rule psp1) (rule psp1 QC QD QY QX))
+(= (exp02-planted-septuple-rule psp2) (rule psp2 QE QF QZ QY))
+(= (exp02-planted-septuple-rule psp3) (rule psp3 QG QH QV QZ))
+(= (exp02-planted-septuple-rule psp4) (rule psp4 QI QJ QU QV))
+(= (exp02-planted-septuple-rule psp5) (rule psp5 QK QL QT QU))
+(= (exp02-planted-septuple-rule psp6) (rule psp6 QM QN QW QT))
+(= (exp02-planted-septuple-rule psd8) (rule psd8 QO QP Q8 R2))
+
+(= (exp02-planted-septuple-rules)
+   ((exp02-planted-septuple-rule psp0)
+    (exp02-planted-septuple-rule psp1)
+    (exp02-planted-septuple-rule psp2)
+    (exp02-planted-septuple-rule psp3)
+    (exp02-planted-septuple-rule psp4)
+    (exp02-planted-septuple-rule psp5)
+    (exp02-planted-septuple-rule psp6)
+    (exp02-planted-septuple-rule psd8)))
+
+(= (exp02-planted-septuple-acs-candidates)
+   (exp02-scan-septuples-8 (exp02-planted-septuple-rules)))
+
+(= (exp02-planted-septuple-active-count)
+   (exp02-active-septuple-count
+     (exp02-planted-septuple-acs-candidates)))
+
+; ----- fold/summary over all 40 generated-unplanted seeds -----
+
+(= (exp02-seed-septuple-total $seed)
+   (+ (exp02-septuple-active-count-8 $seed random-polymer)
+    (+ (exp02-septuple-active-count-8 $seed shuffled-catalysts)
+       (exp02-septuple-active-count-8 $seed no-catalysis))))
+
+(= (exp02-fold-seed-septuple-total $seeds)
+   (if (== $seeds ())
+       0
+       (+ (exp02-seed-septuple-total (car-atom $seeds))
+          (exp02-fold-seed-septuple-total (cdr-atom $seeds)))))
+
+(= (exp02-generated-unplanted-septuple-total)
+   (exp02-fold-seed-septuple-total (exp02-generated-unplanted-seeds-8)))
+
+(= (exp02-septuple-scan-summary
+      $kind $sweep-points $seeds-scanned $active-septuple-total)
+   (septuple-scan-summary
+      $kind $sweep-points $seeds-scanned $active-septuple-total))
+
+(= (exp02-generated-unplanted-septuple-summary)
+   (exp02-septuple-scan-summary
+      generated-unplanted-control
+      40
+      (exp02-generated-unplanted-seed-count)
+      (exp02-generated-unplanted-septuple-total)))
+
+(= (exp02-planted-septuple-summary)
+   (exp02-septuple-scan-summary
+      planted-7-cycle-fixture
+      1
+      1
+      (exp02-planted-septuple-active-count)))

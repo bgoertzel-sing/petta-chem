@@ -803,3 +803,168 @@
 
 (= (exp01-sextuple-recovered?)
    (== (exp01-recovered-sextuple-active-count) 1))
+
+; ----- 7-rule catalytic cycle (septuple) scanner -----
+;
+; Detects RAF-like 7-cycles: product(r0) = catalyst(r1),
+; product(r1) = catalyst(r2), product(r2) = catalyst(r3),
+; product(r3) = catalyst(r4), product(r4) = catalyst(r5),
+; product(r5) = catalyst(r6), product(r6) = catalyst(r0).
+; This generalizes the sextuple scanner to 7-rule closure,
+; enabling detection of longer autocatalytic structures.
+
+(= (product-catalyst-closed-7?
+      (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+      (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+      (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)
+      (rule $id-5 $a-5 $b-5 $product-5 $catalyst-5)
+      (rule $id-6 $a-6 $b-6 $product-6 $catalyst-6))
+   (and (== $product-0 $catalyst-1)
+        (and (== $product-1 $catalyst-2)
+        (and (== $product-2 $catalyst-3)
+        (and (== $product-3 $catalyst-4)
+        (and (== $product-4 $catalyst-5)
+        (and (== $product-5 $catalyst-6)
+             (== $product-6 $catalyst-0))))))))
+
+(= (useful-acs-7?
+      $rule-0
+      $rule-1
+      $rule-2
+      $rule-3
+      $rule-4
+      $rule-5
+      $rule-6)
+   (product-catalyst-closed-7? $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6))
+
+(= (acs-status-for-septuple $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6)
+   (if (useful-acs-7? $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6)
+       active
+       rejected))
+
+(= (scan-rule-septuple
+      $id
+      (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+      (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+      (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)
+      (rule $id-5 $a-5 $b-5 $product-5 $catalyst-5)
+      (rule $id-6 $a-6 $b-6 $product-6 $catalyst-6))
+   (make-acs-candidate
+     $id
+     ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+      (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+      (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)
+      (rule $id-5 $a-5 $b-5 $product-5 $catalyst-5)
+      (rule $id-6 $a-6 $b-6 $product-6 $catalyst-6))
+     ($product-0 $product-1 $product-2 $product-3 $product-4 $product-5 $product-6)
+     ($catalyst-0 $catalyst-1 $catalyst-2 $catalyst-3 $catalyst-4 $catalyst-5 $catalyst-6)
+     (acs-status-for-septuple
+       (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+       (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+       (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)
+       (rule $id-5 $a-5 $b-5 $product-5 $catalyst-5)
+       (rule $id-6 $a-6 $b-6 $product-6 $catalyst-6))))
+
+; Scan all C(8,7)=8 septuples from an 8-rule list.
+(= (scan-rule-septuples-8 ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7))
+   ((scan-rule-septuple septuple-0-1-2-3-4-5-6 $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6)
+    (scan-rule-septuple septuple-0-1-2-3-4-5-7 $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-7)
+    (scan-rule-septuple septuple-0-1-2-3-4-6-7 $rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-6 $rule-7)
+    (scan-rule-septuple septuple-0-1-2-3-5-6-7 $rule-0 $rule-1 $rule-2 $rule-3 $rule-5 $rule-6 $rule-7)
+    (scan-rule-septuple septuple-0-1-2-4-5-6-7 $rule-0 $rule-1 $rule-2 $rule-4 $rule-5 $rule-6 $rule-7)
+    (scan-rule-septuple septuple-0-1-3-4-5-6-7 $rule-0 $rule-1 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7)
+    (scan-rule-septuple septuple-0-2-3-4-5-6-7 $rule-0 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7)
+    (scan-rule-septuple septuple-1-2-3-4-5-6-7 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7)))
+
+; Count active septuples: split 8 into two groups of 4 to stay within
+; PeTTa's nested-operation compilation limit.
+(= (septuple-count-active-4 ($c0 $c1 $c2 $c3))
+   (+ (if (== (acs-status $c0) active) 1 0)
+   (+ (if (== (acs-status $c1) active) 1 0)
+   (+ (if (== (acs-status $c2) active) 1 0)
+      (if (== (acs-status $c3) active) 1 0)))))
+
+(= (active-septuple-count-8 ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7))
+   (+ (septuple-count-active-4 ($c0 $c1 $c2 $c3))
+      (septuple-count-active-4 ($c4 $c5 $c6 $c7))))
+
+; ----- planted 7-rule catalytic cycle fixture with distractors -----
+;
+; Seven rules form a catalytic 7-cycle: sp0 produces SP1 which
+; catalyzes sp1, sp1 produces SP2 which catalyzes sp2, sp2 produces
+; SP3 which catalyzes sp3, sp3 produces SP4 which catalyzes sp4,
+; sp4 produces SP5 which catalyzes sp5, sp5 produces SP6 which
+; catalyzes sp6, sp6 produces SP0 which catalyzes sp0.
+; A distractor rule spd0 does not participate.
+
+(= (exp01-planted-septuple-rule sp0)
+   (rule sp0 SF0 SB0 SP1 SP0))
+
+(= (exp01-planted-septuple-rule sp1)
+   (rule sp1 SF1 SB1 SP2 SP1))
+
+(= (exp01-planted-septuple-rule sp2)
+   (rule sp2 SF2 SB2 SP3 SP2))
+
+(= (exp01-planted-septuple-rule sp3)
+   (rule sp3 SF3 SB3 SP4 SP3))
+
+(= (exp01-planted-septuple-rule sp4)
+   (rule sp4 SF4 SB4 SP5 SP4))
+
+(= (exp01-planted-septuple-rule sp5)
+   (rule sp5 SF5 SB5 SP6 SP5))
+
+(= (exp01-planted-septuple-rule sp6)
+   (rule sp6 SF6 SB6 SP0 SP6))
+
+(= (exp01-septuple-distractor-rule spd0)
+   (rule spd0 SF7 SB7 SNone SNone))
+
+(= (exp01-septuple-rules-with-distractors)
+   ((exp01-planted-septuple-rule sp0)
+    (exp01-planted-septuple-rule sp1)
+    (exp01-septuple-distractor-rule spd0)
+    (exp01-planted-septuple-rule sp2)
+    (exp01-planted-septuple-rule sp3)
+    (exp01-planted-septuple-rule sp4)
+    (exp01-planted-septuple-rule sp5)
+    (exp01-planted-septuple-rule sp6)))
+
+(= (exp01-septuple-closure-ok?)
+   (product-catalyst-closed-7?
+     (exp01-planted-septuple-rule sp0)
+     (exp01-planted-septuple-rule sp1)
+     (exp01-planted-septuple-rule sp2)
+     (exp01-planted-septuple-rule sp3)
+     (exp01-planted-septuple-rule sp4)
+     (exp01-planted-septuple-rule sp5)
+     (exp01-planted-septuple-rule sp6)))
+
+(= (exp01-septuple-distractor-rejected?)
+   (== (useful-acs-7?
+         (exp01-planted-septuple-rule sp0)
+         (exp01-planted-septuple-rule sp1)
+         (exp01-septuple-distractor-rule spd0)
+         (exp01-planted-septuple-rule sp3)
+         (exp01-planted-septuple-rule sp4)
+         (exp01-planted-septuple-rule sp5)
+         (exp01-planted-septuple-rule sp6))
+       False))
+
+(= (exp01-scanned-septuples)
+   (scan-rule-septuples-8 (exp01-septuple-rules-with-distractors)))
+
+(= (exp01-recovered-septuple-active-count)
+   (active-septuple-count-8 (exp01-scanned-septuples)))
+
+(= (exp01-septuple-recovered?)
+   (== (exp01-recovered-septuple-active-count) 1))

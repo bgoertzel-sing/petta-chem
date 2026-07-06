@@ -413,3 +413,49 @@
 !(test (exp01-recovered-sextuple-active-count) 1)
 
 !(test (exp01-sextuple-recovered?) True)
+
+; ----- 7-rule catalytic cycle (septuple) scanner tests -----
+
+; The planted 7-cycle should be closed.
+!(test (exp01-septuple-closure-ok?) True)
+
+; A septuple containing the distractor should not be a useful ACS.
+!(test (acs-status-for-septuple
+         (exp01-planted-septuple-rule sp0)
+         (exp01-planted-septuple-rule sp1)
+         (exp01-septuple-distractor-rule spd0)
+         (exp01-planted-septuple-rule sp3)
+         (exp01-planted-septuple-rule sp4)
+         (exp01-planted-septuple-rule sp5)
+         (exp01-planted-septuple-rule sp6))
+      rejected)
+
+; Distractor rejection via useful-acs-7? returns False.
+!(test (exp01-septuple-distractor-rejected?) True)
+
+; Single scan-rule-septuple on the active 7-cycle produces correct structure.
+!(test (scan-rule-septuple septuple-active
+                          (exp01-planted-septuple-rule sp0)
+                          (exp01-planted-septuple-rule sp1)
+                          (exp01-planted-septuple-rule sp2)
+                          (exp01-planted-septuple-rule sp3)
+                          (exp01-planted-septuple-rule sp4)
+                          (exp01-planted-septuple-rule sp5)
+                          (exp01-planted-septuple-rule sp6))
+      (make-acs-candidate
+         septuple-active
+         ((exp01-planted-septuple-rule sp0)
+          (exp01-planted-septuple-rule sp1)
+          (exp01-planted-septuple-rule sp2)
+          (exp01-planted-septuple-rule sp3)
+          (exp01-planted-septuple-rule sp4)
+          (exp01-planted-septuple-rule sp5)
+          (exp01-planted-septuple-rule sp6))
+         (SP1 SP2 SP3 SP4 SP5 SP6 SP0)
+         (SP0 SP1 SP2 SP3 SP4 SP5 SP6)
+         active))
+
+; Exactly 1 active septuple among the 8.
+!(test (exp01-recovered-septuple-active-count) 1)
+
+!(test (exp01-septuple-recovered?) True)
