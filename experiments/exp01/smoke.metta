@@ -330,3 +330,43 @@
 !(test (exp01-recovered-quadruple-active-count) 1)
 
 !(test (exp01-quadruple-recovered?) True)
+
+; ----- 5-rule catalytic cycle (quintuple) scanner tests -----
+
+; The planted 5-cycle should be detected as closed.
+!(test (exp01-quintuple-closure-ok?) True)
+
+; A quintuple containing the distractor should not be a useful ACS.
+!(test (acs-status-for-quintuple
+         (exp01-planted-quintuple-rule qc0)
+         (exp01-planted-quintuple-rule qc1)
+         (exp01-quintuple-distractor-rule qd0)
+         (exp01-planted-quintuple-rule qc3)
+         (exp01-planted-quintuple-rule qc4))
+       rejected)
+
+; Distractor rejection check.
+!(test (exp01-quintuple-distractor-rejected?) True)
+
+; Single scan-rule-quintuple on the active 5-cycle produces correct structure.
+!(test (scan-rule-quintuple quintuple-active
+                          (exp01-planted-quintuple-rule qc0)
+                          (exp01-planted-quintuple-rule qc1)
+                          (exp01-planted-quintuple-rule qc2)
+                          (exp01-planted-quintuple-rule qc3)
+                          (exp01-planted-quintuple-rule qc4))
+       (acs-candidate
+         quintuple-active
+         ((exp01-planted-quintuple-rule qc0)
+          (exp01-planted-quintuple-rule qc1)
+          (exp01-planted-quintuple-rule qc2)
+          (exp01-planted-quintuple-rule qc3)
+          (exp01-planted-quintuple-rule qc4))
+         (QC1 QC2 QC3 QC4 QC0)
+         (QC0 QC1 QC2 QC3 QC4)
+         active))
+
+; Exactly 1 active quintuple among the 6.
+!(test (exp01-recovered-quintuple-active-count) 1)
+
+!(test (exp01-quintuple-recovered?) True)

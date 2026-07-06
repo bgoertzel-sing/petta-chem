@@ -522,3 +522,136 @@
 
 (= (exp01-quadruple-recovered?)
    (== (exp01-recovered-quadruple-active-count) 1))
+
+; ----- 5-rule catalytic cycle (quintuple) scanner -----
+;
+; Detects RAF-like 5-cycles: product(r0) = catalyst(r1),
+; product(r1) = catalyst(r2), product(r2) = catalyst(r3),
+; product(r3) = catalyst(r4), product(r4) = catalyst(r0).
+; This generalizes the quadruple scanner to 5-rule closure,
+; enabling detection of longer autocatalytic structures.
+
+(= (product-catalyst-closed-5?
+      (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+      (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+      (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4))
+   (and (== $product-0 $catalyst-1)
+        (and (== $product-1 $catalyst-2)
+        (and (== $product-2 $catalyst-3)
+        (and (== $product-3 $catalyst-4)
+             (== $product-4 $catalyst-0))))))
+
+(= (useful-acs-5?
+      $rule-0
+      $rule-1
+      $rule-2
+      $rule-3
+      $rule-4)
+   (product-catalyst-closed-5? $rule-0 $rule-1 $rule-2 $rule-3 $rule-4))
+
+(= (acs-status-for-quintuple $rule-0 $rule-1 $rule-2 $rule-3 $rule-4)
+   (if (useful-acs-5? $rule-0 $rule-1 $rule-2 $rule-3 $rule-4)
+       active
+       rejected))
+
+(= (scan-rule-quintuple
+      $id
+      (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+      (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+      (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4))
+   (make-acs-candidate
+     $id
+     ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+      (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+      (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+      (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+      (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4))
+     ($product-0 $product-1 $product-2 $product-3 $product-4)
+     ($catalyst-0 $catalyst-1 $catalyst-2 $catalyst-3 $catalyst-4)
+     (acs-status-for-quintuple
+       (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+       (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+       (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4))))
+
+; Scan all C(6,5)=6 quintuples from a 6-rule list.
+(= (scan-rule-quintuples-6 ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5))
+   ((scan-rule-quintuple quintuple-0-1-2-3-4 $rule-0 $rule-1 $rule-2 $rule-3 $rule-4)
+    (scan-rule-quintuple quintuple-0-1-2-3-5 $rule-0 $rule-1 $rule-2 $rule-3 $rule-5)
+    (scan-rule-quintuple quintuple-0-1-2-4-5 $rule-0 $rule-1 $rule-2 $rule-4 $rule-5)
+    (scan-rule-quintuple quintuple-0-1-3-4-5 $rule-0 $rule-1 $rule-3 $rule-4 $rule-5)
+    (scan-rule-quintuple quintuple-0-2-3-4-5 $rule-0 $rule-2 $rule-3 $rule-4 $rule-5)
+    (scan-rule-quintuple quintuple-1-2-3-4-5 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5)))
+
+(= (active-quintuple-count-6 ($c0 $c1 $c2 $c3 $c4 $c5))
+   (+ (if (== (acs-status $c0) active) 1 0)
+   (+ (if (== (acs-status $c1) active) 1 0)
+   (+ (if (== (acs-status $c2) active) 1 0)
+   (+ (if (== (acs-status $c3) active) 1 0)
+   (+ (if (== (acs-status $c4) active) 1 0)
+      (if (== (acs-status $c5) active) 1 0)))))))
+
+; ----- planted 5-rule catalytic cycle fixture with distractors -----
+;
+; Five rules form a catalytic 5-cycle: qc0 produces QC1 which
+; catalyzes qc1, qc1 produces QC2 which catalyzes qc2, qc2 produces
+; QC3 which catalyzes qc3, qc3 produces QC4 which catalyzes qc4,
+; qc4 produces QC0 which catalyzes qc0.  A distractor rule qd0 does
+; not participate in any cycle.
+
+(= (exp01-planted-quintuple-rule qc0)
+   (rule qc0 QF0 QB0 QC1 QC0))
+
+(= (exp01-planted-quintuple-rule qc1)
+   (rule qc1 QF1 QB1 QC2 QC1))
+
+(= (exp01-planted-quintuple-rule qc2)
+   (rule qc2 QF2 QB2 QC3 QC2))
+
+(= (exp01-planted-quintuple-rule qc3)
+   (rule qc3 QF3 QB3 QC4 QC3))
+
+(= (exp01-planted-quintuple-rule qc4)
+   (rule qc4 QF4 QB4 QC0 QC4))
+
+(= (exp01-quintuple-distractor-rule qd0)
+   (rule qd0 QF5 QB5 QNone QNone))
+
+(= (exp01-quintuple-rules-with-distractors)
+   ((exp01-planted-quintuple-rule qc0)
+    (exp01-planted-quintuple-rule qc1)
+    (exp01-quintuple-distractor-rule qd0)
+    (exp01-planted-quintuple-rule qc2)
+    (exp01-planted-quintuple-rule qc3)
+    (exp01-planted-quintuple-rule qc4)))
+
+(= (exp01-quintuple-closure-ok?)
+   (product-catalyst-closed-5?
+     (exp01-planted-quintuple-rule qc0)
+     (exp01-planted-quintuple-rule qc1)
+     (exp01-planted-quintuple-rule qc2)
+     (exp01-planted-quintuple-rule qc3)
+     (exp01-planted-quintuple-rule qc4)))
+
+(= (exp01-quintuple-distractor-rejected?)
+   (== (useful-acs-5?
+         (exp01-planted-quintuple-rule qc0)
+         (exp01-planted-quintuple-rule qc1)
+         (exp01-quintuple-distractor-rule qd0)
+         (exp01-planted-quintuple-rule qc3)
+         (exp01-planted-quintuple-rule qc4))
+       False))
+
+(= (exp01-scanned-quintuples)
+   (scan-rule-quintuples-6 (exp01-quintuple-rules-with-distractors)))
+
+(= (exp01-recovered-quintuple-active-count)
+   (active-quintuple-count-6 (exp01-scanned-quintuples)))
+
+(= (exp01-quintuple-recovered?)
+   (== (exp01-recovered-quintuple-active-count) 1))

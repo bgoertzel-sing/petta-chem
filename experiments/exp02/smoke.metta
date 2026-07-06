@@ -1492,3 +1492,53 @@
 !(test (exp02-quadruple-active-count-8 seed-167 no-catalysis) 0)
 
 !(test (exp02-quadruple-active-count-8 seed-199 shuffled-catalysts) 0)
+
+; ----- 5-rule catalytic cycle (quintuple) scanning over 8-rule families -----
+
+; The planted 5-cycle fixture has exactly 1 active quintuple (pqq0->pqq1->pqq2->pqq3->pqq4).
+!(test (exp02-planted-quintuple-active-count) 1)
+
+; The planted fixture should have 56 scanned quintuples total.
+!(test (exp02-list-length (exp02-planted-quintuple-acs-candidates)) 56)
+
+; Seed-13 random-polymer has 2 active pairs but should have 0 active quintuples.
+!(test (exp02-seed-13-quintuple-active-count random-polymer) 0)
+
+; Seed-13 controls should also have 0 active quintuples.
+!(test (exp02-seed-13-quintuple-active-count shuffled-catalysts) 0)
+
+!(test (exp02-seed-13-quintuple-active-count no-catalysis) 0)
+
+; Spot-check generated-unplanted seeds.
+!(test (exp02-quintuple-active-count-8 seed-29 random-polymer) 0)
+
+!(test (exp02-quintuple-active-count-8 seed-17 random-polymer) 0)
+
+!(test (exp02-quintuple-active-count-8 seed-211 random-polymer) 0)
+
+; Expected: 0 active quintuples across all 40 seeds * 3 families = 120 family records.
+!(test (exp02-generated-unplanted-quintuple-total) 0)
+
+; Planted 5-cycle fixture should have exactly 1 active quintuple (control case).
+!(test (exp02-planted-quintuple-active-count) 1)
+
+; Spot-check across representative seeds and families.
+!(test (exp02-quintuple-active-count-8 seed-19 random-polymer) 0)
+
+!(test (exp02-quintuple-active-count-8 seed-19 shuffled-catalysts) 0)
+
+!(test (exp02-quintuple-active-count-8 seed-19 no-catalysis) 0)
+
+!(test (exp02-quintuple-active-count-8 seed-41 random-polymer) 0)
+
+!(test (exp02-quintuple-active-count-8 seed-67 random-polymer) 0)
+
+!(test (exp02-quintuple-active-count-8 seed-97 no-catalysis) 0)
+
+!(test (exp02-quintuple-active-count-8 seed-113 shuffled-catalysts) 0)
+
+!(test (exp02-quintuple-active-count-8 seed-139 random-polymer) 0)
+
+!(test (exp02-quintuple-active-count-8 seed-167 no-catalysis) 0)
+
+!(test (exp02-quintuple-active-count-8 seed-199 shuffled-catalysts) 0)

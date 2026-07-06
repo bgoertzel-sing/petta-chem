@@ -5920,3 +5920,157 @@
       1
       1
       (exp02-planted-quadruple-active-count)))
+
+; ----- 5-rule catalytic cycle (quintuple) scanning over 8-rule families -----
+;
+; Uses product-catalyst-closed-5?, useful-acs-5?,
+; acs-status-for-quintuple, and scan-rule-quintuple from
+; src/chem_exp01.metta.
+
+(= (exp02-scan-quintuples-8 ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7))
+   (
+    (scan-rule-quintuple quintuple-0-1-2-3-4 $rule-0 $rule-1 $rule-2 $rule-3 $rule-4)
+    (scan-rule-quintuple quintuple-0-1-2-3-5 $rule-0 $rule-1 $rule-2 $rule-3 $rule-5)
+    (scan-rule-quintuple quintuple-0-1-2-3-6 $rule-0 $rule-1 $rule-2 $rule-3 $rule-6)
+    (scan-rule-quintuple quintuple-0-1-2-3-7 $rule-0 $rule-1 $rule-2 $rule-3 $rule-7)
+    (scan-rule-quintuple quintuple-0-1-2-4-5 $rule-0 $rule-1 $rule-2 $rule-4 $rule-5)
+    (scan-rule-quintuple quintuple-0-1-2-4-6 $rule-0 $rule-1 $rule-2 $rule-4 $rule-6)
+    (scan-rule-quintuple quintuple-0-1-2-4-7 $rule-0 $rule-1 $rule-2 $rule-4 $rule-7)
+    (scan-rule-quintuple quintuple-0-1-2-5-6 $rule-0 $rule-1 $rule-2 $rule-5 $rule-6)
+    (scan-rule-quintuple quintuple-0-1-2-5-7 $rule-0 $rule-1 $rule-2 $rule-5 $rule-7)
+    (scan-rule-quintuple quintuple-0-1-2-6-7 $rule-0 $rule-1 $rule-2 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-0-1-3-4-5 $rule-0 $rule-1 $rule-3 $rule-4 $rule-5)
+    (scan-rule-quintuple quintuple-0-1-3-4-6 $rule-0 $rule-1 $rule-3 $rule-4 $rule-6)
+    (scan-rule-quintuple quintuple-0-1-3-4-7 $rule-0 $rule-1 $rule-3 $rule-4 $rule-7)
+    (scan-rule-quintuple quintuple-0-1-3-5-6 $rule-0 $rule-1 $rule-3 $rule-5 $rule-6)
+    (scan-rule-quintuple quintuple-0-1-3-5-7 $rule-0 $rule-1 $rule-3 $rule-5 $rule-7)
+    (scan-rule-quintuple quintuple-0-1-3-6-7 $rule-0 $rule-1 $rule-3 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-0-1-4-5-6 $rule-0 $rule-1 $rule-4 $rule-5 $rule-6)
+    (scan-rule-quintuple quintuple-0-1-4-5-7 $rule-0 $rule-1 $rule-4 $rule-5 $rule-7)
+    (scan-rule-quintuple quintuple-0-1-4-6-7 $rule-0 $rule-1 $rule-4 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-0-1-5-6-7 $rule-0 $rule-1 $rule-5 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-0-2-3-4-5 $rule-0 $rule-2 $rule-3 $rule-4 $rule-5)
+    (scan-rule-quintuple quintuple-0-2-3-4-6 $rule-0 $rule-2 $rule-3 $rule-4 $rule-6)
+    (scan-rule-quintuple quintuple-0-2-3-4-7 $rule-0 $rule-2 $rule-3 $rule-4 $rule-7)
+    (scan-rule-quintuple quintuple-0-2-3-5-6 $rule-0 $rule-2 $rule-3 $rule-5 $rule-6)
+    (scan-rule-quintuple quintuple-0-2-3-5-7 $rule-0 $rule-2 $rule-3 $rule-5 $rule-7)
+    (scan-rule-quintuple quintuple-0-2-3-6-7 $rule-0 $rule-2 $rule-3 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-0-2-4-5-6 $rule-0 $rule-2 $rule-4 $rule-5 $rule-6)
+    (scan-rule-quintuple quintuple-0-2-4-5-7 $rule-0 $rule-2 $rule-4 $rule-5 $rule-7)
+    (scan-rule-quintuple quintuple-0-2-4-6-7 $rule-0 $rule-2 $rule-4 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-0-2-5-6-7 $rule-0 $rule-2 $rule-5 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-0-3-4-5-6 $rule-0 $rule-3 $rule-4 $rule-5 $rule-6)
+    (scan-rule-quintuple quintuple-0-3-4-5-7 $rule-0 $rule-3 $rule-4 $rule-5 $rule-7)
+    (scan-rule-quintuple quintuple-0-3-4-6-7 $rule-0 $rule-3 $rule-4 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-0-3-5-6-7 $rule-0 $rule-3 $rule-5 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-0-4-5-6-7 $rule-0 $rule-4 $rule-5 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-1-2-3-4-5 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5)
+    (scan-rule-quintuple quintuple-1-2-3-4-6 $rule-1 $rule-2 $rule-3 $rule-4 $rule-6)
+    (scan-rule-quintuple quintuple-1-2-3-4-7 $rule-1 $rule-2 $rule-3 $rule-4 $rule-7)
+    (scan-rule-quintuple quintuple-1-2-3-5-6 $rule-1 $rule-2 $rule-3 $rule-5 $rule-6)
+    (scan-rule-quintuple quintuple-1-2-3-5-7 $rule-1 $rule-2 $rule-3 $rule-5 $rule-7)
+    (scan-rule-quintuple quintuple-1-2-3-6-7 $rule-1 $rule-2 $rule-3 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-1-2-4-5-6 $rule-1 $rule-2 $rule-4 $rule-5 $rule-6)
+    (scan-rule-quintuple quintuple-1-2-4-5-7 $rule-1 $rule-2 $rule-4 $rule-5 $rule-7)
+    (scan-rule-quintuple quintuple-1-2-4-6-7 $rule-1 $rule-2 $rule-4 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-1-2-5-6-7 $rule-1 $rule-2 $rule-5 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-1-3-4-5-6 $rule-1 $rule-3 $rule-4 $rule-5 $rule-6)
+    (scan-rule-quintuple quintuple-1-3-4-5-7 $rule-1 $rule-3 $rule-4 $rule-5 $rule-7)
+    (scan-rule-quintuple quintuple-1-3-4-6-7 $rule-1 $rule-3 $rule-4 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-1-3-5-6-7 $rule-1 $rule-3 $rule-5 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-1-4-5-6-7 $rule-1 $rule-4 $rule-5 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-2-3-4-5-6 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6)
+    (scan-rule-quintuple quintuple-2-3-4-5-7 $rule-2 $rule-3 $rule-4 $rule-5 $rule-7)
+    (scan-rule-quintuple quintuple-2-3-4-6-7 $rule-2 $rule-3 $rule-4 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-2-3-5-6-7 $rule-2 $rule-3 $rule-5 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-2-4-5-6-7 $rule-2 $rule-4 $rule-5 $rule-6 $rule-7)
+    (scan-rule-quintuple quintuple-3-4-5-6-7 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7)
+))
+
+(= (exp02-active-quintuple-count $candidates)
+   (if (== $candidates ())
+       0
+       (+ (if (== (acs-status (car-atom $candidates)) active) 1 0)
+          (exp02-active-quintuple-count (cdr-atom $candidates)))))
+
+(= (exp02-quintuple-acs-candidates-8 $seed $family)
+   (exp02-scan-quintuples-8 (exp02-generated-rules-8 $seed $family)))
+
+(= (exp02-quintuple-active-count-8 $seed $family)
+   (exp02-active-quintuple-count
+     (exp02-quintuple-acs-candidates-8 $seed $family)))
+
+(= (exp02-seed-13-quintuple-acs-candidates $family)
+   (exp02-scan-quintuples-8 (exp02-seed-13-rules $family)))
+
+(= (exp02-seed-13-quintuple-active-count $family)
+   (exp02-active-quintuple-count
+     (exp02-seed-13-quintuple-acs-candidates $family)))
+
+; Planted 5-cycle fixture in 8-rule format:
+; pqq0->pqq1->pqq2->pqq3->pqq4->pqq0, plus 3 distractor rules.
+(= (exp02-planted-quintuple-rule pqq0) (rule pqq0 QA QB QX QW))
+(= (exp02-planted-quintuple-rule pqq1) (rule pqq1 QC QD QY QX))
+(= (exp02-planted-quintuple-rule pqq2) (rule pqq2 QE QF QZ QY))
+(= (exp02-planted-quintuple-rule pqq3) (rule pqq3 QG QH QV QZ))
+(= (exp02-planted-quintuple-rule pqq4) (rule pqq4 QI QJ QW QV))
+(= (exp02-planted-quintuple-rule pqd5) (rule pqd5 QK QL Q5 R0))
+(= (exp02-planted-quintuple-rule pqd6) (rule pqd6 QM QN Q6 R1))
+(= (exp02-planted-quintuple-rule pqd7) (rule pqd7 QO QP Q7 R2))
+
+(= (exp02-planted-quintuple-rules)
+   ((exp02-planted-quintuple-rule pqq0)
+    (exp02-planted-quintuple-rule pqq1)
+    (exp02-planted-quintuple-rule pqq2)
+    (exp02-planted-quintuple-rule pqq3)
+    (exp02-planted-quintuple-rule pqq4)
+    (exp02-planted-quintuple-rule pqd5)
+    (exp02-planted-quintuple-rule pqd6)
+    (exp02-planted-quintuple-rule pqd7)))
+
+(= (exp02-planted-quintuple-acs-candidates)
+   (exp02-scan-quintuples-8 (exp02-planted-quintuple-rules)))
+
+(= (exp02-planted-quintuple-active-count)
+   (exp02-active-quintuple-count
+     (exp02-planted-quintuple-acs-candidates)))
+
+; Comprehensive 5-rule catalytic cycle scanning across all
+; generated-unplanted 8-rule seeds. Each seed has three families
+; (random-polymer, shuffled-catalysts, no-catalysis). The fold
+; computes the total active quintuple count across all seeds/families,
+; verifying that the conservative pair/triple/quadruple scanner's
+; zero-active result extends to 5-rule cycles for the entire batch.
+
+(= (exp02-seed-quintuple-total $seed)
+   (+ (exp02-quintuple-active-count-8 $seed random-polymer)
+    (+ (exp02-quintuple-active-count-8 $seed shuffled-catalysts)
+       (exp02-quintuple-active-count-8 $seed no-catalysis))))
+
+(= (exp02-fold-seed-quintuple-total $seeds)
+   (if (== $seeds ())
+       0
+       (+ (exp02-seed-quintuple-total (car-atom $seeds))
+          (exp02-fold-seed-quintuple-total (cdr-atom $seeds)))))
+
+(= (exp02-generated-unplanted-quintuple-total)
+   (exp02-fold-seed-quintuple-total (exp02-generated-unplanted-seeds-8)))
+
+(= (exp02-quintuple-scan-summary
+      $kind $sweep-points $seeds-scanned $active-quintuple-total)
+   (quintuple-scan-summary
+      $kind $sweep-points $seeds-scanned $active-quintuple-total))
+
+(= (exp02-generated-unplanted-quintuple-summary)
+   (exp02-quintuple-scan-summary
+      generated-unplanted-control
+      40
+      (exp02-generated-unplanted-seed-count)
+      (exp02-generated-unplanted-quintuple-total)))
+
+(= (exp02-planted-quintuple-summary)
+   (exp02-quintuple-scan-summary
+      planted-5-cycle-fixture
+      1
+      1
+      (exp02-planted-quintuple-active-count)))
