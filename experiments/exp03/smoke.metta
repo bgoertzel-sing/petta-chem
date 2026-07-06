@@ -74,6 +74,52 @@
 
 !(test (exp03-replay-5-ok?) True)
 
+; ----- 10-tick smoke tests -----
+
+!(test (exp03-after-10-tick seed-7) 10)
+
+!(test (exp03-after-10-event-count seed-7) 5)
+
+!(test (trace-events (exp03-after-10 seed-7))
+       ((event 0 r0 A B AB Cat)
+        (event 2 r0 A B AB Cat)
+        (event 4 r0 A B AB Cat)
+        (event 6 r0 A B AB Cat)
+        (event 8 r0 A B AB Cat)))
+
+!(test (exp03-after-10-abundances seed-7)
+       (abundance-snapshot 10 ((mol A 0) (mol B 0) (mol AB 5) (mol Cat 1))))
+
+!(test (exp03-reactant-exhausted-after-10? seed-7) True)
+
+!(test (exp03-replay-10-ok?) True)
+
+!(test (chamber-run (exp03-initial-chamber seed-7) 10)
+       (exp03-after-10 seed-7))
+
+; ----- 16-tick smoke tests -----
+
+!(test (state-tick (chamber-state (exp03-longer-after-16 seed-7))) 16)
+
+!(test (exp03-longer-event-count seed-7) 8)
+
+!(test (trace-events (exp03-longer-after-16 seed-7))
+       ((event 0 r0 A B AB Cat)
+        (event 2 r0 A B AB Cat)
+        (event 4 r0 A B AB Cat)
+        (event 6 r0 A B AB Cat)
+        (event 8 r0 A B AB Cat)
+        (event 10 r0 A B AB Cat)
+        (event 12 r0 A B AB Cat)
+        (event 14 r0 A B AB Cat)))
+
+!(test (exp03-longer-abundances seed-7)
+       (abundance-snapshot 16 ((mol A 0) (mol B 0) (mol AB 8) (mol Cat 1))))
+
+!(test (exp03-longer-reactant-exhausted? seed-7) True)
+
+!(test (exp03-longer-replay-16-ok?) True)
+
 !(test (exp03-exp02-after-3 random seed-7)
        (chamber (exp03-exp02 random)
                 (state 3 seed-7 (mol P0 0) (mol P1 0) (mol P01 2) (mol P10 1))

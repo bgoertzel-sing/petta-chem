@@ -29,6 +29,18 @@
 (= (append-event ($event-0 $event-1 $event-2 $event-3 $event-4) $event)
    ($event-0 $event-1 $event-2 $event-3 $event-4 $event))
 
+(= (append-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event))
+
+(= (append-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event))
+
+(= (append-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event))
+
+(= (append-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event))
+
 (= (state-advance-tick (state $tick $seed $m0 $m1 $m2 $m3))
    (state (+ $tick 1) $seed $m0 $m1 $m2 $m3))
 
@@ -61,6 +73,15 @@
 
 (= (event-count ($event-0 $event-1 $event-2 $event-3 $event-4))
    5)
+
+(= (event-count ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5))
+   6)
+
+(= (event-count ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6))
+   7)
+
+(= (event-count ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7))
+   8)
 
 ; ----- Safe accumulated tick -----
 
@@ -149,6 +170,25 @@
 (= (chamber-run-5 $chamber)
    (chamber-run-1 (chamber-run-4 $chamber)))
 
+(= (chamber-run-6 $chamber)
+   (chamber-run-1 (chamber-run-5 $chamber)))
+
+(= (chamber-run-7 $chamber)
+   (chamber-run-1 (chamber-run-6 $chamber)))
+
+(= (chamber-run-8 $chamber)
+   (chamber-run-1 (chamber-run-7 $chamber)))
+
+(= (chamber-run-9 $chamber)
+   (chamber-run-1 (chamber-run-8 $chamber)))
+
+(= (chamber-run-10 $chamber)
+   (chamber-run-1 (chamber-run-9 $chamber)))
+
+(= (chamber-run-16 $chamber)
+   (chamber-run-1 (chamber-run-1 (chamber-run-1 (chamber-run-1
+     (chamber-run-1 (chamber-run-1 (chamber-run-10 $chamber))))))))
+
 ; ----- exp03 fixtures -----
 
 (= (exp03-initial-state seed-7)
@@ -199,6 +239,70 @@
 (= (exp03-replay-5-ok?)
    (== (exp03-after-5 seed-7)
        (exp03-replay-5 seed-7)))
+
+; ----- 10-tick fixture: longer multi-tick evolution with reactant exhaustion -----
+;
+; With A=5, B=5, the productive r0 rule fires at even ticks (0,2,4,6,8) consuming
+; one A and one B each time.  By tick 8 both A and B reach zero.  Tick 10 would
+; select r0 again but is blocked (no reactants).  This gives 5 events over 10
+; ticks and validates deterministic replay over a longer horizon.
+
+(= (exp03-after-10 seed-7)
+   (chamber-run-10 (exp03-initial-chamber seed-7)))
+
+(= (exp03-replay-10 seed-7)
+   (chamber-run-5 (exp03-after-5 seed-7)))
+
+(= (exp03-replay-10-ok?)
+   (== (exp03-after-10 seed-7)
+       (exp03-replay-10 seed-7)))
+
+(= (exp03-after-10-tick seed-7)
+   (state-tick (chamber-state (exp03-after-10 seed-7))))
+
+(= (exp03-after-10-event-count seed-7)
+   (event-count (trace-events (exp03-after-10 seed-7))))
+
+(= (exp03-after-10-abundances seed-7)
+   (chamber-abundance-snapshot (exp03-after-10 seed-7)))
+
+(= (exp03-reactant-exhausted-after-10? seed-7)
+   (== (exp03-after-10-abundances seed-7)
+       (abundance-snapshot 10 ((mol A 0) (mol B 0) (mol AB 5) (mol Cat 1)))))
+
+; ----- 16-tick fixture: higher abundances for longer productive evolution -----
+;
+; Starting with A=8, B=8, the productive r0 rule fires at even ticks
+; (0,2,4,6,8,10,12,14) for 8 events over 16 ticks before reactant exhaustion.
+
+(= (exp03-longer-initial-state seed-7)
+   (state 0 seed-7 (mol A 8) (mol B 8) (mol AB 0) (mol Cat 1)))
+
+(= (exp03-longer-chamber seed-7)
+   (make-chamber exp03-longer
+                 (exp03-longer-initial-state seed-7)
+                 (exp03-rules)
+                 ()))
+
+(= (exp03-longer-after-16 seed-7)
+   (chamber-run-16 (exp03-longer-chamber seed-7)))
+
+(= (exp03-longer-replay-16 seed-7)
+   (chamber-run-8 (chamber-run-8 (exp03-longer-chamber seed-7))))
+
+(= (exp03-longer-replay-16-ok?)
+   (== (exp03-longer-after-16 seed-7)
+       (exp03-longer-replay-16 seed-7)))
+
+(= (exp03-longer-event-count seed-7)
+   (event-count (trace-events (exp03-longer-after-16 seed-7))))
+
+(= (exp03-longer-abundances seed-7)
+   (chamber-abundance-snapshot (exp03-longer-after-16 seed-7)))
+
+(= (exp03-longer-reactant-exhausted? seed-7)
+   (== (exp03-longer-abundances seed-7)
+       (abundance-snapshot 16 ((mol A 0) (mol B 0) (mol AB 8) (mol Cat 1)))))
 
 (= (exp03-selectable-rule-pool-ok?)
    (and (== (exp03-selected-candidate-at 0 seed-7)
