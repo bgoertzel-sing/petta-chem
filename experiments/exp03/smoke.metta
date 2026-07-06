@@ -521,4 +521,114 @@
 
 !(test (exp03-exp02-longer-run-records-complete? seed-17) True)
 
+; ----- 10-tick exp02-family bridge (seed-11) smoke tests -----
+
+!(test (exp03-exp02-longer-event-count random seed-11) 5)
+!(test (exp03-exp02-longer-event-count shuffled seed-11) 0)
+!(test (exp03-exp02-longer-event-count no-catalysis seed-11) 0)
+
+!(test (exp03-exp02-longer-tick random seed-11) 10)
+!(test (exp03-exp02-longer-tick shuffled seed-11) 10)
+!(test (exp03-exp02-longer-tick no-catalysis seed-11) 10)
+
+!(test (exp03-exp02-longer-abundances random seed-11)
+       (abundance-snapshot 10 ((mol Q0 0) (mol Q1 0) (mol Q01 5) (mol Q10 1))))
+!(test (exp03-exp02-longer-abundances shuffled seed-11)
+       (abundance-snapshot 10 ((mol Q0 5) (mol Q1 5) (mol Q01 0) (mol Q10 1))))
+!(test (exp03-exp02-longer-abundances no-catalysis seed-11)
+       (abundance-snapshot 10 ((mol Q0 5) (mol Q1 5) (mol Q01 0) (mol Q10 1))))
+
+!(test (exp03-exp02-longer-reactant-exhausted? seed-11) True)
+
+!(test (exp03-exp02-longer-replay-ok? random seed-11) True)
+!(test (exp03-exp02-longer-replay-ok? shuffled seed-11) True)
+!(test (exp03-exp02-longer-replay-ok? no-catalysis seed-11) True)
+
+!(test (exp03-exp02-longer-controls-discriminate? seed-11) True)
+
+!(test (trace-events (exp03-exp02-longer-after-10 random seed-11))
+       ((event 0 rr0 Q0 Q1 Q01 Q10)
+        (event 2 rr0 Q0 Q1 Q01 Q10)
+        (event 4 rr0 Q0 Q1 Q01 Q10)
+        (event 6 rr0 Q0 Q1 Q01 Q10)
+        (event 8 rr0 Q0 Q1 Q01 Q10)))
+
+!(test (trace-events (exp03-exp02-longer-after-10 shuffled seed-11)) ())
+!(test (trace-events (exp03-exp02-longer-after-10 no-catalysis seed-11)) ())
+
+!(test (run-record-events (exp03-exp02-longer-run-record seed-11 random))
+       ((event 0 rr0 Q0 Q1 Q01 Q10)
+        (event 2 rr0 Q0 Q1 Q01 Q10)
+        (event 4 rr0 Q0 Q1 Q01 Q10)
+        (event 6 rr0 Q0 Q1 Q01 Q10)
+        (event 8 rr0 Q0 Q1 Q01 Q10)))
+
+!(test (run-record-abundances (exp03-exp02-longer-run-record seed-11 random))
+       ((abundance-snapshot 0 ((mol Q0 5) (mol Q1 5) (mol Q01 0) (mol Q10 1)))
+        (abundance-snapshot 10 ((mol Q0 0) (mol Q1 0) (mol Q01 5) (mol Q10 1)))))
+
+!(test (run-record-abundances (exp03-exp02-longer-run-record seed-11 shuffled))
+       ((abundance-snapshot 0 ((mol Q0 5) (mol Q1 5) (mol Q01 0) (mol Q10 1)))
+        (abundance-snapshot 10 ((mol Q0 5) (mol Q1 5) (mol Q01 0) (mol Q10 1)))))
+
+!(test (exp03-exp02-longer-run-records-complete? seed-11) True)
+
+; ----- 16-tick exp02-family bridge (seed-13) smoke tests -----
+
+!(test (exp03-exp02-longest-event-count random-polymer seed-13) 8)
+!(test (exp03-exp02-longest-event-count shuffled-catalysts seed-13) 0)
+!(test (exp03-exp02-longest-event-count no-catalysis seed-13) 0)
+
+!(test (exp03-exp02-longest-tick random-polymer seed-13) 16)
+!(test (exp03-exp02-longest-tick shuffled-catalysts seed-13) 16)
+!(test (exp03-exp02-longest-tick no-catalysis seed-13) 16)
+
+!(test (exp03-exp02-longest-abundances random-polymer seed-13)
+       (abundance-snapshot 16 ((mol R0 0) (mol R1 0) (mol R01 8) (mol R10 1))))
+!(test (exp03-exp02-longest-abundances shuffled-catalysts seed-13)
+       (abundance-snapshot 16 ((mol R0 8) (mol R1 8) (mol R01 0) (mol R10 1))))
+!(test (exp03-exp02-longest-abundances no-catalysis seed-13)
+       (abundance-snapshot 16 ((mol R0 8) (mol R1 8) (mol R01 0) (mol R10 1))))
+
+!(test (exp03-exp02-longest-reactant-exhausted? seed-13) True)
+
+!(test (exp03-exp02-longest-replay-ok? random-polymer seed-13) True)
+!(test (exp03-exp02-longest-replay-ok? shuffled-catalysts seed-13) True)
+!(test (exp03-exp02-longest-replay-ok? no-catalysis seed-13) True)
+
+!(test (exp03-exp02-longest-controls-discriminate? seed-13) True)
+
+!(test (trace-events (exp03-exp02-longest-after-16 random-polymer seed-13))
+       ((event 0 rr0 R0 R1 R01 R10)
+        (event 2 rr0 R0 R1 R01 R10)
+        (event 4 rr0 R0 R1 R01 R10)
+        (event 6 rr0 R0 R1 R01 R10)
+        (event 8 rr0 R0 R1 R01 R10)
+        (event 10 rr0 R0 R1 R01 R10)
+        (event 12 rr0 R0 R1 R01 R10)
+        (event 14 rr0 R0 R1 R01 R10)))
+
+!(test (trace-events (exp03-exp02-longest-after-16 shuffled-catalysts seed-13)) ())
+!(test (trace-events (exp03-exp02-longest-after-16 no-catalysis seed-13)) ())
+
+!(test (run-record-events (exp03-exp02-longest-run-record seed-13 random-polymer))
+       ((event 0 rr0 R0 R1 R01 R10)
+        (event 2 rr0 R0 R1 R01 R10)
+        (event 4 rr0 R0 R1 R01 R10)
+        (event 6 rr0 R0 R1 R01 R10)
+        (event 8 rr0 R0 R1 R01 R10)
+        (event 10 rr0 R0 R1 R01 R10)
+        (event 12 rr0 R0 R1 R01 R10)
+        (event 14 rr0 R0 R1 R01 R10)))
+
+!(test (run-record-abundances (exp03-exp02-longest-run-record seed-13 random-polymer))
+       ((abundance-snapshot 0 ((mol R0 8) (mol R1 8) (mol R01 0) (mol R10 1)))
+        (abundance-snapshot 16 ((mol R0 0) (mol R1 0) (mol R01 8) (mol R10 1)))))
+
+!(test (run-record-abundances (exp03-exp02-longest-run-record seed-13 shuffled-catalysts))
+       ((abundance-snapshot 0 ((mol R0 8) (mol R1 8) (mol R01 0) (mol R10 1)))
+        (abundance-snapshot 16 ((mol R0 8) (mol R1 8) (mol R01 0) (mol R10 1)))))
+
+!(test (exp03-exp02-longest-run-records-complete? seed-13) True)
+
 !(test (exp03-dynamic-aggregate-report-complete?) True)
