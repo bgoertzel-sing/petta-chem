@@ -47,6 +47,9 @@
 (= (state-abundance-snapshot (state $tick $seed $m0 $m1 $m2 $m3))
    (abundance-snapshot $tick ($m0 $m1 $m2 $m3)))
 
+(= (state-abundance-snapshot (state $tick $seed $m0 $m1 $m2 $m3 $m4 $m5 $m6 $m7 $m8 $m9))
+   (abundance-snapshot $tick ($m0 $m1 $m2 $m3 $m4 $m5 $m6 $m7 $m8 $m9)))
+
 (= (chamber-abundance-snapshot (chamber $id $state $rules $events))
    (state-abundance-snapshot $state))
 
@@ -82,6 +85,9 @@
 
 (= (event-count ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7))
    8)
+
+(= (event-count ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8))
+   9)
 
 ; ----- Safe accumulated tick -----
 
@@ -2762,3 +2768,496 @@
              (and (run-record-passed? (exp03-cap3-run-record seed-11 no-catalysis))
                   (and (exp03-cap3-controls-discriminate? seed-11)
                        (exp03-cap3-replay-ok? random-polymer seed-11))))))
+
+; ============================================================================
+; Cap-3 RICH bridge for seed-13 (10-molecule multi-rule productive state).
+;
+; This bridge explores the top TASKS.md item: richer state shapes where
+; multiple rules fire productively under cap 3.  The initial state includes
+; reactants for all three cap-3 rules (rr0, rr1, rr2), so ALL three can fire:
+;   rr0: R0+R1 -> R01, cat R10  (random) / R2 (shuffled) / None (no-cat)
+;   rr1: R2+R3 -> R10, cat R01  (random) / R4 (shuffled) / None (no-cat)
+;   rr2: R4+R5 -> R45, cat R54  (random) / R6 (shuffled) / None (no-cat)
+;
+; The selector cycles (13+tick)%3 = 1,2,0,1,2,0,... so:
+;   tick 0: rr0 fires, tick 1: rr2 fires, tick 2: rr1 fires, ...
+;   After 9 ticks: 3 rounds x 3 rules = 9 productive events, all reactants
+;   exhausted (R0=R1=R2=R3=R4=R5=0).
+;
+; Shuffled control: rr0 fires (cat R2 present), rr1 fires (cat R4 present),
+;   but rr2 is no-op (cat R6 absent).  Total 6 events.
+; No-catalysis control: 0 events (all catalysts None).
+; Control discrimination: random (9) > shuffled (6) > no-catalysis (0).
+; ============================================================================
+
+; --- 10-molecule chamber-tick-with-candidate-accum clauses ---
+
+; rr0 with cat R10 (random-polymer): productive
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol R0 $r0)
+                      (mol R1 $r1)
+                      (mol R2 $r2)
+                      (mol R3 $r3)
+                      (mol R4 $r4)
+                      (mol R5 $r5)
+                      (mol R01 $r01)
+                      (mol R10 $r10)
+                      (mol R45 $r45)
+                      (mol R54 $r54))
+               $rules
+               $events)
+      (candidate $ct (rule rr0 R0 R1 R01 R10) $score))
+   (if (and (> $r0 0) (and (> $r1 0) (> $r10 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol R0 (- $r0 1))
+                       (mol R1 (- $r1 1))
+                       (mol R2 $r2)
+                       (mol R3 $r3)
+                       (mol R4 $r4)
+                       (mol R5 $r5)
+                       (mol R01 (+ $r01 1))
+                       (mol R10 $r10)
+                       (mol R45 $r45)
+                       (mol R54 $r54))
+                $rules
+                (append-event $events (event $tick rr0 R0 R1 R01 R10)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol R0 $r0)
+                       (mol R1 $r1)
+                       (mol R2 $r2)
+                       (mol R3 $r3)
+                       (mol R4 $r4)
+                       (mol R5 $r5)
+                       (mol R01 $r01)
+                       (mol R10 $r10)
+                       (mol R45 $r45)
+                       (mol R54 $r54))
+                $rules
+                $events)))
+
+; rr0 with cat R2 (shuffled-catalysts): productive (R2 present in rich state)
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol R0 $r0)
+                      (mol R1 $r1)
+                      (mol R2 $r2)
+                      (mol R3 $r3)
+                      (mol R4 $r4)
+                      (mol R5 $r5)
+                      (mol R01 $r01)
+                      (mol R10 $r10)
+                      (mol R45 $r45)
+                      (mol R54 $r54))
+               $rules
+               $events)
+      (candidate $ct (rule rr0 R0 R1 R01 R2) $score))
+   (if (and (> $r0 0) (and (> $r1 0) (> $r2 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol R0 (- $r0 1))
+                       (mol R1 (- $r1 1))
+                       (mol R2 $r2)
+                       (mol R3 $r3)
+                       (mol R4 $r4)
+                       (mol R5 $r5)
+                       (mol R01 (+ $r01 1))
+                       (mol R10 $r10)
+                       (mol R45 $r45)
+                       (mol R54 $r54))
+                $rules
+                (append-event $events (event $tick rr0 R0 R1 R01 R2)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol R0 $r0)
+                       (mol R1 $r1)
+                       (mol R2 $r2)
+                       (mol R3 $r3)
+                       (mol R4 $r4)
+                       (mol R5 $r5)
+                       (mol R01 $r01)
+                       (mol R10 $r10)
+                       (mol R45 $r45)
+                       (mol R54 $r54))
+                $rules
+                $events)))
+
+; rr0 with cat None (no-catalysis): no-op
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol R0 $r0)
+                      (mol R1 $r1)
+                      (mol R2 $r2)
+                      (mol R3 $r3)
+                      (mol R4 $r4)
+                      (mol R5 $r5)
+                      (mol R01 $r01)
+                      (mol R10 $r10)
+                      (mol R45 $r45)
+                      (mol R54 $r54))
+               $rules
+               $events)
+      (candidate $ct (rule rr0 R0 R1 R01 None) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol R0 $r0)
+                   (mol R1 $r1)
+                   (mol R2 $r2)
+                   (mol R3 $r3)
+                   (mol R4 $r4)
+                   (mol R5 $r5)
+                   (mol R01 $r01)
+                   (mol R10 $r10)
+                   (mol R45 $r45)
+                   (mol R54 $r54))
+            $rules
+            $events))
+
+; rr1 with cat R01 (random-polymer): productive
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol R0 $r0)
+                      (mol R1 $r1)
+                      (mol R2 $r2)
+                      (mol R3 $r3)
+                      (mol R4 $r4)
+                      (mol R5 $r5)
+                      (mol R01 $r01)
+                      (mol R10 $r10)
+                      (mol R45 $r45)
+                      (mol R54 $r54))
+               $rules
+               $events)
+      (candidate $ct (rule rr1 R2 R3 R10 R01) $score))
+   (if (and (> $r2 0) (and (> $r3 0) (> $r01 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol R0 $r0)
+                       (mol R1 $r1)
+                       (mol R2 (- $r2 1))
+                       (mol R3 (- $r3 1))
+                       (mol R4 $r4)
+                       (mol R5 $r5)
+                       (mol R01 $r01)
+                       (mol R10 (+ $r10 1))
+                       (mol R45 $r45)
+                       (mol R54 $r54))
+                $rules
+                (append-event $events (event $tick rr1 R2 R3 R10 R01)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol R0 $r0)
+                       (mol R1 $r1)
+                       (mol R2 $r2)
+                       (mol R3 $r3)
+                       (mol R4 $r4)
+                       (mol R5 $r5)
+                       (mol R01 $r01)
+                       (mol R10 $r10)
+                       (mol R45 $r45)
+                       (mol R54 $r54))
+                $rules
+                $events)))
+
+; rr1 with cat R4 (shuffled-catalysts): productive (R4 present in rich state)
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol R0 $r0)
+                      (mol R1 $r1)
+                      (mol R2 $r2)
+                      (mol R3 $r3)
+                      (mol R4 $r4)
+                      (mol R5 $r5)
+                      (mol R01 $r01)
+                      (mol R10 $r10)
+                      (mol R45 $r45)
+                      (mol R54 $r54))
+               $rules
+               $events)
+      (candidate $ct (rule rr1 R2 R3 R10 R4) $score))
+   (if (and (> $r2 0) (and (> $r3 0) (> $r4 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol R0 $r0)
+                       (mol R1 $r1)
+                       (mol R2 (- $r2 1))
+                       (mol R3 (- $r3 1))
+                       (mol R4 $r4)
+                       (mol R5 $r5)
+                       (mol R01 $r01)
+                       (mol R10 (+ $r10 1))
+                       (mol R45 $r45)
+                       (mol R54 $r54))
+                $rules
+                (append-event $events (event $tick rr1 R2 R3 R10 R4)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol R0 $r0)
+                       (mol R1 $r1)
+                       (mol R2 $r2)
+                       (mol R3 $r3)
+                       (mol R4 $r4)
+                       (mol R5 $r5)
+                       (mol R01 $r01)
+                       (mol R10 $r10)
+                       (mol R45 $r45)
+                       (mol R54 $r54))
+                $rules
+                $events)))
+
+; rr1 with cat None (no-catalysis): no-op
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol R0 $r0)
+                      (mol R1 $r1)
+                      (mol R2 $r2)
+                      (mol R3 $r3)
+                      (mol R4 $r4)
+                      (mol R5 $r5)
+                      (mol R01 $r01)
+                      (mol R10 $r10)
+                      (mol R45 $r45)
+                      (mol R54 $r54))
+               $rules
+               $events)
+      (candidate $ct (rule rr1 R2 R3 R10 None) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol R0 $r0)
+                   (mol R1 $r1)
+                   (mol R2 $r2)
+                   (mol R3 $r3)
+                   (mol R4 $r4)
+                   (mol R5 $r5)
+                   (mol R01 $r01)
+                   (mol R10 $r10)
+                   (mol R45 $r45)
+                   (mol R54 $r54))
+            $rules
+            $events))
+
+; rr2 with cat R54 (random-polymer): productive
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol R0 $r0)
+                      (mol R1 $r1)
+                      (mol R2 $r2)
+                      (mol R3 $r3)
+                      (mol R4 $r4)
+                      (mol R5 $r5)
+                      (mol R01 $r01)
+                      (mol R10 $r10)
+                      (mol R45 $r45)
+                      (mol R54 $r54))
+               $rules
+               $events)
+      (candidate $ct (rule rr2 R4 R5 R45 R54) $score))
+   (if (and (> $r4 0) (and (> $r5 0) (> $r54 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol R0 $r0)
+                       (mol R1 $r1)
+                       (mol R2 $r2)
+                       (mol R3 $r3)
+                       (mol R4 (- $r4 1))
+                       (mol R5 (- $r5 1))
+                       (mol R01 $r01)
+                       (mol R10 $r10)
+                       (mol R45 (+ $r45 1))
+                       (mol R54 $r54))
+                $rules
+                (append-event $events (event $tick rr2 R4 R5 R45 R54)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol R0 $r0)
+                       (mol R1 $r1)
+                       (mol R2 $r2)
+                       (mol R3 $r3)
+                       (mol R4 $r4)
+                       (mol R5 $r5)
+                       (mol R01 $r01)
+                       (mol R10 $r10)
+                       (mol R45 $r45)
+                       (mol R54 $r54))
+                $rules
+                $events)))
+
+; rr2 with cat R6 (shuffled-catalysts): no-op (R6 absent from state)
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol R0 $r0)
+                      (mol R1 $r1)
+                      (mol R2 $r2)
+                      (mol R3 $r3)
+                      (mol R4 $r4)
+                      (mol R5 $r5)
+                      (mol R01 $r01)
+                      (mol R10 $r10)
+                      (mol R45 $r45)
+                      (mol R54 $r54))
+               $rules
+               $events)
+      (candidate $ct (rule rr2 R4 R5 R45 R6) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol R0 $r0)
+                   (mol R1 $r1)
+                   (mol R2 $r2)
+                   (mol R3 $r3)
+                   (mol R4 $r4)
+                   (mol R5 $r5)
+                   (mol R01 $r01)
+                   (mol R10 $r10)
+                   (mol R45 $r45)
+                   (mol R54 $r54))
+            $rules
+            $events))
+
+; rr2 with cat None (no-catalysis): no-op
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol R0 $r0)
+                      (mol R1 $r1)
+                      (mol R2 $r2)
+                      (mol R3 $r3)
+                      (mol R4 $r4)
+                      (mol R5 $r5)
+                      (mol R01 $r01)
+                      (mol R10 $r10)
+                      (mol R45 $r45)
+                      (mol R54 $r54))
+               $rules
+               $events)
+      (candidate $ct (rule rr2 R4 R5 R45 None) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol R0 $r0)
+                   (mol R1 $r1)
+                   (mol R2 $r2)
+                   (mol R3 $r3)
+                   (mol R4 $r4)
+                   (mol R5 $r5)
+                   (mol R01 $r01)
+                   (mol R10 $r10)
+                   (mol R45 $r45)
+                   (mol R54 $r54))
+            $rules
+            $events))
+
+; --- Rich bridge atoms ---
+
+(= (exp03-cap3-rich-initial-state seed-13)
+   (state 0 seed-13
+          (mol R0 3) (mol R1 3) (mol R2 3) (mol R3 3)
+          (mol R4 3) (mol R5 3) (mol R01 1) (mol R10 1)
+          (mol R45 0) (mol R54 1)))
+
+(= (exp03-cap3-rich-chamber $family seed-13)
+   (make-chamber (exp03-cap3-rich $family seed-13)
+                 (exp03-cap3-rich-initial-state seed-13)
+                 (exp03-exp02-full-source-rules seed-13 $family)
+                 ()))
+
+(= (exp03-cap3-rich-after-15 $family seed-13)
+   (chamber-run-3cap-15 (exp03-cap3-rich-chamber $family seed-13)))
+
+(= (exp03-cap3-rich-event-count $family seed-13)
+   (event-count (trace-events (exp03-cap3-rich-after-15 $family seed-13))))
+
+(= (exp03-cap3-rich-tick $family seed-13)
+   (state-tick (chamber-state (exp03-cap3-rich-after-15 $family seed-13))))
+
+(= (exp03-cap3-rich-abundances $family seed-13)
+   (chamber-abundance-snapshot (exp03-cap3-rich-after-15 $family seed-13)))
+
+(= (exp03-cap3-rich-replay-15 $family seed-13)
+   (chamber-run-3cap-5 (chamber-run-3cap-10 (exp03-cap3-rich-chamber $family seed-13))))
+
+(= (exp03-cap3-rich-replay-ok? $family seed-13)
+   (== (exp03-cap3-rich-after-15 $family seed-13)
+       (exp03-cap3-rich-replay-15 $family seed-13)))
+
+(= (exp03-cap3-rich-reactant-exhausted? seed-13)
+   (== (exp03-cap3-rich-abundances random-polymer seed-13)
+       (abundance-snapshot 15 ((mol R0 0) (mol R1 0) (mol R2 0) (mol R3 0)
+                               (mol R4 0) (mol R5 0) (mol R01 4) (mol R10 4)
+                               (mol R45 3) (mol R54 1)))))
+
+(= (exp03-cap3-rich-controls-discriminate? seed-13)
+   (and (> (exp03-cap3-rich-event-count random-polymer seed-13)
+           (exp03-cap3-rich-event-count shuffled-catalysts seed-13))
+        (> (exp03-cap3-rich-event-count random-polymer seed-13)
+           (exp03-cap3-rich-event-count no-catalysis seed-13))))
+
+(= (exp03-cap3-rich-run-config seed-13 random-polymer)
+   (make-run-config exp03-cap3-rich-seed-13-random exp03 (seed-13) 15 (candidate-cap 3 1) random-polymer))
+
+(= (exp03-cap3-rich-run-config seed-13 shuffled-catalysts)
+   (make-run-config exp03-cap3-rich-seed-13-shuffled exp03 (seed-13) 15 (candidate-cap 3 1) shuffled-catalysts))
+
+(= (exp03-cap3-rich-run-config seed-13 no-catalysis)
+   (make-run-config exp03-cap3-rich-seed-13-no-catalysis exp03 (seed-13) 15 (candidate-cap 3 1) no-catalysis))
+
+(= (exp03-cap3-rich-run-manifest seed-13 random-polymer)
+   (make-run-manifest exp03-cap3-rich-seed-13-random config-hash-exp03-cap3-rich-seed-13-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap3-rich-run-manifest seed-13 shuffled-catalysts)
+   (make-run-manifest exp03-cap3-rich-seed-13-shuffled config-hash-exp03-cap3-rich-seed-13-shuffled petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap3-rich-run-manifest seed-13 no-catalysis)
+   (make-run-manifest exp03-cap3-rich-seed-13-no-catalysis config-hash-exp03-cap3-rich-seed-13-no-catalysis petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap3-rich-metrics seed-13 $family)
+   ((metric dynamic-event-count (run-config-id (exp03-cap3-rich-run-config seed-13 $family)) (exp03-cap3-rich-event-count $family seed-13))
+    (metric dynamic-tick-count (run-config-id (exp03-cap3-rich-run-config seed-13 $family)) 15)
+    (metric source-exp02-rule-count (run-config-id (exp03-cap3-rich-run-config seed-13 $family)) 8)
+    (metric dynamic-candidate-cap (run-config-id (exp03-cap3-rich-run-config seed-13 $family)) 3)
+    (metric rich-state-molecule-count (run-config-id (exp03-cap3-rich-run-config seed-13 $family)) 10)))
+
+(= (exp03-cap3-rich-run-summary seed-13 random-polymer)
+   (make-run-summary exp03-cap3-rich-seed-13-random passed cap3-rich-seed-13-multi-rule-productive True))
+
+(= (exp03-cap3-rich-run-summary seed-13 shuffled-catalysts)
+   (make-run-summary exp03-cap3-rich-seed-13-shuffled passed cap3-rich-seed-13-shuffled-partial-productive True))
+
+(= (exp03-cap3-rich-run-summary seed-13 no-catalysis)
+   (make-run-summary exp03-cap3-rich-seed-13-no-catalysis passed cap3-rich-seed-13-no-catalysis-control-zero-events True))
+
+(= (exp03-cap3-rich-acs-candidates seed-13 $family)
+   (exp02-seed-13-acs-candidates $family))
+
+(= (exp03-cap3-rich-run-record seed-13 $family)
+   (make-run-record
+     (run-config-id (exp03-cap3-rich-run-config seed-13 $family))
+     (exp03-cap3-rich-run-config seed-13 $family)
+     (exp03-cap3-rich-run-manifest seed-13 $family)
+     (trace-events (exp03-cap3-rich-after-15 $family seed-13))
+     ((state-abundance-snapshot (exp03-cap3-rich-initial-state seed-13))
+      (chamber-abundance-snapshot (exp03-cap3-rich-after-15 $family seed-13)))
+     (exp03-cap3-rich-metrics seed-13 $family)
+     (exp03-cap3-rich-acs-candidates seed-13 $family)
+     ()
+     (exp03-cap3-rich-run-summary seed-13 $family)))
+
+(= (exp03-cap3-rich-run-records seed-13)
+   ((exp03-cap3-rich-run-record seed-13 random-polymer)
+    (exp03-cap3-rich-run-record seed-13 shuffled-catalysts)
+    (exp03-cap3-rich-run-record seed-13 no-catalysis)))
+
+(= (exp03-cap3-rich-run-records-complete? seed-13)
+   (and (run-record-passed? (exp03-cap3-rich-run-record seed-13 random-polymer))
+        (and (run-record-passed? (exp03-cap3-rich-run-record seed-13 shuffled-catalysts))
+             (and (run-record-passed? (exp03-cap3-rich-run-record seed-13 no-catalysis))
+                  (and (exp03-cap3-rich-controls-discriminate? seed-13)
+                       (exp03-cap3-rich-replay-ok? random-polymer seed-13))))))

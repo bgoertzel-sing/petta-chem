@@ -839,3 +839,98 @@
         (abundance-snapshot 15 ((mol Q0 5) (mol Q1 5) (mol Q01 0) (mol Q10 1)))))
 
 !(test (exp03-cap3-run-records-complete? seed-11) True)
+
+; ============================================================================
+; Cap-3 RICH bridge smoke tests (seed-13, 10-molecule multi-rule productive state)
+; ============================================================================
+
+; Random-polymer: 9 productive events (3 rr0 + 3 rr2 + 3 rr1)
+!(test (exp03-cap3-rich-event-count random-polymer seed-13) 9)
+; Shuffled-catalysts: 6 productive events (3 rr0 + 3 rr1, rr2 no-op)
+!(test (exp03-cap3-rich-event-count shuffled-catalysts seed-13) 6)
+; No-catalysis: 0 events
+!(test (exp03-cap3-rich-event-count no-catalysis seed-13) 0)
+
+; All runs reach tick 15
+!(test (exp03-cap3-rich-tick random-polymer seed-13) 15)
+!(test (exp03-cap3-rich-tick shuffled-catalysts seed-13) 15)
+!(test (exp03-cap3-rich-tick no-catalysis seed-13) 15)
+
+; Random-polymer final abundances: all reactants exhausted
+!(test (exp03-cap3-rich-abundances random-polymer seed-13)
+       (abundance-snapshot 15 ((mol R0 0) (mol R1 0) (mol R2 0) (mol R3 0)
+                                (mol R4 0) (mol R5 0) (mol R01 4) (mol R10 4)
+                                (mol R45 3) (mol R54 1))))
+; Shuffled-catalysts: R0/R1 exhausted (rr0), R2/R3 exhausted (rr1), R4/R5 untouched (rr2 no-op)
+!(test (exp03-cap3-rich-abundances shuffled-catalysts seed-13)
+       (abundance-snapshot 15 ((mol R0 0) (mol R1 0) (mol R2 0) (mol R3 0)
+                                (mol R4 3) (mol R5 3) (mol R01 4) (mol R10 4)
+                                (mol R45 0) (mol R54 1))))
+; No-catalysis: unchanged from initial
+!(test (exp03-cap3-rich-abundances no-catalysis seed-13)
+       (abundance-snapshot 15 ((mol R0 3) (mol R1 3) (mol R2 3) (mol R3 3)
+                                (mol R4 3) (mol R5 3) (mol R01 1) (mol R10 1)
+                                (mol R45 0) (mol R54 1))))
+
+; Reactant exhaustion for random
+!(test (exp03-cap3-rich-reactant-exhausted? seed-13) True)
+; Control discrimination: random (9) > shuffled (6) > no-catalysis (0)
+!(test (exp03-cap3-rich-controls-discriminate? seed-13) True)
+; Replay equivalence
+!(test (exp03-cap3-rich-replay-ok? random-polymer seed-13) True)
+!(test (exp03-cap3-rich-replay-ok? shuffled-catalysts seed-13) True)
+!(test (exp03-cap3-rich-replay-ok? no-catalysis seed-13) True)
+
+; Random-polymer events: 3 rounds of rr0/rr2/rr1 starting at tick 0
+!(test (trace-events (exp03-cap3-rich-after-15 random-polymer seed-13))
+       ((event 0 rr0 R0 R1 R01 R10)
+        (event 1 rr2 R4 R5 R45 R54)
+        (event 2 rr1 R2 R3 R10 R01)
+        (event 3 rr0 R0 R1 R01 R10)
+        (event 4 rr2 R4 R5 R45 R54)
+        (event 5 rr1 R2 R3 R10 R01)
+        (event 6 rr0 R0 R1 R01 R10)
+        (event 7 rr2 R4 R5 R45 R54)
+        (event 8 rr1 R2 R3 R10 R01)))
+
+; Shuffled-catalysts events: 3 rr0 + 3 rr1 (rr2 no-op, R6 absent)
+!(test (trace-events (exp03-cap3-rich-after-15 shuffled-catalysts seed-13))
+       ((event 0 rr0 R0 R1 R01 R2)
+        (event 2 rr1 R2 R3 R10 R4)
+        (event 3 rr0 R0 R1 R01 R2)
+        (event 5 rr1 R2 R3 R10 R4)
+        (event 6 rr0 R0 R1 R01 R2)
+        (event 8 rr1 R2 R3 R10 R4)))
+
+; No-catalysis events: empty
+!(test (trace-events (exp03-cap3-rich-after-15 no-catalysis seed-13)) ())
+
+; Run-record coverage
+!(test (run-record-events (exp03-cap3-rich-run-record seed-13 random-polymer))
+       ((event 0 rr0 R0 R1 R01 R10)
+        (event 1 rr2 R4 R5 R45 R54)
+        (event 2 rr1 R2 R3 R10 R01)
+        (event 3 rr0 R0 R1 R01 R10)
+        (event 4 rr2 R4 R5 R45 R54)
+        (event 5 rr1 R2 R3 R10 R01)
+        (event 6 rr0 R0 R1 R01 R10)
+        (event 7 rr2 R4 R5 R45 R54)
+        (event 8 rr1 R2 R3 R10 R01)))
+
+!(test (run-record-abundances (exp03-cap3-rich-run-record seed-13 random-polymer))
+       ((abundance-snapshot 0 ((mol R0 3) (mol R1 3) (mol R2 3) (mol R3 3)
+                               (mol R4 3) (mol R5 3) (mol R01 1) (mol R10 1)
+                               (mol R45 0) (mol R54 1)))
+        (abundance-snapshot 15 ((mol R0 0) (mol R1 0) (mol R2 0) (mol R3 0)
+                                (mol R4 0) (mol R5 0) (mol R01 4) (mol R10 4)
+                                (mol R45 3) (mol R54 1)))))
+
+!(test (run-record-abundances (exp03-cap3-rich-run-record seed-13 shuffled-catalysts))
+       ((abundance-snapshot 0 ((mol R0 3) (mol R1 3) (mol R2 3) (mol R3 3)
+                               (mol R4 3) (mol R5 3) (mol R01 1) (mol R10 1)
+                               (mol R45 0) (mol R54 1)))
+        (abundance-snapshot 15 ((mol R0 0) (mol R1 0) (mol R2 0) (mol R3 0)
+                                (mol R4 3) (mol R5 3) (mol R01 4) (mol R10 4)
+                                (mol R45 0) (mol R54 1)))))
+
+!(test (exp03-cap3-rich-run-records-complete? seed-13) True)
