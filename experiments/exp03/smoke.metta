@@ -689,3 +689,153 @@
         (abundance-snapshot 15 ((mol R0 5) (mol R1 5) (mol R01 0) (mol R10 1)))))
 
 !(test (exp03-cap3-run-records-complete? seed-13) True)
+
+; --- Cap-3 bridge: seed-7 (4-rule P-molecule family) ---
+
+!(test (exp03-cap3-event-count random-polymer seed-7) 5)
+!(test (exp03-cap3-event-count shuffled-catalysts seed-7) 0)
+!(test (exp03-cap3-event-count no-catalysis seed-7) 0)
+
+!(test (exp03-cap3-tick random-polymer seed-7) 15)
+!(test (exp03-cap3-tick shuffled-catalysts seed-7) 15)
+!(test (exp03-cap3-tick no-catalysis seed-7) 15)
+
+!(test (exp03-cap3-abundances random-polymer seed-7)
+       (abundance-snapshot 15 ((mol P0 0) (mol P1 0) (mol P01 5) (mol P10 1))))
+!(test (exp03-cap3-abundances shuffled-catalysts seed-7)
+       (abundance-snapshot 15 ((mol P0 5) (mol P1 5) (mol P01 0) (mol P10 1))))
+!(test (exp03-cap3-abundances no-catalysis seed-7)
+       (abundance-snapshot 15 ((mol P0 5) (mol P1 5) (mol P01 0) (mol P10 1))))
+
+!(test (exp03-cap3-reactant-exhausted? seed-7) True)
+!(test (exp03-cap3-controls-discriminate? seed-7) True)
+!(test (exp03-cap3-replay-ok? random-polymer seed-7) True)
+!(test (exp03-cap3-replay-ok? shuffled-catalysts seed-7) True)
+!(test (exp03-cap3-replay-ok? no-catalysis seed-7) True)
+
+!(test (trace-events (exp03-cap3-after-15 random-polymer seed-7))
+       ((event 0 rr0 P0 P1 P01 P10)
+        (event 3 rr0 P0 P1 P01 P10)
+        (event 6 rr0 P0 P1 P01 P10)
+        (event 9 rr0 P0 P1 P01 P10)
+        (event 12 rr0 P0 P1 P01 P10)))
+
+!(test (trace-events (exp03-cap3-after-15 shuffled-catalysts seed-7)) ())
+!(test (trace-events (exp03-cap3-after-15 no-catalysis seed-7)) ())
+
+!(test (run-record-events (exp03-cap3-run-record seed-7 random-polymer))
+       ((event 0 rr0 P0 P1 P01 P10)
+        (event 3 rr0 P0 P1 P01 P10)
+        (event 6 rr0 P0 P1 P01 P10)
+        (event 9 rr0 P0 P1 P01 P10)
+        (event 12 rr0 P0 P1 P01 P10)))
+
+!(test (run-record-abundances (exp03-cap3-run-record seed-7 random-polymer))
+       ((abundance-snapshot 0 ((mol P0 5) (mol P1 5) (mol P01 0) (mol P10 1)))
+        (abundance-snapshot 15 ((mol P0 0) (mol P1 0) (mol P01 5) (mol P10 1)))))
+
+!(test (run-record-abundances (exp03-cap3-run-record seed-7 shuffled-catalysts))
+       ((abundance-snapshot 0 ((mol P0 5) (mol P1 5) (mol P01 0) (mol P10 1)))
+        (abundance-snapshot 15 ((mol P0 5) (mol P1 5) (mol P01 0) (mol P10 1)))))
+
+!(test (exp03-cap3-run-records-complete? seed-7) True)
+
+; --- Cap-3 bridge: seed-17 (8-rule S-molecule family) ---
+
+!(test (exp03-cap3-event-count random-polymer seed-17) 5)
+!(test (exp03-cap3-event-count shuffled-catalysts seed-17) 0)
+!(test (exp03-cap3-event-count no-catalysis seed-17) 0)
+
+!(test (exp03-cap3-tick random-polymer seed-17) 15)
+!(test (exp03-cap3-tick shuffled-catalysts seed-17) 15)
+!(test (exp03-cap3-tick no-catalysis seed-17) 15)
+
+!(test (exp03-cap3-abundances random-polymer seed-17)
+       (abundance-snapshot 15 ((mol S0 0) (mol S1 0) (mol S01 5) (mol S10 1))))
+!(test (exp03-cap3-abundances shuffled-catalysts seed-17)
+       (abundance-snapshot 15 ((mol S0 5) (mol S1 5) (mol S01 0) (mol S10 1))))
+!(test (exp03-cap3-abundances no-catalysis seed-17)
+       (abundance-snapshot 15 ((mol S0 5) (mol S1 5) (mol S01 0) (mol S10 1))))
+
+!(test (exp03-cap3-reactant-exhausted? seed-17) True)
+!(test (exp03-cap3-controls-discriminate? seed-17) True)
+!(test (exp03-cap3-replay-ok? random-polymer seed-17) True)
+!(test (exp03-cap3-replay-ok? shuffled-catalysts seed-17) True)
+!(test (exp03-cap3-replay-ok? no-catalysis seed-17) True)
+
+!(test (trace-events (exp03-cap3-after-15 random-polymer seed-17))
+       ((event 2 rr0 S0 S1 S01 S10)
+        (event 5 rr0 S0 S1 S01 S10)
+        (event 8 rr0 S0 S1 S01 S10)
+        (event 11 rr0 S0 S1 S01 S10)
+        (event 14 rr0 S0 S1 S01 S10)))
+
+!(test (trace-events (exp03-cap3-after-15 shuffled-catalysts seed-17)) ())
+!(test (trace-events (exp03-cap3-after-15 no-catalysis seed-17)) ())
+
+!(test (run-record-events (exp03-cap3-run-record seed-17 random-polymer))
+       ((event 2 rr0 S0 S1 S01 S10)
+        (event 5 rr0 S0 S1 S01 S10)
+        (event 8 rr0 S0 S1 S01 S10)
+        (event 11 rr0 S0 S1 S01 S10)
+        (event 14 rr0 S0 S1 S01 S10)))
+
+!(test (run-record-abundances (exp03-cap3-run-record seed-17 random-polymer))
+       ((abundance-snapshot 0 ((mol S0 5) (mol S1 5) (mol S01 0) (mol S10 1)))
+        (abundance-snapshot 15 ((mol S0 0) (mol S1 0) (mol S01 5) (mol S10 1)))))
+
+!(test (run-record-abundances (exp03-cap3-run-record seed-17 shuffled-catalysts))
+       ((abundance-snapshot 0 ((mol S0 5) (mol S1 5) (mol S01 0) (mol S10 1)))
+        (abundance-snapshot 15 ((mol S0 5) (mol S1 5) (mol S01 0) (mol S10 1)))))
+
+!(test (exp03-cap3-run-records-complete? seed-17) True)
+
+; --- Cap-3 bridge: seed-11 (6-rule Q-molecule family) ---
+
+!(test (exp03-cap3-event-count random-polymer seed-11) 5)
+!(test (exp03-cap3-event-count shuffled-catalysts seed-11) 0)
+!(test (exp03-cap3-event-count no-catalysis seed-11) 0)
+
+!(test (exp03-cap3-tick random-polymer seed-11) 15)
+!(test (exp03-cap3-tick shuffled-catalysts seed-11) 15)
+!(test (exp03-cap3-tick no-catalysis seed-11) 15)
+
+!(test (exp03-cap3-abundances random-polymer seed-11)
+       (abundance-snapshot 15 ((mol Q0 0) (mol Q1 0) (mol Q01 5) (mol Q10 1))))
+!(test (exp03-cap3-abundances shuffled-catalysts seed-11)
+       (abundance-snapshot 15 ((mol Q0 5) (mol Q1 5) (mol Q01 0) (mol Q10 1))))
+!(test (exp03-cap3-abundances no-catalysis seed-11)
+       (abundance-snapshot 15 ((mol Q0 5) (mol Q1 5) (mol Q01 0) (mol Q10 1))))
+
+!(test (exp03-cap3-reactant-exhausted? seed-11) True)
+!(test (exp03-cap3-controls-discriminate? seed-11) True)
+!(test (exp03-cap3-replay-ok? random-polymer seed-11) True)
+!(test (exp03-cap3-replay-ok? shuffled-catalysts seed-11) True)
+!(test (exp03-cap3-replay-ok? no-catalysis seed-11) True)
+
+!(test (trace-events (exp03-cap3-after-15 random-polymer seed-11))
+       ((event 2 rr0 Q0 Q1 Q01 Q10)
+        (event 5 rr0 Q0 Q1 Q01 Q10)
+        (event 8 rr0 Q0 Q1 Q01 Q10)
+        (event 11 rr0 Q0 Q1 Q01 Q10)
+        (event 14 rr0 Q0 Q1 Q01 Q10)))
+
+!(test (trace-events (exp03-cap3-after-15 shuffled-catalysts seed-11)) ())
+!(test (trace-events (exp03-cap3-after-15 no-catalysis seed-11)) ())
+
+!(test (run-record-events (exp03-cap3-run-record seed-11 random-polymer))
+       ((event 2 rr0 Q0 Q1 Q01 Q10)
+        (event 5 rr0 Q0 Q1 Q01 Q10)
+        (event 8 rr0 Q0 Q1 Q01 Q10)
+        (event 11 rr0 Q0 Q1 Q01 Q10)
+        (event 14 rr0 Q0 Q1 Q01 Q10)))
+
+!(test (run-record-abundances (exp03-cap3-run-record seed-11 random-polymer))
+       ((abundance-snapshot 0 ((mol Q0 5) (mol Q1 5) (mol Q01 0) (mol Q10 1)))
+        (abundance-snapshot 15 ((mol Q0 0) (mol Q1 0) (mol Q01 5) (mol Q10 1)))))
+
+!(test (run-record-abundances (exp03-cap3-run-record seed-11 shuffled-catalysts))
+       ((abundance-snapshot 0 ((mol Q0 5) (mol Q1 5) (mol Q01 0) (mol Q10 1)))
+        (abundance-snapshot 15 ((mol Q0 5) (mol Q1 5) (mol Q01 0) (mol Q10 1)))))
+
+!(test (exp03-cap3-run-records-complete? seed-11) True)

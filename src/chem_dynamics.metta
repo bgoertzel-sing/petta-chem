@@ -1135,6 +1135,184 @@
             $rules
             $events))
 
+; rr2 clauses for cap-3 pool extension in P0/P1/P01/P10 state (seed-7).
+; rr2/sr2/nr2 all need P3 which is absent → no-op.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol P0 $p0-count)
+                      (mol P1 $p1-count)
+                      (mol P01 $product-count)
+                      (mol P10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule rr2 P0 P3 P03 P2) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol P0 $p0-count)
+                   (mol P1 $p1-count)
+                   (mol P01 $product-count)
+                   (mol P10 $catalyst-count))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol P0 $p0-count)
+                      (mol P1 $p1-count)
+                      (mol P01 $product-count)
+                      (mol P10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule sr2 P0 P3 P03 P10) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol P0 $p0-count)
+                   (mol P1 $p1-count)
+                   (mol P01 $product-count)
+                   (mol P10 $catalyst-count))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol P0 $p0-count)
+                      (mol P1 $p1-count)
+                      (mol P01 $product-count)
+                      (mol P10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule nr2 P0 P3 P03 None) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol P0 $p0-count)
+                   (mol P1 $p1-count)
+                   (mol P01 $product-count)
+                   (mol P10 $catalyst-count))
+            $rules
+            $events))
+
+; rr2 clauses for cap-3 pool extension in S0/S1/S01/S10 state (seed-17).
+; rr2 needs S4/S5 which are absent → no-op.  Same rule name for all families
+; (generated rules differ only in catalyst field).
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0-count)
+                      (mol S1 $s1-count)
+                      (mol S01 $product-count)
+                      (mol S10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule rr2 S4 S5 S45 S54) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol S0 $s0-count)
+                   (mol S1 $s1-count)
+                   (mol S01 $product-count)
+                   (mol S10 $catalyst-count))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0-count)
+                      (mol S1 $s1-count)
+                      (mol S01 $product-count)
+                      (mol S10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule rr2 S4 S5 S45 S6) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol S0 $s0-count)
+                   (mol S1 $s1-count)
+                   (mol S01 $product-count)
+                   (mol S10 $catalyst-count))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0-count)
+                      (mol S1 $s1-count)
+                      (mol S01 $product-count)
+                      (mol S10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule rr2 S4 S5 S45 None) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol S0 $s0-count)
+                   (mol S1 $s1-count)
+                   (mol S01 $product-count)
+                   (mol S10 $catalyst-count))
+            $rules
+            $events))
+
+; rr2 clauses for cap-3 pool extension in Q0/Q1/Q01/Q10 state (seed-11).
+; rr2/sr2/nr2 all need Q4/Q5 which are absent → no-op.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol Q0 $q0-count)
+                      (mol Q1 $q1-count)
+                      (mol Q01 $product-count)
+                      (mol Q10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule rr2 Q4 Q5 Q45 Q54) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol Q0 $q0-count)
+                   (mol Q1 $q1-count)
+                   (mol Q01 $product-count)
+                   (mol Q10 $catalyst-count))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol Q0 $q0-count)
+                      (mol Q1 $q1-count)
+                      (mol Q01 $product-count)
+                      (mol Q10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule sr2 Q4 Q5 Q45 Q6) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol Q0 $q0-count)
+                   (mol Q1 $q1-count)
+                   (mol Q01 $product-count)
+                   (mol Q10 $catalyst-count))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol Q0 $q0-count)
+                      (mol Q1 $q1-count)
+                      (mol Q01 $product-count)
+                      (mol Q10 $catalyst-count))
+               $rules
+               $events)
+      (candidate $candidate-tick (rule nr2 Q4 Q5 Q45 None) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol Q0 $q0-count)
+                   (mol Q1 $q1-count)
+                   (mol Q01 $product-count)
+                   (mol Q10 $catalyst-count))
+            $rules
+            $events))
+
 (= (exp03-exp02-initial-state seed-13)
    (state 0 seed-13 (mol R0 2) (mol R1 2) (mol R01 0) (mol R10 1)))
 
@@ -2222,3 +2400,365 @@
              (and (run-record-passed? (exp03-cap3-run-record seed-13 no-catalysis))
                   (and (exp03-cap3-controls-discriminate? seed-13)
                        (exp03-cap3-replay-ok? random-polymer seed-13))))))
+
+; ============================================================================
+; Cap-3 bridge for seed-7 (4-rule P-molecule family).
+; (7+tick)%3 = 1,2,0,1,2,0,... so rr0 (position 1) fires at ticks 0,3,6,9,12
+; for 5 productive events with P0=5/P1=5 exhaustion at tick 12.
+; rr2 (position 2) and rr1 (position 0) are distractors (reactants absent).
+; Note: seed-7 uses random/shuffled/no-catalysis family names in full-source-rules.
+; ============================================================================
+
+(= (exp03-cap3-initial-state seed-7)
+   (state 0 seed-7 (mol P0 5) (mol P1 5) (mol P01 0) (mol P10 1)))
+
+(= (exp03-cap3-chamber random-polymer seed-7)
+   (make-chamber (exp03-cap3 random-polymer seed-7)
+                 (exp03-cap3-initial-state seed-7)
+                 (exp03-exp02-full-source-rules seed-7 random)
+                 ()))
+
+(= (exp03-cap3-chamber shuffled-catalysts seed-7)
+   (make-chamber (exp03-cap3 shuffled-catalysts seed-7)
+                 (exp03-cap3-initial-state seed-7)
+                 (exp03-exp02-full-source-rules seed-7 shuffled)
+                 ()))
+
+(= (exp03-cap3-chamber no-catalysis seed-7)
+   (make-chamber (exp03-cap3 no-catalysis seed-7)
+                 (exp03-cap3-initial-state seed-7)
+                 (exp03-exp02-full-source-rules seed-7 no-catalysis)
+                 ()))
+
+(= (exp03-cap3-after-15 $family seed-7)
+   (chamber-run-3cap-15 (exp03-cap3-chamber $family seed-7)))
+
+(= (exp03-cap3-event-count $family seed-7)
+   (event-count (trace-events (exp03-cap3-after-15 $family seed-7))))
+
+(= (exp03-cap3-tick $family seed-7)
+   (state-tick (chamber-state (exp03-cap3-after-15 $family seed-7))))
+
+(= (exp03-cap3-abundances $family seed-7)
+   (chamber-abundance-snapshot (exp03-cap3-after-15 $family seed-7)))
+
+(= (exp03-cap3-replay-15 $family seed-7)
+   (chamber-run-3cap-5 (chamber-run-3cap-10 (exp03-cap3-chamber $family seed-7))))
+
+(= (exp03-cap3-replay-ok? $family seed-7)
+   (== (exp03-cap3-after-15 $family seed-7)
+       (exp03-cap3-replay-15 $family seed-7)))
+
+(= (exp03-cap3-reactant-exhausted? seed-7)
+   (== (exp03-cap3-abundances random-polymer seed-7)
+       (abundance-snapshot 15 ((mol P0 0) (mol P1 0) (mol P01 5) (mol P10 1)))))
+
+(= (exp03-cap3-controls-discriminate? seed-7)
+   (and (> (exp03-cap3-event-count random-polymer seed-7)
+           (exp03-cap3-event-count shuffled-catalysts seed-7))
+        (> (exp03-cap3-event-count random-polymer seed-7)
+           (exp03-cap3-event-count no-catalysis seed-7))))
+
+(= (exp03-cap3-run-config seed-7 random-polymer)
+   (make-run-config exp03-cap3-seed-7-random exp03 (seed-7) 15 (candidate-cap 3 1) random-polymer))
+
+(= (exp03-cap3-run-config seed-7 shuffled-catalysts)
+   (make-run-config exp03-cap3-seed-7-shuffled exp03 (seed-7) 15 (candidate-cap 3 1) shuffled-catalysts))
+
+(= (exp03-cap3-run-config seed-7 no-catalysis)
+   (make-run-config exp03-cap3-seed-7-no-catalysis exp03 (seed-7) 15 (candidate-cap 3 1) no-catalysis))
+
+(= (exp03-cap3-run-manifest seed-7 random-polymer)
+   (make-run-manifest exp03-cap3-seed-7-random config-hash-exp03-cap3-seed-7-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap3-run-manifest seed-7 shuffled-catalysts)
+   (make-run-manifest exp03-cap3-seed-7-shuffled config-hash-exp03-cap3-seed-7-shuffled petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap3-run-manifest seed-7 no-catalysis)
+   (make-run-manifest exp03-cap3-seed-7-no-catalysis config-hash-exp03-cap3-seed-7-no-catalysis petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap3-metrics seed-7 $family)
+   ((metric dynamic-event-count (run-config-id (exp03-cap3-run-config seed-7 $family)) (exp03-cap3-event-count $family seed-7))
+    (metric dynamic-tick-count (run-config-id (exp03-cap3-run-config seed-7 $family)) 15)
+    (metric source-exp02-rule-count (run-config-id (exp03-cap3-run-config seed-7 $family)) 4)
+    (metric dynamic-candidate-cap (run-config-id (exp03-cap3-run-config seed-7 $family)) 3)))
+
+(= (exp03-cap3-run-summary seed-7 random-polymer)
+   (make-run-summary exp03-cap3-seed-7-random passed cap3-seed-7-bounded-dynamic-replay-ok True))
+
+(= (exp03-cap3-run-summary seed-7 shuffled-catalysts)
+   (make-run-summary exp03-cap3-seed-7-shuffled passed cap3-seed-7-shuffled-control-zero-events True))
+
+(= (exp03-cap3-run-summary seed-7 no-catalysis)
+   (make-run-summary exp03-cap3-seed-7-no-catalysis passed cap3-seed-7-no-catalysis-control-zero-events True))
+
+(= (exp03-cap3-acs-candidates seed-7 random-polymer)
+   (exp02-random-acs-candidates seed-7))
+
+(= (exp03-cap3-acs-candidates seed-7 shuffled-catalysts)
+   (exp02-shuffled-acs-candidates seed-7))
+
+(= (exp03-cap3-acs-candidates seed-7 no-catalysis)
+   (exp02-no-catalysis-acs-candidates seed-7))
+
+(= (exp03-cap3-run-record seed-7 $family)
+   (make-run-record
+     (run-config-id (exp03-cap3-run-config seed-7 $family))
+     (exp03-cap3-run-config seed-7 $family)
+     (exp03-cap3-run-manifest seed-7 $family)
+     (trace-events (exp03-cap3-after-15 $family seed-7))
+     ((state-abundance-snapshot (exp03-cap3-initial-state seed-7))
+      (chamber-abundance-snapshot (exp03-cap3-after-15 $family seed-7)))
+     (exp03-cap3-metrics seed-7 $family)
+     (exp03-cap3-acs-candidates seed-7 $family)
+     ()
+     (exp03-cap3-run-summary seed-7 $family)))
+
+(= (exp03-cap3-run-records seed-7)
+   ((exp03-cap3-run-record seed-7 random-polymer)
+    (exp03-cap3-run-record seed-7 shuffled-catalysts)
+    (exp03-cap3-run-record seed-7 no-catalysis)))
+
+(= (exp03-cap3-run-records-complete? seed-7)
+   (and (run-record-passed? (exp03-cap3-run-record seed-7 random-polymer))
+        (and (run-record-passed? (exp03-cap3-run-record seed-7 shuffled-catalysts))
+             (and (run-record-passed? (exp03-cap3-run-record seed-7 no-catalysis))
+                  (and (exp03-cap3-controls-discriminate? seed-7)
+                       (exp03-cap3-replay-ok? random-polymer seed-7))))))
+
+; ============================================================================
+; Cap-3 bridge for seed-17 (8-rule S-molecule family).
+; (17+tick)%3 = 2,0,1,2,0,1,... so rr0 (position 1) fires at ticks 2,5,8,11,14
+; for 5 productive events with S0=5/S1=5 exhaustion at tick 14.
+; rr2 (position 2) and rr1 (position 0) are distractors (reactants absent).
+; ============================================================================
+
+(= (exp03-cap3-initial-state seed-17)
+   (state 0 seed-17 (mol S0 5) (mol S1 5) (mol S01 0) (mol S10 1)))
+
+(= (exp03-cap3-chamber $family seed-17)
+   (make-chamber (exp03-cap3 $family seed-17)
+                 (exp03-cap3-initial-state seed-17)
+                 (exp03-exp02-full-source-rules seed-17 $family)
+                 ()))
+
+(= (exp03-cap3-after-15 $family seed-17)
+   (chamber-run-3cap-15 (exp03-cap3-chamber $family seed-17)))
+
+(= (exp03-cap3-event-count $family seed-17)
+   (event-count (trace-events (exp03-cap3-after-15 $family seed-17))))
+
+(= (exp03-cap3-tick $family seed-17)
+   (state-tick (chamber-state (exp03-cap3-after-15 $family seed-17))))
+
+(= (exp03-cap3-abundances $family seed-17)
+   (chamber-abundance-snapshot (exp03-cap3-after-15 $family seed-17)))
+
+(= (exp03-cap3-replay-15 $family seed-17)
+   (chamber-run-3cap-5 (chamber-run-3cap-10 (exp03-cap3-chamber $family seed-17))))
+
+(= (exp03-cap3-replay-ok? $family seed-17)
+   (== (exp03-cap3-after-15 $family seed-17)
+       (exp03-cap3-replay-15 $family seed-17)))
+
+(= (exp03-cap3-reactant-exhausted? seed-17)
+   (== (exp03-cap3-abundances random-polymer seed-17)
+       (abundance-snapshot 15 ((mol S0 0) (mol S1 0) (mol S01 5) (mol S10 1)))))
+
+(= (exp03-cap3-controls-discriminate? seed-17)
+   (and (> (exp03-cap3-event-count random-polymer seed-17)
+           (exp03-cap3-event-count shuffled-catalysts seed-17))
+        (> (exp03-cap3-event-count random-polymer seed-17)
+           (exp03-cap3-event-count no-catalysis seed-17))))
+
+(= (exp03-cap3-run-config seed-17 random-polymer)
+   (make-run-config exp03-cap3-seed-17-random exp03 (seed-17) 15 (candidate-cap 3 1) random-polymer))
+
+(= (exp03-cap3-run-config seed-17 shuffled-catalysts)
+   (make-run-config exp03-cap3-seed-17-shuffled exp03 (seed-17) 15 (candidate-cap 3 1) shuffled-catalysts))
+
+(= (exp03-cap3-run-config seed-17 no-catalysis)
+   (make-run-config exp03-cap3-seed-17-no-catalysis exp03 (seed-17) 15 (candidate-cap 3 1) no-catalysis))
+
+(= (exp03-cap3-run-manifest seed-17 random-polymer)
+   (make-run-manifest exp03-cap3-seed-17-random config-hash-exp03-cap3-seed-17-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap3-run-manifest seed-17 shuffled-catalysts)
+   (make-run-manifest exp03-cap3-seed-17-shuffled config-hash-exp03-cap3-seed-17-shuffled petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap3-run-manifest seed-17 no-catalysis)
+   (make-run-manifest exp03-cap3-seed-17-no-catalysis config-hash-exp03-cap3-seed-17-no-catalysis petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap3-metrics seed-17 $family)
+   ((metric dynamic-event-count (run-config-id (exp03-cap3-run-config seed-17 $family)) (exp03-cap3-event-count $family seed-17))
+    (metric dynamic-tick-count (run-config-id (exp03-cap3-run-config seed-17 $family)) 15)
+    (metric source-exp02-rule-count (run-config-id (exp03-cap3-run-config seed-17 $family)) 8)
+    (metric dynamic-candidate-cap (run-config-id (exp03-cap3-run-config seed-17 $family)) 3)))
+
+(= (exp03-cap3-run-summary seed-17 random-polymer)
+   (make-run-summary exp03-cap3-seed-17-random passed cap3-seed-17-bounded-dynamic-replay-ok True))
+
+(= (exp03-cap3-run-summary seed-17 shuffled-catalysts)
+   (make-run-summary exp03-cap3-seed-17-shuffled passed cap3-seed-17-shuffled-control-zero-events True))
+
+(= (exp03-cap3-run-summary seed-17 no-catalysis)
+   (make-run-summary exp03-cap3-seed-17-no-catalysis passed cap3-seed-17-no-catalysis-control-zero-events True))
+
+(= (exp03-cap3-acs-candidates seed-17 random-polymer)
+   (exp02-seed-17-acs-candidates random-polymer))
+
+(= (exp03-cap3-acs-candidates seed-17 shuffled-catalysts)
+   (exp02-seed-17-acs-candidates shuffled-catalysts))
+
+(= (exp03-cap3-acs-candidates seed-17 no-catalysis)
+   (exp02-seed-17-acs-candidates no-catalysis))
+
+(= (exp03-cap3-run-record seed-17 $family)
+   (make-run-record
+     (run-config-id (exp03-cap3-run-config seed-17 $family))
+     (exp03-cap3-run-config seed-17 $family)
+     (exp03-cap3-run-manifest seed-17 $family)
+     (trace-events (exp03-cap3-after-15 $family seed-17))
+     ((state-abundance-snapshot (exp03-cap3-initial-state seed-17))
+      (chamber-abundance-snapshot (exp03-cap3-after-15 $family seed-17)))
+     (exp03-cap3-metrics seed-17 $family)
+     (exp03-cap3-acs-candidates seed-17 $family)
+     ()
+     (exp03-cap3-run-summary seed-17 $family)))
+
+(= (exp03-cap3-run-records seed-17)
+   ((exp03-cap3-run-record seed-17 random-polymer)
+    (exp03-cap3-run-record seed-17 shuffled-catalysts)
+    (exp03-cap3-run-record seed-17 no-catalysis)))
+
+(= (exp03-cap3-run-records-complete? seed-17)
+   (and (run-record-passed? (exp03-cap3-run-record seed-17 random-polymer))
+        (and (run-record-passed? (exp03-cap3-run-record seed-17 shuffled-catalysts))
+             (and (run-record-passed? (exp03-cap3-run-record seed-17 no-catalysis))
+                  (and (exp03-cap3-controls-discriminate? seed-17)
+                       (exp03-cap3-replay-ok? random-polymer seed-17))))))
+
+; ============================================================================
+; Cap-3 bridge for seed-11 (6-rule Q-molecule family).
+; (11+tick)%3 = 2,0,1,2,0,1,... so rr0 (position 1) fires at ticks 2,5,8,11,14
+; for 5 productive events with Q0=5/Q1=5 exhaustion at tick 14.
+; rr2 (position 2) and rr1 (position 0) are distractors (reactants absent).
+; Note: seed-11 uses random/shuffled/no-catalysis family names in full-source-rules.
+; ============================================================================
+
+(= (exp03-cap3-initial-state seed-11)
+   (state 0 seed-11 (mol Q0 5) (mol Q1 5) (mol Q01 0) (mol Q10 1)))
+
+(= (exp03-cap3-chamber random-polymer seed-11)
+   (make-chamber (exp03-cap3 random-polymer seed-11)
+                 (exp03-cap3-initial-state seed-11)
+                 (exp03-exp02-full-source-rules seed-11 random)
+                 ()))
+
+(= (exp03-cap3-chamber shuffled-catalysts seed-11)
+   (make-chamber (exp03-cap3 shuffled-catalysts seed-11)
+                 (exp03-cap3-initial-state seed-11)
+                 (exp03-exp02-full-source-rules seed-11 shuffled)
+                 ()))
+
+(= (exp03-cap3-chamber no-catalysis seed-11)
+   (make-chamber (exp03-cap3 no-catalysis seed-11)
+                 (exp03-cap3-initial-state seed-11)
+                 (exp03-exp02-full-source-rules seed-11 no-catalysis)
+                 ()))
+
+(= (exp03-cap3-after-15 $family seed-11)
+   (chamber-run-3cap-15 (exp03-cap3-chamber $family seed-11)))
+
+(= (exp03-cap3-event-count $family seed-11)
+   (event-count (trace-events (exp03-cap3-after-15 $family seed-11))))
+
+(= (exp03-cap3-tick $family seed-11)
+   (state-tick (chamber-state (exp03-cap3-after-15 $family seed-11))))
+
+(= (exp03-cap3-abundances $family seed-11)
+   (chamber-abundance-snapshot (exp03-cap3-after-15 $family seed-11)))
+
+(= (exp03-cap3-replay-15 $family seed-11)
+   (chamber-run-3cap-5 (chamber-run-3cap-10 (exp03-cap3-chamber $family seed-11))))
+
+(= (exp03-cap3-replay-ok? $family seed-11)
+   (== (exp03-cap3-after-15 $family seed-11)
+       (exp03-cap3-replay-15 $family seed-11)))
+
+(= (exp03-cap3-reactant-exhausted? seed-11)
+   (== (exp03-cap3-abundances random-polymer seed-11)
+       (abundance-snapshot 15 ((mol Q0 0) (mol Q1 0) (mol Q01 5) (mol Q10 1)))))
+
+(= (exp03-cap3-controls-discriminate? seed-11)
+   (and (> (exp03-cap3-event-count random-polymer seed-11)
+           (exp03-cap3-event-count shuffled-catalysts seed-11))
+        (> (exp03-cap3-event-count random-polymer seed-11)
+           (exp03-cap3-event-count no-catalysis seed-11))))
+
+(= (exp03-cap3-run-config seed-11 random-polymer)
+   (make-run-config exp03-cap3-seed-11-random exp03 (seed-11) 15 (candidate-cap 3 1) random-polymer))
+
+(= (exp03-cap3-run-config seed-11 shuffled-catalysts)
+   (make-run-config exp03-cap3-seed-11-shuffled exp03 (seed-11) 15 (candidate-cap 3 1) shuffled-catalysts))
+
+(= (exp03-cap3-run-config seed-11 no-catalysis)
+   (make-run-config exp03-cap3-seed-11-no-catalysis exp03 (seed-11) 15 (candidate-cap 3 1) no-catalysis))
+
+(= (exp03-cap3-run-manifest seed-11 random-polymer)
+   (make-run-manifest exp03-cap3-seed-11-random config-hash-exp03-cap3-seed-11-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap3-run-manifest seed-11 shuffled-catalysts)
+   (make-run-manifest exp03-cap3-seed-11-shuffled config-hash-exp03-cap3-seed-11-shuffled petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap3-run-manifest seed-11 no-catalysis)
+   (make-run-manifest exp03-cap3-seed-11-no-catalysis config-hash-exp03-cap3-seed-11-no-catalysis petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap3-metrics seed-11 $family)
+   ((metric dynamic-event-count (run-config-id (exp03-cap3-run-config seed-11 $family)) (exp03-cap3-event-count $family seed-11))
+    (metric dynamic-tick-count (run-config-id (exp03-cap3-run-config seed-11 $family)) 15)
+    (metric source-exp02-rule-count (run-config-id (exp03-cap3-run-config seed-11 $family)) 6)
+    (metric dynamic-candidate-cap (run-config-id (exp03-cap3-run-config seed-11 $family)) 3)))
+
+(= (exp03-cap3-run-summary seed-11 random-polymer)
+   (make-run-summary exp03-cap3-seed-11-random passed cap3-seed-11-bounded-dynamic-replay-ok True))
+
+(= (exp03-cap3-run-summary seed-11 shuffled-catalysts)
+   (make-run-summary exp03-cap3-seed-11-shuffled passed cap3-seed-11-shuffled-control-zero-events True))
+
+(= (exp03-cap3-run-summary seed-11 no-catalysis)
+   (make-run-summary exp03-cap3-seed-11-no-catalysis passed cap3-seed-11-no-catalysis-control-zero-events True))
+
+(= (exp03-cap3-acs-candidates seed-11 random-polymer)
+   (exp02-random-acs-candidates-6 seed-11))
+
+(= (exp03-cap3-acs-candidates seed-11 shuffled-catalysts)
+   (exp02-shuffled-acs-candidates-6 seed-11))
+
+(= (exp03-cap3-acs-candidates seed-11 no-catalysis)
+   (exp02-no-catalysis-acs-candidates-6 seed-11))
+
+(= (exp03-cap3-run-record seed-11 $family)
+   (make-run-record
+     (run-config-id (exp03-cap3-run-config seed-11 $family))
+     (exp03-cap3-run-config seed-11 $family)
+     (exp03-cap3-run-manifest seed-11 $family)
+     (trace-events (exp03-cap3-after-15 $family seed-11))
+     ((state-abundance-snapshot (exp03-cap3-initial-state seed-11))
+      (chamber-abundance-snapshot (exp03-cap3-after-15 $family seed-11)))
+     (exp03-cap3-metrics seed-11 $family)
+     (exp03-cap3-acs-candidates seed-11 $family)
+     ()
+     (exp03-cap3-run-summary seed-11 $family)))
+
+(= (exp03-cap3-run-records seed-11)
+   ((exp03-cap3-run-record seed-11 random-polymer)
+    (exp03-cap3-run-record seed-11 shuffled-catalysts)
+    (exp03-cap3-run-record seed-11 no-catalysis)))
+
+(= (exp03-cap3-run-records-complete? seed-11)
+   (and (run-record-passed? (exp03-cap3-run-record seed-11 random-polymer))
+        (and (run-record-passed? (exp03-cap3-run-record seed-11 shuffled-catalysts))
+             (and (run-record-passed? (exp03-cap3-run-record seed-11 no-catalysis))
+                  (and (exp03-cap3-controls-discriminate? seed-11)
+                       (exp03-cap3-replay-ok? random-polymer seed-11))))))
