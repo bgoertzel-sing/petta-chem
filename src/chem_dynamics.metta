@@ -6929,6 +6929,275 @@
                   (and (exp03-cap5-rich-controls-discriminate? seed-11)
                        (exp03-cap5-rich-replay-ok? random seed-11))))))
 
+
+; ============================================================================
+; Cap-6 PRODUCTIVE bridge for seed-11 (15-molecule Q-family, productive sixth candidate)
+; ============================================================================
+;
+; The cap-6 rich bridge above exposes rr5 as a safe no-op because Q16 is outside
+; the 12-molecule state shape.  This wider state includes Q05 and Q16 so all six
+; bounded seed-11 random-polymer candidates can fire through chamber ticking.
+
+; rr1: productive in the 15-molecule seed-11 Q-family cap-6 state.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol Q0 $q0) (mol Q1 $q1) (mol Q2 $q2) (mol Q3 $q3)
+                      (mol Q4 $q4) (mol Q5 $q5) (mol Q6 $q6) (mol Q7 $q7)
+                      (mol Q01 $q01) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 $q54)
+                      (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+               $rules
+               $events)
+      (candidate $ct (rule rr1 Q2 Q3 Q10 Q01) $score))
+   (if (and (> $q2 0) (and (> $q3 0) (> $q01 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol Q0 $q0) (mol Q1 $q1) (mol Q2 (- $q2 1)) (mol Q3 (- $q3 1))
+                       (mol Q4 $q4) (mol Q5 $q5) (mol Q6 $q6) (mol Q7 $q7)
+                       (mol Q01 $q01) (mol Q10 (+ $q10 1)) (mol Q45 $q45) (mol Q54 $q54)
+                       (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+                $rules
+                (append-event $events (event $tick rr1 Q2 Q3 Q10 Q01)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol Q0 $q0) (mol Q1 $q1) (mol Q2 $q2) (mol Q3 $q3)
+                       (mol Q4 $q4) (mol Q5 $q5) (mol Q6 $q6) (mol Q7 $q7)
+                       (mol Q01 $q01) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 $q54)
+                       (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+                $rules
+                $events)))
+
+; rr0: productive in the 15-molecule seed-11 Q-family cap-6 state.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol Q0 $q0) (mol Q1 $q1) (mol Q2 $q2) (mol Q3 $q3)
+                      (mol Q4 $q4) (mol Q5 $q5) (mol Q6 $q6) (mol Q7 $q7)
+                      (mol Q01 $q01) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 $q54)
+                      (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+               $rules
+               $events)
+      (candidate $ct (rule rr0 Q0 Q1 Q01 Q10) $score))
+   (if (and (> $q0 0) (and (> $q1 0) (> $q10 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol Q0 (- $q0 1)) (mol Q1 (- $q1 1)) (mol Q2 $q2) (mol Q3 $q3)
+                       (mol Q4 $q4) (mol Q5 $q5) (mol Q6 $q6) (mol Q7 $q7)
+                       (mol Q01 (+ $q01 1)) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 $q54)
+                       (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+                $rules
+                (append-event $events (event $tick rr0 Q0 Q1 Q01 Q10)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol Q0 $q0) (mol Q1 $q1) (mol Q2 $q2) (mol Q3 $q3)
+                       (mol Q4 $q4) (mol Q5 $q5) (mol Q6 $q6) (mol Q7 $q7)
+                       (mol Q01 $q01) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 $q54)
+                       (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+                $rules
+                $events)))
+
+; rr2: productive in the 15-molecule seed-11 Q-family cap-6 state.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol Q0 $q0) (mol Q1 $q1) (mol Q2 $q2) (mol Q3 $q3)
+                      (mol Q4 $q4) (mol Q5 $q5) (mol Q6 $q6) (mol Q7 $q7)
+                      (mol Q01 $q01) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 $q54)
+                      (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+               $rules
+               $events)
+      (candidate $ct (rule rr2 Q4 Q5 Q45 Q54) $score))
+   (if (and (> $q4 0) (and (> $q5 0) (> $q54 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol Q0 $q0) (mol Q1 $q1) (mol Q2 $q2) (mol Q3 $q3)
+                       (mol Q4 (- $q4 1)) (mol Q5 (- $q5 1)) (mol Q6 $q6) (mol Q7 $q7)
+                       (mol Q01 $q01) (mol Q10 $q10) (mol Q45 (+ $q45 1)) (mol Q54 $q54)
+                       (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+                $rules
+                (append-event $events (event $tick rr2 Q4 Q5 Q45 Q54)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol Q0 $q0) (mol Q1 $q1) (mol Q2 $q2) (mol Q3 $q3)
+                       (mol Q4 $q4) (mol Q5 $q5) (mol Q6 $q6) (mol Q7 $q7)
+                       (mol Q01 $q01) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 $q54)
+                       (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+                $rules
+                $events)))
+
+; rr3: productive in the 15-molecule seed-11 Q-family cap-6 state.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol Q0 $q0) (mol Q1 $q1) (mol Q2 $q2) (mol Q3 $q3)
+                      (mol Q4 $q4) (mol Q5 $q5) (mol Q6 $q6) (mol Q7 $q7)
+                      (mol Q01 $q01) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 $q54)
+                      (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+               $rules
+               $events)
+      (candidate $ct (rule rr3 Q6 Q7 Q54 Q45) $score))
+   (if (and (> $q6 0) (and (> $q7 0) (> $q45 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol Q0 $q0) (mol Q1 $q1) (mol Q2 $q2) (mol Q3 $q3)
+                       (mol Q4 $q4) (mol Q5 $q5) (mol Q6 (- $q6 1)) (mol Q7 (- $q7 1))
+                       (mol Q01 $q01) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 (+ $q54 1))
+                       (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+                $rules
+                (append-event $events (event $tick rr3 Q6 Q7 Q54 Q45)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol Q0 $q0) (mol Q1 $q1) (mol Q2 $q2) (mol Q3 $q3)
+                       (mol Q4 $q4) (mol Q5 $q5) (mol Q6 $q6) (mol Q7 $q7)
+                       (mol Q01 $q01) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 $q54)
+                       (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+                $rules
+                $events)))
+
+; rr4: productive in the 15-molecule seed-11 Q-family cap-6 state.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol Q0 $q0) (mol Q1 $q1) (mol Q2 $q2) (mol Q3 $q3)
+                      (mol Q4 $q4) (mol Q5 $q5) (mol Q6 $q6) (mol Q7 $q7)
+                      (mol Q01 $q01) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 $q54)
+                      (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+               $rules
+               $events)
+      (candidate $ct (rule rr4 Q0 Q5 Q05 Q2) $score))
+   (if (and (> $q0 0) (and (> $q5 0) (> $q2 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol Q0 (- $q0 1)) (mol Q1 $q1) (mol Q2 $q2) (mol Q3 $q3)
+                       (mol Q4 $q4) (mol Q5 (- $q5 1)) (mol Q6 $q6) (mol Q7 $q7)
+                       (mol Q01 $q01) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 $q54)
+                       (mol Q05 (+ $q05 1)) (mol Q16 $q16) (mol Q99 $q99))
+                $rules
+                (append-event $events (event $tick rr4 Q0 Q5 Q05 Q2)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol Q0 $q0) (mol Q1 $q1) (mol Q2 $q2) (mol Q3 $q3)
+                       (mol Q4 $q4) (mol Q5 $q5) (mol Q6 $q6) (mol Q7 $q7)
+                       (mol Q01 $q01) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 $q54)
+                       (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+                $rules
+                $events)))
+
+; rr5: productive in the wider state, making the sixth cap-6 candidate an
+; in-state reaction instead of a bounded no-op.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol Q0 $q0) (mol Q1 $q1) (mol Q2 $q2) (mol Q3 $q3)
+                      (mol Q4 $q4) (mol Q5 $q5) (mol Q6 $q6) (mol Q7 $q7)
+                      (mol Q01 $q01) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 $q54)
+                      (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+               $rules
+               $events)
+      (candidate $ct (rule rr5 Q1 Q6 Q16 Q3) $score))
+   (if (and (> $q1 0) (and (> $q6 0) (> $q3 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol Q0 $q0) (mol Q1 (- $q1 1)) (mol Q2 $q2) (mol Q3 $q3)
+                       (mol Q4 $q4) (mol Q5 $q5) (mol Q6 (- $q6 1)) (mol Q7 $q7)
+                       (mol Q01 $q01) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 $q54)
+                       (mol Q05 $q05) (mol Q16 (+ $q16 1)) (mol Q99 $q99))
+                $rules
+                (append-event $events (event $tick rr5 Q1 Q6 Q16 Q3)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol Q0 $q0) (mol Q1 $q1) (mol Q2 $q2) (mol Q3 $q3)
+                       (mol Q4 $q4) (mol Q5 $q5) (mol Q6 $q6) (mol Q7 $q7)
+                       (mol Q01 $q01) (mol Q10 $q10) (mol Q45 $q45) (mol Q54 $q54)
+                       (mol Q05 $q05) (mol Q16 $q16) (mol Q99 $q99))
+                $rules
+                $events)))
+
+(= (exp03-cap6-productive-initial-state seed-11)
+   (state 0 seed-11
+          (mol Q0 4) (mol Q1 4) (mol Q2 3) (mol Q3 2)
+          (mol Q4 2) (mol Q5 4) (mol Q6 4) (mol Q7 2)
+          (mol Q01 1) (mol Q10 1) (mol Q45 1) (mol Q54 1)
+          (mol Q05 0) (mol Q16 0) (mol Q99 0)))
+
+(= (exp03-cap6-productive-chamber random seed-11)
+   (make-chamber (exp03-cap6-productive random seed-11)
+                 (exp03-cap6-productive-initial-state seed-11)
+                 (exp03-exp02-full-source-rules seed-11 random)
+                 ()))
+
+(= (exp03-cap6-productive-capped-candidates random seed-11)
+   (candidate-pool-candidates
+     (bounded-candidate-pool
+       (exp00-candidate-cap-6)
+       (exp03-cap6-productive-chamber random seed-11))))
+
+(= (exp03-cap6-productive-selected-candidate random seed-11)
+   (selected-candidate-from-list-6
+     (exp03-cap6-productive-chamber random seed-11)
+     (exp03-cap6-productive-capped-candidates random seed-11)))
+
+(= (exp03-cap6-productive-after-12 random seed-11)
+   (chamber-run-6cap-12 (exp03-cap6-productive-chamber random seed-11)))
+
+(= (exp03-cap6-productive-event-count random seed-11)
+   (event-count (trace-events (exp03-cap6-productive-after-12 random seed-11))))
+
+(= (exp03-cap6-productive-tick random seed-11)
+   (state-tick (chamber-state (exp03-cap6-productive-after-12 random seed-11))))
+
+(= (exp03-cap6-productive-abundances random seed-11)
+   (chamber-abundance-snapshot (exp03-cap6-productive-after-12 random seed-11)))
+
+(= (exp03-cap6-productive-replay-12 random seed-11)
+   (chamber-run-6cap-6 (chamber-run-6cap-6 (exp03-cap6-productive-chamber random seed-11))))
+
+(= (exp03-cap6-productive-replay-ok? random seed-11)
+   (== (exp03-cap6-productive-after-12 random seed-11)
+       (exp03-cap6-productive-replay-12 random seed-11)))
+
+(= (exp03-cap6-productive-final-abundances-ok? seed-11)
+   (== (exp03-cap6-productive-abundances random seed-11)
+       (abundance-snapshot 12 ((mol Q0 0) (mol Q1 0) (mol Q2 1) (mol Q3 0)
+                               (mol Q4 0) (mol Q5 0) (mol Q6 0) (mol Q7 0)
+                               (mol Q01 3) (mol Q10 3) (mol Q45 3) (mol Q54 3)
+                               (mol Q05 2) (mol Q16 2) (mol Q99 0)))))
+
+(= (exp03-cap6-productive-run-config seed-11 random)
+   (make-run-config exp03-cap6-productive-seed-11-random exp03 (seed-11) 12 (candidate-cap 6 1) random))
+
+(= (exp03-cap6-productive-run-manifest seed-11 random)
+   (make-run-manifest exp03-cap6-productive-seed-11-random config-hash-exp03-cap6-productive-seed-11-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap6-productive-metrics seed-11 random)
+   ((metric dynamic-event-count exp03-cap6-productive-seed-11-random (exp03-cap6-productive-event-count random seed-11))
+    (metric dynamic-tick-count exp03-cap6-productive-seed-11-random 12)
+    (metric source-exp02-rule-count exp03-cap6-productive-seed-11-random 6)
+    (metric dynamic-candidate-cap exp03-cap6-productive-seed-11-random 6)
+    (metric rich-state-molecule-count exp03-cap6-productive-seed-11-random 15)
+    (metric productive-sixth-candidate exp03-cap6-productive-seed-11-random rr5)))
+
+(= (exp03-cap6-productive-run-summary seed-11 random)
+   (make-run-summary exp03-cap6-productive-seed-11-random passed cap6-productive-sixth-candidate-seed-11 True))
+
+(= (exp03-cap6-productive-run-record seed-11 random)
+   (make-run-record
+     exp03-cap6-productive-seed-11-random
+     (exp03-cap6-productive-run-config seed-11 random)
+     (exp03-cap6-productive-run-manifest seed-11 random)
+     (trace-events (exp03-cap6-productive-after-12 random seed-11))
+     ((state-abundance-snapshot (exp03-cap6-productive-initial-state seed-11))
+      (chamber-abundance-snapshot (exp03-cap6-productive-after-12 random seed-11)))
+     (exp03-cap6-productive-metrics seed-11 random)
+     (exp02-random-acs-candidates-6 seed-11)
+     ()
+     (exp03-cap6-productive-run-summary seed-11 random)))
+
+(= (exp03-cap6-productive-run-record-complete? seed-11)
+   (and (run-record-passed? (exp03-cap6-productive-run-record seed-11 random))
+        (and (exp03-cap6-productive-replay-ok? random seed-11)
+             (exp03-cap6-productive-final-abundances-ok? seed-11))))
+
 ; Cap-6 bridge over the same seed-11/Q-family rich state.  This is the first
 ; exp03 dynamic run where the full six-rule source pool is visible to per-tick
 ; deterministic selection.  The sixth rule is outside the 12-molecule state
