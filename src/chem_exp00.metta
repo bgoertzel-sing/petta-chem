@@ -90,10 +90,16 @@
 (= (state-tick (state $tick $seed $m0 $m1 $m2 $m3 $m4 $m5 $m6 $m7 $m8 $m9))
    $tick)
 
+(= (state-tick (state $tick $seed $m0 $m1 $m2 $m3 $m4 $m5 $m6 $m7 $m8 $m9 $m10 $m11))
+   $tick)
+
 (= (state-seed (state $tick $seed $m0 $m1 $m2 $m3))
    $seed)
 
 (= (state-seed (state $tick $seed $m0 $m1 $m2 $m3 $m4 $m5 $m6 $m7 $m8 $m9))
+   $seed)
+
+(= (state-seed (state $tick $seed $m0 $m1 $m2 $m3 $m4 $m5 $m6 $m7 $m8 $m9 $m10 $m11))
    $seed)
 
 (= (state-nonnegative?
@@ -182,6 +188,19 @@
            $candidate-1
            $candidate-2)))
 
+; 4-candidate deterministic seam for cap-4 pools.
+(= (seeded-choice-4 $seed $tick)
+   (#mod (+ (seed-number $seed) $tick) 4))
+
+(= (select-candidate-4 $seed $tick $candidate-0 $candidate-1 $candidate-2 $candidate-3)
+   (if (== (seeded-choice-4 $seed $tick) 0)
+       $candidate-0
+       (if (== (seeded-choice-4 $seed $tick) 1)
+           $candidate-1
+           (if (== (seeded-choice-4 $seed $tick) 2)
+               $candidate-2
+               $candidate-3))))
+
 (= (cap-candidate-pool 0 (candidate-pool $tick $candidates))
    ())
 
@@ -225,6 +244,9 @@
    ($candidate-0 $candidate-1 $candidate-2))
 
 (= (cap-candidate-pool 4 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3)))
+   ($candidate-0 $candidate-1 $candidate-2 $candidate-3))
+
+(= (cap-candidate-pool 4 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6 $candidate-7)))
    ($candidate-0 $candidate-1 $candidate-2 $candidate-3))
 
 (= (generate-candidate-pool
@@ -283,6 +305,19 @@
 
 (= (generate-candidate-pool
       (chamber $id (state $tick $seed $m0 $m1 $m2 $m3 $m4 $m5 $m6 $m7 $m8 $m9) ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7) $events))
+   (candidate-pool
+     $tick
+     ((make-candidate-for-rule $tick $rule-0)
+      (make-candidate-for-rule $tick $rule-1)
+      (make-candidate-for-rule $tick $rule-2)
+      (make-candidate-for-rule $tick $rule-3)
+      (make-candidate-for-rule $tick $rule-4)
+      (make-candidate-for-rule $tick $rule-5)
+      (make-candidate-for-rule $tick $rule-6)
+      (make-candidate-for-rule $tick $rule-7))))
+
+(= (generate-candidate-pool
+      (chamber $id (state $tick $seed $m0 $m1 $m2 $m3 $m4 $m5 $m6 $m7 $m8 $m9 $m10 $m11) ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7) $events))
    (candidate-pool
      $tick
      ((make-candidate-for-rule $tick $rule-0)
@@ -411,6 +446,26 @@
          $chamber
          (candidate-pool-candidates $candidate-pool)))))
 
+; 4-candidate deterministic selection from a bounded pool.
+(= (selected-candidate-from-list-4
+      (chamber $id $state $rules $events)
+      ($candidate-0 $candidate-1 $candidate-2 $candidate-3))
+   (select-candidate-4
+     (state-seed $state)
+     (state-tick $state)
+     $candidate-0
+     $candidate-1
+     $candidate-2
+     $candidate-3))
+
+(= (chamber-tick-generated-4 $cap $chamber)
+   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
+     (chamber-tick-with-candidate
+       $chamber
+       (selected-candidate-from-list-4
+         $chamber
+         (candidate-pool-candidates $candidate-pool)))))
+
 ; ----- exp00 fixture -----
 
 (= (exp00-rule r0)
@@ -444,6 +499,9 @@
 
 (= (exp00-candidate-cap-3)
    (make-candidate-cap 3 1))
+
+(= (exp00-candidate-cap-4)
+   (make-candidate-cap 4 1))
 
 (= (exp00-generated-candidate-pool $seed)
    (generate-candidate-pool (exp00-initial-chamber $seed)))
