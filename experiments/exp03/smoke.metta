@@ -1116,6 +1116,36 @@
         (event 12 rr3 Q6 Q7 Q54 Q45)
         (event 14 rr1 Q2 Q3 Q10 Q01)))
 
+; Cap-5 productive fifth-candidate bridge: seed-13 via R-family eight-rule pool.
+; This 15-molecule state adds R8/R9/R89 so rr4 is selected and fires in-state.
+!(test (exp03-cap5-productive-capped-candidates random-polymer seed-13)
+       ((candidate 0 (rule rr1 R2 R3 R10 R01) 1)
+        (candidate 0 (rule rr0 R0 R1 R01 R10) 1)
+        (candidate 0 (rule rr2 R4 R5 R45 R54) 1)
+        (candidate 0 (rule rr3 R6 R7 R54 R45) 1)
+        (candidate 0 (rule rr4 R8 R9 R89 R2) 1)))
+!(test (exp03-cap5-productive-selected-candidate random-polymer seed-13)
+       (candidate 0 (rule rr3 R6 R7 R54 R45) 1))
+!(test (exp03-cap5-productive-event-count random-polymer seed-13) 10)
+!(test (exp03-cap5-productive-tick random-polymer seed-13) 10)
+!(test (exp03-cap5-productive-abundances random-polymer seed-13)
+       (abundance-snapshot 10 ((mol R0 0) (mol R1 0) (mol R2 0) (mol R3 0) (mol R4 0)
+                               (mol R5 0) (mol R6 0) (mol R7 0) (mol R8 0) (mol R9 0)
+                               (mol R01 3) (mol R10 3) (mol R45 3) (mol R54 3) (mol R89 2))))
+!(test (exp03-cap5-productive-replay-ok? random-polymer seed-13) True)
+!(test (exp03-cap5-productive-run-record-complete? seed-13) True)
+!(test (trace-events (exp03-cap5-productive-after-10 random-polymer seed-13))
+       ((event 0 rr3 R6 R7 R54 R45)
+        (event 1 rr4 R8 R9 R89 R2)
+        (event 2 rr1 R2 R3 R10 R01)
+        (event 3 rr0 R0 R1 R01 R10)
+        (event 4 rr2 R4 R5 R45 R54)
+        (event 5 rr3 R6 R7 R54 R45)
+        (event 6 rr4 R8 R9 R89 R2)
+        (event 7 rr1 R2 R3 R10 R01)
+        (event 8 rr0 R0 R1 R01 R10)
+        (event 9 rr2 R4 R5 R45 R54)))
+
 ; Cap-5 rich bridge extension: seed-17 via S-family eight-rule source pool.
 ; Candidate cap 5 exposes rr1/rr0/rr2/rr3/rr4 from the generated source pool;
 ; the fifth candidate remains a bounded no-op because S8/S9/S89 are outside the
