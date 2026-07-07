@@ -5157,6 +5157,114 @@
                        (exp03-cap3-rich-replay-ok? random-polymer seed-13))))))
 
 ; ============================================================================
+; rr4 uses S8/S9/S89, which are intentionally outside this 12-molecule
+; rich-state bridge.  Keep the fifth cap-5 candidate visible as a no-op that
+; still advances the chamber tick across random/shuffled/no-catalysis families.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0)
+                      (mol S1 $s1)
+                      (mol S2 $s2)
+                      (mol S3 $s3)
+                      (mol S4 $s4)
+                      (mol S5 $s5)
+                      (mol S6 $s6)
+                      (mol S7 $s7)
+                      (mol S01 $s01)
+                      (mol S10 $s10)
+                      (mol S45 $s45)
+                      (mol S54 $s54))
+               $rules
+               $events)
+      (candidate $ct (rule rr4 S8 S9 S89 S2) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol S0 $s0)
+                   (mol S1 $s1)
+                   (mol S2 $s2)
+                   (mol S3 $s3)
+                   (mol S4 $s4)
+                   (mol S5 $s5)
+                   (mol S6 $s6)
+                   (mol S7 $s7)
+                   (mol S01 $s01)
+                   (mol S10 $s10)
+                   (mol S45 $s45)
+                   (mol S54 $s54))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0)
+                      (mol S1 $s1)
+                      (mol S2 $s2)
+                      (mol S3 $s3)
+                      (mol S4 $s4)
+                      (mol S5 $s5)
+                      (mol S6 $s6)
+                      (mol S7 $s7)
+                      (mol S01 $s01)
+                      (mol S10 $s10)
+                      (mol S45 $s45)
+                      (mol S54 $s54))
+               $rules
+               $events)
+      (candidate $ct (rule rr4 S8 S9 S89 S10) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol S0 $s0)
+                   (mol S1 $s1)
+                   (mol S2 $s2)
+                   (mol S3 $s3)
+                   (mol S4 $s4)
+                   (mol S5 $s5)
+                   (mol S6 $s6)
+                   (mol S7 $s7)
+                   (mol S01 $s01)
+                   (mol S10 $s10)
+                   (mol S45 $s45)
+                   (mol S54 $s54))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0)
+                      (mol S1 $s1)
+                      (mol S2 $s2)
+                      (mol S3 $s3)
+                      (mol S4 $s4)
+                      (mol S5 $s5)
+                      (mol S6 $s6)
+                      (mol S7 $s7)
+                      (mol S01 $s01)
+                      (mol S10 $s10)
+                      (mol S45 $s45)
+                      (mol S54 $s54))
+               $rules
+               $events)
+      (candidate $ct (rule rr4 S8 S9 S89 None) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol S0 $s0)
+                   (mol S1 $s1)
+                   (mol S2 $s2)
+                   (mol S3 $s3)
+                   (mol S4 $s4)
+                   (mol S5 $s5)
+                   (mol S6 $s6)
+                   (mol S7 $s7)
+                   (mol S01 $s01)
+                   (mol S10 $s10)
+                   (mol S45 $s45)
+                   (mol S54 $s54))
+            $rules
+            $events))
+
 ; 12-molecule P-family chamber-tick-with-candidate-accum clauses (seed-7 cap-4 rich bridge)
 ; ============================================================================
 
@@ -6062,6 +6170,110 @@
              (and (run-record-passed? (exp03-cap4-rich-run-record seed-17 no-catalysis))
                   (and (exp03-cap4-rich-controls-discriminate? seed-17)
                        (exp03-cap4-rich-replay-ok? random-polymer seed-17))))))
+
+
+; Cap-5 bridge over the seed-17 S-family rich state.  The fifth bounded
+; candidate is intentionally outside the 12-molecule state shape (S8/S9/S89)
+; but remains visible to the deterministic selector as a tick-advancing no-op.
+(= (exp03-cap5-rich-capped-candidates $family seed-17)
+   (candidate-pool-candidates
+     (bounded-candidate-pool
+       (exp00-candidate-cap-5)
+       (exp03-cap4-rich-chamber $family seed-17))))
+
+(= (exp03-cap5-rich-selected-candidate $family seed-17)
+   (selected-candidate-from-list-5
+     (exp03-cap4-rich-chamber $family seed-17)
+     (exp03-cap5-rich-capped-candidates $family seed-17)))
+
+(= (exp03-cap5-rich-after-15 $family seed-17)
+   (chamber-run-5cap-15 (exp03-cap4-rich-chamber $family seed-17)))
+
+(= (exp03-cap5-rich-event-count $family seed-17)
+   (event-count (trace-events (exp03-cap5-rich-after-15 $family seed-17))))
+
+(= (exp03-cap5-rich-tick $family seed-17)
+   (state-tick (chamber-state (exp03-cap5-rich-after-15 $family seed-17))))
+
+(= (exp03-cap5-rich-abundances $family seed-17)
+   (chamber-abundance-snapshot (exp03-cap5-rich-after-15 $family seed-17)))
+
+(= (exp03-cap5-rich-replay-15 $family seed-17)
+   (chamber-run-5cap-5 (chamber-run-5cap-10 (exp03-cap4-rich-chamber $family seed-17))))
+
+(= (exp03-cap5-rich-replay-ok? $family seed-17)
+   (== (exp03-cap5-rich-after-15 $family seed-17)
+       (exp03-cap5-rich-replay-15 $family seed-17)))
+
+(= (exp03-cap5-rich-controls-discriminate? seed-17)
+   (and (> (exp03-cap5-rich-event-count random-polymer seed-17)
+           (exp03-cap5-rich-event-count shuffled-catalysts seed-17))
+        (> (exp03-cap5-rich-event-count random-polymer seed-17)
+           (exp03-cap5-rich-event-count no-catalysis seed-17))))
+
+(= (exp03-cap5-rich-run-config seed-17 random-polymer)
+   (make-run-config exp03-cap5-rich-seed-17-random exp03 (seed-17) 15 (candidate-cap 5 1) random-polymer))
+
+(= (exp03-cap5-rich-run-config seed-17 shuffled-catalysts)
+   (make-run-config exp03-cap5-rich-seed-17-shuffled exp03 (seed-17) 15 (candidate-cap 5 1) shuffled-catalysts))
+
+(= (exp03-cap5-rich-run-config seed-17 no-catalysis)
+   (make-run-config exp03-cap5-rich-seed-17-no-catalysis exp03 (seed-17) 15 (candidate-cap 5 1) no-catalysis))
+
+(= (exp03-cap5-rich-run-manifest seed-17 random-polymer)
+   (make-run-manifest exp03-cap5-rich-seed-17-random config-hash-exp03-cap5-rich-seed-17-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap5-rich-run-manifest seed-17 shuffled-catalysts)
+   (make-run-manifest exp03-cap5-rich-seed-17-shuffled config-hash-exp03-cap5-rich-seed-17-shuffled petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap5-rich-run-manifest seed-17 no-catalysis)
+   (make-run-manifest exp03-cap5-rich-seed-17-no-catalysis config-hash-exp03-cap5-rich-seed-17-no-catalysis petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap5-rich-metrics seed-17 $family)
+   ((metric dynamic-event-count (run-config-id (exp03-cap5-rich-run-config seed-17 $family)) (exp03-cap5-rich-event-count $family seed-17))
+    (metric dynamic-tick-count (run-config-id (exp03-cap5-rich-run-config seed-17 $family)) 15)
+    (metric source-exp02-rule-count (run-config-id (exp03-cap5-rich-run-config seed-17 $family)) 8)
+    (metric dynamic-candidate-cap (run-config-id (exp03-cap5-rich-run-config seed-17 $family)) 5)
+    (metric rich-state-molecule-count (run-config-id (exp03-cap5-rich-run-config seed-17 $family)) 12)
+    (metric cap5-distractor-rule (run-config-id (exp03-cap5-rich-run-config seed-17 $family)) fifth-candidate-outside-state-shape)
+    (metric generation-seam (run-config-id (exp03-cap5-rich-run-config seed-17 $family)) seed-to-components)))
+
+(= (exp03-cap5-rich-run-summary seed-17 random-polymer)
+   (make-run-summary exp03-cap5-rich-seed-17-random passed cap5-rich-seed-17-five-candidate-dynamics True))
+
+(= (exp03-cap5-rich-run-summary seed-17 shuffled-catalysts)
+   (make-run-summary exp03-cap5-rich-seed-17-shuffled passed cap5-rich-seed-17-shuffled-partial-productive True))
+
+(= (exp03-cap5-rich-run-summary seed-17 no-catalysis)
+   (make-run-summary exp03-cap5-rich-seed-17-no-catalysis passed cap5-rich-seed-17-no-catalysis-control-zero-events True))
+
+(= (exp03-cap5-rich-acs-candidates seed-17 $family)
+   (exp02-seed-17-acs-candidates $family))
+
+(= (exp03-cap5-rich-run-record seed-17 $family)
+   (make-run-record
+     (run-config-id (exp03-cap5-rich-run-config seed-17 $family))
+     (exp03-cap5-rich-run-config seed-17 $family)
+     (exp03-cap5-rich-run-manifest seed-17 $family)
+     (trace-events (exp03-cap5-rich-after-15 $family seed-17))
+     ((state-abundance-snapshot (exp03-cap4-rich-initial-state seed-17))
+      (chamber-abundance-snapshot (exp03-cap5-rich-after-15 $family seed-17)))
+     (exp03-cap5-rich-metrics seed-17 $family)
+     (exp03-cap5-rich-acs-candidates seed-17 $family)
+     ()
+     (exp03-cap5-rich-run-summary seed-17 $family)))
+
+(= (exp03-cap5-rich-run-records seed-17)
+   ((exp03-cap5-rich-run-record seed-17 random-polymer)
+    (exp03-cap5-rich-run-record seed-17 shuffled-catalysts)
+    (exp03-cap5-rich-run-record seed-17 no-catalysis)))
+
+(= (exp03-cap5-rich-run-records-complete? seed-17)
+   (and (run-record-passed? (exp03-cap5-rich-run-record seed-17 random-polymer))
+        (and (run-record-passed? (exp03-cap5-rich-run-record seed-17 shuffled-catalysts))
+             (and (run-record-passed? (exp03-cap5-rich-run-record seed-17 no-catalysis))
+                  (and (exp03-cap5-rich-controls-discriminate? seed-17)
+                       (exp03-cap5-rich-replay-ok? random-polymer seed-17))))))
 
 
 ; ============================================================================
