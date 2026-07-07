@@ -190,6 +190,15 @@
          $chamber
          (candidate-pool-candidates $candidate-pool)))))
 
+; Cap-5 accum: selects 1 of 5 candidates per tick, accumulates events.
+(= (chamber-tick-generated-5-accum $cap $chamber)
+   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
+     (chamber-tick-with-candidate-accum
+       $chamber
+       (selected-candidate-from-list-5
+         $chamber
+         (candidate-pool-candidates $candidate-pool)))))
+
 ; Recursive entry point for PeTTa implementations that reduce arithmetic in
 ; recursive arguments.  The explicit exp03-run-* wrappers below keep smoke tests
 ; bounded and transparent while using the same per-tick transition.
@@ -303,6 +312,28 @@
 
 (= (chamber-run-4cap-15 $chamber)
    (chamber-run-4cap-3 (chamber-run-4cap-12 $chamber)))
+
+; Cap-5 chamber-run wrappers: each tick selects 1 of 5 candidates.
+(= (chamber-run-5cap-1 $chamber)
+   (chamber-tick-generated-5-accum (exp00-candidate-cap-5) $chamber))
+
+(= (chamber-run-5cap-2 $chamber)
+   (chamber-run-5cap-1 (chamber-run-5cap-1 $chamber)))
+
+(= (chamber-run-5cap-3 $chamber)
+   (chamber-run-5cap-1 (chamber-run-5cap-2 $chamber)))
+
+(= (chamber-run-5cap-4 $chamber)
+   (chamber-run-5cap-1 (chamber-run-5cap-3 $chamber)))
+
+(= (chamber-run-5cap-5 $chamber)
+   (chamber-run-5cap-1 (chamber-run-5cap-4 $chamber)))
+
+(= (chamber-run-5cap-10 $chamber)
+   (chamber-run-5cap-5 (chamber-run-5cap-5 $chamber)))
+
+(= (chamber-run-5cap-15 $chamber)
+   (chamber-run-5cap-5 (chamber-run-5cap-10 $chamber)))
 
 (= (chamber-run-16 $chamber)
    (chamber-run-1 (chamber-run-1 (chamber-run-1 (chamber-run-1
@@ -4356,6 +4387,114 @@
             $events))
 
 
+; rr4 uses Q05, which is intentionally outside this 12-molecule rich-state
+; bridge.  Treat it as a bounded cap-5 distractor/no-op while preserving tick
+; advancement and keeping the rule visible in the candidate pool.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol Q0 $q0)
+                      (mol Q1 $q1)
+                      (mol Q2 $q2)
+                      (mol Q3 $q3)
+                      (mol Q4 $q4)
+                      (mol Q5 $q5)
+                      (mol Q6 $q6)
+                      (mol Q7 $q7)
+                      (mol Q01 $q01)
+                      (mol Q10 $q10)
+                      (mol Q45 $q45)
+                      (mol Q54 $q54))
+               $rules
+               $events)
+      (candidate $ct (rule rr4 Q0 Q5 Q05 Q2) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol Q0 $q0)
+                   (mol Q1 $q1)
+                   (mol Q2 $q2)
+                   (mol Q3 $q3)
+                   (mol Q4 $q4)
+                   (mol Q5 $q5)
+                   (mol Q6 $q6)
+                   (mol Q7 $q7)
+                   (mol Q01 $q01)
+                   (mol Q10 $q10)
+                   (mol Q45 $q45)
+                   (mol Q54 $q54))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol Q0 $q0)
+                      (mol Q1 $q1)
+                      (mol Q2 $q2)
+                      (mol Q3 $q3)
+                      (mol Q4 $q4)
+                      (mol Q5 $q5)
+                      (mol Q6 $q6)
+                      (mol Q7 $q7)
+                      (mol Q01 $q01)
+                      (mol Q10 $q10)
+                      (mol Q45 $q45)
+                      (mol Q54 $q54))
+               $rules
+               $events)
+      (candidate $ct (rule sr4 Q0 Q5 Q05 Q10) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol Q0 $q0)
+                   (mol Q1 $q1)
+                   (mol Q2 $q2)
+                   (mol Q3 $q3)
+                   (mol Q4 $q4)
+                   (mol Q5 $q5)
+                   (mol Q6 $q6)
+                   (mol Q7 $q7)
+                   (mol Q01 $q01)
+                   (mol Q10 $q10)
+                   (mol Q45 $q45)
+                   (mol Q54 $q54))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol Q0 $q0)
+                      (mol Q1 $q1)
+                      (mol Q2 $q2)
+                      (mol Q3 $q3)
+                      (mol Q4 $q4)
+                      (mol Q5 $q5)
+                      (mol Q6 $q6)
+                      (mol Q7 $q7)
+                      (mol Q01 $q01)
+                      (mol Q10 $q10)
+                      (mol Q45 $q45)
+                      (mol Q54 $q54))
+               $rules
+               $events)
+      (candidate $ct (rule nr4 Q0 Q5 Q05 None) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol Q0 $q0)
+                   (mol Q1 $q1)
+                   (mol Q2 $q2)
+                   (mol Q3 $q3)
+                   (mol Q4 $q4)
+                   (mol Q5 $q5)
+                   (mol Q6 $q6)
+                   (mol Q7 $q7)
+                   (mol Q01 $q01)
+                   (mol Q10 $q10)
+                   (mol Q45 $q45)
+                   (mol Q54 $q54))
+            $rules
+            $events))
+
 ; --- 12-molecule S-family chamber-tick-with-candidate-accum clauses (seed-17 cap-4 rich bridge) ---
 
 ; rr0 with cat S10 (random-polymer): productive
@@ -5954,6 +6093,94 @@
    (selected-candidate-from-list-5
      (exp03-cap4-rich-chamber $family seed-11)
      (exp03-cap5-rich-capped-candidates $family seed-11)))
+
+(= (exp03-cap5-rich-after-15 $family seed-11)
+   (chamber-run-5cap-15 (exp03-cap4-rich-chamber $family seed-11)))
+
+(= (exp03-cap5-rich-event-count $family seed-11)
+   (event-count (trace-events (exp03-cap5-rich-after-15 $family seed-11))))
+
+(= (exp03-cap5-rich-tick $family seed-11)
+   (state-tick (chamber-state (exp03-cap5-rich-after-15 $family seed-11))))
+
+(= (exp03-cap5-rich-abundances $family seed-11)
+   (chamber-abundance-snapshot (exp03-cap5-rich-after-15 $family seed-11)))
+
+(= (exp03-cap5-rich-replay-15 $family seed-11)
+   (chamber-run-5cap-5 (chamber-run-5cap-10 (exp03-cap4-rich-chamber $family seed-11))))
+
+(= (exp03-cap5-rich-replay-ok? $family seed-11)
+   (== (exp03-cap5-rich-after-15 $family seed-11)
+       (exp03-cap5-rich-replay-15 $family seed-11)))
+
+(= (exp03-cap5-rich-controls-discriminate? seed-11)
+   (and (> (exp03-cap5-rich-event-count random seed-11)
+           (exp03-cap5-rich-event-count shuffled seed-11))
+        (> (exp03-cap5-rich-event-count random seed-11)
+           (exp03-cap5-rich-event-count no-catalysis seed-11))))
+
+(= (exp03-cap5-rich-run-config seed-11 random)
+   (make-run-config exp03-cap5-rich-seed-11-random exp03 (seed-11) 15 (candidate-cap 5 1) random))
+
+(= (exp03-cap5-rich-run-config seed-11 shuffled)
+   (make-run-config exp03-cap5-rich-seed-11-shuffled exp03 (seed-11) 15 (candidate-cap 5 1) shuffled))
+
+(= (exp03-cap5-rich-run-config seed-11 no-catalysis)
+   (make-run-config exp03-cap5-rich-seed-11-no-catalysis exp03 (seed-11) 15 (candidate-cap 5 1) no-catalysis))
+
+(= (exp03-cap5-rich-run-manifest seed-11 random)
+   (make-run-manifest exp03-cap5-rich-seed-11-random config-hash-exp03-cap5-rich-seed-11-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap5-rich-run-manifest seed-11 shuffled)
+   (make-run-manifest exp03-cap5-rich-seed-11-shuffled config-hash-exp03-cap5-rich-seed-11-shuffled petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap5-rich-run-manifest seed-11 no-catalysis)
+   (make-run-manifest exp03-cap5-rich-seed-11-no-catalysis config-hash-exp03-cap5-rich-seed-11-no-catalysis petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap5-rich-metrics seed-11 $family)
+   ((metric dynamic-event-count (run-config-id (exp03-cap5-rich-run-config seed-11 $family)) (exp03-cap5-rich-event-count $family seed-11))
+    (metric dynamic-tick-count (run-config-id (exp03-cap5-rich-run-config seed-11 $family)) 15)
+    (metric source-exp02-rule-count (run-config-id (exp03-cap5-rich-run-config seed-11 $family)) 6)
+    (metric dynamic-candidate-cap (run-config-id (exp03-cap5-rich-run-config seed-11 $family)) 5)
+    (metric rich-state-molecule-count (run-config-id (exp03-cap5-rich-run-config seed-11 $family)) 12)
+    (metric cap5-distractor-rule (run-config-id (exp03-cap5-rich-run-config seed-11 $family)) fifth-candidate-outside-state-shape)))
+
+(= (exp03-cap5-rich-run-summary seed-11 random)
+   (make-run-summary exp03-cap5-rich-seed-11-random passed cap5-rich-seed-11-five-candidate-dynamics True))
+
+(= (exp03-cap5-rich-run-summary seed-11 shuffled)
+   (make-run-summary exp03-cap5-rich-seed-11-shuffled passed cap5-rich-seed-11-shuffled-partial-productive True))
+
+(= (exp03-cap5-rich-run-summary seed-11 no-catalysis)
+   (make-run-summary exp03-cap5-rich-seed-11-no-catalysis passed cap5-rich-seed-11-no-catalysis-control-zero-events True))
+
+(= (exp03-cap5-rich-acs-candidates seed-11 $family)
+   (exp02-random-acs-candidates-6 seed-11))
+
+(= (exp03-cap5-rich-run-record seed-11 $family)
+   (make-run-record
+     (run-config-id (exp03-cap5-rich-run-config seed-11 $family))
+     (exp03-cap5-rich-run-config seed-11 $family)
+     (exp03-cap5-rich-run-manifest seed-11 $family)
+     (trace-events (exp03-cap5-rich-after-15 $family seed-11))
+     ((state-abundance-snapshot (exp03-cap4-rich-initial-state seed-11))
+      (chamber-abundance-snapshot (exp03-cap5-rich-after-15 $family seed-11)))
+     (exp03-cap5-rich-metrics seed-11 $family)
+     (exp03-cap5-rich-acs-candidates seed-11 $family)
+     ()
+     (exp03-cap5-rich-run-summary seed-11 $family)))
+
+(= (exp03-cap5-rich-run-records seed-11)
+   ((exp03-cap5-rich-run-record seed-11 random)
+    (exp03-cap5-rich-run-record seed-11 shuffled)
+    (exp03-cap5-rich-run-record seed-11 no-catalysis)))
+
+(= (exp03-cap5-rich-run-records-complete? seed-11)
+   (and (run-record-passed? (exp03-cap5-rich-run-record seed-11 random))
+        (and (run-record-passed? (exp03-cap5-rich-run-record seed-11 shuffled))
+             (and (run-record-passed? (exp03-cap5-rich-run-record seed-11 no-catalysis))
+                  (and (exp03-cap5-rich-controls-discriminate? seed-11)
+                       (exp03-cap5-rich-replay-ok? random seed-11))))))
 
 (= (exp03-cap4-rich-after-12 $family seed-11)
    (chamber-run-4cap-12 (exp03-cap4-rich-chamber $family seed-11)))
