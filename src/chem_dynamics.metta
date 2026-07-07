@@ -338,6 +338,36 @@
 (= (chamber-run-5cap-15 $chamber)
    (chamber-run-5cap-5 (chamber-run-5cap-10 $chamber)))
 
+; Cap-6 chamber-run wrappers: each tick selects 1 of 6 candidates.
+(= (chamber-tick-generated-6-accum $cap $chamber)
+   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
+     (chamber-tick-with-candidate-accum
+       $chamber
+       (selected-candidate-from-list-6
+         $chamber
+         (candidate-pool-candidates $candidate-pool)))))
+
+(= (chamber-run-6cap-1 $chamber)
+   (chamber-tick-generated-6-accum (exp00-candidate-cap-6) $chamber))
+
+(= (chamber-run-6cap-2 $chamber)
+   (chamber-run-6cap-1 (chamber-run-6cap-1 $chamber)))
+
+(= (chamber-run-6cap-3 $chamber)
+   (chamber-run-6cap-1 (chamber-run-6cap-2 $chamber)))
+
+(= (chamber-run-6cap-4 $chamber)
+   (chamber-run-6cap-1 (chamber-run-6cap-3 $chamber)))
+
+(= (chamber-run-6cap-5 $chamber)
+   (chamber-run-6cap-1 (chamber-run-6cap-4 $chamber)))
+
+(= (chamber-run-6cap-6 $chamber)
+   (chamber-run-6cap-1 (chamber-run-6cap-5 $chamber)))
+
+(= (chamber-run-6cap-12 $chamber)
+   (chamber-run-6cap-6 (chamber-run-6cap-6 $chamber)))
+
 (= (chamber-run-16 $chamber)
    (chamber-run-1 (chamber-run-1 (chamber-run-1 (chamber-run-1
      (chamber-run-1 (chamber-run-1 (chamber-run-10 $chamber))))))))
@@ -4498,6 +4528,114 @@
             $rules
             $events))
 
+; rr5 is the sixth seed-11/Q-family source rule.  It is intentionally outside
+; this 12-molecule rich-state bridge (product Q16), so cap-6 can expose the
+; full six-rule source pool while preserving safe no-op tick advancement.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol Q0 $q0)
+                      (mol Q1 $q1)
+                      (mol Q2 $q2)
+                      (mol Q3 $q3)
+                      (mol Q4 $q4)
+                      (mol Q5 $q5)
+                      (mol Q6 $q6)
+                      (mol Q7 $q7)
+                      (mol Q01 $q01)
+                      (mol Q10 $q10)
+                      (mol Q45 $q45)
+                      (mol Q54 $q54))
+               $rules
+               $events)
+      (candidate $ct (rule rr5 Q1 Q6 Q16 Q3) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol Q0 $q0)
+                   (mol Q1 $q1)
+                   (mol Q2 $q2)
+                   (mol Q3 $q3)
+                   (mol Q4 $q4)
+                   (mol Q5 $q5)
+                   (mol Q6 $q6)
+                   (mol Q7 $q7)
+                   (mol Q01 $q01)
+                   (mol Q10 $q10)
+                   (mol Q45 $q45)
+                   (mol Q54 $q54))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol Q0 $q0)
+                      (mol Q1 $q1)
+                      (mol Q2 $q2)
+                      (mol Q3 $q3)
+                      (mol Q4 $q4)
+                      (mol Q5 $q5)
+                      (mol Q6 $q6)
+                      (mol Q7 $q7)
+                      (mol Q01 $q01)
+                      (mol Q10 $q10)
+                      (mol Q45 $q45)
+                      (mol Q54 $q54))
+               $rules
+               $events)
+      (candidate $ct (rule sr5 Q1 Q6 Q16 Q54) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol Q0 $q0)
+                   (mol Q1 $q1)
+                   (mol Q2 $q2)
+                   (mol Q3 $q3)
+                   (mol Q4 $q4)
+                   (mol Q5 $q5)
+                   (mol Q6 $q6)
+                   (mol Q7 $q7)
+                   (mol Q01 $q01)
+                   (mol Q10 $q10)
+                   (mol Q45 $q45)
+                   (mol Q54 $q54))
+            $rules
+            $events))
+
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol Q0 $q0)
+                      (mol Q1 $q1)
+                      (mol Q2 $q2)
+                      (mol Q3 $q3)
+                      (mol Q4 $q4)
+                      (mol Q5 $q5)
+                      (mol Q6 $q6)
+                      (mol Q7 $q7)
+                      (mol Q01 $q01)
+                      (mol Q10 $q10)
+                      (mol Q45 $q45)
+                      (mol Q54 $q54))
+               $rules
+               $events)
+      (candidate $ct (rule nr5 Q1 Q6 Q16 None) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol Q0 $q0)
+                   (mol Q1 $q1)
+                   (mol Q2 $q2)
+                   (mol Q3 $q3)
+                   (mol Q4 $q4)
+                   (mol Q5 $q5)
+                   (mol Q6 $q6)
+                   (mol Q7 $q7)
+                   (mol Q01 $q01)
+                   (mol Q10 $q10)
+                   (mol Q45 $q45)
+                   (mol Q54 $q54))
+            $rules
+            $events))
+
 ; --- 12-molecule S-family chamber-tick-with-candidate-accum clauses (seed-17 cap-4 rich bridge) ---
 
 ; rr0 with cat S10 (random-polymer): productive
@@ -6790,6 +6928,75 @@
              (and (run-record-passed? (exp03-cap5-rich-run-record seed-11 no-catalysis))
                   (and (exp03-cap5-rich-controls-discriminate? seed-11)
                        (exp03-cap5-rich-replay-ok? random seed-11))))))
+
+; Cap-6 bridge over the same seed-11/Q-family rich state.  This is the first
+; exp03 dynamic run where the full six-rule source pool is visible to per-tick
+; deterministic selection.  The sixth rule is outside the 12-molecule state
+; shape and therefore advances as a bounded no-op, while rr0..rr3 remain
+; productive when their catalysts are present.
+(= (exp03-cap6-rich-capped-candidates $family seed-11)
+   (candidate-pool-candidates
+     (bounded-candidate-pool
+       (exp00-candidate-cap-6)
+       (exp03-cap4-rich-chamber $family seed-11))))
+
+(= (exp03-cap6-rich-selected-candidate $family seed-11)
+   (selected-candidate-from-list-6
+     (exp03-cap4-rich-chamber $family seed-11)
+     (exp03-cap6-rich-capped-candidates $family seed-11)))
+
+(= (exp03-cap6-rich-after-12 $family seed-11)
+   (chamber-run-6cap-12 (exp03-cap4-rich-chamber $family seed-11)))
+
+(= (exp03-cap6-rich-event-count $family seed-11)
+   (event-count (trace-events (exp03-cap6-rich-after-12 $family seed-11))))
+
+(= (exp03-cap6-rich-tick $family seed-11)
+   (state-tick (chamber-state (exp03-cap6-rich-after-12 $family seed-11))))
+
+(= (exp03-cap6-rich-abundances $family seed-11)
+   (chamber-abundance-snapshot (exp03-cap6-rich-after-12 $family seed-11)))
+
+(= (exp03-cap6-rich-replay-12 $family seed-11)
+   (chamber-run-6cap-6 (chamber-run-6cap-6 (exp03-cap4-rich-chamber $family seed-11))))
+
+(= (exp03-cap6-rich-replay-ok? $family seed-11)
+   (== (exp03-cap6-rich-after-12 $family seed-11)
+       (exp03-cap6-rich-replay-12 $family seed-11)))
+
+(= (exp03-cap6-rich-run-config seed-11 random)
+   (make-run-config exp03-cap6-rich-seed-11-random exp03 (seed-11) 12 (candidate-cap 6 1) random))
+
+(= (exp03-cap6-rich-run-manifest seed-11 random)
+   (make-run-manifest exp03-cap6-rich-seed-11-random config-hash-exp03-cap6-rich-seed-11-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap6-rich-metrics seed-11 random)
+   ((metric dynamic-event-count exp03-cap6-rich-seed-11-random (exp03-cap6-rich-event-count random seed-11))
+    (metric dynamic-tick-count exp03-cap6-rich-seed-11-random 12)
+    (metric source-exp02-rule-count exp03-cap6-rich-seed-11-random 6)
+    (metric dynamic-candidate-cap exp03-cap6-rich-seed-11-random 6)
+    (metric rich-state-molecule-count exp03-cap6-rich-seed-11-random 12)
+    (metric cap6-sixth-candidate exp03-cap6-rich-seed-11-random bounded-outside-state-shape)))
+
+(= (exp03-cap6-rich-run-summary seed-11 random)
+   (make-run-summary exp03-cap6-rich-seed-11-random passed cap6-rich-seed-11-six-candidate-dynamics True))
+
+(= (exp03-cap6-rich-run-record seed-11 random)
+   (make-run-record
+     exp03-cap6-rich-seed-11-random
+     (exp03-cap6-rich-run-config seed-11 random)
+     (exp03-cap6-rich-run-manifest seed-11 random)
+     (trace-events (exp03-cap6-rich-after-12 random seed-11))
+     ((state-abundance-snapshot (exp03-cap4-rich-initial-state seed-11))
+      (chamber-abundance-snapshot (exp03-cap6-rich-after-12 random seed-11)))
+     (exp03-cap6-rich-metrics seed-11 random)
+     (exp02-random-acs-candidates-6 seed-11)
+     ()
+     (exp03-cap6-rich-run-summary seed-11 random)))
+
+(= (exp03-cap6-rich-run-record-complete? seed-11)
+   (and (run-record-passed? (exp03-cap6-rich-run-record seed-11 random))
+        (exp03-cap6-rich-replay-ok? random seed-11)))
 
 (= (exp03-cap4-rich-after-12 $family seed-11)
    (chamber-run-4cap-12 (exp03-cap4-rich-chamber $family seed-11)))
