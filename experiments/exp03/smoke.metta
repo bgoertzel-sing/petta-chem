@@ -1079,3 +1079,18 @@
         (event 9 rr2 S4 S5 S45 S54)
         (event 10 rr3 S6 S7 S54 S45)
         (event 11 rr1 S2 S3 S10 S01)))
+
+; Cap-4 rich bridge extension: seed-11 via Q-family six-rule source pool.
+; Candidate cap 4 exposes the first four source rules from the six-rule family;
+; the deterministic selector phase is (11+tick)%4 = 3,0,1,2...
+!(test (exp03-cap4-rich-event-count random seed-11) 12)
+!(test (exp03-cap4-rich-event-count no-catalysis seed-11) 0)
+!(test (exp03-cap4-rich-tick random seed-11) 12)
+!(test (exp03-cap4-rich-abundances random seed-11)
+       (abundance-snapshot 12 ((mol Q0 0) (mol Q1 0) (mol Q2 0) (mol Q3 0)
+                               (mol Q4 0) (mol Q5 0) (mol Q6 0) (mol Q7 0)
+                               (mol Q01 4) (mol Q10 3) (mol Q45 4) (mol Q54 3))))
+!(test (exp03-cap4-rich-reactant-exhausted? seed-11) True)
+!(test (exp03-cap4-rich-controls-discriminate? seed-11) True)
+!(test (exp03-cap4-rich-replay-ok? random seed-11) True)
+!(test (exp03-cap4-rich-run-records-complete? seed-11) True)
