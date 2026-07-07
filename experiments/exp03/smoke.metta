@@ -1083,6 +1083,16 @@
 ; Cap-4 rich bridge extension: seed-11 via Q-family six-rule source pool.
 ; Candidate cap 4 exposes the first four source rules from the six-rule family;
 ; the deterministic selector phase is (11+tick)%4 = 3,0,1,2...
+; The cap-5 exploratory seam bounds the same six-rule rich-state pool to five
+; candidates and selects deterministically with (11+0)%5 = 1.
+!(test (exp03-cap5-rich-capped-candidates random seed-11)
+       ((candidate 0 (rule rr1 Q2 Q3 Q10 Q01) 1)
+        (candidate 0 (rule rr0 Q0 Q1 Q01 Q10) 1)
+        (candidate 0 (rule rr2 Q4 Q5 Q45 Q54) 1)
+        (candidate 0 (rule rr3 Q6 Q7 Q54 Q45) 1)
+        (candidate 0 (rule rr4 Q0 Q5 Q05 Q2) 1)))
+!(test (exp03-cap5-rich-selected-candidate random seed-11)
+       (candidate 0 (rule rr0 Q0 Q1 Q01 Q10) 1))
 !(test (exp03-cap4-rich-event-count random seed-11) 12)
 !(test (exp03-cap4-rich-event-count no-catalysis seed-11) 0)
 !(test (exp03-cap4-rich-tick random seed-11) 12)

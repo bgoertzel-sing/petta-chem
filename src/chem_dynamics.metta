@@ -5941,6 +5941,20 @@
                  (exp03-exp02-full-source-rules seed-11 $family)
                  ()))
 
+; Cap-5 exploratory seam over the same richer 12-molecule seed-11 state.
+; This keeps the chemistry PeTTa-native and verifies that six-rule source pools
+; can be bounded to five per-tick candidates before adding longer cap-5 dynamics.
+(= (exp03-cap5-rich-capped-candidates $family seed-11)
+   (candidate-pool-candidates
+     (bounded-candidate-pool
+       (exp00-candidate-cap-5)
+       (exp03-cap4-rich-chamber $family seed-11))))
+
+(= (exp03-cap5-rich-selected-candidate $family seed-11)
+   (selected-candidate-from-list-5
+     (exp03-cap4-rich-chamber $family seed-11)
+     (exp03-cap5-rich-capped-candidates $family seed-11)))
+
 (= (exp03-cap4-rich-after-12 $family seed-11)
    (chamber-run-4cap-12 (exp03-cap4-rich-chamber $family seed-11)))
 

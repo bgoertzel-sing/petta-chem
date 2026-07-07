@@ -37,6 +37,10 @@
 
 !(test (seeded-choice-2 seed-8 0) 0)
 
+!(test (seeded-choice-5 seed-7 0) 2)
+
+!(test (seeded-choice-5 seed-8 0) 3)
+
 !(test (exp00-initial-state seed-7)
        (state 0 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1)))
 
@@ -121,6 +125,25 @@
         (candidate 0 (rule r0 A B AB Cat) 1)
         (candidate 0 (rule r2 A Cat ACat B) 1)))
 
+!(test (exp00-candidate-cap-5)
+       (candidate-cap 5 1))
+
+!(test (cap-candidate-pool
+         5
+         (candidate-pool
+           0
+           ((exp00-distractor-candidate seed-7)
+            (exp00-candidate seed-7)
+            (exp00-third-candidate seed-7)
+            (exp00-distractor-candidate seed-7)
+            (exp00-candidate seed-7)
+            (exp00-third-candidate seed-7))))
+       ((candidate 0 (rule r1 B Cat BCat A) 1)
+        (candidate 0 (rule r0 A B AB Cat) 1)
+        (candidate 0 (rule r2 A Cat ACat B) 1)
+        (candidate 0 (rule r1 B Cat BCat A) 1)
+        (candidate 0 (rule r0 A B AB Cat) 1)))
+
 !(test (select-candidate-2
          seed-7
          0
@@ -137,6 +160,16 @@
 
 !(test (exp00-sampled-candidate seed-7)
        (candidate 0 (rule r0 A B AB Cat) 1))
+
+!(test (select-candidate-5
+         seed-7
+         0
+         (exp00-distractor-candidate seed-7)
+         (exp00-candidate seed-7)
+         (exp00-third-candidate seed-7)
+         (exp00-distractor-candidate seed-7)
+         (exp00-candidate seed-7))
+       (candidate 0 (rule r2 A Cat ACat B) 1))
 
 !(test (selected-candidate-from-chamber-2
          (exp00-initial-chamber seed-7)

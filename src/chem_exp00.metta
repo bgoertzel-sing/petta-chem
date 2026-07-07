@@ -201,6 +201,21 @@
                $candidate-2
                $candidate-3))))
 
+; 5-candidate deterministic seam for cap-5 pools.
+(= (seeded-choice-5 $seed $tick)
+   (#mod (+ (seed-number $seed) $tick) 5))
+
+(= (select-candidate-5 $seed $tick $candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4)
+   (if (== (seeded-choice-5 $seed $tick) 0)
+       $candidate-0
+       (if (== (seeded-choice-5 $seed $tick) 1)
+           $candidate-1
+           (if (== (seeded-choice-5 $seed $tick) 2)
+               $candidate-2
+               (if (== (seeded-choice-5 $seed $tick) 3)
+                   $candidate-3
+                   $candidate-4)))))
+
 (= (cap-candidate-pool 0 (candidate-pool $tick $candidates))
    ())
 
@@ -251,6 +266,15 @@
 
 (= (cap-candidate-pool 4 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6 $candidate-7)))
    ($candidate-0 $candidate-1 $candidate-2 $candidate-3))
+
+(= (cap-candidate-pool 5 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4)))
+   ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4))
+
+(= (cap-candidate-pool 5 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5)))
+   ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4))
+
+(= (cap-candidate-pool 5 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6 $candidate-7)))
+   ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4))
 
 (= (generate-candidate-pool
       (chamber $id (state $tick $seed $m0 $m1 $m2 $m3) ($rule-0) $events))
@@ -489,6 +513,27 @@
          $chamber
          (candidate-pool-candidates $candidate-pool)))))
 
+; 5-candidate deterministic selection from a bounded pool.
+(= (selected-candidate-from-list-5
+      (chamber $id $state $rules $events)
+      ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4))
+   (select-candidate-5
+     (state-seed $state)
+     (state-tick $state)
+     $candidate-0
+     $candidate-1
+     $candidate-2
+     $candidate-3
+     $candidate-4))
+
+(= (chamber-tick-generated-5 $cap $chamber)
+   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
+     (chamber-tick-with-candidate
+       $chamber
+       (selected-candidate-from-list-5
+         $chamber
+         (candidate-pool-candidates $candidate-pool)))))
+
 ; ----- exp00 fixture -----
 
 (= (exp00-rule r0)
@@ -525,6 +570,9 @@
 
 (= (exp00-candidate-cap-4)
    (make-candidate-cap 4 1))
+
+(= (exp00-candidate-cap-5)
+   (make-candidate-cap 5 1))
 
 (= (exp00-generated-candidate-pool $seed)
    (generate-candidate-pool (exp00-initial-chamber $seed)))
