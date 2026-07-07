@@ -1050,13 +1050,33 @@
      (run-record-ablations $record)
      (run-record-summary $record)))
 
+(= (run-export-config
+      (run-export $config $manifest $events $abundances $metrics $acs-candidates $ablations $summary))
+   $config)
+
+(= (run-export-manifest
+      (run-export $config $manifest $events $abundances $metrics $acs-candidates $ablations $summary))
+   $manifest)
+
 (= (run-export-events
       (run-export $config $manifest $events $abundances $metrics $acs-candidates $ablations $summary))
    $events)
 
+(= (run-export-abundances
+      (run-export $config $manifest $events $abundances $metrics $acs-candidates $ablations $summary))
+   $abundances)
+
 (= (run-export-metrics
       (run-export $config $manifest $events $abundances $metrics $acs-candidates $ablations $summary))
    $metrics)
+
+(= (run-export-acs-candidates
+      (run-export $config $manifest $events $abundances $metrics $acs-candidates $ablations $summary))
+   $acs-candidates)
+
+(= (run-export-ablations
+      (run-export $config $manifest $events $abundances $metrics $acs-candidates $ablations $summary))
+   $ablations)
 
 (= (run-export-summary
       (run-export $config $manifest $events $abundances $metrics $acs-candidates $ablations $summary))
@@ -6703,6 +6723,9 @@
      ()
      (exp03-cap5-productive-run-summary seed-13 random-polymer)))
 
+(= (exp03-cap5-productive-run-export seed-13 random-polymer)
+   (make-run-export (exp03-cap5-productive-run-record seed-13 random-polymer)))
+
 (= (exp03-cap5-productive-run-record-complete? seed-13)
    (and (run-record-passed? (exp03-cap5-productive-run-record seed-13 random-polymer))
         (exp03-cap5-productive-replay-ok? random-polymer seed-13)))
@@ -7193,6 +7216,9 @@
      ()
      (exp03-cap6-productive-run-summary seed-11 random)))
 
+(= (exp03-cap6-productive-run-export seed-11 random)
+   (make-run-export (exp03-cap6-productive-run-record seed-11 random)))
+
 (= (exp03-cap6-productive-run-record-complete? seed-11)
    (and (run-record-passed? (exp03-cap6-productive-run-record seed-11 random))
         (and (exp03-cap6-productive-replay-ok? random seed-11)
@@ -7262,6 +7288,19 @@
      (exp02-random-acs-candidates-6 seed-11)
      ()
      (exp03-cap6-rich-run-summary seed-11 random)))
+
+(= (exp03-cap6-rich-run-export seed-11 random)
+   (make-run-export (exp03-cap6-rich-run-record seed-11 random)))
+
+(= (exp03-productive-cap-run-exports)
+   ((exp03-cap5-productive-run-export seed-13 random-polymer)
+    (exp03-cap6-rich-run-export seed-11 random)
+    (exp03-cap6-productive-run-export seed-11 random)))
+
+(= (exp03-productive-cap-run-exports-complete?)
+   (and (== (event-count (run-export-events (exp03-cap5-productive-run-export seed-13 random-polymer))) 10)
+        (and (== (event-count (run-export-events (exp03-cap6-rich-run-export seed-11 random))) 7)
+             (== (event-count (run-export-events (exp03-cap6-productive-run-export seed-11 random))) 12))))
 
 (= (exp03-cap6-rich-run-record-complete? seed-11)
    (and (run-record-passed? (exp03-cap6-rich-run-record seed-11 random))
