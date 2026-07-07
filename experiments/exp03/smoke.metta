@@ -1040,3 +1040,42 @@
                                 (mol R01 3) (mol R10 3) (mol R45 3) (mol R54 1)))))
 
 !(test (exp03-cap4-rich-run-records-complete? seed-13) True)
+
+
+; Cap-4 rich bridge extension: seed-17 via generated S-family rules.
+; Seed-17 has the same cap-4 selector phase as seed-13: (17+tick)%4 = 1,2,3,0...
+!(test (exp03-cap4-rich-event-count random-polymer seed-17) 12)
+!(test (exp03-cap4-rich-event-count shuffled-catalysts seed-17) 8)
+!(test (exp03-cap4-rich-event-count no-catalysis seed-17) 0)
+
+!(test (exp03-cap4-rich-tick random-polymer seed-17) 12)
+!(test (exp03-cap4-rich-abundances random-polymer seed-17)
+       (abundance-snapshot 12 ((mol S0 0) (mol S1 0) (mol S2 0) (mol S3 0)
+                                (mol S4 0) (mol S5 0) (mol S6 0) (mol S7 0)
+                                (mol S01 3) (mol S10 4) (mol S45 3) (mol S54 4))))
+!(test (exp03-cap4-rich-abundances shuffled-catalysts seed-17)
+       (abundance-snapshot 12 ((mol S0 0) (mol S1 0) (mol S2 1) (mol S3 1)
+                                (mol S4 0) (mol S5 0) (mol S6 3) (mol S7 3)
+                                (mol S01 3) (mol S10 3) (mol S45 3) (mol S54 1))))
+!(test (exp03-cap4-rich-abundances no-catalysis seed-17)
+       (abundance-snapshot 12 ((mol S0 3) (mol S1 3) (mol S2 3) (mol S3 3)
+                                (mol S4 3) (mol S5 3) (mol S6 3) (mol S7 3)
+                                (mol S01 0) (mol S10 1) (mol S45 0) (mol S54 1))))
+
+!(test (exp03-cap4-rich-reactant-exhausted? seed-17) True)
+!(test (exp03-cap4-rich-controls-discriminate? seed-17) True)
+!(test (exp03-cap4-rich-replay-ok? random-polymer seed-17) True)
+!(test (exp03-cap4-rich-run-records-complete? seed-17) True)
+!(test (trace-events (exp03-cap4-rich-after-12 random-polymer seed-17))
+       ((event 0 rr0 S0 S1 S01 S10)
+        (event 1 rr2 S4 S5 S45 S54)
+        (event 2 rr3 S6 S7 S54 S45)
+        (event 3 rr1 S2 S3 S10 S01)
+        (event 4 rr0 S0 S1 S01 S10)
+        (event 5 rr2 S4 S5 S45 S54)
+        (event 6 rr3 S6 S7 S54 S45)
+        (event 7 rr1 S2 S3 S10 S01)
+        (event 8 rr0 S0 S1 S01 S10)
+        (event 9 rr2 S4 S5 S45 S54)
+        (event 10 rr3 S6 S7 S54 S45)
+        (event 11 rr1 S2 S3 S10 S01)))
