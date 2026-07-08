@@ -6315,3 +6315,50 @@
         (cycle-scan-summary-row 7 generated-unplanted-control 40 120 0)
         (cycle-scan-summary-note scanners-validated-by-planted-cycle-fixtures)
         (cycle-scan-summary-note no-generated-unplanted-k4-through-k7-cycles))))
+
+; ----- compact cycle-scan report artifact/export hooks -----
+;
+; These expose the generated-unplanted k=4..7 scan report as PeTTa-queryable
+; file atoms.  A thin host writer can serialize the queried atoms, but the
+; report content and completeness predicate stay in PeTTa.
+
+(= (exp02-cycle-scan-report-summary)
+   (exp02-cycle-scan-report
+      generated-unplanted-control
+      cycle-sizes-4-through-7
+      (exp02-cycle-scan-summary-report)
+      (complete? (exp02-cycle-scan-summary-report-complete?))))
+
+(= (exp02-cycle-scan-report-bundle)
+   (report-file-bundle
+     exp02-cycle-scan-summary-report
+     ((run-file CYCLE_SCAN_REPORT.metta (exp02-cycle-scan-summary-report))
+      (run-file SUMMARY.metta (exp02-cycle-scan-report-summary)))))
+
+(= (report-file-bundle-id (report-file-bundle $report-id $files))
+   $report-id)
+
+(= (report-file-bundle-files (report-file-bundle $report-id $files))
+   $files)
+
+(= (report-file-bundle-report-file
+      (report-file-bundle $report-id
+        ((run-file CYCLE_SCAN_REPORT.metta $report)
+         (run-file SUMMARY.metta $summary))))
+   (run-file CYCLE_SCAN_REPORT.metta $report))
+
+(= (report-file-bundle-summary-file
+      (report-file-bundle $report-id
+        ((run-file CYCLE_SCAN_REPORT.metta $report)
+         (run-file SUMMARY.metta $summary))))
+   (run-file SUMMARY.metta $summary))
+
+(= (exp02-cycle-scan-report-bundle-complete?)
+   (and (== (report-file-bundle-id (exp02-cycle-scan-report-bundle))
+            exp02-cycle-scan-summary-report)
+        (and (== (run-file-name
+                   (report-file-bundle-report-file (exp02-cycle-scan-report-bundle)))
+                 CYCLE_SCAN_REPORT.metta)
+             (== (run-file-atoms
+                   (report-file-bundle-summary-file (exp02-cycle-scan-report-bundle)))
+                 (exp02-cycle-scan-report-summary)))))

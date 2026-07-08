@@ -1653,3 +1653,31 @@
         (cycle-scan-summary-note no-generated-unplanted-k4-through-k7-cycles)))
 
 !(test (exp02-cycle-scan-summary-report-complete?) True)
+
+!(test (report-file-bundle-id (exp02-cycle-scan-report-bundle))
+       exp02-cycle-scan-summary-report)
+
+!(test (run-file-name (report-file-bundle-report-file (exp02-cycle-scan-report-bundle)))
+       CYCLE_SCAN_REPORT.metta)
+
+!(test (run-file-atoms (report-file-bundle-report-file (exp02-cycle-scan-report-bundle)))
+       ((cycle-scan-summary-row 4 generated-unplanted-control 40 120 0)
+        (cycle-scan-summary-row 5 generated-unplanted-control 40 120 0)
+        (cycle-scan-summary-row 6 generated-unplanted-control 40 120 0)
+        (cycle-scan-summary-row 7 generated-unplanted-control 40 120 0)
+        (cycle-scan-summary-note scanners-validated-by-planted-cycle-fixtures)
+        (cycle-scan-summary-note no-generated-unplanted-k4-through-k7-cycles)))
+
+!(test (run-file-atoms (report-file-bundle-summary-file (exp02-cycle-scan-report-bundle)))
+       (exp02-cycle-scan-report
+          generated-unplanted-control
+          cycle-sizes-4-through-7
+          ((cycle-scan-summary-row 4 generated-unplanted-control 40 120 0)
+           (cycle-scan-summary-row 5 generated-unplanted-control 40 120 0)
+           (cycle-scan-summary-row 6 generated-unplanted-control 40 120 0)
+           (cycle-scan-summary-row 7 generated-unplanted-control 40 120 0)
+           (cycle-scan-summary-note scanners-validated-by-planted-cycle-fixtures)
+           (cycle-scan-summary-note no-generated-unplanted-k4-through-k7-cycles))
+          (complete? True)))
+
+!(test (exp02-cycle-scan-report-bundle-complete?) True)
