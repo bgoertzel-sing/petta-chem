@@ -1642,3 +1642,14 @@
 !(test (exp02-septuple-active-count-8 seed-167 no-catalysis) 0)
 
 !(test (exp02-septuple-active-count-8 seed-199 shuffled-catalysts) 0)
+
+; Compact human-facing provenance report over generated-unplanted cycle scans.
+!(test (exp02-cycle-scan-summary-report)
+       ((cycle-scan-summary-row 4 generated-unplanted-control 40 120 0)
+        (cycle-scan-summary-row 5 generated-unplanted-control 40 120 0)
+        (cycle-scan-summary-row 6 generated-unplanted-control 40 120 0)
+        (cycle-scan-summary-row 7 generated-unplanted-control 40 120 0)
+        (cycle-scan-summary-note scanners-validated-by-planted-cycle-fixtures)
+        (cycle-scan-summary-note no-generated-unplanted-k4-through-k7-cycles)))
+
+!(test (exp02-cycle-scan-summary-report-complete?) True)

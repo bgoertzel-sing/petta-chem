@@ -6296,3 +6296,22 @@
       1
       1
       (exp02-planted-septuple-active-count)))
+
+; ----- compact cycle-scan summary report for human-facing provenance -----
+
+(= (exp02-cycle-scan-summary-report)
+   ((cycle-scan-summary-row 4 generated-unplanted-control 40 120 (exp02-generated-unplanted-quadruple-total))
+    (cycle-scan-summary-row 5 generated-unplanted-control 40 120 (exp02-generated-unplanted-quintuple-total))
+    (cycle-scan-summary-row 6 generated-unplanted-control 40 120 (exp02-generated-unplanted-sextuple-total))
+    (cycle-scan-summary-row 7 generated-unplanted-control 40 120 (exp02-generated-unplanted-septuple-total))
+    (cycle-scan-summary-note scanners-validated-by-planted-cycle-fixtures)
+    (cycle-scan-summary-note no-generated-unplanted-k4-through-k7-cycles)))
+
+(= (exp02-cycle-scan-summary-report-complete?)
+   (== (exp02-cycle-scan-summary-report)
+       ((cycle-scan-summary-row 4 generated-unplanted-control 40 120 0)
+        (cycle-scan-summary-row 5 generated-unplanted-control 40 120 0)
+        (cycle-scan-summary-row 6 generated-unplanted-control 40 120 0)
+        (cycle-scan-summary-row 7 generated-unplanted-control 40 120 0)
+        (cycle-scan-summary-note scanners-validated-by-planted-cycle-fixtures)
+        (cycle-scan-summary-note no-generated-unplanted-k4-through-k7-cycles))))

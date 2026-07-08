@@ -76,6 +76,17 @@ The 7-rule scanner (`product-catalyst-closed-7?`) checks product(r0)=catalyst(r1
 - All 40 generated-unplanted seeds × 3 families = 120 family records scan to 0 active septuples, confirming the pair/triple/quadruple/quintuple/sextuple scanner's zero-active result extends to 7-rule catalytic cycles.
 - This completes systematic cycle-size coverage for 8-rule families: all cycle sizes k=2 through k=7 produce zero active cycles across all 120 generated-unplanted family records.
 
+## Compact cycle-scan report
+
+The generated-unplanted cycle-scan result is now also exposed as a compact PeTTa report atom for human-facing provenance. The report summarizes the tested k=4..7 generated-unplanted scans without changing the conservative interpretation.
+
+| Cycle size k | Sweep kind | Sweep points | Family records | Active cycles |
+|---:|---|---:|---:|---:|
+| 4 | generated-unplanted-control | 40 | 120 | 0 |
+| 5 | generated-unplanted-control | 40 | 120 | 0 |
+| 6 | generated-unplanted-control | 40 | 120 | 0 |
+| 7 | generated-unplanted-control | 40 | 120 | 0 |
+
 ## PeTTa provenance
 
-The table mirrors tested PeTTa atoms in `src/chem_exp02.metta`: `exp02-fold-sweep-kind-summary` folds over `run-record` lists to derive family-record counts, active-family counts, active-pair totals, active random-polymer points, and `exp02-sweep-kind-summary`; `exp02-sweep-kind-summary-report` now builds its rows from those folded summaries. Triple-scan summaries use `exp02-triple-scan-summary`, `exp02-generated-unplanted-triple-summary`, and `exp02-planted-triple-summary`. Quadruple-scan summaries use `exp02-quadruple-scan-summary`, `exp02-generated-unplanted-quadruple-summary`, and `exp02-planted-quadruple-summary`. Quintuple-scan summaries use `exp02-quintuple-scan-summary`, `exp02-generated-unplanted-quintuple-summary`, and `exp02-planted-quintuple-summary`. Sextuple-scan summaries use `exp02-sextuple-scan-summary`, `exp02-generated-unplanted-sextuple-summary`, and `exp02-planted-sextuple-summary`. Septuple-scan summaries use `exp02-septuple-scan-summary`, `exp02-generated-unplanted-septuple-summary`, and `exp02-planted-septuple-summary`.
+The table mirrors tested PeTTa atoms in `src/chem_exp02.metta`: `exp02-fold-sweep-kind-summary` folds over `run-record` lists to derive family-record counts, active-family counts, active-pair totals, active random-polymer points, and `exp02-sweep-kind-summary`; `exp02-sweep-kind-summary-report` now builds its rows from those folded summaries. Triple-scan summaries use `exp02-triple-scan-summary`, `exp02-generated-unplanted-triple-summary`, and `exp02-planted-triple-summary`. Quadruple-scan summaries use `exp02-quadruple-scan-summary`, `exp02-generated-unplanted-quadruple-summary`, and `exp02-planted-quadruple-summary`. Quintuple-scan summaries use `exp02-quintuple-scan-summary`, `exp02-generated-unplanted-quintuple-summary`, and `exp02-planted-quintuple-summary`. Sextuple-scan summaries use `exp02-sextuple-scan-summary`, `exp02-generated-unplanted-sextuple-summary`, and `exp02-planted-sextuple-summary`. Septuple-scan summaries use `exp02-septuple-scan-summary`, `exp02-generated-unplanted-septuple-summary`, and `exp02-planted-septuple-summary`. The compact k=4..7 generated-unplanted provenance report uses `exp02-cycle-scan-summary-report` and `exp02-cycle-scan-summary-report-complete?`, covered by exp02 smoke.
