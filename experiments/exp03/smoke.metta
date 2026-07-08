@@ -1263,6 +1263,18 @@
        (exp02-random-acs-candidates-6 seed-11))
 !(test (run-export-ablations (exp03-cap6-productive-run-export seed-11 random)) ())
 !(test (exp03-productive-cap-run-exports-complete?) True)
+
+; File-section bundles expose the same productive cap records as named v0.1
+; files from PeTTa, leaving any actual filesystem write to a thin harness.
+!(test (run-file-bundle-id (exp03-cap6-productive-file-bundle seed-11 random))
+       exp03-cap6-productive-seed-11-random)
+!(test (run-file-name (run-file-bundle-events-file (exp03-cap6-productive-file-bundle seed-11 random)))
+       EVENTS.metta)
+!(test (event-count (run-file-atoms (run-file-bundle-events-file (exp03-cap6-productive-file-bundle seed-11 random))))
+       12)
+!(test (run-file-atoms (run-file-bundle-summary-file (exp03-cap6-productive-file-bundle seed-11 random)))
+       (run-summary exp03-cap6-productive-seed-11-random passed cap6-productive-sixth-candidate-seed-11 True))
+!(test (exp03-productive-cap-file-bundles-complete?) True)
 !(test (exp03-cap4-rich-event-count random seed-11) 12)
 !(test (exp03-cap4-rich-event-count no-catalysis seed-11) 0)
 !(test (exp03-cap4-rich-tick random seed-11) 12)

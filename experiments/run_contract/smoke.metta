@@ -103,3 +103,14 @@
 !(test (run-record-passed? (exp01-contract-run-record)) True)
 
 !(test (exp01-contract-complete?) True)
+
+!(test (run-file-bundle-id (make-run-file-bundle (exp01-contract-run-record))) exp01-contract)
+
+!(test (run-file-name (run-file-bundle-events-file (make-run-file-bundle (exp01-contract-run-record)))) EVENTS.metta)
+
+!(test (run-file-atoms (run-file-bundle-events-file (make-run-file-bundle (exp01-contract-run-record))))
+       ((event 0 rp0 Food X Y Z)
+        (event 1 rp1 Food W Z Y)))
+
+!(test (run-file-atoms (run-file-bundle-summary-file (make-run-file-bundle (exp01-contract-run-record))))
+       (run-summary exp01-contract passed planted-acs-recovered True))

@@ -136,6 +136,72 @@
                   (run-summary $run-id passed $conclusion True)))
    True)
 
+; ----- PeTTa-side file-section export hooks -----
+;
+; These atoms do not perform host I/O.  They expose the v0.1 per-run file
+; convention as a PeTTa-queryable bundle so a thin host serializer can ask for
+; sections directly without reconstructing run-record fields in Python.
+
+(= (make-run-file-bundle $record)
+   (run-file-bundle
+     (run-record-id $record)
+     ((run-file CONFIG.metta (run-record-config $record))
+      (run-file MANIFEST.metta (run-record-manifest $record))
+      (run-file EVENTS.metta (run-record-events $record))
+      (run-file ABUNDANCES.metta (run-record-abundances $record))
+      (run-file METRICS.metta (run-record-metrics $record))
+      (run-file ACS.metta (run-record-acs-candidates $record))
+      (run-file ABLATIONS.metta (run-record-ablations $record))
+      (run-file SUMMARY.metta (run-record-summary $record)))))
+
+(= (run-file-bundle-id (run-file-bundle $run-id $files))
+   $run-id)
+
+(= (run-file-bundle-files (run-file-bundle $run-id $files))
+   $files)
+
+(= (run-file-name (run-file $filename $atoms))
+   $filename)
+
+(= (run-file-atoms (run-file $filename $atoms))
+   $atoms)
+
+(= (run-file-bundle-config-file
+      (run-file-bundle $run-id
+        ((run-file CONFIG.metta $config)
+         (run-file MANIFEST.metta $manifest)
+         (run-file EVENTS.metta $events)
+         (run-file ABUNDANCES.metta $abundances)
+         (run-file METRICS.metta $metrics)
+         (run-file ACS.metta $acs-candidates)
+         (run-file ABLATIONS.metta $ablations)
+         (run-file SUMMARY.metta $summary))))
+   (run-file CONFIG.metta $config))
+
+(= (run-file-bundle-events-file
+      (run-file-bundle $run-id
+        ((run-file CONFIG.metta $config)
+         (run-file MANIFEST.metta $manifest)
+         (run-file EVENTS.metta $events)
+         (run-file ABUNDANCES.metta $abundances)
+         (run-file METRICS.metta $metrics)
+         (run-file ACS.metta $acs-candidates)
+         (run-file ABLATIONS.metta $ablations)
+         (run-file SUMMARY.metta $summary))))
+   (run-file EVENTS.metta $events))
+
+(= (run-file-bundle-summary-file
+      (run-file-bundle $run-id
+        ((run-file CONFIG.metta $config)
+         (run-file MANIFEST.metta $manifest)
+         (run-file EVENTS.metta $events)
+         (run-file ABUNDANCES.metta $abundances)
+         (run-file METRICS.metta $metrics)
+         (run-file ACS.metta $acs-candidates)
+         (run-file ABLATIONS.metta $ablations)
+         (run-file SUMMARY.metta $summary))))
+   (run-file SUMMARY.metta $summary))
+
 ; ----- exp01 fixture projected into the contract -----
 
 (= (exp01-contract-config)
