@@ -45,6 +45,10 @@
 
 !(test (seeded-choice-6 seed-8 0) 2)
 
+!(test (seeded-choice-7 seed-7 0) 0)
+
+!(test (seeded-choice-7 seed-8 0) 1)
+
 !(test (exp00-initial-state seed-7)
        (state 0 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1)))
 
@@ -135,6 +139,9 @@
 !(test (exp00-candidate-cap-6)
        (candidate-cap 6 1))
 
+!(test (exp00-candidate-cap-7)
+       (candidate-cap 7 1))
+
 !(test (cap-candidate-pool
          5
          (candidate-pool
@@ -169,6 +176,26 @@
         (candidate 0 (rule r1 B Cat BCat A) 1)
         (candidate 0 (rule r0 A B AB Cat) 1)
         (candidate 0 (rule r2 A Cat ACat B) 1)))
+
+!(test (cap-candidate-pool
+         7
+         (candidate-pool
+           0
+           ((exp00-candidate seed-7)
+            (exp00-distractor-candidate seed-7)
+            (exp00-third-candidate seed-7)
+            (exp00-distractor-candidate seed-7)
+            (exp00-candidate seed-7)
+            (exp00-third-candidate seed-7)
+            (exp00-distractor-candidate seed-7)
+            (exp00-candidate seed-7))))
+       ((candidate 0 (rule r0 A B AB Cat) 1)
+        (candidate 0 (rule r1 B Cat BCat A) 1)
+        (candidate 0 (rule r2 A Cat ACat B) 1)
+        (candidate 0 (rule r1 B Cat BCat A) 1)
+        (candidate 0 (rule r0 A B AB Cat) 1)
+        (candidate 0 (rule r2 A Cat ACat B) 1)
+        (candidate 0 (rule r1 B Cat BCat A) 1)))
 
 !(test (select-candidate-2
          seed-7
@@ -208,6 +235,18 @@
          (exp00-third-candidate seed-7))
        (candidate 0 (rule r0 A B AB Cat) 1))
 
+!(test (select-candidate-7
+         seed-8
+         0
+         (exp00-distractor-candidate seed-8)
+         (exp00-candidate seed-8)
+         (exp00-third-candidate seed-8)
+         (exp00-distractor-candidate seed-8)
+         (exp00-candidate seed-8)
+         (exp00-third-candidate seed-8)
+         (exp00-distractor-candidate seed-8))
+       (candidate 0 (rule r0 A B AB Cat) 1))
+
 !(test (chamber-tick-generated-6
          (exp00-candidate-cap-6)
          (make-chamber
@@ -228,6 +267,32 @@
                  (rule r1 B Cat BCat A)
                  (rule r0 A B AB Cat)
                  (rule r2 A Cat ACat B))
+                ((event 0 r0 A B AB Cat))))
+
+!(test (chamber-tick-generated-7
+         (exp00-candidate-cap-7)
+         (make-chamber
+           exp00-cap7
+           (exp00-initial-state seed-7)
+           ((exp00-rule r0)
+            (exp00-rule r1)
+            (exp00-rule r2)
+            (exp00-rule r1)
+            (exp00-rule r0)
+            (exp00-rule r2)
+            (exp00-rule r1)
+            (exp00-rule r0))
+           ()))
+       (chamber exp00-cap7
+                (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
+                ((rule r0 A B AB Cat)
+                 (rule r1 B Cat BCat A)
+                 (rule r2 A Cat ACat B)
+                 (rule r1 B Cat BCat A)
+                 (rule r0 A B AB Cat)
+                 (rule r2 A Cat ACat B)
+                 (rule r1 B Cat BCat A)
+                 (rule r0 A B AB Cat))
                 ((event 0 r0 A B AB Cat))))
 
 !(test (selected-candidate-from-chamber-2
