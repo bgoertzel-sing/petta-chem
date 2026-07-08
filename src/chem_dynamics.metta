@@ -7005,6 +7005,273 @@
         (and (exp03-cap6-productive-replay-ok? random-polymer seed-13)
              (exp03-cap6-productive-final-abundances-ok? seed-13))))
 
+; This fixture extends productive cap-6 dynamics to the seed-17/S-family
+; state shape.  The 16-molecule S-family state keeps rr0..rr5 in-state,
+; including both rr4/S89 and sixth bounded candidate rr5/S05, while the source
+; pool still contains all eight seed-17 rules and is capped to six candidates.
+
+; rr1: productive in the 16-molecule seed-17 S-family cap-6 state.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                      (mol S4 $s4) (mol S5 $s5) (mol S6 $s6) (mol S7 $s7)
+                      (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 $s10)
+                      (mol S45 $s45) (mol S54 $s54) (mol S89 $s89) (mol S05 $s05))
+               $rules
+               $events)
+      (candidate $ct (rule rr1 S2 S3 S10 S01) $score))
+   (if (and (> $s2 0) (and (> $s3 0) (> $s01 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol S0 $s0) (mol S1 $s1) (mol S2 (- $s2 1)) (mol S3 (- $s3 1))
+                       (mol S4 $s4) (mol S5 $s5) (mol S6 $s6) (mol S7 $s7)
+                       (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 (+ $s10 1))
+                       (mol S45 $s45) (mol S54 $s54) (mol S89 $s89) (mol S05 $s05))
+                $rules
+                (append-event $events (event $tick rr1 S2 S3 S10 S01)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol S0 $s0) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                       (mol S4 $s4) (mol S5 $s5) (mol S6 $s6) (mol S7 $s7)
+                       (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 $s10)
+                       (mol S45 $s45) (mol S54 $s54) (mol S89 $s89) (mol S05 $s05))
+                $rules
+                $events)))
+
+; rr0: productive in the 16-molecule seed-17 S-family cap-6 state.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                      (mol S4 $s4) (mol S5 $s5) (mol S6 $s6) (mol S7 $s7)
+                      (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 $s10)
+                      (mol S45 $s45) (mol S54 $s54) (mol S89 $s89) (mol S05 $s05))
+               $rules
+               $events)
+      (candidate $ct (rule rr0 S0 S1 S01 S10) $score))
+   (if (and (> $s0 0) (and (> $s1 0) (> $s10 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol S0 (- $s0 1)) (mol S1 (- $s1 1)) (mol S2 $s2) (mol S3 $s3)
+                       (mol S4 $s4) (mol S5 $s5) (mol S6 $s6) (mol S7 $s7)
+                       (mol S8 $s8) (mol S9 $s9) (mol S01 (+ $s01 1)) (mol S10 $s10)
+                       (mol S45 $s45) (mol S54 $s54) (mol S89 $s89) (mol S05 $s05))
+                $rules
+                (append-event $events (event $tick rr0 S0 S1 S01 S10)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol S0 $s0) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                       (mol S4 $s4) (mol S5 $s5) (mol S6 $s6) (mol S7 $s7)
+                       (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 $s10)
+                       (mol S45 $s45) (mol S54 $s54) (mol S89 $s89) (mol S05 $s05))
+                $rules
+                $events)))
+
+; rr2: productive in the 16-molecule seed-17 S-family cap-6 state.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                      (mol S4 $s4) (mol S5 $s5) (mol S6 $s6) (mol S7 $s7)
+                      (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 $s10)
+                      (mol S45 $s45) (mol S54 $s54) (mol S89 $s89) (mol S05 $s05))
+               $rules
+               $events)
+      (candidate $ct (rule rr2 S4 S5 S45 S54) $score))
+   (if (and (> $s4 0) (and (> $s5 0) (> $s54 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol S0 $s0) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                       (mol S4 (- $s4 1)) (mol S5 (- $s5 1)) (mol S6 $s6) (mol S7 $s7)
+                       (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 $s10)
+                       (mol S45 (+ $s45 1)) (mol S54 $s54) (mol S89 $s89) (mol S05 $s05))
+                $rules
+                (append-event $events (event $tick rr2 S4 S5 S45 S54)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol S0 $s0) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                       (mol S4 $s4) (mol S5 $s5) (mol S6 $s6) (mol S7 $s7)
+                       (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 $s10)
+                       (mol S45 $s45) (mol S54 $s54) (mol S89 $s89) (mol S05 $s05))
+                $rules
+                $events)))
+
+; rr3: productive in the 16-molecule seed-17 S-family cap-6 state.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                      (mol S4 $s4) (mol S5 $s5) (mol S6 $s6) (mol S7 $s7)
+                      (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 $s10)
+                      (mol S45 $s45) (mol S54 $s54) (mol S89 $s89) (mol S05 $s05))
+               $rules
+               $events)
+      (candidate $ct (rule rr3 S6 S7 S54 S45) $score))
+   (if (and (> $s6 0) (and (> $s7 0) (> $s45 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol S0 $s0) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                       (mol S4 $s4) (mol S5 $s5) (mol S6 (- $s6 1)) (mol S7 (- $s7 1))
+                       (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 $s10)
+                       (mol S45 $s45) (mol S54 (+ $s54 1)) (mol S89 $s89) (mol S05 $s05))
+                $rules
+                (append-event $events (event $tick rr3 S6 S7 S54 S45)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol S0 $s0) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                       (mol S4 $s4) (mol S5 $s5) (mol S6 $s6) (mol S7 $s7)
+                       (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 $s10)
+                       (mol S45 $s45) (mol S54 $s54) (mol S89 $s89) (mol S05 $s05))
+                $rules
+                $events)))
+
+; rr4: productive in the 16-molecule seed-17 S-family cap-6 state.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                      (mol S4 $s4) (mol S5 $s5) (mol S6 $s6) (mol S7 $s7)
+                      (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 $s10)
+                      (mol S45 $s45) (mol S54 $s54) (mol S89 $s89) (mol S05 $s05))
+               $rules
+               $events)
+      (candidate $ct (rule rr4 S8 S9 S89 S2) $score))
+   (if (and (> $s8 0) (and (> $s9 0) (> $s2 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol S0 $s0) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                       (mol S4 $s4) (mol S5 $s5) (mol S6 $s6) (mol S7 $s7)
+                       (mol S8 (- $s8 1)) (mol S9 (- $s9 1)) (mol S01 $s01) (mol S10 $s10)
+                       (mol S45 $s45) (mol S54 $s54) (mol S89 (+ $s89 1)) (mol S05 $s05))
+                $rules
+                (append-event $events (event $tick rr4 S8 S9 S89 S2)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol S0 $s0) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                       (mol S4 $s4) (mol S5 $s5) (mol S6 $s6) (mol S7 $s7)
+                       (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 $s10)
+                       (mol S45 $s45) (mol S54 $s54) (mol S89 $s89) (mol S05 $s05))
+                $rules
+                $events)))
+
+; rr5: productive in the 16-molecule seed-17 S-family cap-6 state.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol S0 $s0) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                      (mol S4 $s4) (mol S5 $s5) (mol S6 $s6) (mol S7 $s7)
+                      (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 $s10)
+                      (mol S45 $s45) (mol S54 $s54) (mol S89 $s89) (mol S05 $s05))
+               $rules
+               $events)
+      (candidate $ct (rule rr5 S0 S5 S05 S3) $score))
+   (if (and (> $s0 0) (and (> $s5 0) (> $s3 0)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol S0 (- $s0 1)) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                       (mol S4 $s4) (mol S5 (- $s5 1)) (mol S6 $s6) (mol S7 $s7)
+                       (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 $s10)
+                       (mol S45 $s45) (mol S54 $s54) (mol S89 $s89) (mol S05 (+ $s05 1)))
+                $rules
+                (append-event $events (event $tick rr5 S0 S5 S05 S3)))
+       (chamber $id
+                (state (+ $tick 1) $seed
+                       (mol S0 $s0) (mol S1 $s1) (mol S2 $s2) (mol S3 $s3)
+                       (mol S4 $s4) (mol S5 $s5) (mol S6 $s6) (mol S7 $s7)
+                       (mol S8 $s8) (mol S9 $s9) (mol S01 $s01) (mol S10 $s10)
+                       (mol S45 $s45) (mol S54 $s54) (mol S89 $s89) (mol S05 $s05))
+                $rules
+                $events)))
+
+(= (exp03-cap6-productive-initial-state seed-17)
+   (state 0 seed-17
+          (mol S0 4) (mol S1 2) (mol S2 4) (mol S3 2)
+          (mol S4 2) (mol S5 4) (mol S6 2) (mol S7 2)
+          (mol S8 2) (mol S9 2) (mol S01 1) (mol S10 1)
+          (mol S45 1) (mol S54 1) (mol S89 0) (mol S05 0)))
+
+(= (exp03-cap6-productive-chamber random-polymer seed-17)
+   (make-chamber (exp03-cap6-productive random-polymer seed-17)
+                 (exp03-cap6-productive-initial-state seed-17)
+                 (exp03-exp02-full-source-rules seed-17 random-polymer)
+                 ()))
+
+(= (exp03-cap6-productive-capped-candidates random-polymer seed-17)
+   (candidate-pool-candidates
+     (bounded-candidate-pool
+       (exp00-candidate-cap-6)
+       (exp03-cap6-productive-chamber random-polymer seed-17))))
+
+(= (exp03-cap6-productive-selected-candidate random-polymer seed-17)
+   (selected-candidate-from-list-6
+     (exp03-cap6-productive-chamber random-polymer seed-17)
+     (exp03-cap6-productive-capped-candidates random-polymer seed-17)))
+
+(= (exp03-cap6-productive-after-12 random-polymer seed-17)
+   (chamber-run-6cap-12 (exp03-cap6-productive-chamber random-polymer seed-17)))
+
+(= (exp03-cap6-productive-event-count random-polymer seed-17)
+   (event-count (trace-events (exp03-cap6-productive-after-12 random-polymer seed-17))))
+
+(= (exp03-cap6-productive-tick random-polymer seed-17)
+   (state-tick (chamber-state (exp03-cap6-productive-after-12 random-polymer seed-17))))
+
+(= (exp03-cap6-productive-abundances random-polymer seed-17)
+   (chamber-abundance-snapshot (exp03-cap6-productive-after-12 random-polymer seed-17)))
+
+(= (exp03-cap6-productive-replay-12 random-polymer seed-17)
+   (chamber-run-6cap-6 (chamber-run-6cap-6 (exp03-cap6-productive-chamber random-polymer seed-17))))
+
+(= (exp03-cap6-productive-replay-ok? random-polymer seed-17)
+   (== (exp03-cap6-productive-after-12 random-polymer seed-17)
+       (exp03-cap6-productive-replay-12 random-polymer seed-17)))
+
+(= (exp03-cap6-productive-final-abundances-ok? seed-17)
+   (== (exp03-cap6-productive-abundances random-polymer seed-17)
+       (abundance-snapshot 12 ((mol S0 0) (mol S1 0) (mol S2 2) (mol S3 0)
+                               (mol S4 0) (mol S5 0) (mol S6 0) (mol S7 0)
+                               (mol S8 0) (mol S9 0) (mol S01 3) (mol S10 3)
+                               (mol S45 3) (mol S54 3) (mol S89 2) (mol S05 2)))))
+
+(= (exp03-cap6-productive-run-config seed-17 random-polymer)
+   (make-run-config exp03-cap6-productive-seed-17-random exp03 (seed-17) 12 (candidate-cap 6 1) random-polymer))
+
+(= (exp03-cap6-productive-run-manifest seed-17 random-polymer)
+   (make-run-manifest exp03-cap6-productive-seed-17-random config-hash-exp03-cap6-productive-seed-17-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap6-productive-metrics seed-17 random-polymer)
+   ((metric dynamic-event-count exp03-cap6-productive-seed-17-random (exp03-cap6-productive-event-count random-polymer seed-17))
+    (metric dynamic-tick-count exp03-cap6-productive-seed-17-random 12)
+    (metric source-exp02-rule-count exp03-cap6-productive-seed-17-random 8)
+    (metric dynamic-candidate-cap exp03-cap6-productive-seed-17-random 6)
+    (metric rich-state-molecule-count exp03-cap6-productive-seed-17-random 16)
+    (metric productive-sixth-candidate exp03-cap6-productive-seed-17-random rr5)))
+
+(= (exp03-cap6-productive-run-summary seed-17 random-polymer)
+   (make-run-summary exp03-cap6-productive-seed-17-random passed cap6-productive-sixth-candidate-seed-17 True))
+
+(= (exp03-cap6-productive-run-record seed-17 random-polymer)
+   (make-run-record
+     exp03-cap6-productive-seed-17-random
+     (exp03-cap6-productive-run-config seed-17 random-polymer)
+     (exp03-cap6-productive-run-manifest seed-17 random-polymer)
+     (trace-events (exp03-cap6-productive-after-12 random-polymer seed-17))
+     ((state-abundance-snapshot (exp03-cap6-productive-initial-state seed-17))
+      (chamber-abundance-snapshot (exp03-cap6-productive-after-12 random-polymer seed-17)))
+     (exp03-cap6-productive-metrics seed-17 random-polymer)
+     (exp02-seed-17-acs-candidates random-polymer)
+     ()
+     (exp03-cap6-productive-run-summary seed-17 random-polymer)))
+
+(= (exp03-cap6-productive-run-export seed-17 random-polymer)
+   (make-run-export (exp03-cap6-productive-run-record seed-17 random-polymer)))
+
+(= (exp03-cap6-productive-run-record-complete? seed-17)
+   (and (run-record-passed? (exp03-cap6-productive-run-record seed-17 random-polymer))
+        (and (exp03-cap6-productive-replay-ok? random-polymer seed-17)
+             (exp03-cap6-productive-final-abundances-ok? seed-17))))
+
 ; Cap-5 bridge over the seed-17 S-family rich state.  The fifth bounded
 ; candidate is intentionally outside the 12-molecule state shape (S8/S9/S89)
 ; but remains visible to the deterministic selector as a tick-advancing no-op.
@@ -7571,13 +7838,15 @@
    ((exp03-cap5-productive-run-export seed-13 random-polymer)
     (exp03-cap6-rich-run-export seed-11 random)
     (exp03-cap6-productive-run-export seed-11 random)
-    (exp03-cap6-productive-run-export seed-13 random-polymer)))
+    (exp03-cap6-productive-run-export seed-13 random-polymer)
+    (exp03-cap6-productive-run-export seed-17 random-polymer)))
 
 (= (exp03-productive-cap-run-exports-complete?)
    (and (== (event-count (run-export-events (exp03-cap5-productive-run-export seed-13 random-polymer))) 10)
         (and (== (event-count (run-export-events (exp03-cap6-rich-run-export seed-11 random))) 7)
              (and (== (event-count (run-export-events (exp03-cap6-productive-run-export seed-11 random))) 12)
-                  (== (event-count (run-export-events (exp03-cap6-productive-run-export seed-13 random-polymer))) 12)))))
+                  (and (== (event-count (run-export-events (exp03-cap6-productive-run-export seed-13 random-polymer))) 12)
+                       (== (event-count (run-export-events (exp03-cap6-productive-run-export seed-17 random-polymer))) 12))))))
 
 ; PeTTa-side per-file bundle projections for thin host serializers.  These keep
 ; file section choice in the PeTTa contract rather than rebuilding it in Python.
@@ -7593,11 +7862,15 @@
 (= (exp03-cap6-productive-file-bundle seed-13 random-polymer)
    (make-run-file-bundle (exp03-cap6-productive-run-record seed-13 random-polymer)))
 
+(= (exp03-cap6-productive-file-bundle seed-17 random-polymer)
+   (make-run-file-bundle (exp03-cap6-productive-run-record seed-17 random-polymer)))
+
 (= (exp03-productive-cap-file-bundles)
    ((exp03-cap5-productive-file-bundle seed-13 random-polymer)
     (exp03-cap6-rich-file-bundle seed-11 random)
     (exp03-cap6-productive-file-bundle seed-11 random)
-    (exp03-cap6-productive-file-bundle seed-13 random-polymer)))
+    (exp03-cap6-productive-file-bundle seed-13 random-polymer)
+    (exp03-cap6-productive-file-bundle seed-17 random-polymer)))
 
 (= (exp03-productive-cap-file-bundles-complete?)
    (and (== (run-file-bundle-id (exp03-cap5-productive-file-bundle seed-13 random-polymer))
@@ -7606,8 +7879,10 @@
                  exp03-cap6-rich-seed-11-random)
              (and (== (run-file-bundle-id (exp03-cap6-productive-file-bundle seed-11 random))
                       exp03-cap6-productive-seed-11-random)
-                  (== (run-file-bundle-id (exp03-cap6-productive-file-bundle seed-13 random-polymer))
-                      exp03-cap6-productive-seed-13-random)))))
+                  (and (== (run-file-bundle-id (exp03-cap6-productive-file-bundle seed-13 random-polymer))
+                           exp03-cap6-productive-seed-13-random)
+                       (== (run-file-bundle-id (exp03-cap6-productive-file-bundle seed-17 random-polymer))
+                           exp03-cap6-productive-seed-17-random))))))
 
 (= (exp03-cap6-rich-run-record-complete? seed-11)
    (and (run-record-passed? (exp03-cap6-rich-run-record seed-11 random))
