@@ -8175,19 +8175,24 @@
 (= (exp03-cap6-rich-run-export seed-11 random)
    (make-run-export (exp03-cap6-rich-run-record seed-11 random)))
 
+(= (exp03-cap7-productive-run-export seed-13 random-polymer)
+   (make-run-export (exp03-cap7-productive-run-record seed-13 random-polymer)))
+
 (= (exp03-productive-cap-run-exports)
    ((exp03-cap5-productive-run-export seed-13 random-polymer)
     (exp03-cap6-rich-run-export seed-11 random)
     (exp03-cap6-productive-run-export seed-11 random)
     (exp03-cap6-productive-run-export seed-13 random-polymer)
-    (exp03-cap6-productive-run-export seed-17 random-polymer)))
+    (exp03-cap6-productive-run-export seed-17 random-polymer)
+    (exp03-cap7-productive-run-export seed-13 random-polymer)))
 
 (= (exp03-productive-cap-run-exports-complete?)
    (and (== (event-count (run-export-events (exp03-cap5-productive-run-export seed-13 random-polymer))) 10)
         (and (== (event-count (run-export-events (exp03-cap6-rich-run-export seed-11 random))) 7)
              (and (== (event-count (run-export-events (exp03-cap6-productive-run-export seed-11 random))) 12)
                   (and (== (event-count (run-export-events (exp03-cap6-productive-run-export seed-13 random-polymer))) 12)
-                       (== (event-count (run-export-events (exp03-cap6-productive-run-export seed-17 random-polymer))) 12))))))
+                       (and (== (event-count (run-export-events (exp03-cap6-productive-run-export seed-17 random-polymer))) 12)
+                            (== (event-count (run-export-events (exp03-cap7-productive-run-export seed-13 random-polymer))) 14)))))))
 
 ; PeTTa-side per-file bundle projections for thin host serializers.  These keep
 ; file section choice in the PeTTa contract rather than rebuilding it in Python.
@@ -8206,12 +8211,16 @@
 (= (exp03-cap6-productive-file-bundle seed-17 random-polymer)
    (make-run-file-bundle (exp03-cap6-productive-run-record seed-17 random-polymer)))
 
+(= (exp03-cap7-productive-file-bundle seed-13 random-polymer)
+   (make-run-file-bundle (exp03-cap7-productive-run-record seed-13 random-polymer)))
+
 (= (exp03-productive-cap-file-bundles)
    ((exp03-cap5-productive-file-bundle seed-13 random-polymer)
     (exp03-cap6-rich-file-bundle seed-11 random)
     (exp03-cap6-productive-file-bundle seed-11 random)
     (exp03-cap6-productive-file-bundle seed-13 random-polymer)
-    (exp03-cap6-productive-file-bundle seed-17 random-polymer)))
+    (exp03-cap6-productive-file-bundle seed-17 random-polymer)
+    (exp03-cap7-productive-file-bundle seed-13 random-polymer)))
 
 (= (exp03-productive-cap-file-bundles-complete?)
    (and (== (run-file-bundle-id (exp03-cap5-productive-file-bundle seed-13 random-polymer))
@@ -8222,8 +8231,10 @@
                       exp03-cap6-productive-seed-11-random)
                   (and (== (run-file-bundle-id (exp03-cap6-productive-file-bundle seed-13 random-polymer))
                            exp03-cap6-productive-seed-13-random)
-                       (== (run-file-bundle-id (exp03-cap6-productive-file-bundle seed-17 random-polymer))
-                           exp03-cap6-productive-seed-17-random))))))
+                       (and (== (run-file-bundle-id (exp03-cap6-productive-file-bundle seed-17 random-polymer))
+                                exp03-cap6-productive-seed-17-random)
+                            (== (run-file-bundle-id (exp03-cap7-productive-file-bundle seed-13 random-polymer))
+                                exp03-cap7-productive-seed-13-random)))))))
 
 (= (exp03-cap6-rich-run-record-complete? seed-11)
    (and (run-record-passed? (exp03-cap6-rich-run-record seed-11 random))
