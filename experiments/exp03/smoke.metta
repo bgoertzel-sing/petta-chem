@@ -1245,6 +1245,35 @@
         (event 10 rr3 Q6 Q7 Q54 Q45)
         (event 11 rr4 Q0 Q5 Q05 Q2)))
 
+; Cap-6 productive bridge beyond seed-11: seed-13/R-family uses a 16-molecule
+; state so the sixth bounded candidate rr5/R05 and rr4/R89 both remain in-state.
+!(test (exp03-cap6-productive-capped-candidates random-polymer seed-13)
+       ((candidate 0 (rule rr1 R2 R3 R10 R01) 1)
+        (candidate 0 (rule rr0 R0 R1 R01 R10) 1)
+        (candidate 0 (rule rr2 R4 R5 R45 R54) 1)
+        (candidate 0 (rule rr3 R6 R7 R54 R45) 1)
+        (candidate 0 (rule rr4 R8 R9 R89 R2) 1)
+        (candidate 0 (rule rr5 R0 R5 R05 R3) 1)))
+!(test (exp03-cap6-productive-selected-candidate random-polymer seed-13)
+       (candidate 0 (rule rr0 R0 R1 R01 R10) 1))
+!(test (exp03-cap6-productive-event-count random-polymer seed-13) 12)
+!(test (exp03-cap6-productive-tick random-polymer seed-13) 12)
+!(test (exp03-cap6-productive-final-abundances-ok? seed-13) True)
+!(test (exp03-cap6-productive-run-record-complete? seed-13) True)
+!(test (trace-events (exp03-cap6-productive-after-12 random-polymer seed-13))
+       ((event 0 rr0 R0 R1 R01 R10)
+        (event 1 rr2 R4 R5 R45 R54)
+        (event 2 rr3 R6 R7 R54 R45)
+        (event 3 rr4 R8 R9 R89 R2)
+        (event 4 rr5 R0 R5 R05 R3)
+        (event 5 rr1 R2 R3 R10 R01)
+        (event 6 rr0 R0 R1 R01 R10)
+        (event 7 rr2 R4 R5 R45 R54)
+        (event 8 rr3 R6 R7 R54 R45)
+        (event 9 rr4 R8 R9 R89 R2)
+        (event 10 rr5 R0 R5 R05 R3)
+        (event 11 rr1 R2 R3 R10 R01)))
+
 ; PeTTa-side export hooks over productive cap fixtures expose all run-record
 ; fields without relying on host-side file serialization.
 !(test (run-export-config (exp03-cap6-productive-run-export seed-11 random))
