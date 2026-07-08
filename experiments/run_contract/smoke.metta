@@ -106,11 +106,28 @@
 
 !(test (run-file-bundle-id (make-run-file-bundle (exp01-contract-run-record))) exp01-contract)
 
+!(test (run-file-name (run-file-bundle-manifest-file (make-run-file-bundle (exp01-contract-run-record)))) MANIFEST.metta)
+
+!(test (run-file-atoms (run-file-bundle-manifest-file (make-run-file-bundle (exp01-contract-run-record))))
+       (run-manifest exp01-contract config-hash-exp01-contract petta-local swi-9-3-36 scripts-run-exp01-sh 0))
+
 !(test (run-file-name (run-file-bundle-events-file (make-run-file-bundle (exp01-contract-run-record)))) EVENTS.metta)
 
 !(test (run-file-atoms (run-file-bundle-events-file (make-run-file-bundle (exp01-contract-run-record))))
        ((event 0 rp0 Food X Y Z)
         (event 1 rp1 Food W Z Y)))
+
+!(test (run-file-atoms (run-file-bundle-abundances-file (make-run-file-bundle (exp01-contract-run-record))))
+       ((abundance-snapshot 0 ((mol Food 2) (mol X 1) (mol Y 0) (mol Z 1)))
+        (abundance-snapshot 1 ((mol Food 1) (mol X 0) (mol Y 1) (mol Z 1)))
+        (abundance-snapshot 2 ((mol Food 0) (mol W 0) (mol Z 1) (mol Y 1)))))
+
+!(test (run-file-atoms (run-file-bundle-metrics-file (make-run-file-bundle (exp01-contract-run-record))))
+       ((metric productivity-trace-count exp01-planted 2)
+        (metric ablation-drop exp01-planted 1)))
+
+!(test (run-file-atoms (run-file-bundle-ablations-file (make-run-file-bundle (exp01-contract-run-record))))
+       ((ablation exp01-planted rp0 2 1 1)))
 
 !(test (run-file-atoms (run-file-bundle-summary-file (make-run-file-bundle (exp01-contract-run-record))))
        (run-summary exp01-contract passed planted-acs-recovered True))

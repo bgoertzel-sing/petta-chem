@@ -178,6 +178,18 @@
          (run-file SUMMARY.metta $summary))))
    (run-file CONFIG.metta $config))
 
+(= (run-file-bundle-manifest-file
+      (run-file-bundle $run-id
+        ((run-file CONFIG.metta $config)
+         (run-file MANIFEST.metta $manifest)
+         (run-file EVENTS.metta $events)
+         (run-file ABUNDANCES.metta $abundances)
+         (run-file METRICS.metta $metrics)
+         (run-file ACS.metta $acs-candidates)
+         (run-file ABLATIONS.metta $ablations)
+         (run-file SUMMARY.metta $summary))))
+   (run-file MANIFEST.metta $manifest))
+
 (= (run-file-bundle-events-file
       (run-file-bundle $run-id
         ((run-file CONFIG.metta $config)
@@ -189,6 +201,54 @@
          (run-file ABLATIONS.metta $ablations)
          (run-file SUMMARY.metta $summary))))
    (run-file EVENTS.metta $events))
+
+(= (run-file-bundle-abundances-file
+      (run-file-bundle $run-id
+        ((run-file CONFIG.metta $config)
+         (run-file MANIFEST.metta $manifest)
+         (run-file EVENTS.metta $events)
+         (run-file ABUNDANCES.metta $abundances)
+         (run-file METRICS.metta $metrics)
+         (run-file ACS.metta $acs-candidates)
+         (run-file ABLATIONS.metta $ablations)
+         (run-file SUMMARY.metta $summary))))
+   (run-file ABUNDANCES.metta $abundances))
+
+(= (run-file-bundle-metrics-file
+      (run-file-bundle $run-id
+        ((run-file CONFIG.metta $config)
+         (run-file MANIFEST.metta $manifest)
+         (run-file EVENTS.metta $events)
+         (run-file ABUNDANCES.metta $abundances)
+         (run-file METRICS.metta $metrics)
+         (run-file ACS.metta $acs-candidates)
+         (run-file ABLATIONS.metta $ablations)
+         (run-file SUMMARY.metta $summary))))
+   (run-file METRICS.metta $metrics))
+
+(= (run-file-bundle-acs-file
+      (run-file-bundle $run-id
+        ((run-file CONFIG.metta $config)
+         (run-file MANIFEST.metta $manifest)
+         (run-file EVENTS.metta $events)
+         (run-file ABUNDANCES.metta $abundances)
+         (run-file METRICS.metta $metrics)
+         (run-file ACS.metta $acs-candidates)
+         (run-file ABLATIONS.metta $ablations)
+         (run-file SUMMARY.metta $summary))))
+   (run-file ACS.metta $acs-candidates))
+
+(= (run-file-bundle-ablations-file
+      (run-file-bundle $run-id
+        ((run-file CONFIG.metta $config)
+         (run-file MANIFEST.metta $manifest)
+         (run-file EVENTS.metta $events)
+         (run-file ABUNDANCES.metta $abundances)
+         (run-file METRICS.metta $metrics)
+         (run-file ACS.metta $acs-candidates)
+         (run-file ABLATIONS.metta $ablations)
+         (run-file SUMMARY.metta $summary))))
+   (run-file ABLATIONS.metta $ablations))
 
 (= (run-file-bundle-summary-file
       (run-file-bundle $run-id
