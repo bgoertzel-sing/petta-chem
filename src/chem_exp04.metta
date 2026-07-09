@@ -691,6 +691,84 @@
                            baseline (exp04-reduction-baseline-row)
                            interpretation (exp04-reduction-sweep-interpretation)))
 
+; Compact offset-sensitivity summary/export atoms for the full rotated-shuffle
+; sweep.  These are intentionally lossy human-facing report rows: the full
+; deterministic table remains in `exp04-reduction-sweep-row`, while this report
+; makes the scientific takeaway queryable without scanning all 108 rows.
+(= (exp04-offset-sensitivity-report-id) exp04-offset-sensitivity-20260709)
+(= (exp04-offset-sensitivity-tested-offsets) (1 2 3 4 5 6 7 8 9))
+(= (exp04-offset-sensitivity-row-count) 3)
+(= (exp04-offset-sensitivity-report-row hand-designed)
+   (offset-sensitivity-row hand-designed basal-4 offsets-tested (1 2 3 4 5 6 7 8 9)
+                           raf-negative-offsets (1 2 3 6 7)
+                           raf-like-offsets (4 5 8 9)
+                           representative-core shuffled-4 (lBC)
+                           caveat catalysis-map-sensitive))
+(= (exp04-offset-sensitivity-report-row mechanically-generated-template)
+   (offset-sensitivity-row mechanically-generated-template basal-4 offsets-tested (1 2 3 4 5 6 7 8 9)
+                           raf-negative-offsets (1 2 3 6 7 8)
+                           raf-like-offsets (4 5 9)
+                           representative-core shuffled-4 (glCD)
+                           caveat shuffle-can-create-small-raf))
+(= (exp04-offset-sensitivity-report-row mechanically-generated-cross-template)
+   (offset-sensitivity-row mechanically-generated-cross-template basal-4 offsets-tested (1 2 3 4 5 6 7 8 9)
+                           raf-negative-offsets (2 4 6 8)
+                           raf-like-offsets (1 3 5 7 9)
+                           representative-core shuffled-3 (xglAC)
+                           caveat shuffle-can-create-small-raf))
+(= (exp04-offset-sensitivity-claim)
+   (claim exp04-offset-sensitivity
+          full-offset-sweep mixed-negative-and-raf-like
+          specific-generated-controls raf-negative
+          no-catalysis-controls raf-negative
+          unbiased-emergence not-supported))
+(= (exp04-offset-sensitivity-report)
+   (offset-sensitivity-report (exp04-offset-sensitivity-report-id)
+                              rows ((exp04-offset-sensitivity-report-row hand-designed)
+                                    (exp04-offset-sensitivity-report-row mechanically-generated-template)
+                                    (exp04-offset-sensitivity-report-row mechanically-generated-cross-template))
+                              claim (exp04-offset-sensitivity-claim)))
+(= (exp04-offset-sensitivity-report-file)
+   (run-file OFFSET_SENSITIVITY_REPORT.metta
+             ((exp04-offset-sensitivity-report)
+              (exp04-offset-sensitivity-claim))))
+(= (exp04-offset-sensitivity-summary-file)
+   (run-file SUMMARY.metta
+             ((exp04-reduction-sweep-id)
+              (exp04-reduction-sweep-row-count)
+              (exp04-offset-sensitivity-tested-offsets))))
+(= (exp04-offset-sensitivity-report-bundle)
+   (report-bundle exp04-offset-sensitivity-20260709
+                  files ((exp04-offset-sensitivity-report-file)
+                         (exp04-offset-sensitivity-summary-file))))
+(= (exp04-offset-sensitivity-report-complete?)
+   (and (== (exp04-offset-sensitivity-row-count) 3)
+   (and (== (exp04-offset-sensitivity-tested-offsets) (1 2 3 4 5 6 7 8 9))
+   (and (== (exp04-offset-sensitivity-report-row hand-designed)
+            (offset-sensitivity-row hand-designed basal-4 offsets-tested (1 2 3 4 5 6 7 8 9)
+                                    raf-negative-offsets (1 2 3 6 7)
+                                    raf-like-offsets (4 5 8 9)
+                                    representative-core shuffled-4 (lBC)
+                                    caveat catalysis-map-sensitive))
+   (and (== (exp04-offset-sensitivity-report-row mechanically-generated-template)
+            (offset-sensitivity-row mechanically-generated-template basal-4 offsets-tested (1 2 3 4 5 6 7 8 9)
+                                    raf-negative-offsets (1 2 3 6 7 8)
+                                    raf-like-offsets (4 5 9)
+                                    representative-core shuffled-4 (glCD)
+                                    caveat shuffle-can-create-small-raf))
+   (and (== (exp04-offset-sensitivity-report-row mechanically-generated-cross-template)
+            (offset-sensitivity-row mechanically-generated-cross-template basal-4 offsets-tested (1 2 3 4 5 6 7 8 9)
+                                    raf-negative-offsets (2 4 6 8)
+                                    raf-like-offsets (1 3 5 7 9)
+                                    representative-core shuffled-3 (xglAC)
+                                    caveat shuffle-can-create-small-raf))
+        (== (exp04-offset-sensitivity-claim)
+            (claim exp04-offset-sensitivity
+                   full-offset-sweep mixed-negative-and-raf-like
+                   specific-generated-controls raf-negative
+                   no-catalysis-controls raf-negative
+                   unbiased-emergence not-supported))))))))
+
 (= (exp04-reduction-sweep-report-complete?)
    (and (== (exp04-reduction-sweep-row-count) 108)
    (and (exp04-reduction-baseline-positive?)
