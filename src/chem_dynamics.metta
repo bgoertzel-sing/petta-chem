@@ -419,6 +419,42 @@
 (= (chamber-run-7cap-14 $chamber)
    (chamber-run-7cap-7 (chamber-run-7cap-7 $chamber)))
 
+; Cap-8 chamber-run wrappers: each tick selects 1 of 8 candidates.
+(= (chamber-tick-generated-8-accum $cap $chamber)
+   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
+     (chamber-tick-with-candidate-accum
+       $chamber
+       (selected-candidate-from-list-8
+         $chamber
+         (candidate-pool-candidates $candidate-pool)))))
+
+(= (chamber-run-8cap-1 $chamber)
+   (chamber-tick-generated-8-accum (exp00-candidate-cap-8) $chamber))
+
+(= (chamber-run-8cap-2 $chamber)
+   (chamber-run-8cap-1 (chamber-run-8cap-1 $chamber)))
+
+(= (chamber-run-8cap-3 $chamber)
+   (chamber-run-8cap-1 (chamber-run-8cap-2 $chamber)))
+
+(= (chamber-run-8cap-4 $chamber)
+   (chamber-run-8cap-1 (chamber-run-8cap-3 $chamber)))
+
+(= (chamber-run-8cap-5 $chamber)
+   (chamber-run-8cap-1 (chamber-run-8cap-4 $chamber)))
+
+(= (chamber-run-8cap-6 $chamber)
+   (chamber-run-8cap-1 (chamber-run-8cap-5 $chamber)))
+
+(= (chamber-run-8cap-7 $chamber)
+   (chamber-run-8cap-1 (chamber-run-8cap-6 $chamber)))
+
+(= (chamber-run-8cap-8 $chamber)
+   (chamber-run-8cap-1 (chamber-run-8cap-7 $chamber)))
+
+(= (chamber-run-8cap-16 $chamber)
+   (chamber-run-8cap-8 (chamber-run-8cap-8 $chamber)))
+
 (= (chamber-run-16 $chamber)
    (chamber-run-1 (chamber-run-1 (chamber-run-1 (chamber-run-1
      (chamber-run-1 (chamber-run-1 (chamber-run-10 $chamber))))))))
@@ -7261,6 +7297,28 @@
                 $rules
                 $events)))
 
+; rr7 remains outside the 17-molecule cap-7/productive state shape because its
+; product R27 is intentionally absent.  Cap-8 keeps the eighth source rule
+; visible to deterministic chamber ticking while advancing it as a bounded no-op.
+(= (chamber-tick-with-candidate-accum
+      (chamber $id
+               (state $tick $seed
+                      (mol R0 $r0) (mol R1 $r1) (mol R2 $r2) (mol R3 $r3)
+                      (mol R4 $r4) (mol R5 $r5) (mol R6 $r6) (mol R7 $r7)
+                      (mol R8 $r8) (mol R9 $r9) (mol R01 $r01) (mol R10 $r10)
+                      (mol R45 $r45) (mol R54 $r54) (mol R89 $r89) (mol R05 $r05) (mol R16 $r16))
+               $rules
+               $events)
+      (candidate $ct (rule rr7 R2 R7 R27 R9) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol R0 $r0) (mol R1 $r1) (mol R2 $r2) (mol R3 $r3)
+                   (mol R4 $r4) (mol R5 $r5) (mol R6 $r6) (mol R7 $r7)
+                   (mol R8 $r8) (mol R9 $r9) (mol R01 $r01) (mol R10 $r10)
+                   (mol R45 $r45) (mol R54 $r54) (mol R89 $r89) (mol R05 $r05) (mol R16 $r16))
+            $rules
+            $events))
+
 (= (exp03-cap7-productive-initial-state seed-13)
    (state 0 seed-13
           (mol R0 4) (mol R1 4) (mol R2 3) (mol R3 3)
@@ -8178,13 +8236,99 @@
 (= (exp03-cap7-productive-run-export seed-13 random-polymer)
    (make-run-export (exp03-cap7-productive-run-record seed-13 random-polymer)))
 
+; Cap-8 bridge over the full seed-13/R-family source pool.  The eighth source
+; rule rr7 is generated, bounded, and selected directly by chamber ticking; it
+; advances as a safe no-op because R27 is outside the 17-molecule productive
+; state, while rr0..rr6 remain productive.
+(= (exp03-cap8-productive-chamber random-polymer seed-13)
+   (make-chamber (exp03-cap8-productive random-polymer seed-13)
+                 (exp03-cap7-productive-initial-state seed-13)
+                 (exp03-exp02-full-source-rules seed-13 random-polymer)
+                 ()))
+
+(= (exp03-cap8-productive-capped-candidates random-polymer seed-13)
+   (candidate-pool-candidates
+     (bounded-candidate-pool
+       (exp00-candidate-cap-8)
+       (exp03-cap8-productive-chamber random-polymer seed-13))))
+
+(= (exp03-cap8-productive-selected-candidate random-polymer seed-13)
+   (selected-candidate-from-list-8
+     (exp03-cap8-productive-chamber random-polymer seed-13)
+     (exp03-cap8-productive-capped-candidates random-polymer seed-13)))
+
+(= (exp03-cap8-productive-after-16 random-polymer seed-13)
+   (chamber-run-8cap-16 (exp03-cap8-productive-chamber random-polymer seed-13)))
+
+(= (exp03-cap8-productive-event-count random-polymer seed-13)
+   (event-count (trace-events (exp03-cap8-productive-after-16 random-polymer seed-13))))
+
+(= (exp03-cap8-productive-tick random-polymer seed-13)
+   (state-tick (chamber-state (exp03-cap8-productive-after-16 random-polymer seed-13))))
+
+(= (exp03-cap8-productive-abundances random-polymer seed-13)
+   (chamber-abundance-snapshot (exp03-cap8-productive-after-16 random-polymer seed-13)))
+
+(= (exp03-cap8-productive-replay-16 random-polymer seed-13)
+   (chamber-run-8cap-8 (chamber-run-8cap-8 (exp03-cap8-productive-chamber random-polymer seed-13))))
+
+(= (exp03-cap8-productive-replay-ok? random-polymer seed-13)
+   (== (exp03-cap8-productive-after-16 random-polymer seed-13)
+       (exp03-cap8-productive-replay-16 random-polymer seed-13)))
+
+(= (exp03-cap8-productive-final-abundances-ok? seed-13)
+   (== (exp03-cap8-productive-abundances random-polymer seed-13)
+       (abundance-snapshot 16 ((mol R0 0) (mol R1 0) (mol R2 1) (mol R3 1)
+                               (mol R4 0) (mol R5 0) (mol R6 0) (mol R7 0)
+                               (mol R8 0) (mol R9 0) (mol R01 3) (mol R10 3)
+                               (mol R45 3) (mol R54 3) (mol R89 2) (mol R05 2) (mol R16 2)))))
+
+(= (exp03-cap8-productive-run-config seed-13 random-polymer)
+   (make-run-config exp03-cap8-productive-seed-13-random exp03 (seed-13) 16 (candidate-cap 8 1) random-polymer))
+
+(= (exp03-cap8-productive-run-manifest seed-13 random-polymer)
+   (make-run-manifest exp03-cap8-productive-seed-13-random config-hash-exp03-cap8-productive-seed-13-random petta-local swi-9-3-36 scripts-run-exp03-sh 0))
+
+(= (exp03-cap8-productive-metrics seed-13 random-polymer)
+   ((metric dynamic-event-count exp03-cap8-productive-seed-13-random (exp03-cap8-productive-event-count random-polymer seed-13))
+    (metric dynamic-tick-count exp03-cap8-productive-seed-13-random 16)
+    (metric source-exp02-rule-count exp03-cap8-productive-seed-13-random 8)
+    (metric dynamic-candidate-cap exp03-cap8-productive-seed-13-random 8)
+    (metric rich-state-molecule-count exp03-cap8-productive-seed-13-random 17)
+    (metric cap8-eighth-candidate exp03-cap8-productive-seed-13-random bounded-outside-state-shape)))
+
+(= (exp03-cap8-productive-run-summary seed-13 random-polymer)
+   (make-run-summary exp03-cap8-productive-seed-13-random passed cap8-full-source-eighth-candidate-seed-13 True))
+
+(= (exp03-cap8-productive-run-record seed-13 random-polymer)
+   (make-run-record
+     exp03-cap8-productive-seed-13-random
+     (exp03-cap8-productive-run-config seed-13 random-polymer)
+     (exp03-cap8-productive-run-manifest seed-13 random-polymer)
+     (trace-events (exp03-cap8-productive-after-16 random-polymer seed-13))
+     ((state-abundance-snapshot (exp03-cap7-productive-initial-state seed-13))
+      (chamber-abundance-snapshot (exp03-cap8-productive-after-16 random-polymer seed-13)))
+     (exp03-cap8-productive-metrics seed-13 random-polymer)
+     (exp02-seed-13-acs-candidates random-polymer)
+     ()
+     (exp03-cap8-productive-run-summary seed-13 random-polymer)))
+
+(= (exp03-cap8-productive-run-record-complete? seed-13)
+   (and (run-record-passed? (exp03-cap8-productive-run-record seed-13 random-polymer))
+        (and (exp03-cap8-productive-replay-ok? random-polymer seed-13)
+             (exp03-cap8-productive-final-abundances-ok? seed-13))))
+
+(= (exp03-cap8-productive-run-export seed-13 random-polymer)
+   (make-run-export (exp03-cap8-productive-run-record seed-13 random-polymer)))
+
 (= (exp03-productive-cap-run-exports)
    ((exp03-cap5-productive-run-export seed-13 random-polymer)
     (exp03-cap6-rich-run-export seed-11 random)
     (exp03-cap6-productive-run-export seed-11 random)
     (exp03-cap6-productive-run-export seed-13 random-polymer)
     (exp03-cap6-productive-run-export seed-17 random-polymer)
-    (exp03-cap7-productive-run-export seed-13 random-polymer)))
+    (exp03-cap7-productive-run-export seed-13 random-polymer)
+    (exp03-cap8-productive-run-export seed-13 random-polymer)))
 
 (= (exp03-productive-cap-run-exports-complete?)
    (and (== (event-count (run-export-events (exp03-cap5-productive-run-export seed-13 random-polymer))) 10)
@@ -8192,7 +8336,8 @@
              (and (== (event-count (run-export-events (exp03-cap6-productive-run-export seed-11 random))) 12)
                   (and (== (event-count (run-export-events (exp03-cap6-productive-run-export seed-13 random-polymer))) 12)
                        (and (== (event-count (run-export-events (exp03-cap6-productive-run-export seed-17 random-polymer))) 12)
-                            (== (event-count (run-export-events (exp03-cap7-productive-run-export seed-13 random-polymer))) 14)))))))
+                            (and (== (event-count (run-export-events (exp03-cap7-productive-run-export seed-13 random-polymer))) 14)
+                                 (== (event-count (run-export-events (exp03-cap8-productive-run-export seed-13 random-polymer))) 14))))))))
 
 ; PeTTa-side per-file bundle projections for thin host serializers.  These keep
 ; file section choice in the PeTTa contract rather than rebuilding it in Python.
@@ -8214,13 +8359,17 @@
 (= (exp03-cap7-productive-file-bundle seed-13 random-polymer)
    (make-run-file-bundle (exp03-cap7-productive-run-record seed-13 random-polymer)))
 
+(= (exp03-cap8-productive-file-bundle seed-13 random-polymer)
+   (make-run-file-bundle (exp03-cap8-productive-run-record seed-13 random-polymer)))
+
 (= (exp03-productive-cap-file-bundles)
    ((exp03-cap5-productive-file-bundle seed-13 random-polymer)
     (exp03-cap6-rich-file-bundle seed-11 random)
     (exp03-cap6-productive-file-bundle seed-11 random)
     (exp03-cap6-productive-file-bundle seed-13 random-polymer)
     (exp03-cap6-productive-file-bundle seed-17 random-polymer)
-    (exp03-cap7-productive-file-bundle seed-13 random-polymer)))
+    (exp03-cap7-productive-file-bundle seed-13 random-polymer)
+    (exp03-cap8-productive-file-bundle seed-13 random-polymer)))
 
 (= (exp03-productive-cap-file-bundles-complete?)
    (and (== (run-file-bundle-id (exp03-cap5-productive-file-bundle seed-13 random-polymer))
@@ -8233,8 +8382,10 @@
                            exp03-cap6-productive-seed-13-random)
                        (and (== (run-file-bundle-id (exp03-cap6-productive-file-bundle seed-17 random-polymer))
                                 exp03-cap6-productive-seed-17-random)
-                            (== (run-file-bundle-id (exp03-cap7-productive-file-bundle seed-13 random-polymer))
-                                exp03-cap7-productive-seed-13-random)))))))
+                            (and (== (run-file-bundle-id (exp03-cap7-productive-file-bundle seed-13 random-polymer))
+                                     exp03-cap7-productive-seed-13-random)
+                                 (== (run-file-bundle-id (exp03-cap8-productive-file-bundle seed-13 random-polymer))
+                                     exp03-cap8-productive-seed-13-random))))))))
 
 (= (exp03-cap6-rich-run-record-complete? seed-11)
    (and (run-record-passed? (exp03-cap6-rich-run-record seed-11 random))
