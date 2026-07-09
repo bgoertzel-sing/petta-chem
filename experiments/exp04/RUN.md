@@ -74,6 +74,29 @@ Observed metrics from that run:
 
 The dynamic run uses a slow basal trickle every fourth tick, even after catalyzed reactions appear, to avoid the first side-loop monopolizing all subsequent events. This makes the result more informative as a positive exploratory RAF fixture, but it remains success-biased rather than evidence of unbiased spontaneous ACS emergence.
 
+## Reduction sweep
+
+A follow-up host-side reduction harness, `experiments/exp04/run_reduction_sweep.py`, varies three levers around the PeTTa exp04 fixture without moving chemistry-kernel work out of PeTTa:
+
+- catalysis mode: specificity-filtered, broad template, shuffled catalysts, and no catalysis;
+- basal interval: no basal trickle, every 4 ticks, and every 8 ticks;
+- rule-pool construction: original hand-designed rich pool versus a mechanically generated template pool over the same food set.
+
+Command:
+
+```bash
+scripts/run_exp04_reduction_sweep.sh
+```
+
+Artifact run: `experiments/exp04_reduction_sweep_20260708/`.
+
+Observed comparison highlights:
+
+- Original hand-designed/specific/basal-4 condition: maximal RAF 15, greedy core 2 (`lCD`, `lBCD2`), 56 events, 15 fired-rule diversity.
+- No-catalysis controls: maximal RAF 0 for both pools; only basal events occur when basal interval is enabled.
+- Shuffled hand-designed catalysis still leaves a smaller RAF-like signal (maximal RAF 10, core 3), so the current pool remains catalysis-map-sensitive and not an unbiased emergence claim.
+- The mechanically generated template pool has zero RAF under specific matching; broad/shuffled variants can produce catalyzed events or a tiny RAF-like artifact, highlighting the need for stricter generated-pool controls before making scientific claims.
+
 ## Limitation and next reduction
 
-This is still an inspectable PeTTa-side deterministic/summarized fixture rather than a fully generic stochastic simulator over arbitrary rule subsets. It now incorporates the design-review direction: start success-biased but non-planted, with specificity-filtered catalysis and maximal-RAF pruning notes. Next experiments should reduce bias gradually and move pruning/closure from explicit tested atoms into a more generic PeTTa or host-swept implementation.
+This is still an inspectable PeTTa-side deterministic/summarized fixture plus host-side reduction artifacts rather than a fully generic stochastic simulator over arbitrary rule subsets. It now incorporates the design-review direction: start success-biased but non-planted, with specificity-filtered catalysis and maximal-RAF pruning notes. Next experiments should move more pruning/closure summaries into PeTTa-queryable report atoms and continue reducing bias in generated rule pools.
