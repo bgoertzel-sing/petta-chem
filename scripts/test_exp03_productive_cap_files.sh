@@ -15,6 +15,7 @@ expected_runs=(
   exp03-cap6-productive-seed-13-random
   exp03-cap6-productive-seed-17-random
   exp03-cap7-productive-seed-13-random
+  exp03-cap8-productive-seed-13-random
 )
 
 for run_id in "${expected_runs[@]}"; do
@@ -32,6 +33,7 @@ grep -Fq '`exp03-cap6-productive-seed-11-random` from `(exp03-cap6-productive-fi
 grep -Fq '`exp03-cap6-productive-seed-13-random` from `(exp03-cap6-productive-file-bundle seed-13 random-polymer)`' "$TMP_DIR/RUN.md"
 grep -Fq '`exp03-cap6-productive-seed-17-random` from `(exp03-cap6-productive-file-bundle seed-17 random-polymer)`' "$TMP_DIR/RUN.md"
 grep -Fq '`exp03-cap7-productive-seed-13-random` from `(exp03-cap7-productive-file-bundle seed-13 random-polymer)`' "$TMP_DIR/RUN.md"
+grep -Fq '`exp03-cap8-productive-seed-13-random` from `(exp03-cap8-productive-file-bundle seed-13 random-polymer)`' "$TMP_DIR/RUN.md"
 
 grep -Fq '(run-config exp03-cap5-productive-seed-13-random exp03 (seed-13) 10 (candidate-cap 5 1) random-polymer)' \
   "$TMP_DIR/exp03-cap5-productive-seed-13-random/CONFIG.metta"
@@ -69,3 +71,11 @@ grep -Fq '(metric dynamic-event-count exp03-cap7-productive-seed-13-random 14)' 
   "$TMP_DIR/exp03-cap7-productive-seed-13-random/METRICS.metta"
 grep -Fq '(run-summary exp03-cap7-productive-seed-13-random passed cap7-productive-seventh-candidate-seed-13 true)' \
   "$TMP_DIR/exp03-cap7-productive-seed-13-random/SUMMARY.metta"
+grep -Fq '(run-config exp03-cap8-productive-seed-13-random exp03 (seed-13) 16 (candidate-cap 8 1) random-polymer)' \
+  "$TMP_DIR/exp03-cap8-productive-seed-13-random/CONFIG.metta"
+grep -Fq '(event 0 rr5 R0 R5 R05 R3)' \
+  "$TMP_DIR/exp03-cap8-productive-seed-13-random/EVENTS.metta"
+grep -Fq '(metric dynamic-event-count exp03-cap8-productive-seed-13-random 14)' \
+  "$TMP_DIR/exp03-cap8-productive-seed-13-random/METRICS.metta"
+grep -Fq '(run-summary exp03-cap8-productive-seed-13-random passed cap8-full-source-eighth-candidate-seed-13 true)' \
+  "$TMP_DIR/exp03-cap8-productive-seed-13-random/SUMMARY.metta"

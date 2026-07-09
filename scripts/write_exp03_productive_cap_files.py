@@ -91,6 +91,10 @@ BUNDLES = (
         "exp03-cap7-productive-seed-13-random",
         "(exp03-cap7-productive-file-bundle seed-13 random-polymer)",
     ),
+    BundleQuery(
+        "exp03-cap8-productive-seed-13-random",
+        "(exp03-cap8-productive-file-bundle seed-13 random-polymer)",
+    ),
 )
 
 
