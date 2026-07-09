@@ -338,7 +338,7 @@
 ; filesystem/logistics layer.
 
 (= (exp04-reduction-sweep-id) exp04-reduction-sweep-20260708)
-(= (exp04-reduction-sweep-row-count) 24)
+(= (exp04-reduction-sweep-row-count) 36)
 
 (= (exp04-reduction-sweep-row hand-designed specific 0)
    (reduction-row hand-designed specific basal-0 maximal-raf 15 core 2 events 0 diversity 0 catalyzed 0 basal 0))
@@ -390,6 +390,31 @@
 (= (exp04-reduction-sweep-row mechanically-generated-template none 8)
    (reduction-row mechanically-generated-template none basal-8 maximal-raf 0 core 0 events 7 diversity 7 catalyzed 0 basal 7))
 
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template specific 0)
+   (reduction-row mechanically-generated-cross-template specific basal-0 maximal-raf 0 core 0 events 0 diversity 0 catalyzed 0 basal 0))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template specific 4)
+   (reduction-row mechanically-generated-cross-template specific basal-4 maximal-raf 0 core 0 events 14 diversity 11 catalyzed 0 basal 14))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template specific 8)
+   (reduction-row mechanically-generated-cross-template specific basal-8 maximal-raf 0 core 0 events 7 diversity 7 catalyzed 0 basal 7))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template broad 0)
+   (reduction-row mechanically-generated-cross-template broad basal-0 maximal-raf 0 core 0 events 0 diversity 0 catalyzed 0 basal 0))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template broad 4)
+   (reduction-row mechanically-generated-cross-template broad basal-4 maximal-raf 0 core 0 events 14 diversity 11 catalyzed 0 basal 14))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template broad 8)
+   (reduction-row mechanically-generated-cross-template broad basal-8 maximal-raf 0 core 0 events 7 diversity 7 catalyzed 0 basal 7))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template shuffled 0)
+   (reduction-row mechanically-generated-cross-template shuffled basal-0 maximal-raf 5 core 1 events 0 diversity 0 catalyzed 0 basal 0))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template shuffled 4)
+   (reduction-row mechanically-generated-cross-template shuffled basal-4 maximal-raf 5 core 1 events 48 diversity 12 catalyzed 34 basal 14))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template shuffled 8)
+   (reduction-row mechanically-generated-cross-template shuffled basal-8 maximal-raf 5 core 1 events 36 diversity 9 catalyzed 29 basal 7))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template none 0)
+   (reduction-row mechanically-generated-cross-template none basal-0 maximal-raf 0 core 0 events 0 diversity 0 catalyzed 0 basal 0))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template none 4)
+   (reduction-row mechanically-generated-cross-template none basal-4 maximal-raf 0 core 0 events 14 diversity 11 catalyzed 0 basal 14))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template none 8)
+   (reduction-row mechanically-generated-cross-template none basal-8 maximal-raf 0 core 0 events 7 diversity 7 catalyzed 0 basal 7))
+
 (= (exp04-reduction-baseline-row)
    (exp04-reduction-sweep-row hand-designed specific 4))
 
@@ -406,8 +431,22 @@
 (= (exp04-reduction-generated-specific-zero?)
    (and (== (exp04-reduction-sweep-row mechanically-generated-template specific 4)
             (reduction-row mechanically-generated-template specific basal-4 maximal-raf 0 core 0 events 14 diversity 11 catalyzed 0 basal 14))
-        (== (exp04-reduction-sweep-row mechanically-generated-template specific 8)
-            (reduction-row mechanically-generated-template specific basal-8 maximal-raf 0 core 0 events 7 diversity 7 catalyzed 0 basal 7))))
+   (and (== (exp04-reduction-sweep-row mechanically-generated-template specific 8)
+            (reduction-row mechanically-generated-template specific basal-8 maximal-raf 0 core 0 events 7 diversity 7 catalyzed 0 basal 7))
+   (and (== (exp04-reduction-sweep-row mechanically-generated-cross-template specific 4)
+            (reduction-row mechanically-generated-cross-template specific basal-4 maximal-raf 0 core 0 events 14 diversity 11 catalyzed 0 basal 14))
+        (== (exp04-reduction-sweep-row mechanically-generated-cross-template specific 8)
+            (reduction-row mechanically-generated-cross-template specific basal-8 maximal-raf 0 core 0 events 7 diversity 7 catalyzed 0 basal 7))))))
+
+(= (exp04-reduction-cross-template-broad-zero?)
+   (and (== (exp04-reduction-sweep-row mechanically-generated-cross-template broad 4)
+            (reduction-row mechanically-generated-cross-template broad basal-4 maximal-raf 0 core 0 events 14 diversity 11 catalyzed 0 basal 14))
+        (== (exp04-reduction-sweep-row mechanically-generated-cross-template broad 8)
+            (reduction-row mechanically-generated-cross-template broad basal-8 maximal-raf 0 core 0 events 7 diversity 7 catalyzed 0 basal 7))))
+
+(= (exp04-reduction-shuffling-can-create-cross-template-raf?)
+   (== (exp04-reduction-sweep-row mechanically-generated-cross-template shuffled 4)
+       (reduction-row mechanically-generated-cross-template shuffled basal-4 maximal-raf 5 core 1 events 48 diversity 12 catalyzed 34 basal 14)))
 
 (= (exp04-reduction-shuffled-caveat?)
    (== (exp04-reduction-sweep-row hand-designed shuffled 4)
@@ -418,6 +457,8 @@
                    no-catalysis-controls raf-negative
                    shuffled-hand-designed-control raf-like-signal-remains
                    generated-specific-control raf-negative
+                   cross-template-broad-control raf-negative
+                   shuffled-cross-template-control raf-like-signal-created
                    claim unbiased-emergence-not-supported))
 
 (= (exp04-reduction-sweep-report)
@@ -427,8 +468,10 @@
                            interpretation (exp04-reduction-sweep-interpretation)))
 
 (= (exp04-reduction-sweep-report-complete?)
-   (and (== (exp04-reduction-sweep-row-count) 24)
+   (and (== (exp04-reduction-sweep-row-count) 36)
    (and (exp04-reduction-baseline-positive?)
    (and (exp04-reduction-no-catalysis-zero?)
    (and (exp04-reduction-generated-specific-zero?)
-        (exp04-reduction-shuffled-caveat?))))))
+   (and (exp04-reduction-cross-template-broad-zero?)
+   (and (exp04-reduction-shuffling-can-create-cross-template-raf?)
+        (exp04-reduction-shuffled-caveat?))))))))

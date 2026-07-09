@@ -29,5 +29,17 @@ It varies catalysis controls, basal interval, and hand-designed versus mechanica
 | mechanically-generated-template | none | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mechanically-generated-template | none | 4 | 0 | 0 | 14 | 11 | 0 | 14 |
 | mechanically-generated-template | none | 8 | 0 | 0 | 7 | 7 | 0 | 7 |
+| mechanically-generated-cross-template | specific | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mechanically-generated-cross-template | specific | 4 | 0 | 0 | 14 | 11 | 0 | 14 |
+| mechanically-generated-cross-template | specific | 8 | 0 | 0 | 7 | 7 | 0 | 7 |
+| mechanically-generated-cross-template | broad | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mechanically-generated-cross-template | broad | 4 | 0 | 0 | 14 | 11 | 0 | 14 |
+| mechanically-generated-cross-template | broad | 8 | 0 | 0 | 7 | 7 | 0 | 7 |
+| mechanically-generated-cross-template | shuffled | 0 | 5 | 1 | 0 | 0 | 0 | 0 |
+| mechanically-generated-cross-template | shuffled | 4 | 5 | 1 | 48 | 12 | 34 | 14 |
+| mechanically-generated-cross-template | shuffled | 8 | 5 | 1 | 36 | 9 | 29 | 7 |
+| mechanically-generated-cross-template | none | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mechanically-generated-cross-template | none | 4 | 0 | 0 | 14 | 11 | 0 | 14 |
+| mechanically-generated-cross-template | none | 8 | 0 | 0 | 7 | 7 | 0 | 7 |
 
 Interpretation: the original hand-designed/specific run remains a positive RAF artifact, while the none/shuffled controls expose how much the result depends on the catalysis map and basal trickle.

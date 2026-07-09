@@ -19,7 +19,7 @@ import run_rich_raf as rich
 
 CATALYSIS_MODES = ("specific", "broad", "shuffled", "none")
 BASAL_INTERVALS = (0, 4, 8)
-RULE_POOLS = ("hand-designed", "mechanically-generated-template")
+RULE_POOLS = ("hand-designed", "mechanically-generated-template", "mechanically-generated-cross-template")
 
 
 def rotate_catalysts(rules: list[rich.Rule], offset: int = 5) -> list[rich.Rule]:
@@ -35,6 +35,12 @@ def no_catalysis_rules(rules: list[rich.Rule]) -> list[rich.Rule]:
     return [rich.Rule(r.rid, r.kind, r.a, r.b, r.product, r.secondary, "None") for r in rules]
 
 
+PAIR_SPECS = (
+    ("A", "B", "AB"), ("A", "C", "AC"), ("A", "D", "AD"),
+    ("B", "C", "BC"), ("B", "D", "BD"), ("C", "D", "CD"),
+)
+
+
 def generated_template_rules() -> list[rich.Rule]:
     """A deterministic non-hand-picked 20-rule template pool over A/B/C/D.
 
@@ -42,23 +48,42 @@ def generated_template_rules() -> list[rich.Rule]:
     cleavages, and pair-to-star modifications; catalysts are local products or
     adjacent pair products, not manually tuned to the exp04 RAF core.
     """
-    pair_specs = [
-        ("A", "B", "AB"), ("A", "C", "AC"), ("A", "D", "AD"),
-        ("B", "C", "BC"), ("B", "D", "BD"), ("C", "D", "CD"),
-    ]
     rules: list[rich.Rule] = []
-    for i, (a, b, product) in enumerate(pair_specs):
-        catalyst = pair_specs[(i + 1) % len(pair_specs)][2]
+    for i, (a, b, product) in enumerate(PAIR_SPECS):
+        catalyst = PAIR_SPECS[(i + 1) % len(PAIR_SPECS)][2]
         rules.append(rich.Rule(f"gl{product}", "ligation", a, b, product, None, catalyst))
-    for i, (_a, _b, product) in enumerate(pair_specs):
-        catalyst = pair_specs[(i + 2) % len(pair_specs)][2]
+    for i, (_a, _b, product) in enumerate(PAIR_SPECS):
+        catalyst = PAIR_SPECS[(i + 2) % len(PAIR_SPECS)][2]
         rules.append(rich.Rule(f"gc{product}", "cleavage", product, None, product[0], product[1], catalyst))
-    for i, (_a, _b, product) in enumerate(pair_specs):
-        catalyst = pair_specs[(i + 3) % len(pair_specs)][2]
+    for i, (_a, _b, product) in enumerate(PAIR_SPECS):
+        catalyst = PAIR_SPECS[(i + 3) % len(PAIR_SPECS)][2]
         rules.append(rich.Rule(f"gm{product}", "modification", product, None, f"{product}star", None, catalyst))
     rules.extend([
         rich.Rule("glABC", "ligation", "AB", "C", "ABC", None, "BC"),
         rich.Rule("glBCD", "ligation", "BC", "D", "BCD", None, "CD"),
+    ])
+    return rules
+
+
+def generated_cross_template_rules() -> list[rich.Rule]:
+    """A stricter mechanically generated 20-rule decoy pool.
+
+    Pair-level catalysts are assigned to disjoint/cross pair products when
+    possible, reducing direct motif matches relative to `generated_template_rules`.
+    This probes how much the exp04 RAF signal depends on local template bias and
+    whether shuffled catalysis can itself manufacture RAF-like closure.
+    """
+    cross = {"AB": "CD", "AC": "BD", "AD": "BC", "BC": "AD", "BD": "AC", "CD": "AB"}
+    rules: list[rich.Rule] = []
+    for a, b, product in PAIR_SPECS:
+        rules.append(rich.Rule(f"xgl{product}", "ligation", a, b, product, None, cross[product]))
+    for a, b, product in PAIR_SPECS:
+        rules.append(rich.Rule(f"xgc{product}", "cleavage", product, None, a, b, cross[product]))
+    for _a, _b, product in PAIR_SPECS:
+        rules.append(rich.Rule(f"xgm{product}", "modification", product, None, f"{product}star", None, cross[product]))
+    rules.extend([
+        rich.Rule("xglABC", "ligation", "AB", "C", "ABC", None, "BD"),
+        rich.Rule("xglBCD", "ligation", "BC", "D", "BCD", None, "AC"),
     ])
     return rules
 
@@ -68,6 +93,8 @@ def rule_pool(name: str) -> list[rich.Rule]:
         return list(rich.RULES)
     if name == "mechanically-generated-template":
         return generated_template_rules()
+    if name == "mechanically-generated-cross-template":
+        return generated_cross_template_rules()
     raise ValueError(f"unknown rule pool: {name}")
 
 
