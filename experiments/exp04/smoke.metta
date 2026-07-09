@@ -61,7 +61,7 @@
                  event-count 42 raf-status emerged))
 
 !(test (exp04-reduction-sweep-id) exp04-reduction-sweep-20260708)
-!(test (exp04-reduction-sweep-row-count) 36)
+!(test (exp04-reduction-sweep-row-count) 54)
 !(test (exp04-reduction-baseline-row)
        (reduction-row hand-designed specific basal-4 maximal-raf 15 core 2 events 56 diversity 15 catalyzed 42 basal 14))
 !(test (exp04-reduction-sweep-row hand-designed none 4)
@@ -79,6 +79,11 @@
 !(test (exp04-reduction-generated-specific-zero?) True)
 !(test (exp04-reduction-cross-template-broad-zero?) True)
 !(test (exp04-reduction-shuffling-can-create-cross-template-raf?) True)
+!(test (exp04-reduction-sweep-row hand-designed shuffled-1 4)
+       (reduction-row hand-designed shuffled-1 basal-4 maximal-raf 0 core 0 events 38 diversity 12 catalyzed 24 basal 14))
+!(test (exp04-reduction-sweep-row mechanically-generated-cross-template shuffled-9 4)
+       (reduction-row mechanically-generated-cross-template shuffled-9 basal-4 maximal-raf 3 core 1 events 53 diversity 13 catalyzed 39 basal 14))
+!(test (exp04-reduction-alt-shuffle-offsets-tested?) True)
 !(test (exp04-reduction-shuffled-caveat?) True)
 !(test (exp04-reduction-sweep-interpretation)
        (interpretation positive-inspectable-artifact
@@ -87,5 +92,6 @@
                        generated-specific-control raf-negative
                        cross-template-broad-control raf-negative
                        shuffled-cross-template-control raf-like-signal-created
+                       alternate-shuffle-offsets offset-sensitive
                        claim unbiased-emergence-not-supported))
 !(test (exp04-reduction-sweep-report-complete?) True)

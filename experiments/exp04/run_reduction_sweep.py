@@ -17,7 +17,8 @@ from typing import Iterable
 import run_rich_raf as rich
 
 
-CATALYSIS_MODES = ("specific", "broad", "shuffled", "none")
+CATALYSIS_MODES = ("specific", "broad", "shuffled", "shuffled-1", "shuffled-9", "none")
+SHUFFLED_CATALYST_OFFSETS = {"shuffled": 5, "shuffled-1": 1, "shuffled-9": 9}
 BASAL_INTERVALS = (0, 4, 8)
 RULE_POOLS = ("hand-designed", "mechanically-generated-template", "mechanically-generated-cross-template")
 
@@ -110,8 +111,16 @@ def closure_from_food(rules: Iterable[rich.Rule]) -> set[str]:
     return rich.closure_from_food(rules)
 
 
+def rules_for_catalysis_mode(rules: list[rich.Rule], mode: str) -> list[rich.Rule]:
+    if mode in SHUFFLED_CATALYST_OFFSETS:
+        return rotate_catalysts(rules, SHUFFLED_CATALYST_OFFSETS[mode])
+    if mode == "none":
+        return no_catalysis_rules(rules)
+    return list(rules)
+
+
 def maximal_raf_prune_variant(rules: list[rich.Rule], mode: str) -> tuple[list[rich.Rule], list[dict]]:
-    active = rotate_catalysts(rules) if mode == "shuffled" else no_catalysis_rules(rules) if mode == "none" else list(rules)
+    active = rules_for_catalysis_mode(rules, mode)
     trace = []
     for step in range(len(active) + len(rich.STRUCTURAL_CONTAINS)):
         closure = closure_from_food(active)
@@ -161,7 +170,7 @@ def greedy_minimize_variant(rules: list[rich.Rule], mode: str) -> list[rich.Rule
 
 
 def simulate_variant(rules: list[rich.Rule], mode: str, basal_interval: int, ticks: int) -> tuple[dict[str, int], list[dict]]:
-    active_rules = rotate_catalysts(rules) if mode == "shuffled" else no_catalysis_rules(rules) if mode == "none" else list(rules)
+    active_rules = rules_for_catalysis_mode(rules, mode)
     abundance = {m: rich.FOOD_FLOOR for m in rich.FOOD}
     events = []
     for tick in range(ticks):
@@ -237,7 +246,7 @@ def write_summary(out_dir: Path, rows: list[dict]) -> None:
         )
     lines.extend([
         "",
-        "Interpretation: the original hand-designed/specific run remains a positive RAF artifact, while the none/shuffled controls expose how much the result depends on the catalysis map and basal trickle.",
+        "Interpretation: the original hand-designed/specific run remains a positive RAF artifact, while no-catalysis and multiple rotated-shuffle controls expose how much the result depends on the catalysis map and basal trickle.",
     ])
     (out_dir / "SUMMARY.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 

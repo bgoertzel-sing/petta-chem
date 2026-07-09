@@ -14,6 +14,12 @@ It varies catalysis controls, basal interval, and hand-designed versus mechanica
 | hand-designed | shuffled | 0 | 10 | 3 | 0 | 0 | 0 | 0 |
 | hand-designed | shuffled | 4 | 10 | 3 | 53 | 16 | 39 | 14 |
 | hand-designed | shuffled | 8 | 10 | 3 | 49 | 13 | 42 | 7 |
+| hand-designed | shuffled-1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hand-designed | shuffled-1 | 4 | 0 | 0 | 38 | 12 | 24 | 14 |
+| hand-designed | shuffled-1 | 8 | 0 | 0 | 45 | 11 | 38 | 7 |
+| hand-designed | shuffled-9 | 0 | 7 | 3 | 0 | 0 | 0 | 0 |
+| hand-designed | shuffled-9 | 4 | 7 | 3 | 20 | 10 | 6 | 14 |
+| hand-designed | shuffled-9 | 8 | 7 | 3 | 11 | 10 | 4 | 7 |
 | hand-designed | none | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | hand-designed | none | 4 | 0 | 0 | 14 | 11 | 0 | 14 |
 | hand-designed | none | 8 | 0 | 0 | 7 | 7 | 0 | 7 |
@@ -26,6 +32,12 @@ It varies catalysis controls, basal interval, and hand-designed versus mechanica
 | mechanically-generated-template | shuffled | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
 | mechanically-generated-template | shuffled | 4 | 1 | 1 | 56 | 12 | 42 | 14 |
 | mechanically-generated-template | shuffled | 8 | 1 | 1 | 56 | 7 | 49 | 7 |
+| mechanically-generated-template | shuffled-1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mechanically-generated-template | shuffled-1 | 4 | 0 | 0 | 14 | 11 | 0 | 14 |
+| mechanically-generated-template | shuffled-1 | 8 | 0 | 0 | 7 | 7 | 0 | 7 |
+| mechanically-generated-template | shuffled-9 | 0 | 4 | 1 | 0 | 0 | 0 | 0 |
+| mechanically-generated-template | shuffled-9 | 4 | 4 | 1 | 50 | 14 | 36 | 14 |
+| mechanically-generated-template | shuffled-9 | 8 | 4 | 1 | 38 | 11 | 31 | 7 |
 | mechanically-generated-template | none | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mechanically-generated-template | none | 4 | 0 | 0 | 14 | 11 | 0 | 14 |
 | mechanically-generated-template | none | 8 | 0 | 0 | 7 | 7 | 0 | 7 |
@@ -38,8 +50,14 @@ It varies catalysis controls, basal interval, and hand-designed versus mechanica
 | mechanically-generated-cross-template | shuffled | 0 | 5 | 1 | 0 | 0 | 0 | 0 |
 | mechanically-generated-cross-template | shuffled | 4 | 5 | 1 | 48 | 12 | 34 | 14 |
 | mechanically-generated-cross-template | shuffled | 8 | 5 | 1 | 36 | 9 | 29 | 7 |
+| mechanically-generated-cross-template | shuffled-1 | 0 | 5 | 1 | 0 | 0 | 0 | 0 |
+| mechanically-generated-cross-template | shuffled-1 | 4 | 5 | 1 | 42 | 12 | 28 | 14 |
+| mechanically-generated-cross-template | shuffled-1 | 8 | 5 | 1 | 24 | 10 | 17 | 7 |
+| mechanically-generated-cross-template | shuffled-9 | 0 | 3 | 1 | 0 | 0 | 0 | 0 |
+| mechanically-generated-cross-template | shuffled-9 | 4 | 3 | 1 | 53 | 13 | 39 | 14 |
+| mechanically-generated-cross-template | shuffled-9 | 8 | 3 | 1 | 49 | 9 | 42 | 7 |
 | mechanically-generated-cross-template | none | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mechanically-generated-cross-template | none | 4 | 0 | 0 | 14 | 11 | 0 | 14 |
 | mechanically-generated-cross-template | none | 8 | 0 | 0 | 7 | 7 | 0 | 7 |
 
-Interpretation: the original hand-designed/specific run remains a positive RAF artifact, while the none/shuffled controls expose how much the result depends on the catalysis map and basal trickle.
+Interpretation: the original hand-designed/specific run remains a positive RAF artifact, while no-catalysis and multiple rotated-shuffle controls expose how much the result depends on the catalysis map and basal trickle.

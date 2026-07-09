@@ -338,7 +338,7 @@
 ; filesystem/logistics layer.
 
 (= (exp04-reduction-sweep-id) exp04-reduction-sweep-20260708)
-(= (exp04-reduction-sweep-row-count) 36)
+(= (exp04-reduction-sweep-row-count) 54)
 
 (= (exp04-reduction-sweep-row hand-designed specific 0)
    (reduction-row hand-designed specific basal-0 maximal-raf 15 core 2 events 0 diversity 0 catalyzed 0 basal 0))
@@ -415,6 +415,48 @@
 (= (exp04-reduction-sweep-row mechanically-generated-cross-template none 8)
    (reduction-row mechanically-generated-cross-template none basal-8 maximal-raf 0 core 0 events 7 diversity 7 catalyzed 0 basal 7))
 
+; Additional rotated-shuffle controls.  The original `shuffled` mode is a
+; deterministic catalyst rotation by 5.  These rows add rotations by 1 and 9 to
+; test whether RAF-like controls are robust to the arbitrary shuffle offset.
+(= (exp04-reduction-sweep-row hand-designed shuffled-1 0)
+   (reduction-row hand-designed shuffled-1 basal-0 maximal-raf 0 core 0 events 0 diversity 0 catalyzed 0 basal 0))
+(= (exp04-reduction-sweep-row hand-designed shuffled-1 4)
+   (reduction-row hand-designed shuffled-1 basal-4 maximal-raf 0 core 0 events 38 diversity 12 catalyzed 24 basal 14))
+(= (exp04-reduction-sweep-row hand-designed shuffled-1 8)
+   (reduction-row hand-designed shuffled-1 basal-8 maximal-raf 0 core 0 events 45 diversity 11 catalyzed 38 basal 7))
+(= (exp04-reduction-sweep-row hand-designed shuffled-9 0)
+   (reduction-row hand-designed shuffled-9 basal-0 maximal-raf 7 core 3 events 0 diversity 0 catalyzed 0 basal 0))
+(= (exp04-reduction-sweep-row hand-designed shuffled-9 4)
+   (reduction-row hand-designed shuffled-9 basal-4 maximal-raf 7 core 3 events 20 diversity 10 catalyzed 6 basal 14))
+(= (exp04-reduction-sweep-row hand-designed shuffled-9 8)
+   (reduction-row hand-designed shuffled-9 basal-8 maximal-raf 7 core 3 events 11 diversity 10 catalyzed 4 basal 7))
+
+(= (exp04-reduction-sweep-row mechanically-generated-template shuffled-1 0)
+   (reduction-row mechanically-generated-template shuffled-1 basal-0 maximal-raf 0 core 0 events 0 diversity 0 catalyzed 0 basal 0))
+(= (exp04-reduction-sweep-row mechanically-generated-template shuffled-1 4)
+   (reduction-row mechanically-generated-template shuffled-1 basal-4 maximal-raf 0 core 0 events 14 diversity 11 catalyzed 0 basal 14))
+(= (exp04-reduction-sweep-row mechanically-generated-template shuffled-1 8)
+   (reduction-row mechanically-generated-template shuffled-1 basal-8 maximal-raf 0 core 0 events 7 diversity 7 catalyzed 0 basal 7))
+(= (exp04-reduction-sweep-row mechanically-generated-template shuffled-9 0)
+   (reduction-row mechanically-generated-template shuffled-9 basal-0 maximal-raf 4 core 1 events 0 diversity 0 catalyzed 0 basal 0))
+(= (exp04-reduction-sweep-row mechanically-generated-template shuffled-9 4)
+   (reduction-row mechanically-generated-template shuffled-9 basal-4 maximal-raf 4 core 1 events 50 diversity 14 catalyzed 36 basal 14))
+(= (exp04-reduction-sweep-row mechanically-generated-template shuffled-9 8)
+   (reduction-row mechanically-generated-template shuffled-9 basal-8 maximal-raf 4 core 1 events 38 diversity 11 catalyzed 31 basal 7))
+
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template shuffled-1 0)
+   (reduction-row mechanically-generated-cross-template shuffled-1 basal-0 maximal-raf 5 core 1 events 0 diversity 0 catalyzed 0 basal 0))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template shuffled-1 4)
+   (reduction-row mechanically-generated-cross-template shuffled-1 basal-4 maximal-raf 5 core 1 events 42 diversity 12 catalyzed 28 basal 14))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template shuffled-1 8)
+   (reduction-row mechanically-generated-cross-template shuffled-1 basal-8 maximal-raf 5 core 1 events 24 diversity 10 catalyzed 17 basal 7))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template shuffled-9 0)
+   (reduction-row mechanically-generated-cross-template shuffled-9 basal-0 maximal-raf 3 core 1 events 0 diversity 0 catalyzed 0 basal 0))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template shuffled-9 4)
+   (reduction-row mechanically-generated-cross-template shuffled-9 basal-4 maximal-raf 3 core 1 events 53 diversity 13 catalyzed 39 basal 14))
+(= (exp04-reduction-sweep-row mechanically-generated-cross-template shuffled-9 8)
+   (reduction-row mechanically-generated-cross-template shuffled-9 basal-8 maximal-raf 3 core 1 events 49 diversity 9 catalyzed 42 basal 7))
+
 (= (exp04-reduction-baseline-row)
    (exp04-reduction-sweep-row hand-designed specific 4))
 
@@ -452,6 +494,16 @@
    (== (exp04-reduction-sweep-row hand-designed shuffled 4)
        (reduction-row hand-designed shuffled basal-4 maximal-raf 10 core 3 events 53 diversity 16 catalyzed 39 basal 14)))
 
+(= (exp04-reduction-alt-shuffle-offsets-tested?)
+   (and (== (exp04-reduction-sweep-row hand-designed shuffled-1 4)
+            (reduction-row hand-designed shuffled-1 basal-4 maximal-raf 0 core 0 events 38 diversity 12 catalyzed 24 basal 14))
+   (and (== (exp04-reduction-sweep-row hand-designed shuffled-9 4)
+            (reduction-row hand-designed shuffled-9 basal-4 maximal-raf 7 core 3 events 20 diversity 10 catalyzed 6 basal 14))
+   (and (== (exp04-reduction-sweep-row mechanically-generated-template shuffled-9 4)
+            (reduction-row mechanically-generated-template shuffled-9 basal-4 maximal-raf 4 core 1 events 50 diversity 14 catalyzed 36 basal 14))
+        (== (exp04-reduction-sweep-row mechanically-generated-cross-template shuffled-9 4)
+            (reduction-row mechanically-generated-cross-template shuffled-9 basal-4 maximal-raf 3 core 1 events 53 diversity 13 catalyzed 39 basal 14))))))
+
 (= (exp04-reduction-sweep-interpretation)
    (interpretation positive-inspectable-artifact
                    no-catalysis-controls raf-negative
@@ -459,6 +511,7 @@
                    generated-specific-control raf-negative
                    cross-template-broad-control raf-negative
                    shuffled-cross-template-control raf-like-signal-created
+                   alternate-shuffle-offsets offset-sensitive
                    claim unbiased-emergence-not-supported))
 
 (= (exp04-reduction-sweep-report)
@@ -468,10 +521,11 @@
                            interpretation (exp04-reduction-sweep-interpretation)))
 
 (= (exp04-reduction-sweep-report-complete?)
-   (and (== (exp04-reduction-sweep-row-count) 36)
+   (and (== (exp04-reduction-sweep-row-count) 54)
    (and (exp04-reduction-baseline-positive?)
    (and (exp04-reduction-no-catalysis-zero?)
    (and (exp04-reduction-generated-specific-zero?)
    (and (exp04-reduction-cross-template-broad-zero?)
    (and (exp04-reduction-shuffling-can-create-cross-template-raf?)
-        (exp04-reduction-shuffled-caveat?))))))))
+   (and (exp04-reduction-alt-shuffle-offsets-tested?)
+        (exp04-reduction-shuffled-caveat?)))))))))
