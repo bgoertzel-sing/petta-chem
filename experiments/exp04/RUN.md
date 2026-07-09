@@ -58,6 +58,22 @@ scripts/run_exp04.sh
 
 Result: all exp04 smoke tests passed. The PeTTa-side summary reports `(exp04-spontaneous-raf-emerged?)` as `True` for the 20-rule, 56-tick configuration.
 
+## Host-computed refinement
+
+A host-side harness, `experiments/exp04/run_rich_raf.py`, mirrors the same 20-rule pool and computes closure, bounded maximal-RAF pruning, greedy RAF-core minimization, a no-catalysis RAF control, and a 56-tick deterministic dynamics run with food replenishment.
+
+Artifact run: `projects/petta-chem/experiments/exp04_rich_raf_20260708/`.
+
+Observed metrics from that run:
+
+- Maximal RAF after strict pruning: 15 rules.
+- Greedy minimized RAF core: 2 rules, `lCD` and `lBCD2`.
+- Minimized core passes the RAF predicate: true.
+- No-catalysis control maximal RAF size: 0.
+- Dynamic simulation: 56 events over 56 ticks; food floor maintained.
+
+The dynamic run uses a slow basal trickle every fourth tick, even after catalyzed reactions appear, to avoid the first side-loop monopolizing all subsequent events. This makes the result more informative as a positive exploratory RAF fixture, but it remains success-biased rather than evidence of unbiased spontaneous ACS emergence.
+
 ## Limitation and next reduction
 
 This is still an inspectable PeTTa-side deterministic/summarized fixture rather than a fully generic stochastic simulator over arbitrary rule subsets. It now incorporates the design-review direction: start success-biased but non-planted, with specificity-filtered catalysis and maximal-RAF pruning notes. Next experiments should reduce bias gradually and move pruning/closure from explicit tested atoms into a more generic PeTTa or host-swept implementation.
