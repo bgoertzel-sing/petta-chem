@@ -10,6 +10,8 @@
       "broad",
       "shuffled",
       "shuffled-1",
+      "shuffled-2",
+      "shuffled-6",
       "shuffled-9",
       "none"
     ],
@@ -646,6 +648,304 @@
         }
       ],
       "fixed_point_step": 3,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "hand-designed",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 0,
+      "basal_interval": 0,
+      "catalysis_mode": "shuffled-2",
+      "catalyzed_event_count": 0,
+      "event_count": 0,
+      "event_diversity": 0,
+      "first_8_events": [],
+      "fixed_point_step": 2,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "hand-designed",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 14,
+      "basal_interval": 4,
+      "catalysis_mode": "shuffled-2",
+      "catalyzed_event_count": 5,
+      "event_count": 19,
+      "event_diversity": 8,
+      "first_8_events": [
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lAB",
+          "tick": 0
+        },
+        {
+          "kind": "modification",
+          "mode": "catalyzed",
+          "rule": "mAB",
+          "tick": 1
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lBC",
+          "tick": 4
+        },
+        {
+          "kind": "modification",
+          "mode": "catalyzed",
+          "rule": "mBC",
+          "tick": 5
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lCD",
+          "tick": 8
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lAC",
+          "tick": 12
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lBCD2",
+          "tick": 16
+        },
+        {
+          "kind": "modification",
+          "mode": "basal",
+          "rule": "mBCD",
+          "tick": 20
+        }
+      ],
+      "fixed_point_step": 2,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "hand-designed",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 7,
+      "basal_interval": 8,
+      "catalysis_mode": "shuffled-2",
+      "catalyzed_event_count": 3,
+      "event_count": 10,
+      "event_diversity": 8,
+      "first_8_events": [
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lAB",
+          "tick": 0
+        },
+        {
+          "kind": "modification",
+          "mode": "catalyzed",
+          "rule": "mAB",
+          "tick": 1
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lBC",
+          "tick": 8
+        },
+        {
+          "kind": "modification",
+          "mode": "catalyzed",
+          "rule": "mBC",
+          "tick": 9
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lCD",
+          "tick": 16
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lAC",
+          "tick": 24
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lBCD2",
+          "tick": 32
+        },
+        {
+          "kind": "modification",
+          "mode": "basal",
+          "rule": "mBCD",
+          "tick": 40
+        }
+      ],
+      "fixed_point_step": 2,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "hand-designed",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 0,
+      "basal_interval": 0,
+      "catalysis_mode": "shuffled-6",
+      "catalyzed_event_count": 0,
+      "event_count": 0,
+      "event_diversity": 0,
+      "first_8_events": [],
+      "fixed_point_step": 2,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "hand-designed",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 14,
+      "basal_interval": 4,
+      "catalysis_mode": "shuffled-6",
+      "catalyzed_event_count": 4,
+      "event_count": 18,
+      "event_diversity": 10,
+      "first_8_events": [
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lAB",
+          "tick": 0
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lBC",
+          "tick": 4
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lCD",
+          "tick": 8
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lAC",
+          "tick": 12
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lABC1",
+          "tick": 16
+        },
+        {
+          "kind": "ligation",
+          "mode": "catalyzed",
+          "rule": "lABC2",
+          "tick": 17
+        },
+        {
+          "kind": "cleavage",
+          "mode": "basal",
+          "rule": "cCD",
+          "tick": 20
+        },
+        {
+          "kind": "modification",
+          "mode": "basal",
+          "rule": "mABC",
+          "tick": 24
+        }
+      ],
+      "fixed_point_step": 2,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "hand-designed",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 7,
+      "basal_interval": 8,
+      "catalysis_mode": "shuffled-6",
+      "catalyzed_event_count": 1,
+      "event_count": 8,
+      "event_diversity": 8,
+      "first_8_events": [
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lAB",
+          "tick": 0
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lBC",
+          "tick": 8
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lCD",
+          "tick": 16
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lAC",
+          "tick": 24
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "lABC1",
+          "tick": 32
+        },
+        {
+          "kind": "cleavage",
+          "mode": "catalyzed",
+          "rule": "cBC",
+          "tick": 33
+        },
+        {
+          "kind": "cleavage",
+          "mode": "basal",
+          "rule": "cCD",
+          "tick": 40
+        },
+        {
+          "kind": "modification",
+          "mode": "basal",
+          "rule": "mABC",
+          "tick": 48
+        }
+      ],
+      "fixed_point_step": 2,
       "food_floor_ok": true,
       "maximal_raf_size": 0,
       "minimal_core_is_raf": false,
@@ -1492,6 +1792,298 @@
       "basal_event_count": 7,
       "basal_interval": 8,
       "catalysis_mode": "shuffled-1",
+      "catalyzed_event_count": 0,
+      "event_count": 7,
+      "event_diversity": 7,
+      "first_8_events": [
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glAB",
+          "tick": 0
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glAC",
+          "tick": 8
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glAD",
+          "tick": 16
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glBC",
+          "tick": 24
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glBD",
+          "tick": 32
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glCD",
+          "tick": 40
+        },
+        {
+          "kind": "cleavage",
+          "mode": "basal",
+          "rule": "gcAB",
+          "tick": 48
+        }
+      ],
+      "fixed_point_step": 1,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "mechanically-generated-template",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 0,
+      "basal_interval": 0,
+      "catalysis_mode": "shuffled-2",
+      "catalyzed_event_count": 0,
+      "event_count": 0,
+      "event_diversity": 0,
+      "first_8_events": [],
+      "fixed_point_step": 2,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "mechanically-generated-template",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 14,
+      "basal_interval": 4,
+      "catalysis_mode": "shuffled-2",
+      "catalyzed_event_count": 1,
+      "event_count": 15,
+      "event_diversity": 11,
+      "first_8_events": [
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glAB",
+          "tick": 0
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glAC",
+          "tick": 4
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glAD",
+          "tick": 8
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glBC",
+          "tick": 12
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glBD",
+          "tick": 16
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glCD",
+          "tick": 20
+        },
+        {
+          "kind": "modification",
+          "mode": "catalyzed",
+          "rule": "gmCD",
+          "tick": 21
+        },
+        {
+          "kind": "cleavage",
+          "mode": "basal",
+          "rule": "gcAB",
+          "tick": 24
+        }
+      ],
+      "fixed_point_step": 2,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "mechanically-generated-template",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 7,
+      "basal_interval": 8,
+      "catalysis_mode": "shuffled-2",
+      "catalyzed_event_count": 1,
+      "event_count": 8,
+      "event_diversity": 8,
+      "first_8_events": [
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glAB",
+          "tick": 0
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glAC",
+          "tick": 8
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glAD",
+          "tick": 16
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glBC",
+          "tick": 24
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glBD",
+          "tick": 32
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glCD",
+          "tick": 40
+        },
+        {
+          "kind": "modification",
+          "mode": "catalyzed",
+          "rule": "gmCD",
+          "tick": 41
+        },
+        {
+          "kind": "cleavage",
+          "mode": "basal",
+          "rule": "gcAB",
+          "tick": 48
+        }
+      ],
+      "fixed_point_step": 2,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "mechanically-generated-template",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 0,
+      "basal_interval": 0,
+      "catalysis_mode": "shuffled-6",
+      "catalyzed_event_count": 0,
+      "event_count": 0,
+      "event_diversity": 0,
+      "first_8_events": [],
+      "fixed_point_step": 1,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "mechanically-generated-template",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 14,
+      "basal_interval": 4,
+      "catalysis_mode": "shuffled-6",
+      "catalyzed_event_count": 0,
+      "event_count": 14,
+      "event_diversity": 11,
+      "first_8_events": [
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glAB",
+          "tick": 0
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glAC",
+          "tick": 4
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glAD",
+          "tick": 8
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glBC",
+          "tick": 12
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glBD",
+          "tick": 16
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "glCD",
+          "tick": 20
+        },
+        {
+          "kind": "cleavage",
+          "mode": "basal",
+          "rule": "gcAB",
+          "tick": 24
+        },
+        {
+          "kind": "cleavage",
+          "mode": "basal",
+          "rule": "gcAD",
+          "tick": 28
+        }
+      ],
+      "fixed_point_step": 1,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "mechanically-generated-template",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 7,
+      "basal_interval": 8,
+      "catalysis_mode": "shuffled-6",
       "catalyzed_event_count": 0,
       "event_count": 7,
       "event_diversity": 7,
@@ -2439,6 +3031,304 @@
         "xglAD"
       ],
       "minimal_core_size": 1,
+      "pool": "mechanically-generated-cross-template",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 0,
+      "basal_interval": 0,
+      "catalysis_mode": "shuffled-2",
+      "catalyzed_event_count": 0,
+      "event_count": 0,
+      "event_diversity": 0,
+      "first_8_events": [],
+      "fixed_point_step": 2,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "mechanically-generated-cross-template",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 14,
+      "basal_interval": 4,
+      "catalysis_mode": "shuffled-2",
+      "catalyzed_event_count": 1,
+      "event_count": 15,
+      "event_diversity": 11,
+      "first_8_events": [
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglAB",
+          "tick": 0
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglAC",
+          "tick": 4
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglAD",
+          "tick": 8
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglBC",
+          "tick": 12
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglBD",
+          "tick": 16
+        },
+        {
+          "kind": "modification",
+          "mode": "catalyzed",
+          "rule": "xgmBD",
+          "tick": 17
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglCD",
+          "tick": 20
+        },
+        {
+          "kind": "cleavage",
+          "mode": "basal",
+          "rule": "xgcAB",
+          "tick": 24
+        }
+      ],
+      "fixed_point_step": 2,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "mechanically-generated-cross-template",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 7,
+      "basal_interval": 8,
+      "catalysis_mode": "shuffled-2",
+      "catalyzed_event_count": 1,
+      "event_count": 8,
+      "event_diversity": 8,
+      "first_8_events": [
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglAB",
+          "tick": 0
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglAC",
+          "tick": 8
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglAD",
+          "tick": 16
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglBC",
+          "tick": 24
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglBD",
+          "tick": 32
+        },
+        {
+          "kind": "modification",
+          "mode": "catalyzed",
+          "rule": "xgmBD",
+          "tick": 33
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglCD",
+          "tick": 40
+        },
+        {
+          "kind": "cleavage",
+          "mode": "basal",
+          "rule": "xgcAB",
+          "tick": 48
+        }
+      ],
+      "fixed_point_step": 2,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "mechanically-generated-cross-template",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 0,
+      "basal_interval": 0,
+      "catalysis_mode": "shuffled-6",
+      "catalyzed_event_count": 0,
+      "event_count": 0,
+      "event_diversity": 0,
+      "first_8_events": [],
+      "fixed_point_step": 2,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "mechanically-generated-cross-template",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 14,
+      "basal_interval": 4,
+      "catalysis_mode": "shuffled-6",
+      "catalyzed_event_count": 2,
+      "event_count": 16,
+      "event_diversity": 11,
+      "first_8_events": [
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglAB",
+          "tick": 0
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglAC",
+          "tick": 4
+        },
+        {
+          "kind": "modification",
+          "mode": "catalyzed",
+          "rule": "xgmAC",
+          "tick": 5
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglAD",
+          "tick": 8
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglBC",
+          "tick": 12
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglBD",
+          "tick": 16
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglCD",
+          "tick": 20
+        },
+        {
+          "kind": "cleavage",
+          "mode": "basal",
+          "rule": "xgcAB",
+          "tick": 24
+        }
+      ],
+      "fixed_point_step": 2,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
+      "pool": "mechanically-generated-cross-template",
+      "rule_count": 20
+    },
+    {
+      "basal_event_count": 7,
+      "basal_interval": 8,
+      "catalysis_mode": "shuffled-6",
+      "catalyzed_event_count": 1,
+      "event_count": 8,
+      "event_diversity": 8,
+      "first_8_events": [
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglAB",
+          "tick": 0
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglAC",
+          "tick": 8
+        },
+        {
+          "kind": "modification",
+          "mode": "catalyzed",
+          "rule": "xgmAC",
+          "tick": 9
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglAD",
+          "tick": 16
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglBC",
+          "tick": 24
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglBD",
+          "tick": 32
+        },
+        {
+          "kind": "ligation",
+          "mode": "basal",
+          "rule": "xglCD",
+          "tick": 40
+        },
+        {
+          "kind": "cleavage",
+          "mode": "basal",
+          "rule": "xgcAB",
+          "tick": 48
+        }
+      ],
+      "fixed_point_step": 2,
+      "food_floor_ok": true,
+      "maximal_raf_size": 0,
+      "minimal_core_is_raf": false,
+      "minimal_core_rule_ids": [],
+      "minimal_core_size": 0,
       "pool": "mechanically-generated-cross-template",
       "rule_count": 20
     },

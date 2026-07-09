@@ -17,8 +17,8 @@ from typing import Iterable
 import run_rich_raf as rich
 
 
-CATALYSIS_MODES = ("specific", "broad", "shuffled", "shuffled-1", "shuffled-9", "none")
-SHUFFLED_CATALYST_OFFSETS = {"shuffled": 5, "shuffled-1": 1, "shuffled-9": 9}
+CATALYSIS_MODES = ("specific", "broad", "shuffled", "shuffled-1", "shuffled-2", "shuffled-6", "shuffled-9", "none")
+SHUFFLED_CATALYST_OFFSETS = {"shuffled": 5, "shuffled-1": 1, "shuffled-2": 2, "shuffled-6": 6, "shuffled-9": 9}
 BASAL_INTERVALS = (0, 4, 8)
 RULE_POOLS = ("hand-designed", "mechanically-generated-template", "mechanically-generated-cross-template")
 

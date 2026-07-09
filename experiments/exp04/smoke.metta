@@ -61,7 +61,7 @@
                  event-count 42 raf-status emerged))
 
 !(test (exp04-reduction-sweep-id) exp04-reduction-sweep-20260708)
-!(test (exp04-reduction-sweep-row-count) 54)
+!(test (exp04-reduction-sweep-row-count) 72)
 !(test (exp04-reduction-baseline-row)
        (reduction-row hand-designed specific basal-4 maximal-raf 15 core 2 events 56 diversity 15 catalyzed 42 basal 14))
 !(test (exp04-reduction-sweep-row hand-designed none 4)
@@ -81,10 +81,17 @@
 !(test (exp04-reduction-shuffling-can-create-cross-template-raf?) True)
 !(test (exp04-reduction-sweep-row hand-designed shuffled-1 4)
        (reduction-row hand-designed shuffled-1 basal-4 maximal-raf 0 core 0 events 38 diversity 12 catalyzed 24 basal 14))
+!(test (exp04-reduction-sweep-row hand-designed shuffled-2 4)
+       (reduction-row hand-designed shuffled-2 basal-4 maximal-raf 0 core 0 events 19 diversity 8 catalyzed 5 basal 14))
+!(test (exp04-reduction-sweep-row mechanically-generated-cross-template shuffled-6 4)
+       (reduction-row mechanically-generated-cross-template shuffled-6 basal-4 maximal-raf 0 core 0 events 16 diversity 11 catalyzed 2 basal 14))
 !(test (exp04-reduction-sweep-row mechanically-generated-cross-template shuffled-9 4)
        (reduction-row mechanically-generated-cross-template shuffled-9 basal-4 maximal-raf 3 core 1 events 53 diversity 13 catalyzed 39 basal 14))
 !(test (exp04-reduction-alt-shuffle-offsets-tested?) True)
+!(test (exp04-reduction-shuffle-negative-offsets-tested?) True)
 !(test (exp04-reduction-shuffled-caveat?) True)
+!(test (exp04-reduction-minimized-core-rules hand-designed specific 4) (lCD lBCD2))
+!(test (exp04-reduction-minimized-core-rules hand-designed shuffled 4) (lBC lABC2 lBCD1))
 !(test (exp04-reduction-sweep-interpretation)
        (interpretation positive-inspectable-artifact
                        no-catalysis-controls raf-negative
@@ -93,5 +100,7 @@
                        cross-template-broad-control raf-negative
                        shuffled-cross-template-control raf-like-signal-created
                        alternate-shuffle-offsets offset-sensitive
+                       shuffled-2-and-6-controls raf-negative
+                       minimized-cores exposed-for-inspection
                        claim unbiased-emergence-not-supported))
 !(test (exp04-reduction-sweep-report-complete?) True)
