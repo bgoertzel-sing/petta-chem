@@ -15,6 +15,8 @@ The first Doob-h diagnostic slice is PeTTa-native bookkeeping: it ranks catalyst
 
 The second slice links the weak-guidance variables to existing PeTTa-native dynamic evidence: affinity weight points to exp05 treatment/control chamber ticking through exp00 deterministic selection, and candidate-pool cap points to exp06's three-tick stateful cap sweep plus ACS-boundary table. The aggregate `exp07-weak-guidance-probe-status` keeps the boundary explicit: dynamic probes are linked, but there is no terminal forcing, no ACS-positive result, and no emergence claim.
 
+The third slice adds a first deterministic weak-guidance comparison table. It records that affinity weighting changes the catalyst/product context while both treatment and rotated control remain first-tick productive, and that cap-1/cap-2 stateful paths diverge then block without passing the two-rule ACS closure check. This prepares a later seed/affinity-strength frequency comparison without claiming ACS uplift yet.
+
 Run with:
 
 ```bash

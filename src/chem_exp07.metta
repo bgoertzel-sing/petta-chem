@@ -254,3 +254,49 @@
      current-boundary dynamic-probes-linked-but-no-acs-positive-result
      next-test unguided-versus-weakly-guided-frequency-comparison
      emergence-claim none))
+
+; ----- First deterministic weak-guidance comparison table -----
+;
+; This is the smallest PeTTa-native comparison slice before a broader frequency
+; sweep.  It records exactly what the existing deterministic chamber ticks show:
+; affinity weighting changes the selected catalyst/product context versus its
+; rotated control while preserving first-tick productivity, and candidate-cap
+; variation changes the stateful path without passing the conservative
+; two-rule closure boundary.  The table is therefore a checked design boundary,
+; not evidence for ACS emergence.
+
+(= (exp07-weak-guidance-comparison-row affinity-weight)
+   (weak-guidance-comparison-row
+     variable affinity-weight
+     treatment (exp05-chamber-tick-affinity-2 seed-7 3 1)
+     control (exp05-chamber-tick-shuffled-affinity-2 seed-7 3 1)
+     deterministic-selector exp00-selected-candidate-from-list-2
+     observed-effect catalyst-context-changed-but-both-first-tick-productive
+     acs-uplift not-evaluated
+     terminal-forcing prohibited
+     emergence-claim none))
+
+(= (exp07-weak-guidance-comparison-row candidate-pool-cap)
+   (weak-guidance-comparison-row
+     variable candidate-pool-cap
+     treatment (exp06-candidate-cap-stateful-three-tick-sweep)
+     boundary (exp06-stateful-cap-sweep-acs-boundary-table)
+     deterministic-selector exp00-selected-candidate-from-list-1-and-2
+     observed-effect cap-1-cap-2-stateful-paths-diverge-then-block
+     acs-uplift rejected-by-two-rule-product-catalyst-closure
+     terminal-forcing prohibited
+     emergence-claim none))
+
+(= (exp07-weak-guidance-comparison-table)
+   ((exp07-weak-guidance-comparison-row affinity-weight)
+    (exp07-weak-guidance-comparison-row candidate-pool-cap)))
+
+(= (exp07-weak-guidance-comparison-status)
+   (weak-guidance-comparison-status
+     compared-variables (affinity-weight candidate-pool-cap)
+     evidence (exp07-weak-guidance-comparison-table)
+     deterministic-selection directly-wired-to-chamber-ticking
+     bounded-caps tested-via-exp06-stateful-cap-sweep
+     current-boundary deterministic-differences-without-acs-uplift
+     next-test vary-affinity-strength-and-seed-before-frequency-claim
+     emergence-claim none))

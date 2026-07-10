@@ -237,3 +237,39 @@
          current-boundary dynamic-probes-linked-but-no-acs-positive-result
          next-test unguided-versus-weakly-guided-frequency-comparison
          emergence-claim none))
+
+!(test (exp07-weak-guidance-comparison-row affinity-weight)
+       (weak-guidance-comparison-row
+         variable affinity-weight
+         treatment (chamber exp05-treatment
+                            (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AB 1))
+                            ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                            ((event 3 e5r0 A B AB AB)))
+         control (chamber exp05-rotated-control
+                          (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AC 1))
+                          ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                          ((event 3 e5r0 A B AB AC)))
+         deterministic-selector exp00-selected-candidate-from-list-2
+         observed-effect catalyst-context-changed-but-both-first-tick-productive
+         acs-uplift not-evaluated
+         terminal-forcing prohibited
+         emergence-claim none))
+!(test (exp07-weak-guidance-comparison-row candidate-pool-cap)
+       (weak-guidance-comparison-row
+         variable candidate-pool-cap
+         treatment (exp06-candidate-cap-stateful-three-tick-sweep)
+         boundary (exp06-stateful-cap-sweep-acs-boundary-table)
+         deterministic-selector exp00-selected-candidate-from-list-1-and-2
+         observed-effect cap-1-cap-2-stateful-paths-diverge-then-block
+         acs-uplift rejected-by-two-rule-product-catalyst-closure
+         terminal-forcing prohibited
+         emergence-claim none))
+!(test (exp07-weak-guidance-comparison-status)
+       (weak-guidance-comparison-status
+         compared-variables (affinity-weight candidate-pool-cap)
+         evidence (exp07-weak-guidance-comparison-table)
+         deterministic-selection directly-wired-to-chamber-ticking
+         bounded-caps tested-via-exp06-stateful-cap-sweep
+         current-boundary deterministic-differences-without-acs-uplift
+         next-test vary-affinity-strength-and-seed-before-frequency-claim
+         emergence-claim none))
