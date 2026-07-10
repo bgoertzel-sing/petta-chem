@@ -13,6 +13,8 @@ The scaffold records a structured cost vector over catalyst assignment, basal-fo
 
 The first Doob-h diagnostic slice is PeTTa-native bookkeeping: it ranks catalyst assignment highest as the terminal-fixture diagnostic, identifies affinity weight plus candidate cap as weak-guidance variables to test without terminal forcing, and keeps basal replenishment plus catalysis-map offset as controls/context. This is not a spontaneous-emergence claim. Old ACS scanners remain validation/control infrastructure; Python may remain a harness only.
 
+The second slice links the weak-guidance variables to existing PeTTa-native dynamic evidence: affinity weight points to exp05 treatment/control chamber ticking through exp00 deterministic selection, and candidate-pool cap points to exp06's three-tick stateful cap sweep plus ACS-boundary table. The aggregate `exp07-weak-guidance-probe-status` keeps the boundary explicit: dynamic probes are linked, but there is no terminal forcing, no ACS-positive result, and no emergence claim.
+
 Run with:
 
 ```bash

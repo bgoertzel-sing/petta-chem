@@ -196,3 +196,44 @@
          success-observable increased-acs-frequency-or-persistence-versus-controls
          current-status planned-not-run
          emergence-claim none))
+
+!(test (exp07-weak-guidance-evidence-row affinity-weight)
+       (weak-guidance-evidence-row
+         variable affinity-weight
+         doob-h-value 3
+         dynamic-source exp05-chamber-tick-affinity-2
+         treatment-selected (candidate 3 (rule e5r0 A B AB AB) 3)
+         control-selected (candidate 3 (rule e5r0 A B AB AC) 2)
+         treatment-after-tick (chamber exp05-treatment
+                                       (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AB 1))
+                                       ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                       ((event 3 e5r0 A B AB AB)))
+         control-after-tick (chamber exp05-rotated-control
+                                      (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AC 1))
+                                      ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                      ((event 3 e5r0 A B AB AC)))
+         chamber-ticking wired-through-exp00-selector
+         terminal-forcing prohibited
+         acs-status not-yet-scanned
+         emergence-claim none))
+!(test (exp07-weak-guidance-evidence-row candidate-pool-cap)
+       (weak-guidance-evidence-row
+         variable candidate-pool-cap
+         doob-h-value 2
+         dynamic-source exp06-candidate-cap-stateful-three-tick-sweep
+         stateful-sweep (exp06-candidate-cap-stateful-three-tick-sweep)
+         acs-boundary (exp06-stateful-cap-sweep-acs-boundary-table)
+         cap-effect divergence-persists-through-bounded-blocked-tick
+         terminal-forcing prohibited
+         acs-status rejected-by-two-rule-product-catalyst-closure
+         emergence-claim none))
+!(test (exp07-weak-guidance-probe-status)
+       (weak-guidance-probe-status
+         policy (exp07-doob-policy-order)
+         evidence (exp07-weak-guidance-evidence-table)
+         tested-variables (affinity-weight candidate-pool-cap)
+         chamber-ticking deterministic-exp00-selector
+         terminal-forcing prohibited
+         current-boundary dynamic-probes-linked-but-no-acs-positive-result
+         next-test unguided-versus-weakly-guided-frequency-comparison
+         emergence-claim none))

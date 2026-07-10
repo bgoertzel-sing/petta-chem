@@ -205,3 +205,52 @@
      success-observable increased-acs-frequency-or-persistence-versus-controls
      current-status planned-not-run
      emergence-claim none))
+
+; ----- Weak-guidance probe over existing PeTTa-native dynamics -----
+;
+; This slice connects the exp07 Doob-h policy to already-tested exp05/exp06
+; chamber ticking evidence.  It does not add a host chemistry kernel, does not
+; force the exp04 terminal state, and does not upgrade candidate caps to ACS
+; evidence.  It simply records which weak-guidance variables have dynamic
+; PeTTa-native probes available for the next unguided-vs-biased comparison.
+
+(= (exp07-weak-guidance-evidence-row affinity-weight)
+   (weak-guidance-evidence-row
+     variable affinity-weight
+     doob-h-value 3
+     dynamic-source exp05-chamber-tick-affinity-2
+     treatment-selected (exp05-affinity-selected-candidate-2 seed-7 3 1)
+     control-selected (exp05-shuffled-affinity-selected-candidate-2 seed-7 3 1)
+     treatment-after-tick (exp05-chamber-tick-affinity-2 seed-7 3 1)
+     control-after-tick (exp05-chamber-tick-shuffled-affinity-2 seed-7 3 1)
+     chamber-ticking wired-through-exp00-selector
+     terminal-forcing prohibited
+     acs-status not-yet-scanned
+     emergence-claim none))
+
+(= (exp07-weak-guidance-evidence-row candidate-pool-cap)
+   (weak-guidance-evidence-row
+     variable candidate-pool-cap
+     doob-h-value 2
+     dynamic-source exp06-candidate-cap-stateful-three-tick-sweep
+     stateful-sweep (exp06-candidate-cap-stateful-three-tick-sweep)
+     acs-boundary (exp06-stateful-cap-sweep-acs-boundary-table)
+     cap-effect divergence-persists-through-bounded-blocked-tick
+     terminal-forcing prohibited
+     acs-status rejected-by-two-rule-product-catalyst-closure
+     emergence-claim none))
+
+(= (exp07-weak-guidance-evidence-table)
+   ((exp07-weak-guidance-evidence-row affinity-weight)
+    (exp07-weak-guidance-evidence-row candidate-pool-cap)))
+
+(= (exp07-weak-guidance-probe-status)
+   (weak-guidance-probe-status
+     policy (exp07-doob-policy-order)
+     evidence (exp07-weak-guidance-evidence-table)
+     tested-variables (affinity-weight candidate-pool-cap)
+     chamber-ticking deterministic-exp00-selector
+     terminal-forcing prohibited
+     current-boundary dynamic-probes-linked-but-no-acs-positive-result
+     next-test unguided-versus-weakly-guided-frequency-comparison
+     emergence-claim none))
