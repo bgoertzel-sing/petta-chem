@@ -535,6 +535,74 @@
      next-test longer-stateful-sweep-with-acs-scan
      emergence-claim none))
 
+; Extend the stateful diagnostic by one more selected tick.  Tick 5 selects the
+; first source rule for both caps.  Because the two-tick stateful sweep has
+; already exhausted molecule A in both arms, this third tick is explicitly
+; recorded as a blocked/no-op tick that advances time without inventing negative
+; abundances or a RAF claim.
+
+(= (chamber-tick-with-candidate
+      (chamber $id
+               (state $tick $seed
+                      (mol A 0)
+                      (mol B $b-count)
+                      (mol C $c-count)
+                      (mol AB $ab-count)
+                      (mol AC $ac-count)
+                      (mol BC $bc-count))
+               $rules
+               ($event-0 $event-1))
+      (candidate $tick (rule e5r0 A B AB $catalyst) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol A 0)
+                   (mol B $b-count)
+                   (mol C $c-count)
+                   (mol AB $ab-count)
+                   (mol AC $ac-count)
+                   (mol BC $bc-count))
+            $rules
+            ($event-0 $event-1)))
+
+(= (exp06-stateful-cap-sweep-selected tick-5 cap-1)
+   (assign-soft-biased-candidate-4
+     seed-7 5 1 (exp05-source-rule) (exp05-catalyst-candidates)))
+
+(= (exp06-stateful-cap-sweep-selected tick-5 cap-2)
+   (selected-candidate-from-list-2
+     (exp06-stateful-cap-sweep-after tick-4 cap-2)
+     (cap-candidate-pool
+       2
+       (exp05-affinity-candidate-pool-2 seed-7 5 1))))
+
+(= (exp06-stateful-cap-sweep-after tick-5 cap-1)
+   (chamber-tick-with-candidate
+     (exp06-stateful-cap-sweep-after tick-4 cap-1)
+     (exp06-stateful-cap-sweep-selected tick-5 cap-1)))
+
+(= (exp06-stateful-cap-sweep-after tick-5 cap-2)
+   (chamber-tick-with-candidate
+     (exp06-stateful-cap-sweep-after tick-4 cap-2)
+     (exp06-stateful-cap-sweep-selected tick-5 cap-2)))
+
+(= (exp06-candidate-cap-stateful-three-tick-sweep)
+   (candidate-cap-stateful-three-tick-sweep
+     ticks (3 4 5)
+     caps (cap-1 cap-2)
+     selected-candidates ((exp06-stateful-cap-sweep-selected tick-3 cap-1)
+                          (exp06-stateful-cap-sweep-selected tick-3 cap-2)
+                          (exp06-stateful-cap-sweep-selected tick-4 cap-1)
+                          (exp06-stateful-cap-sweep-selected tick-4 cap-2)
+                          (exp06-stateful-cap-sweep-selected tick-5 cap-1)
+                          (exp06-stateful-cap-sweep-selected tick-5 cap-2))
+     final-chambers ((exp06-stateful-cap-sweep-after tick-5 cap-1)
+                     (exp06-stateful-cap-sweep-after tick-5 cap-2))
+     tick-5-result blocked-by-a-exhaustion-in-both-arms
+     cap-effect divergence-persists-through-bounded-blocked-tick
+     scientific-boundary three-tick-stateful-diagnostic-not-raf-status
+     next-test attach-acs-scan-boundary-to-stateful-sweep
+     emergence-claim none))
+
 ; Protected-release / anti-precedence placeholder as a testable bias contract,
 ; not an implemented terminal-forcing policy.
 (= (exp06-protected-release-bias-contract)

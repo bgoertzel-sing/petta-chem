@@ -498,6 +498,74 @@
          next-test longer-stateful-sweep-with-acs-scan
          emergence-claim none))
 
+; The three-tick stateful extension records the next deterministic selection and
+; proves the diagnostic does not create negative abundances after A is exhausted.
+!(test (exp06-stateful-cap-sweep-selected tick-5 cap-1)
+       (candidate 5 (rule e5r0 A B AB AC) 2))
+!(test (exp06-stateful-cap-sweep-selected tick-5 cap-2)
+       (candidate 5 (rule e5r0 A B AB AC) 2))
+!(test (exp06-stateful-cap-sweep-after tick-5 cap-1)
+       (chamber exp06-stateful-cap1
+                (state 6 seed-7
+                       (mol A 0)
+                       (mol B 0)
+                       (mol C 1)
+                       (mol AB 3)
+                       (mol AC 1)
+                       (mol BC 0))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 3 e5r0 A B AB AB)
+                 (event 4 e5r0 A B AB AC))))
+!(test (exp06-stateful-cap-sweep-after tick-5 cap-2)
+       (chamber exp06-stateful-cap2
+                (state 6 seed-7
+                       (mol A 0)
+                       (mol B 1)
+                       (mol C 0)
+                       (mol AB 2)
+                       (mol AC 2)
+                       (mol BC 0))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 3 e5r0 A B AB AB)
+                 (event 4 e5r1 A C AC AC))))
+!(test (exp06-candidate-cap-stateful-three-tick-sweep)
+       (candidate-cap-stateful-three-tick-sweep
+         ticks (3 4 5)
+         caps (cap-1 cap-2)
+         selected-candidates ((candidate 3 (rule e5r0 A B AB AB) 3)
+                              (candidate 3 (rule e5r0 A B AB AB) 3)
+                              (candidate 4 (rule e5r0 A B AB AC) 2)
+                              (candidate 4 (rule e5r1 A C AC AC) 3)
+                              (candidate 5 (rule e5r0 A B AB AC) 2)
+                              (candidate 5 (rule e5r0 A B AB AC) 2))
+         final-chambers ((chamber exp06-stateful-cap1
+                                  (state 6 seed-7
+                                         (mol A 0)
+                                         (mol B 0)
+                                         (mol C 1)
+                                         (mol AB 3)
+                                         (mol AC 1)
+                                         (mol BC 0))
+                                  ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                  ((event 3 e5r0 A B AB AB)
+                                   (event 4 e5r0 A B AB AC)))
+                         (chamber exp06-stateful-cap2
+                                  (state 6 seed-7
+                                         (mol A 0)
+                                         (mol B 1)
+                                         (mol C 0)
+                                         (mol AB 2)
+                                         (mol AC 2)
+                                         (mol BC 0))
+                                  ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                  ((event 3 e5r0 A B AB AB)
+                                   (event 4 e5r1 A C AC AC))))
+         tick-5-result blocked-by-a-exhaustion-in-both-arms
+         cap-effect divergence-persists-through-bounded-blocked-tick
+         scientific-boundary three-tick-stateful-diagnostic-not-raf-status
+         next-test attach-acs-scan-boundary-to-stateful-sweep
+         emergence-claim none))
+
 ; Protected-release analog is only a bias contract for future dynamics, not a
 ; terminal-condition clamp.
 !(test (exp06-protected-release-bias-contract)
