@@ -635,6 +635,29 @@
    ((exp06-stateful-cap-sweep-acs-boundary cap-1)
     (exp06-stateful-cap-sweep-acs-boundary cap-2)))
 
+; ----- Consolidation summary -----
+;
+; exp06 closes the candidate-cap route as not ACS-positive for the current
+; bounded evidence slice.  The refreshed, stateful two-tick, and stateful
+; three-tick cap sweeps all reject cap-1/cap-2 under the two-rule
+; product-catalyst closure boundary.  The bridge table remains useful as
+; intervention bookkeeping, but it does not support an emergence claim.
+
+(= (exp06-consolidation-summary)
+   (exp06-consolidation
+     candidate-cap-sweep-results
+       (cap-1 rejected-by-two-rule-product-catalyst-closure
+              across (refreshed-two-tick stateful-two-tick stateful-three-tick))
+       (cap-2 rejected-by-two-rule-product-catalyst-closure
+              across (refreshed-two-tick stateful-two-tick stateful-three-tick))
+     bridge-intervention-table
+       (catalyst-assignment cost-1 shortest-raf-positive-path)
+       (basal-only raf-negative)
+       (candidate-cap dynamic-test-required not-acs-positive)
+       (catalysis-map-offsets offset-sensitive)
+     consolidated-boundary (candidate-cap-route not-acs-positive)
+     emergence-claim none))
+
 ; Protected-release / anti-precedence placeholder as a testable bias contract,
 ; not an implemented terminal-forcing policy.
 (= (exp06-protected-release-bias-contract)

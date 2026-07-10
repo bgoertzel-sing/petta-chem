@@ -620,6 +620,23 @@
           scientific-boundary two-rule-closure-check-not-raf-enumeration
           emergence-claim none)))
 
+; Consolidated exp06 closure: candidate-cap route is dynamically probed but not
+; ACS-positive; the bridge table is retained as diagnostic intervention evidence.
+!(test (exp06-consolidation-summary)
+       (exp06-consolidation
+         candidate-cap-sweep-results
+           (cap-1 rejected-by-two-rule-product-catalyst-closure
+                  across (refreshed-two-tick stateful-two-tick stateful-three-tick))
+           (cap-2 rejected-by-two-rule-product-catalyst-closure
+                  across (refreshed-two-tick stateful-two-tick stateful-three-tick))
+         bridge-intervention-table
+           (catalyst-assignment cost-1 shortest-raf-positive-path)
+           (basal-only raf-negative)
+           (candidate-cap dynamic-test-required not-acs-positive)
+           (catalysis-map-offsets offset-sensitive)
+         consolidated-boundary (candidate-cap-route not-acs-positive)
+         emergence-claim none))
+
 ; Protected-release analog is only a bias contract for future dynamics, not a
 ; terminal-condition clamp.
 !(test (exp06-protected-release-bias-contract)
