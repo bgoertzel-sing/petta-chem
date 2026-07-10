@@ -245,6 +245,59 @@
                      host-role bookkeeping-only
                      emergence-claim none))
 
+; Candidate-cap dynamics now have a narrow single-tick probe through exp05's
+; affinity-assigned pool and exp00 chamber ticking. This starts evaluating the
+; cap row without turning a one-tick productive event into a RAF claim.
+!(test (exp06-candidate-cap-selected-candidate cap-1)
+       (candidate 3 (rule e5r0 A B AB AB) 3))
+!(test (exp06-candidate-cap-selected-candidate cap-2)
+       (candidate 3 (rule e5r0 A B AB AB) 3))
+!(test (exp06-candidate-cap-after-tick cap-1)
+       (chamber exp05-treatment
+                (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AB 1))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 3 e5r0 A B AB AB))))
+!(test (exp06-candidate-cap-dynamic-probe cap-1)
+       (candidate-cap-dynamic-probe
+         cap cap-1
+         source exp05-affinity-assigned-pool
+         chamber exp05-treatment
+         seed seed-7
+         tick 3
+         selected-candidate (candidate 3 (rule e5r0 A B AB AB) 3)
+         after-tick (chamber exp05-treatment
+                             (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AB 1))
+                             ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                             ((event 3 e5r0 A B AB AB)))
+         first-tick-productivity productive
+         raf-status not-yet-evaluated
+         emergence-claim none))
+!(test (exp06-candidate-cap-dynamic-probe cap-2)
+       (candidate-cap-dynamic-probe
+         cap cap-2
+         source exp05-affinity-assigned-pool
+         chamber exp05-treatment
+         seed seed-7
+         tick 3
+         selected-candidate (candidate 3 (rule e5r0 A B AB AB) 3)
+         after-tick (chamber exp05-treatment
+                             (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AB 1))
+                             ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                             ((event 3 e5r0 A B AB AB)))
+         first-tick-productivity productive
+         raf-status not-yet-evaluated
+         emergence-claim none))
+!(test (exp06-candidate-cap-dynamic-comparison)
+       (candidate-cap-dynamic-comparison
+         caps (cap-1 cap-2)
+         source exp05-affinity-single-tick
+         selected-candidates ((candidate 3 (rule e5r0 A B AB AB) 3)
+                              (candidate 3 (rule e5r0 A B AB AB) 3))
+         result same-first-tick-productive-event
+         conclusion cap-dynamics-probed-but-raf-status-open
+         next-test multi-tick-cap-sweep
+         emergence-claim none))
+
 ; Protected-release analog is only a bias contract for future dynamics, not a
 ; terminal-condition clamp.
 !(test (exp06-protected-release-bias-contract)

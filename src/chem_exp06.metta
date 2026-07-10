@@ -197,6 +197,66 @@
                  host-role bookkeeping-only
                  emergence-claim none))
 
+; ----- Candidate-cap dynamic probe -----
+;
+; This is the first dynamic check behind the candidate-pool-cap intervention row.
+; It reuses the exp05 affinity-assigned candidate pool and exp00 chamber tick.
+; The result is intentionally narrow: cap-1 and cap-2 both preserve the same
+; productive first tick for this seed/tick fixture, so RAF status remains
+; not-yet-evaluated rather than inferred from a one-tick probe.
+
+(= (exp06-candidate-cap-selected-candidate cap-1)
+   (assign-soft-biased-candidate-4
+     seed-7 3 1 (exp05-source-rule) (exp05-catalyst-candidates)))
+
+(= (exp06-candidate-cap-selected-candidate cap-2)
+   (exp05-affinity-selected-candidate-2 seed-7 3 1))
+
+(= (exp06-candidate-cap-after-tick cap-1)
+   (chamber-tick-with-candidate
+     (exp05-treatment-chamber seed-7 3)
+     (exp06-candidate-cap-selected-candidate cap-1)))
+
+(= (exp06-candidate-cap-after-tick cap-2)
+   (exp05-chamber-tick-affinity-2 seed-7 3 1))
+
+(= (exp06-candidate-cap-dynamic-probe cap-1)
+   (candidate-cap-dynamic-probe
+     cap cap-1
+     source exp05-affinity-assigned-pool
+     chamber exp05-treatment
+     seed seed-7
+     tick 3
+     selected-candidate (exp06-candidate-cap-selected-candidate cap-1)
+     after-tick (exp06-candidate-cap-after-tick cap-1)
+     first-tick-productivity productive
+     raf-status not-yet-evaluated
+     emergence-claim none))
+
+(= (exp06-candidate-cap-dynamic-probe cap-2)
+   (candidate-cap-dynamic-probe
+     cap cap-2
+     source exp05-affinity-assigned-pool
+     chamber exp05-treatment
+     seed seed-7
+     tick 3
+     selected-candidate (exp06-candidate-cap-selected-candidate cap-2)
+     after-tick (exp06-candidate-cap-after-tick cap-2)
+     first-tick-productivity productive
+     raf-status not-yet-evaluated
+     emergence-claim none))
+
+(= (exp06-candidate-cap-dynamic-comparison)
+   (candidate-cap-dynamic-comparison
+     caps (cap-1 cap-2)
+     source exp05-affinity-single-tick
+     selected-candidates ((exp06-candidate-cap-selected-candidate cap-1)
+                          (exp06-candidate-cap-selected-candidate cap-2))
+     result same-first-tick-productive-event
+     conclusion cap-dynamics-probed-but-raf-status-open
+     next-test multi-tick-cap-sweep
+     emergence-claim none))
+
 ; Protected-release / anti-precedence placeholder as a testable bias contract,
 ; not an implemented terminal-forcing policy.
 (= (exp06-protected-release-bias-contract)
