@@ -220,6 +220,21 @@
 (= (exp06-candidate-cap-after-tick cap-2)
    (exp05-chamber-tick-affinity-2 seed-7 3 1))
 
+(= (exp06-candidate-cap-control-selected-candidate cap-1)
+   (assign-shuffled-affinity-candidate-4
+     seed-7 3 1 (exp05-source-rule) (exp05-catalyst-candidates)))
+
+(= (exp06-candidate-cap-control-selected-candidate cap-2)
+   (exp05-shuffled-affinity-selected-candidate-2 seed-7 3 1))
+
+(= (exp06-candidate-cap-control-after-tick cap-1)
+   (chamber-tick-with-candidate
+     (exp05-rotated-control-chamber seed-7 3)
+     (exp06-candidate-cap-control-selected-candidate cap-1)))
+
+(= (exp06-candidate-cap-control-after-tick cap-2)
+   (exp05-chamber-tick-shuffled-affinity-2 seed-7 3 1))
+
 (= (exp06-candidate-cap-dynamic-probe cap-1)
    (candidate-cap-dynamic-probe
      cap cap-1
@@ -254,6 +269,22 @@
                           (exp06-candidate-cap-selected-candidate cap-2))
      result same-first-tick-productive-event
      conclusion cap-dynamics-probed-but-raf-status-open
+     next-test multi-tick-cap-sweep
+     emergence-claim none))
+
+(= (exp06-candidate-cap-treatment-control-probe)
+   (candidate-cap-treatment-control-probe
+     caps (cap-1 cap-2)
+     treatment-selected ((exp06-candidate-cap-selected-candidate cap-1)
+                         (exp06-candidate-cap-selected-candidate cap-2))
+     control-selected ((exp06-candidate-cap-control-selected-candidate cap-1)
+                       (exp06-candidate-cap-control-selected-candidate cap-2))
+     treatment-after-tick ((exp06-candidate-cap-after-tick cap-1)
+                           (exp06-candidate-cap-after-tick cap-2))
+     control-after-tick ((exp06-candidate-cap-control-after-tick cap-1)
+                         (exp06-candidate-cap-control-after-tick cap-2))
+     result cap-1-and-cap-2-preserve-first-tick-productivity-in-treatment-and-control
+     scientific-boundary single-tick-productivity-not-raf-status
      next-test multi-tick-cap-sweep
      emergence-claim none))
 

@@ -257,6 +257,25 @@
                 (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AB 1))
                 ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
                 ((event 3 e5r0 A B AB AB))))
+!(test (exp06-candidate-cap-after-tick cap-2)
+       (chamber exp05-treatment
+                (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AB 1))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 3 e5r0 A B AB AB))))
+!(test (exp06-candidate-cap-control-selected-candidate cap-1)
+       (candidate 3 (rule e5r0 A B AB AC) 2))
+!(test (exp06-candidate-cap-control-selected-candidate cap-2)
+       (candidate 3 (rule e5r0 A B AB AC) 2))
+!(test (exp06-candidate-cap-control-after-tick cap-1)
+       (chamber exp05-rotated-control
+                (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AC 1))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 3 e5r0 A B AB AC))))
+!(test (exp06-candidate-cap-control-after-tick cap-2)
+       (chamber exp05-rotated-control
+                (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AC 1))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 3 e5r0 A B AB AC))))
 !(test (exp06-candidate-cap-dynamic-probe cap-1)
        (candidate-cap-dynamic-probe
          cap cap-1
@@ -295,6 +314,33 @@
                               (candidate 3 (rule e5r0 A B AB AB) 3))
          result same-first-tick-productive-event
          conclusion cap-dynamics-probed-but-raf-status-open
+         next-test multi-tick-cap-sweep
+         emergence-claim none))
+!(test (exp06-candidate-cap-treatment-control-probe)
+       (candidate-cap-treatment-control-probe
+         caps (cap-1 cap-2)
+         treatment-selected ((candidate 3 (rule e5r0 A B AB AB) 3)
+                             (candidate 3 (rule e5r0 A B AB AB) 3))
+         control-selected ((candidate 3 (rule e5r0 A B AB AC) 2)
+                           (candidate 3 (rule e5r0 A B AB AC) 2))
+         treatment-after-tick ((chamber exp05-treatment
+                                        (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AB 1))
+                                        ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                        ((event 3 e5r0 A B AB AB)))
+                               (chamber exp05-treatment
+                                        (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AB 1))
+                                        ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                        ((event 3 e5r0 A B AB AB))))
+         control-after-tick ((chamber exp05-rotated-control
+                                      (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AC 1))
+                                      ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                      ((event 3 e5r0 A B AB AC)))
+                             (chamber exp05-rotated-control
+                                      (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AC 1))
+                                      ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                      ((event 3 e5r0 A B AB AC))))
+         result cap-1-and-cap-2-preserve-first-tick-productivity-in-treatment-and-control
+         scientific-boundary single-tick-productivity-not-raf-status
          next-test multi-tick-cap-sweep
          emergence-claim none))
 
