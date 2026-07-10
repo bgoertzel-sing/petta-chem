@@ -27,6 +27,7 @@ scripts/test_exp02_contract_files.sh
 scripts/run_exp03.sh
 scripts/run_exp04.sh
 scripts/run_exp05.sh
+scripts/run_exp06.sh
 ```
 
 `experiments/exp00/smoke.metta` is a deliberately tiny deterministic chemistry spike. It establishes initial molecule/rule/state/candidate/candidate-pool/candidate-cap/event/chamber/metric atom contracts plus a generic bounded binary catalytic transition, candidate applicability checks, nonnegative abundance invariants, chamber-rule-based candidate generation, per-tick candidate caps, and a seed/tick deterministic candidate selector wired into generated chamber ticking before larger stochastic/harness work is added.
@@ -44,3 +45,5 @@ scripts/run_exp05.sh
 `experiments/exp04/smoke.metta` is a deliberately success-biased rich RAF fixture over ligation, cleavage, and modification templates. `experiments/exp04/run_reduction_sweep.py` is a host-side reduction harness that compares hand-designed versus mechanically generated rule pools under specificity-filtered, broad, shuffled, and no-catalysis modes plus different basal intervals; it writes `experiments/exp04_reduction_sweep_20260708/` via `scripts/run_exp04_reduction_sweep.sh`. `scripts/write_exp04_offset_report_files.sh` is a thin host harness that serializes the PeTTa-tested offset-sensitivity report bundle into `OFFSET_SENSITIVITY_REPORT.metta`, `SUMMARY.metta`, and `RUN.md` without driving chemistry logic.
 
 `experiments/exp05/smoke.metta` starts a soft-biased ecological autocatalysis scaffold in PeTTa. It assigns catalysts from generic token-overlap affinity with a positive baseline and a rotated-weight control, then projects assigned source rules into ordinary exp00 `candidate`/`candidate-pool` atoms so bounded caps can be reused by later chamber-ticking slices. It is plumbing only: no RAF scan or emergence claim is made.
+
+`experiments/exp06/smoke.metta` starts the bridge-to-ACS favorable-conditions analysis. It names an ACS-negative exp04 no-catalysis source row, the exp04 RAF-rich terminal row/core, intervention variables spanning exp05 affinity assignment, basal replenishment, candidate-pool cap, and catalysis-map offset, plus a first deterministic one-step shortest-path witness. The bridge is diagnostic bookkeeping in PeTTa atoms, not spontaneous-emergence evidence.
