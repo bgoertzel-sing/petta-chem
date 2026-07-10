@@ -344,6 +344,68 @@
          next-test multi-tick-cap-sweep
          emergence-claim none))
 
+; The next bounded diagnostic sweep adds a refreshed tick-4 comparison.  Cap-2
+; exposes the second source rule at tick 4 through deterministic selection;
+; cap-1 remains pinned to the first rule.  This is still not a RAF claim.
+!(test (exp06-cap-sweep-treatment-selected tick-4 cap-1)
+       (candidate 4 (rule e5r0 A B AB AC) 2))
+!(test (exp06-cap-sweep-treatment-selected tick-4 cap-2)
+       (candidate 4 (rule e5r1 A C AC AC) 3))
+!(test (exp06-cap-sweep-control-selected tick-4 cap-1)
+       (candidate 4 (rule e5r0 A B AB AC) 2))
+!(test (exp06-cap-sweep-control-selected tick-4 cap-2)
+       (candidate 4 (rule e5r1 A C AC AC) 3))
+!(test (exp06-cap-sweep-treatment-after-tick tick-4 cap-1)
+       (chamber exp06-treatment-cap1-tick4
+                (state 5 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AC 1))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 4 e5r0 A B AB AC))))
+!(test (exp06-cap-sweep-treatment-after-tick tick-4 cap-2)
+       (chamber exp06-treatment-cap2-tick4
+                (state 5 seed-7 (mol A 0) (mol C 0) (mol AC 1) (mol AC 1))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 4 e5r1 A C AC AC))))
+!(test (exp06-cap-sweep-control-after-tick tick-4 cap-1)
+       (chamber exp06-control-cap1-tick4
+                (state 5 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AC 1))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 4 e5r0 A B AB AC))))
+!(test (exp06-cap-sweep-control-after-tick tick-4 cap-2)
+       (chamber exp06-control-cap2-tick4
+                (state 5 seed-7 (mol A 0) (mol C 0) (mol AC 1) (mol AC 1))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 4 e5r1 A C AC AC))))
+!(test (exp06-candidate-cap-two-tick-sweep)
+       (candidate-cap-two-tick-sweep
+         ticks (3 4)
+         caps (cap-1 cap-2)
+         tick-3-result same-first-tick-productive-event
+         tick-4-treatment-selected ((candidate 4 (rule e5r0 A B AB AC) 2)
+                                    (candidate 4 (rule e5r1 A C AC AC) 3))
+         tick-4-control-selected ((candidate 4 (rule e5r0 A B AB AC) 2)
+                                  (candidate 4 (rule e5r1 A C AC AC) 3))
+         tick-4-treatment-after ((chamber exp06-treatment-cap1-tick4
+                                          (state 5 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AC 1))
+                                          ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                          ((event 4 e5r0 A B AB AC)))
+                                 (chamber exp06-treatment-cap2-tick4
+                                          (state 5 seed-7 (mol A 0) (mol C 0) (mol AC 1) (mol AC 1))
+                                          ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                          ((event 4 e5r1 A C AC AC))))
+         tick-4-control-after ((chamber exp06-control-cap1-tick4
+                                        (state 5 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AC 1))
+                                        ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                        ((event 4 e5r0 A B AB AC)))
+                               (chamber exp06-control-cap2-tick4
+                                        (state 5 seed-7 (mol A 0) (mol C 0) (mol AC 1) (mol AC 1))
+                                        ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                        ((event 4 e5r1 A C AC AC))))
+         cap-effect cap-2-exposes-second-source-rule-at-tick-4
+         treatment-control-result matched-productive-cap-divergence
+         scientific-boundary refreshed-two-tick-diagnostic-not-raf-status
+         next-test accumulated-multi-tick-stateful-sweep
+         emergence-claim none))
+
 ; Protected-release analog is only a bias contract for future dynamics, not a
 ; terminal-condition clamp.
 !(test (exp06-protected-release-bias-contract)

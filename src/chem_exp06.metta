@@ -288,6 +288,98 @@
      next-test multi-tick-cap-sweep
      emergence-claim none))
 
+; A bounded two-tick sweep extends the cap probe beyond the single tick above
+; while keeping all candidate assignment and chamber firing in PeTTa.  The
+; second tick is a refreshed diagnostic chamber, not a replayed RAF dynamics
+; claim: it asks whether deterministic selection differs when cap-2 exposes the
+; second affinity-assigned source rule.  At tick 4, seed-7 chooses index 1 from
+; a cap-2 pool, while cap-1 still exposes only the first candidate.
+
+(= (exp06-cap-sweep-treatment-chamber tick-4 cap-1)
+   (chamber exp06-treatment-cap1-tick4
+            (state 4 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp06-cap-sweep-treatment-chamber tick-4 cap-2)
+   (chamber exp06-treatment-cap2-tick4
+            (state 4 seed-7 (mol A 1) (mol C 1) (mol AC 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp06-cap-sweep-control-chamber tick-4 cap-1)
+   (chamber exp06-control-cap1-tick4
+            (state 4 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp06-cap-sweep-control-chamber tick-4 cap-2)
+   (chamber exp06-control-cap2-tick4
+            (state 4 seed-7 (mol A 1) (mol C 1) (mol AC 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp06-cap-sweep-treatment-selected tick-4 cap-1)
+   (assign-soft-biased-candidate-4
+     seed-7 4 1 (exp05-source-rule) (exp05-catalyst-candidates)))
+
+(= (exp06-cap-sweep-treatment-selected tick-4 cap-2)
+   (selected-candidate-from-list-2
+     (exp06-cap-sweep-treatment-chamber tick-4 cap-2)
+     (cap-candidate-pool
+       2
+       (exp05-affinity-candidate-pool-2 seed-7 4 1))))
+
+(= (exp06-cap-sweep-control-selected tick-4 cap-1)
+   (assign-shuffled-affinity-candidate-4
+     seed-7 4 1 (exp05-source-rule) (exp05-catalyst-candidates)))
+
+(= (exp06-cap-sweep-control-selected tick-4 cap-2)
+   (selected-candidate-from-list-2
+     (exp06-cap-sweep-control-chamber tick-4 cap-2)
+     (cap-candidate-pool
+       2
+       (exp05-shuffled-affinity-candidate-pool-2 seed-7 4 1))))
+
+(= (exp06-cap-sweep-treatment-after-tick tick-4 cap-1)
+   (chamber-tick-with-candidate
+     (exp06-cap-sweep-treatment-chamber tick-4 cap-1)
+     (exp06-cap-sweep-treatment-selected tick-4 cap-1)))
+
+(= (exp06-cap-sweep-treatment-after-tick tick-4 cap-2)
+   (chamber-tick-with-candidate
+     (exp06-cap-sweep-treatment-chamber tick-4 cap-2)
+     (exp06-cap-sweep-treatment-selected tick-4 cap-2)))
+
+(= (exp06-cap-sweep-control-after-tick tick-4 cap-1)
+   (chamber-tick-with-candidate
+     (exp06-cap-sweep-control-chamber tick-4 cap-1)
+     (exp06-cap-sweep-control-selected tick-4 cap-1)))
+
+(= (exp06-cap-sweep-control-after-tick tick-4 cap-2)
+   (chamber-tick-with-candidate
+     (exp06-cap-sweep-control-chamber tick-4 cap-2)
+     (exp06-cap-sweep-control-selected tick-4 cap-2)))
+
+(= (exp06-candidate-cap-two-tick-sweep)
+   (candidate-cap-two-tick-sweep
+     ticks (3 4)
+     caps (cap-1 cap-2)
+     tick-3-result same-first-tick-productive-event
+     tick-4-treatment-selected ((exp06-cap-sweep-treatment-selected tick-4 cap-1)
+                                (exp06-cap-sweep-treatment-selected tick-4 cap-2))
+     tick-4-control-selected ((exp06-cap-sweep-control-selected tick-4 cap-1)
+                              (exp06-cap-sweep-control-selected tick-4 cap-2))
+     tick-4-treatment-after ((exp06-cap-sweep-treatment-after-tick tick-4 cap-1)
+                             (exp06-cap-sweep-treatment-after-tick tick-4 cap-2))
+     tick-4-control-after ((exp06-cap-sweep-control-after-tick tick-4 cap-1)
+                           (exp06-cap-sweep-control-after-tick tick-4 cap-2))
+     cap-effect cap-2-exposes-second-source-rule-at-tick-4
+     treatment-control-result matched-productive-cap-divergence
+     scientific-boundary refreshed-two-tick-diagnostic-not-raf-status
+     next-test accumulated-multi-tick-stateful-sweep
+     emergence-claim none))
+
 ; Protected-release / anti-precedence placeholder as a testable bias contract,
 ; not an implemented terminal-forcing policy.
 (= (exp06-protected-release-bias-contract)
