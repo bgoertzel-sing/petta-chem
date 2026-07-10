@@ -563,8 +563,62 @@
          tick-5-result blocked-by-a-exhaustion-in-both-arms
          cap-effect divergence-persists-through-bounded-blocked-tick
          scientific-boundary three-tick-stateful-diagnostic-not-raf-status
-         next-test attach-acs-scan-boundary-to-stateful-sweep
+         next-test extend-stateful-cap-sweep-or-vary-affinity-strength
          emergence-claim none))
+
+; Boundary ACS check over the stateful tick-3/tick-4 selected pairs.  This is a
+; product-catalyst closure check on selected rules, not RAF enumeration.
+!(test (exp06-selected-candidate-pair-acs-status
+         (candidate 3 (rule e5r0 A B AB AB) 3)
+         (candidate 4 (rule e5r0 A B AB AC) 2))
+       rejected)
+!(test (exp06-selected-candidate-pair-acs-status
+         (candidate 3 (rule e5r0 A B AB AB) 3)
+         (candidate 4 (rule e5r1 A C AC AC) 3))
+       rejected)
+!(test (exp06-stateful-cap-sweep-acs-boundary cap-1)
+       (stateful-cap-acs-boundary
+         cap cap-1
+         ticks (3 4)
+         selected-candidates ((candidate 3 (rule e5r0 A B AB AB) 3)
+                              (candidate 4 (rule e5r0 A B AB AC) 2))
+         scanner product-catalyst-closed-2
+         acs-status rejected
+         interpretation selected-pair-not-product-catalyst-closed
+         scientific-boundary two-rule-closure-check-not-raf-enumeration
+         emergence-claim none))
+!(test (exp06-stateful-cap-sweep-acs-boundary cap-2)
+       (stateful-cap-acs-boundary
+         cap cap-2
+         ticks (3 4)
+         selected-candidates ((candidate 3 (rule e5r0 A B AB AB) 3)
+                              (candidate 4 (rule e5r1 A C AC AC) 3))
+         scanner product-catalyst-closed-2
+         acs-status rejected
+         interpretation selected-pair-not-product-catalyst-closed
+         scientific-boundary two-rule-closure-check-not-raf-enumeration
+         emergence-claim none))
+!(test (exp06-stateful-cap-sweep-acs-boundary-table)
+       ((stateful-cap-acs-boundary
+          cap cap-1
+          ticks (3 4)
+          selected-candidates ((candidate 3 (rule e5r0 A B AB AB) 3)
+                               (candidate 4 (rule e5r0 A B AB AC) 2))
+          scanner product-catalyst-closed-2
+          acs-status rejected
+          interpretation selected-pair-not-product-catalyst-closed
+          scientific-boundary two-rule-closure-check-not-raf-enumeration
+          emergence-claim none)
+        (stateful-cap-acs-boundary
+          cap cap-2
+          ticks (3 4)
+          selected-candidates ((candidate 3 (rule e5r0 A B AB AB) 3)
+                               (candidate 4 (rule e5r1 A C AC AC) 3))
+          scanner product-catalyst-closed-2
+          acs-status rejected
+          interpretation selected-pair-not-product-catalyst-closed
+          scientific-boundary two-rule-closure-check-not-raf-enumeration
+          emergence-claim none)))
 
 ; Protected-release analog is only a bias contract for future dynamics, not a
 ; terminal-condition clamp.

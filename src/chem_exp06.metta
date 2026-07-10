@@ -600,8 +600,40 @@
      tick-5-result blocked-by-a-exhaustion-in-both-arms
      cap-effect divergence-persists-through-bounded-blocked-tick
      scientific-boundary three-tick-stateful-diagnostic-not-raf-status
-     next-test attach-acs-scan-boundary-to-stateful-sweep
+     next-test extend-stateful-cap-sweep-or-vary-affinity-strength
      emergence-claim none))
+
+; Attach a PeTTa-native ACS boundary check to the selected stateful tick-3/tick-4
+; rule pairs.  This only asks whether the two selected catalytic rules are
+; product-catalyst closed; both current cap arms are rejected, so candidate caps
+; have now been dynamically probed without upgrading the result to RAF status.
+
+(= (exp06-selected-candidate-pair-acs-status
+      (candidate $tick-0 (rule $id-0 $a-0 $b-0 $product-0 $catalyst-0) $score-0)
+      (candidate $tick-1 (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1) $score-1))
+   (if (and (== $product-0 $catalyst-1)
+            (== $product-1 $catalyst-0))
+       active
+       rejected))
+
+(= (exp06-stateful-cap-sweep-acs-boundary $cap)
+   (let $tick-3-candidate (exp06-stateful-cap-sweep-selected tick-3 $cap)
+     (let $tick-4-candidate (exp06-stateful-cap-sweep-selected tick-4 $cap)
+       (stateful-cap-acs-boundary
+         cap $cap
+         ticks (3 4)
+         selected-candidates ($tick-3-candidate $tick-4-candidate)
+         scanner product-catalyst-closed-2
+         acs-status (exp06-selected-candidate-pair-acs-status
+                      $tick-3-candidate
+                      $tick-4-candidate)
+         interpretation selected-pair-not-product-catalyst-closed
+         scientific-boundary two-rule-closure-check-not-raf-enumeration
+         emergence-claim none))))
+
+(= (exp06-stateful-cap-sweep-acs-boundary-table)
+   ((exp06-stateful-cap-sweep-acs-boundary cap-1)
+    (exp06-stateful-cap-sweep-acs-boundary cap-2)))
 
 ; Protected-release / anti-precedence placeholder as a testable bias contract,
 ; not an implemented terminal-forcing policy.
