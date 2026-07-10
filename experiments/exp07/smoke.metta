@@ -106,3 +106,93 @@
                      bridge-paths ordered-intervention-sequences
                      chemistry-kernel petta-native
                      emergence-claim none))
+
+!(test (exp07-doob-h-table)
+       ((doob-h-row catalyst-assignment
+                    bridge-action assign-specific-template-catalysts
+                    cost 1
+                    h-value 5
+                    terminal-proximity terminal-raf-positive
+                    validation exp04-acs-scanner
+                    guidance-status strongest-diagnostic-bias
+                    emergence-claim none)
+        (doob-h-row affinity-weight
+                    bridge-action increase-token-overlap-affinity
+                    cost 1
+                    h-value 3
+                    terminal-proximity weak-guidance-variable
+                    validation exp05-chamber-tick-probe
+                    guidance-status weak-bias-test-candidate
+                    emergence-claim none)
+        (doob-h-row candidate-pool-cap
+                    bridge-action expose-bounded-candidate-diversity
+                    cost 1
+                    h-value 2
+                    terminal-proximity not-acs-positive-in-exp06
+                    validation exp06-stateful-cap-boundary
+                    guidance-status control-or-secondary-variable
+                    emergence-claim none)
+        (doob-h-row basal-food-replenishment
+                    bridge-action maintain-food-floor
+                    cost 1
+                    h-value 1
+                    terminal-proximity raf-negative-alone
+                    validation exp04-no-catalysis-control
+                    guidance-status necessary-context-not-sufficient
+                    emergence-claim none)
+        (doob-h-row catalysis-map-offset
+                    bridge-action rotate-catalysis-map
+                    cost 1
+                    h-value 1
+                    terminal-proximity offset-sensitive-artifact-risk
+                    validation exp04-offset-sensitivity-report
+                    guidance-status control-not-primary-bias
+                    emergence-claim none)))
+!(test (exp07-doob-policy-order)
+       (doob-policy-order
+         initial (bridge-state initial
+                               sources (exp02-generated-unplanted-no-catalysis-controls
+                                        exp04-no-catalysis-controls)
+                               acs-status verified-acs-negative
+                               exp02-cycle-scan active-cycles-0-through-5-rule-scans
+                               exp04-maximal-raf 0)
+         terminal (bridge-state terminal
+                                source exp04-acs-rich-fixture
+                                acs-status acs-rich-terminal-fixture
+                                maximal-raf 15
+                                greedy-core-size 2
+                                greedy-core (lCD lBCD2))
+         ranked-actions (catalyst-assignment affinity-weight candidate-pool-cap basal-food-replenishment catalysis-map-offset)
+         top-action catalyst-assignment
+         weak-guidance-actions (affinity-weight candidate-pool-cap)
+         control-actions (basal-food-replenishment catalysis-map-offset)
+         terminal-forcing prohibited
+         emergence-claim none))
+!(test (exp07-weak-guidance-test-plan)
+       (weak-guidance-test-plan
+         purpose test-bridge-derived-bias-without-fixing-terminal-state
+         candidate-policy (doob-policy-order
+                            initial (bridge-state initial
+                                                  sources (exp02-generated-unplanted-no-catalysis-controls
+                                                           exp04-no-catalysis-controls)
+                                                  acs-status verified-acs-negative
+                                                  exp02-cycle-scan active-cycles-0-through-5-rule-scans
+                                                  exp04-maximal-raf 0)
+                            terminal (bridge-state terminal
+                                                   source exp04-acs-rich-fixture
+                                                   acs-status acs-rich-terminal-fixture
+                                                   maximal-raf 15
+                                                   greedy-core-size 2
+                                                   greedy-core (lCD lBCD2))
+                            ranked-actions (catalyst-assignment affinity-weight candidate-pool-cap basal-food-replenishment catalysis-map-offset)
+                            top-action catalyst-assignment
+                            weak-guidance-actions (affinity-weight candidate-pool-cap)
+                            control-actions (basal-food-replenishment catalysis-map-offset)
+                            terminal-forcing prohibited
+                            emergence-claim none)
+         unguided-baseline exp02-generated-unplanted-controls
+         weakly-guided-variables (affinity-weight candidate-pool-cap)
+         validation-scanners old-acs-scanners
+         success-observable increased-acs-frequency-or-persistence-versus-controls
+         current-status planned-not-run
+         emergence-claim none))

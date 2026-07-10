@@ -11,7 +11,7 @@ exp07 scaffolds the next main experiment family after exp06 consolidation. It fr
 
 The scaffold records a structured cost vector over catalyst assignment, basal-food replenishment, candidate-pool cap, catalysis-map offset, and exp05 affinity weight. The baseline bridge path is the exp06 cost-1 catalyst-assignment route to the engineered terminal fixture.
 
-This is not a spontaneous-emergence claim. Old ACS scanners remain validation/control infrastructure; Python may remain a harness only.
+The first Doob-h diagnostic slice is PeTTa-native bookkeeping: it ranks catalyst assignment highest as the terminal-fixture diagnostic, identifies affinity weight plus candidate cap as weak-guidance variables to test without terminal forcing, and keeps basal replenishment plus catalysis-map offset as controls/context. This is not a spontaneous-emergence claim. Old ACS scanners remain validation/control infrastructure; Python may remain a harness only.
 
 Run with:
 

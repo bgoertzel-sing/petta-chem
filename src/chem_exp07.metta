@@ -119,3 +119,89 @@
                  bridge-paths ordered-intervention-sequences
                  chemistry-kernel petta-native
                  emergence-claim none))
+
+; ----- Doob-h diagnostic weighting slice -----
+;
+; These rows turn the bridge framing into a first PeTTa-queryable action policy.
+; The h-value is a bounded diagnostic preference for interventions that move a
+; soup toward the terminal ACS-rich fixture without directly imposing the
+; terminal state.  It is deliberately ordinal/static in this first slice.
+
+(= (exp07-doob-h-row catalyst-assignment)
+   (doob-h-row catalyst-assignment
+               bridge-action assign-specific-template-catalysts
+               cost 1
+               h-value 5
+               terminal-proximity terminal-raf-positive
+               validation exp04-acs-scanner
+               guidance-status strongest-diagnostic-bias
+               emergence-claim none))
+
+(= (exp07-doob-h-row affinity-weight)
+   (doob-h-row affinity-weight
+               bridge-action increase-token-overlap-affinity
+               cost 1
+               h-value 3
+               terminal-proximity weak-guidance-variable
+               validation exp05-chamber-tick-probe
+               guidance-status weak-bias-test-candidate
+               emergence-claim none))
+
+(= (exp07-doob-h-row candidate-pool-cap)
+   (doob-h-row candidate-pool-cap
+               bridge-action expose-bounded-candidate-diversity
+               cost 1
+               h-value 2
+               terminal-proximity not-acs-positive-in-exp06
+               validation exp06-stateful-cap-boundary
+               guidance-status control-or-secondary-variable
+               emergence-claim none))
+
+(= (exp07-doob-h-row basal-food-replenishment)
+   (doob-h-row basal-food-replenishment
+               bridge-action maintain-food-floor
+               cost 1
+               h-value 1
+               terminal-proximity raf-negative-alone
+               validation exp04-no-catalysis-control
+               guidance-status necessary-context-not-sufficient
+               emergence-claim none))
+
+(= (exp07-doob-h-row catalysis-map-offset)
+   (doob-h-row catalysis-map-offset
+               bridge-action rotate-catalysis-map
+               cost 1
+               h-value 1
+               terminal-proximity offset-sensitive-artifact-risk
+               validation exp04-offset-sensitivity-report
+               guidance-status control-not-primary-bias
+               emergence-claim none))
+
+(= (exp07-doob-h-table)
+   ((exp07-doob-h-row catalyst-assignment)
+    (exp07-doob-h-row affinity-weight)
+    (exp07-doob-h-row candidate-pool-cap)
+    (exp07-doob-h-row basal-food-replenishment)
+    (exp07-doob-h-row catalysis-map-offset)))
+
+(= (exp07-doob-policy-order)
+   (doob-policy-order
+     initial (exp07-initial-state)
+     terminal (exp07-terminal-state)
+     ranked-actions (catalyst-assignment affinity-weight candidate-pool-cap basal-food-replenishment catalysis-map-offset)
+     top-action catalyst-assignment
+     weak-guidance-actions (affinity-weight candidate-pool-cap)
+     control-actions (basal-food-replenishment catalysis-map-offset)
+     terminal-forcing prohibited
+     emergence-claim none))
+
+(= (exp07-weak-guidance-test-plan)
+   (weak-guidance-test-plan
+     purpose test-bridge-derived-bias-without-fixing-terminal-state
+     candidate-policy (exp07-doob-policy-order)
+     unguided-baseline exp02-generated-unplanted-controls
+     weakly-guided-variables (affinity-weight candidate-pool-cap)
+     validation-scanners old-acs-scanners
+     success-observable increased-acs-frequency-or-persistence-versus-controls
+     current-status planned-not-run
+     emergence-claim none))
