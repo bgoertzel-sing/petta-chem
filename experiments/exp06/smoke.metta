@@ -79,6 +79,172 @@
                             suffices-for raf-positive-territory
                             emergence-claim none))
 
+; Bounded path-search table compares multiple intervention variables using
+; existing PeTTa evidence rows and explicit not-yet-evaluated dynamic seams.
+!(test (exp06-intervention-cost-row catalyst-assignment none specific-template)
+       (intervention-cost-row catalyst-assignment
+                              from none
+                              to specific-template
+                              cost 1
+                              source-row (reduction-row hand-designed specific basal-4 maximal-raf 15 core 2 events 56 diversity 15 catalyzed 42 basal 14)
+                              maximal-raf 15
+                              core-size 2
+                              status reaches-raf-positive-territory))
+!(test (exp06-intervention-cost-row basal-food-replenishment basal-0 basal-4)
+       (intervention-cost-row basal-food-replenishment
+                              from basal-0
+                              to basal-4
+                              cost 1
+                              source-row (reduction-row hand-designed none basal-4 maximal-raf 0 core 0 events 14 diversity 11 catalyzed 0 basal 14)
+                              maximal-raf 0
+                              core-size 0
+                              status remains-raf-negative))
+!(test (exp06-intervention-cost-row candidate-pool-cap unbounded-for-raf-report cap-2)
+       (intervention-cost-row candidate-pool-cap
+                              from unbounded-for-raf-report
+                              to cap-2
+                              cost 1
+                              source-seam exp00-exp03
+                              maximal-raf not-yet-evaluated
+                              core-size not-yet-evaluated
+                              status dynamic-test-required))
+!(test (exp06-intervention-cost-row catalysis-map-offset none shuffled-1)
+       (intervention-cost-row catalysis-map-offset
+                              from none
+                              to shuffled-1
+                              cost 1
+                              source-row (reduction-row hand-designed shuffled-1 basal-4 maximal-raf 0 core 0 events 38 diversity 12 catalyzed 24 basal 14)
+                              maximal-raf 0
+                              core-size 0
+                              status remains-raf-negative))
+!(test (exp06-intervention-cost-row catalysis-map-offset none shuffled-9)
+       (intervention-cost-row catalysis-map-offset
+                              from none
+                              to shuffled-9
+                              cost 1
+                              source-row (reduction-row hand-designed shuffled-9 basal-4 maximal-raf 7 core 3 events 20 diversity 10 catalyzed 6 basal 14)
+                              maximal-raf 7
+                              core-size 3
+                              status offset-sensitive-raf-like-control))
+!(test (exp06-bounded-cost-table)
+       ((intervention-cost-row catalyst-assignment
+                               from none
+                               to specific-template
+                               cost 1
+                               source-row (reduction-row hand-designed specific basal-4 maximal-raf 15 core 2 events 56 diversity 15 catalyzed 42 basal 14)
+                               maximal-raf 15
+                               core-size 2
+                               status reaches-raf-positive-territory)
+        (intervention-cost-row catalyst-assignment
+                               from none
+                               to broad-template
+                               cost 1
+                               source-row (reduction-row hand-designed broad basal-4 maximal-raf 15 core 2 events 56 diversity 15 catalyzed 42 basal 14)
+                               maximal-raf 15
+                               core-size 2
+                               status reaches-raf-positive-territory)
+        (intervention-cost-row basal-food-replenishment
+                               from basal-0
+                               to basal-4
+                               cost 1
+                               source-row (reduction-row hand-designed none basal-4 maximal-raf 0 core 0 events 14 diversity 11 catalyzed 0 basal 14)
+                               maximal-raf 0
+                               core-size 0
+                               status remains-raf-negative)
+        (intervention-cost-row candidate-pool-cap
+                               from unbounded-for-raf-report
+                               to cap-2
+                               cost 1
+                               source-seam exp00-exp03
+                               maximal-raf not-yet-evaluated
+                               core-size not-yet-evaluated
+                               status dynamic-test-required)
+        (intervention-cost-row catalysis-map-offset
+                               from none
+                               to shuffled-1
+                               cost 1
+                               source-row (reduction-row hand-designed shuffled-1 basal-4 maximal-raf 0 core 0 events 38 diversity 12 catalyzed 24 basal 14)
+                               maximal-raf 0
+                               core-size 0
+                               status remains-raf-negative)
+        (intervention-cost-row catalysis-map-offset
+                               from none
+                               to shuffled-9
+                               cost 1
+                               source-row (reduction-row hand-designed shuffled-9 basal-4 maximal-raf 7 core 3 events 20 diversity 10 catalyzed 6 basal 14)
+                               maximal-raf 7
+                               core-size 3
+                               status offset-sensitive-raf-like-control)))
+!(test (exp06-bounded-shortest-path-table)
+       (bounded-path-search
+         start initial
+         terminal-class raf-positive-territory
+         bound max-cost-1
+         variables (catalyst-affinity-assignment
+                    basal-food-replenishment
+                    candidate-pool-cap
+                    catalysis-map-offset)
+         winning-path ((intervention-cost-row catalyst-assignment
+                                              from none
+                                              to specific-template
+                                              cost 1
+                                              source-row (reduction-row hand-designed specific basal-4 maximal-raf 15 core 2 events 56 diversity 15 catalyzed 42 basal 14)
+                                              maximal-raf 15
+                                              core-size 2
+                                              status reaches-raf-positive-territory))
+         alternate-positive ((intervention-cost-row catalyst-assignment
+                                                    from none
+                                                    to broad-template
+                                                    cost 1
+                                                    source-row (reduction-row hand-designed broad basal-4 maximal-raf 15 core 2 events 56 diversity 15 catalyzed 42 basal 14)
+                                                    maximal-raf 15
+                                                    core-size 2
+                                                    status reaches-raf-positive-territory)
+                             (intervention-cost-row catalysis-map-offset
+                                                    from none
+                                                    to shuffled-9
+                                                    cost 1
+                                                    source-row (reduction-row hand-designed shuffled-9 basal-4 maximal-raf 7 core 3 events 20 diversity 10 catalyzed 6 basal 14)
+                                                    maximal-raf 7
+                                                    core-size 3
+                                                    status offset-sensitive-raf-like-control))
+         negative-or-unevaluated ((intervention-cost-row basal-food-replenishment
+                                                         from basal-0
+                                                         to basal-4
+                                                         cost 1
+                                                         source-row (reduction-row hand-designed none basal-4 maximal-raf 0 core 0 events 14 diversity 11 catalyzed 0 basal 14)
+                                                         maximal-raf 0
+                                                         core-size 0
+                                                         status remains-raf-negative)
+                                  (intervention-cost-row catalysis-map-offset
+                                                         from none
+                                                         to shuffled-1
+                                                         cost 1
+                                                         source-row (reduction-row hand-designed shuffled-1 basal-4 maximal-raf 0 core 0 events 38 diversity 12 catalyzed 24 basal 14)
+                                                         maximal-raf 0
+                                                         core-size 0
+                                                         status remains-raf-negative)
+                                  (intervention-cost-row candidate-pool-cap
+                                                         from unbounded-for-raf-report
+                                                         to cap-2
+                                                         cost 1
+                                                         source-seam exp00-exp03
+                                                         maximal-raf not-yet-evaluated
+                                                         core-size not-yet-evaluated
+                                                         status dynamic-test-required))
+         interpretation favorable-condition-candidates-are-catalysis-map-sensitive
+         emergence-claim none))
+!(test (exp06-bounded-path-search-status)
+       (exp06-status bounded-cost-path-table
+                     rows 6
+                     bound max-cost-1
+                     variables 4
+                     positive-rows 3
+                     negative-or-unevaluated-rows 3
+                     chemistry-kernel petta-native
+                     host-role bookkeeping-only
+                     emergence-claim none))
+
 ; Protected-release analog is only a bias contract for future dynamics, not a
 ; terminal-condition clamp.
 !(test (exp06-protected-release-bias-contract)
