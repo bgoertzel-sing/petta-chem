@@ -380,6 +380,161 @@
      next-test accumulated-multi-tick-stateful-sweep
      emergence-claim none))
 
+; The stateful sweep below carries the tick-3 chamber state into tick 4 rather
+; than refreshing the chamber.  It uses the same exp05 affinity-assigned source
+; rules and exp00 candidate selector, plus explicit PeTTa six-molecule chamber
+; tick clauses for this diagnostic state shape.  Cap-1 repeats the first source
+; rule, while cap-2 admits the second source rule at tick 4; the result is an
+; accumulated abundance/pathway split, not an ACS/RAF-status claim.
+
+(= (state-tick (state $tick $seed $m0 $m1 $m2 $m3 $m4 $m5))
+   $tick)
+
+(= (state-seed (state $tick $seed $m0 $m1 $m2 $m3 $m4 $m5))
+   $seed)
+
+(= (chamber-tick-with-candidate
+      (chamber $id
+               (state $tick $seed
+                      (mol A $a-count)
+                      (mol B $b-count)
+                      (mol C $c-count)
+                      (mol AB $ab-count)
+                      (mol AC $ac-count)
+                      (mol BC $bc-count))
+               $rules
+               ())
+      (candidate $tick (rule e5r0 A B AB $catalyst) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol A (- $a-count 1))
+                   (mol B (- $b-count 1))
+                   (mol C $c-count)
+                   (mol AB (+ $ab-count 1))
+                   (mol AC $ac-count)
+                   (mol BC $bc-count))
+            $rules
+            ((event $tick e5r0 A B AB $catalyst))))
+
+(= (chamber-tick-with-candidate
+      (chamber $id
+               (state $tick $seed
+                      (mol A $a-count)
+                      (mol B $b-count)
+                      (mol C $c-count)
+                      (mol AB $ab-count)
+                      (mol AC $ac-count)
+                      (mol BC $bc-count))
+               $rules
+               ($event-0))
+      (candidate $tick (rule e5r0 A B AB $catalyst) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol A (- $a-count 1))
+                   (mol B (- $b-count 1))
+                   (mol C $c-count)
+                   (mol AB (+ $ab-count 1))
+                   (mol AC $ac-count)
+                   (mol BC $bc-count))
+            $rules
+            ($event-0 (event $tick e5r0 A B AB $catalyst))))
+
+(= (chamber-tick-with-candidate
+      (chamber $id
+               (state $tick $seed
+                      (mol A $a-count)
+                      (mol B $b-count)
+                      (mol C $c-count)
+                      (mol AB $ab-count)
+                      (mol AC $ac-count)
+                      (mol BC $bc-count))
+               $rules
+               ($event-0))
+      (candidate $tick (rule e5r1 A C AC $catalyst) $score))
+   (chamber $id
+            (state (+ $tick 1) $seed
+                   (mol A (- $a-count 1))
+                   (mol B $b-count)
+                   (mol C (- $c-count 1))
+                   (mol AB $ab-count)
+                   (mol AC (+ $ac-count 1))
+                   (mol BC $bc-count))
+            $rules
+            ($event-0 (event $tick e5r1 A C AC $catalyst))))
+
+(= (exp06-stateful-cap-sweep-initial-chamber $arm $cap)
+   (chamber $arm
+            (state 3 seed-7
+                   (mol A 2)
+                   (mol B 2)
+                   (mol C 1)
+                   (mol AB 1)
+                   (mol AC 1)
+                   (mol BC 0))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp06-stateful-cap-sweep-selected tick-3 cap-1)
+   (assign-soft-biased-candidate-4
+     seed-7 3 1 (exp05-source-rule) (exp05-catalyst-candidates)))
+
+(= (exp06-stateful-cap-sweep-selected tick-3 cap-2)
+   (selected-candidate-from-list-2
+     (exp06-stateful-cap-sweep-initial-chamber exp06-stateful-cap2 cap-2)
+     (cap-candidate-pool
+       2
+       (exp05-affinity-candidate-pool-2 seed-7 3 1))))
+
+(= (exp06-stateful-cap-sweep-after tick-3 cap-1)
+   (chamber-tick-with-candidate
+     (exp06-stateful-cap-sweep-initial-chamber exp06-stateful-cap1 cap-1)
+     (exp06-stateful-cap-sweep-selected tick-3 cap-1)))
+
+(= (exp06-stateful-cap-sweep-after tick-3 cap-2)
+   (chamber-tick-with-candidate
+     (exp06-stateful-cap-sweep-initial-chamber exp06-stateful-cap2 cap-2)
+     (exp06-stateful-cap-sweep-selected tick-3 cap-2)))
+
+(= (exp06-stateful-cap-sweep-selected tick-4 cap-1)
+   (assign-soft-biased-candidate-4
+     seed-7 4 1 (exp05-source-rule) (exp05-catalyst-candidates)))
+
+(= (exp06-stateful-cap-sweep-selected tick-4 cap-2)
+   (selected-candidate-from-list-2
+     (exp06-stateful-cap-sweep-after tick-3 cap-2)
+     (cap-candidate-pool
+       2
+       (exp05-affinity-candidate-pool-2 seed-7 4 1))))
+
+(= (exp06-stateful-cap-sweep-after tick-4 cap-1)
+   (chamber-tick-with-candidate
+     (exp06-stateful-cap-sweep-after tick-3 cap-1)
+     (exp06-stateful-cap-sweep-selected tick-4 cap-1)))
+
+(= (exp06-stateful-cap-sweep-after tick-4 cap-2)
+   (chamber-tick-with-candidate
+     (exp06-stateful-cap-sweep-after tick-3 cap-2)
+     (exp06-stateful-cap-sweep-selected tick-4 cap-2)))
+
+(= (exp06-candidate-cap-stateful-two-tick-sweep)
+   (candidate-cap-stateful-two-tick-sweep
+     ticks (3 4)
+     caps (cap-1 cap-2)
+     initial-chambers ((exp06-stateful-cap-sweep-initial-chamber exp06-stateful-cap1 cap-1)
+                       (exp06-stateful-cap-sweep-initial-chamber exp06-stateful-cap2 cap-2))
+     selected-candidates ((exp06-stateful-cap-sweep-selected tick-3 cap-1)
+                          (exp06-stateful-cap-sweep-selected tick-3 cap-2)
+                          (exp06-stateful-cap-sweep-selected tick-4 cap-1)
+                          (exp06-stateful-cap-sweep-selected tick-4 cap-2))
+     final-chambers ((exp06-stateful-cap-sweep-after tick-4 cap-1)
+                     (exp06-stateful-cap-sweep-after tick-4 cap-2))
+     cap-1-pathway repeated-first-source-rule
+     cap-2-pathway first-then-second-source-rule
+     cap-effect accumulated-abundance-divergence-after-stateful-two-tick-sweep
+     scientific-boundary stateful-two-tick-diagnostic-not-raf-status
+     next-test longer-stateful-sweep-with-acs-scan
+     emergence-claim none))
+
 ; Protected-release / anti-precedence placeholder as a testable bias contract,
 ; not an implemented terminal-forcing policy.
 (= (exp06-protected-release-bias-contract)

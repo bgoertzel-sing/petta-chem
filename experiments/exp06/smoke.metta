@@ -406,6 +406,98 @@
          next-test accumulated-multi-tick-stateful-sweep
          emergence-claim none))
 
+; Stateful two-tick cap sweep: tick 4 starts from the tick 3 output chamber.
+; Cap-1 repeats e5r0; cap-2 exposes e5r1 and accumulates a different final
+; abundance/event path.  This is still a bounded diagnostic, not RAF status.
+!(test (exp06-stateful-cap-sweep-selected tick-3 cap-1)
+       (candidate 3 (rule e5r0 A B AB AB) 3))
+!(test (exp06-stateful-cap-sweep-selected tick-3 cap-2)
+       (candidate 3 (rule e5r0 A B AB AB) 3))
+!(test (exp06-stateful-cap-sweep-selected tick-4 cap-1)
+       (candidate 4 (rule e5r0 A B AB AC) 2))
+!(test (exp06-stateful-cap-sweep-selected tick-4 cap-2)
+       (candidate 4 (rule e5r1 A C AC AC) 3))
+!(test (exp06-stateful-cap-sweep-after tick-4 cap-1)
+       (chamber exp06-stateful-cap1
+                (state 5 seed-7
+                       (mol A 0)
+                       (mol B 0)
+                       (mol C 1)
+                       (mol AB 3)
+                       (mol AC 1)
+                       (mol BC 0))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 3 e5r0 A B AB AB)
+                 (event 4 e5r0 A B AB AC))))
+!(test (exp06-stateful-cap-sweep-after tick-4 cap-2)
+       (chamber exp06-stateful-cap2
+                (state 5 seed-7
+                       (mol A 0)
+                       (mol B 1)
+                       (mol C 0)
+                       (mol AB 2)
+                       (mol AC 2)
+                       (mol BC 0))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 3 e5r0 A B AB AB)
+                 (event 4 e5r1 A C AC AC))))
+!(test (exp06-candidate-cap-stateful-two-tick-sweep)
+       (candidate-cap-stateful-two-tick-sweep
+         ticks (3 4)
+         caps (cap-1 cap-2)
+         initial-chambers ((chamber exp06-stateful-cap1
+                                    (state 3 seed-7
+                                           (mol A 2)
+                                           (mol B 2)
+                                           (mol C 1)
+                                           (mol AB 1)
+                                           (mol AC 1)
+                                           (mol BC 0))
+                                    ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                    ())
+                           (chamber exp06-stateful-cap2
+                                    (state 3 seed-7
+                                           (mol A 2)
+                                           (mol B 2)
+                                           (mol C 1)
+                                           (mol AB 1)
+                                           (mol AC 1)
+                                           (mol BC 0))
+                                    ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                    ()))
+         selected-candidates ((candidate 3 (rule e5r0 A B AB AB) 3)
+                              (candidate 3 (rule e5r0 A B AB AB) 3)
+                              (candidate 4 (rule e5r0 A B AB AC) 2)
+                              (candidate 4 (rule e5r1 A C AC AC) 3))
+         final-chambers ((chamber exp06-stateful-cap1
+                                  (state 5 seed-7
+                                         (mol A 0)
+                                         (mol B 0)
+                                         (mol C 1)
+                                         (mol AB 3)
+                                         (mol AC 1)
+                                         (mol BC 0))
+                                  ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                  ((event 3 e5r0 A B AB AB)
+                                   (event 4 e5r0 A B AB AC)))
+                         (chamber exp06-stateful-cap2
+                                  (state 5 seed-7
+                                         (mol A 0)
+                                         (mol B 1)
+                                         (mol C 0)
+                                         (mol AB 2)
+                                         (mol AC 2)
+                                         (mol BC 0))
+                                  ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                  ((event 3 e5r0 A B AB AB)
+                                   (event 4 e5r1 A C AC AC))))
+         cap-1-pathway repeated-first-source-rule
+         cap-2-pathway first-then-second-source-rule
+         cap-effect accumulated-abundance-divergence-after-stateful-two-tick-sweep
+         scientific-boundary stateful-two-tick-diagnostic-not-raf-status
+         next-test longer-stateful-sweep-with-acs-scan
+         emergence-claim none))
+
 ; Protected-release analog is only a bias contract for future dynamics, not a
 ; terminal-condition clamp.
 !(test (exp06-protected-release-bias-contract)
