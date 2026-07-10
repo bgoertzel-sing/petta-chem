@@ -28,6 +28,7 @@ scripts/run_exp03.sh
 scripts/run_exp04.sh
 scripts/run_exp05.sh
 scripts/run_exp06.sh
+scripts/test_exp06_bridge_path_files.sh
 ```
 
 `experiments/exp00/smoke.metta` is a deliberately tiny deterministic chemistry spike. It establishes initial molecule/rule/state/candidate/candidate-pool/candidate-cap/event/chamber/metric atom contracts plus a generic bounded binary catalytic transition, candidate applicability checks, nonnegative abundance invariants, chamber-rule-based candidate generation, per-tick candidate caps, and a seed/tick deterministic candidate selector wired into generated chamber ticking before larger stochastic/harness work is added.
@@ -46,4 +47,4 @@ scripts/run_exp06.sh
 
 `experiments/exp05/smoke.metta` starts a soft-biased ecological autocatalysis scaffold in PeTTa. It assigns catalysts from generic token-overlap affinity with a positive baseline and a rotated-weight control, then projects assigned source rules into ordinary exp00 `candidate`/`candidate-pool` atoms so bounded caps can be reused by later chamber-ticking slices. It is plumbing only: no RAF scan or emergence claim is made.
 
-`experiments/exp06/smoke.metta` starts the bridge-to-ACS favorable-conditions analysis. It names an ACS-negative exp04 no-catalysis source row, the exp04 RAF-rich terminal row/core, intervention variables spanning exp05 affinity assignment, basal replenishment, candidate-pool cap, and catalysis-map offset, plus a first deterministic one-step shortest-path witness. It also exposes a bounded cost/path-search table over these variables, marking candidate-cap dynamics as not-yet-evaluated rather than inferred. The bridge is diagnostic bookkeeping in PeTTa atoms, not spontaneous-emergence evidence.
+`experiments/exp06/smoke.metta` starts the bridge-to-ACS favorable-conditions analysis. It names an ACS-negative exp04 no-catalysis source row, the exp04 RAF-rich terminal row/core, intervention variables spanning exp05 affinity assignment, basal replenishment, candidate-pool cap, and catalysis-map offset, plus a first deterministic one-step shortest-path witness. It also exposes a bounded cost/path-search table over these variables, marking candidate-cap dynamics as not-yet-evaluated rather than inferred. `scripts/write_exp06_bridge_path_files.sh` is a thin host-side Dijkstra/bookkeeping harness that queries those PeTTa-exposed rows and serializes CONFIG, NODE_EVALUATIONS, PATHS, SUMMARY, and RUN.md artifacts without implementing chemistry. The bridge is diagnostic bookkeeping, not spontaneous-emergence evidence.
