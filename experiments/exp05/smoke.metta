@@ -58,3 +58,31 @@
           (candidate 3 (rule e5r1 A C AC AB) 2))))
 !(test (exp05-affinity-bounded-first-candidate seed-7 3 1)
        ((candidate 3 (rule e5r0 A B AB AB) 3)))
+
+; The projected affinity candidates now feed a minimal chamber tick directly:
+; source rules -> affinity assignment -> cap-2 bounded pool -> deterministic
+; seed/tick selector -> ordinary exp00 chamber ticking.  The matched rotated
+; control uses the same path with only the weight profile rotated.
+!(test (exp05-affinity-selected-candidate-2 seed-7 3 1)
+       (candidate 3 (rule e5r0 A B AB AB) 3))
+!(test (exp05-shuffled-affinity-selected-candidate-2 seed-7 3 1)
+       (candidate 3 (rule e5r0 A B AB AC) 2))
+!(test (exp05-chamber-tick-affinity-2 seed-7 3 1)
+       (chamber exp05-treatment
+                (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AB 1))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 3 e5r0 A B AB AB))))
+!(test (exp05-chamber-tick-shuffled-affinity-2 seed-7 3 1)
+       (chamber exp05-rotated-control
+                (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AC 1))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 3 e5r0 A B AB AC))))
+!(test (exp05-chamber-ticking-slice-status)
+       (exp05-status catalyst-affinity-to-chamber-tick
+                     candidate-source affinity-assigned-pool
+                     cap 2
+                     selector deterministic-seed-tick
+                     treatment weighted-assignment
+                     control rotated-weight-profile
+                     raf-scan not-yet-run
+                     emergence-claim none))

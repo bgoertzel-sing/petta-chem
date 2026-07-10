@@ -215,3 +215,56 @@
 
 (= (exp05-affinity-bounded-first-candidate $seed $tick $strength)
    (cap-candidate-pool 1 (exp05-affinity-candidate-pool-2 $seed $tick $strength)))
+
+; ----- Minimal chamber-ticking slice over affinity-assigned pools -----
+;
+; The source rules are still catalyst-free before assignment.  Each tick builds
+; an affinity-assigned candidate pool, applies a bounded cap, chooses from the
+; bounded candidates with exp00's seed/tick deterministic selector, and then
+; hands the selected ordinary candidate to exp00 chamber ticking.  The rotated
+; control follows the same path with only the weight-to-catalyst profile
+; rotated.
+
+(= (exp05-treatment-chamber seed-7 3)
+   (chamber exp05-treatment
+            (state 3 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol AB 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-7 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-7 (mol A 1) (mol B 1) (mol AB 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-affinity-selected-candidate-2 $seed $tick $strength)
+   (let $pool (exp05-affinity-candidate-pool-2 $seed $tick $strength)
+     (selected-candidate-from-list-2
+       (exp05-treatment-chamber $seed $tick)
+       (cap-candidate-pool 2 $pool))))
+
+(= (exp05-shuffled-affinity-selected-candidate-2 $seed $tick $strength)
+   (let $pool (exp05-shuffled-affinity-candidate-pool-2 $seed $tick $strength)
+     (selected-candidate-from-list-2
+       (exp05-rotated-control-chamber $seed $tick)
+       (cap-candidate-pool 2 $pool))))
+
+(= (exp05-chamber-tick-affinity-2 $seed $tick $strength)
+   (chamber-tick-with-candidate
+     (exp05-treatment-chamber $seed $tick)
+     (exp05-affinity-selected-candidate-2 $seed $tick $strength)))
+
+(= (exp05-chamber-tick-shuffled-affinity-2 $seed $tick $strength)
+   (chamber-tick-with-candidate
+     (exp05-rotated-control-chamber $seed $tick)
+     (exp05-shuffled-affinity-selected-candidate-2 $seed $tick $strength)))
+
+(= (exp05-chamber-ticking-slice-status)
+   (exp05-status catalyst-affinity-to-chamber-tick
+                 candidate-source affinity-assigned-pool
+                 cap 2
+                 selector deterministic-seed-tick
+                 treatment weighted-assignment
+                 control rotated-weight-profile
+                 raf-scan not-yet-run
+                 emergence-claim none))
