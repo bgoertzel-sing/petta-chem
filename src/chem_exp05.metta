@@ -269,6 +269,23 @@
             ((exp05-source-rule) (exp05-second-source-rule))
             ()))
 
+; Fourth seed-sweep fixture for exp07.  Seed-10 selects the second bounded
+; candidate at tick 3, while the affinity draw assigns a different rotated
+; control catalyst than seed-8.  Both treatment and control states keep the
+; selected catalysts present so the second candidate is handed to ordinary
+; productive chamber ticking.
+(= (exp05-treatment-chamber seed-10 3)
+   (chamber exp05-treatment
+            (state 3 seed-10 (mol A 1) (mol C 1) (mol AC 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-10 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-10 (mol A 1) (mol C 1) (mol AC 0) (mol BC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
 (= (exp05-affinity-selected-candidate-2 $seed $tick $strength)
    (let $pool (exp05-affinity-candidate-pool-2 $seed $tick $strength)
      (selected-candidate-from-list-2
