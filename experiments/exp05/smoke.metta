@@ -155,6 +155,34 @@
                 (state 4 seed-14 (mol A 0) (mol C 0) (mol AC 1) (mol CD 1))
                 ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
                 ((event 3 e5r1 A C AC CD))))
+!(test (exp05-affinity-selected-candidate-2 seed-15 3 1)
+       (candidate 3 (rule e5r0 A B AB AB) 3))
+!(test (exp05-shuffled-affinity-selected-candidate-2 seed-15 3 1)
+       (candidate 3 (rule e5r0 A B AB AC) 2))
+!(test (exp05-chamber-tick-affinity-2 seed-15 3 1)
+       (chamber exp05-treatment
+                (state 4 seed-15 (mol A 0) (mol B 0) (mol AB 1) (mol AB 1))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 3 e5r0 A B AB AB))))
+!(test (exp05-chamber-tick-shuffled-affinity-2 seed-15 3 1)
+       (chamber exp05-rotated-control
+                (state 4 seed-15 (mol A 0) (mol B 0) (mol AB 1) (mol AC 1))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 3 e5r0 A B AB AC))))
+!(test (exp05-affinity-selected-candidate-2 seed-16 3 1)
+       (candidate 3 (rule e5r1 A C AC AB) 2))
+!(test (exp05-shuffled-affinity-selected-candidate-2 seed-16 3 1)
+       (candidate 3 (rule e5r1 A C AC AB) 2))
+!(test (exp05-chamber-tick-affinity-2 seed-16 3 1)
+       (chamber exp05-treatment
+                (state 4 seed-16 (mol A 0) (mol C 0) (mol AC 1) (mol AB 1))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 3 e5r1 A C AC AB))))
+!(test (exp05-chamber-tick-shuffled-affinity-2 seed-16 3 1)
+       (chamber exp05-rotated-control
+                (state 4 seed-16 (mol A 0) (mol C 0) (mol AC 1) (mol AB 1))
+                ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                ((event 3 e5r1 A C AC AB))))
 
 !(test (exp05-chamber-ticking-slice-status)
        (exp05-status catalyst-affinity-to-chamber-tick

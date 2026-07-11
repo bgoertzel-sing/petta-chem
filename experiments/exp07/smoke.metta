@@ -419,7 +419,7 @@
                                       ((event 3 e5r0 A B AB AC)))
          selected-rule e5r0
          productivity treatment-and-control-productive
-         scientific-boundary eight-seed-provenance-not-frequency-or-acs-uplift
+         scientific-boundary ten-seed-provenance-not-frequency-or-acs-uplift
          terminal-forcing prohibited
          emergence-claim none))
 !(test (exp07-affinity-seed-variation-row seed-8)
@@ -441,7 +441,7 @@
                                       ((event 3 e5r1 A C AC AC)))
          selected-rule e5r1
          productivity treatment-and-control-productive
-         scientific-boundary eight-seed-provenance-not-frequency-or-acs-uplift
+         scientific-boundary ten-seed-provenance-not-frequency-or-acs-uplift
          terminal-forcing prohibited
          emergence-claim none))
 !(test (exp07-affinity-seed-variation-row seed-9)
@@ -463,7 +463,7 @@
                                       ((event 3 e5r0 A B AB BC)))
          selected-rule e5r0
          productivity treatment-and-control-productive
-         scientific-boundary eight-seed-provenance-not-frequency-or-acs-uplift
+         scientific-boundary ten-seed-provenance-not-frequency-or-acs-uplift
          terminal-forcing prohibited
          emergence-claim none))
 
@@ -486,7 +486,7 @@
                                       ((event 3 e5r1 A C AC BC)))
          selected-rule e5r1
          productivity treatment-and-control-productive
-         scientific-boundary eight-seed-provenance-not-frequency-or-acs-uplift
+         scientific-boundary ten-seed-provenance-not-frequency-or-acs-uplift
          terminal-forcing prohibited
          emergence-claim none))
 
@@ -509,7 +509,7 @@
                                       ((event 3 e5r0 A B AB CD)))
          selected-rule e5r0
          productivity treatment-and-control-productive
-         scientific-boundary eight-seed-provenance-not-frequency-or-acs-uplift
+         scientific-boundary ten-seed-provenance-not-frequency-or-acs-uplift
          terminal-forcing prohibited
          emergence-claim none))
 !(test (exp07-affinity-seed-variation-row seed-12)
@@ -531,7 +531,7 @@
                                       ((event 3 e5r1 A C AC BC)))
          selected-rule e5r1
          productivity treatment-and-control-productive
-         scientific-boundary eight-seed-provenance-not-frequency-or-acs-uplift
+         scientific-boundary ten-seed-provenance-not-frequency-or-acs-uplift
          terminal-forcing prohibited
          emergence-claim none))
 !(test (exp07-affinity-seed-variation-row seed-13)
@@ -553,7 +553,7 @@
                                       ((event 3 e5r0 A B AB AB)))
          selected-rule e5r0
          productivity treatment-and-control-productive
-         scientific-boundary eight-seed-provenance-not-frequency-or-acs-uplift
+         scientific-boundary ten-seed-provenance-not-frequency-or-acs-uplift
          terminal-forcing prohibited
          emergence-claim none))
 !(test (exp07-affinity-seed-variation-row seed-14)
@@ -575,20 +575,64 @@
                                       ((event 3 e5r1 A C AC CD)))
          selected-rule e5r1
          productivity treatment-and-control-productive
-         scientific-boundary eight-seed-provenance-not-frequency-or-acs-uplift
+         scientific-boundary ten-seed-provenance-not-frequency-or-acs-uplift
+         terminal-forcing prohibited
+         emergence-claim none))
+!(test (exp07-affinity-seed-variation-row seed-15)
+       (affinity-seed-variation-row
+         seed seed-15
+         tick 3
+         strength 1
+         cap 2
+         selector-phase first-candidate-extended-draw
+         treatment-selected (candidate 3 (rule e5r0 A B AB AB) 3)
+         treatment-after-tick (chamber exp05-treatment
+                                       (state 4 seed-15 (mol A 0) (mol B 0) (mol AB 1) (mol AB 1))
+                                       ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                       ((event 3 e5r0 A B AB AB)))
+         control-selected (candidate 3 (rule e5r0 A B AB AC) 2)
+         control-after-tick (chamber exp05-rotated-control
+                                      (state 4 seed-15 (mol A 0) (mol B 0) (mol AB 1) (mol AC 1))
+                                      ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                      ((event 3 e5r0 A B AB AC)))
+         selected-rule e5r0
+         productivity treatment-and-control-productive
+         scientific-boundary ten-seed-provenance-not-frequency-or-acs-uplift
+         terminal-forcing prohibited
+         emergence-claim none))
+!(test (exp07-affinity-seed-variation-row seed-16)
+       (affinity-seed-variation-row
+         seed seed-16
+         tick 3
+         strength 1
+         cap 2
+         selector-phase second-candidate-extended-draw
+         treatment-selected (candidate 3 (rule e5r1 A C AC AB) 2)
+         treatment-after-tick (chamber exp05-treatment
+                                       (state 4 seed-16 (mol A 0) (mol C 0) (mol AC 1) (mol AB 1))
+                                       ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                       ((event 3 e5r1 A C AC AB)))
+         control-selected (candidate 3 (rule e5r1 A C AC AB) 2)
+         control-after-tick (chamber exp05-rotated-control
+                                      (state 4 seed-16 (mol A 0) (mol C 0) (mol AC 1) (mol AB 1))
+                                      ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                      ((event 3 e5r1 A C AC AB)))
+         selected-rule e5r1
+         productivity treatment-and-control-productive
+         scientific-boundary ten-seed-provenance-not-frequency-or-acs-uplift
          terminal-forcing prohibited
          emergence-claim none))
 !(test (exp07-affinity-seed-variation-status)
        (affinity-seed-variation-status
          variable affinity-weight
          strength 1
-         tested-seeds (seed-7 seed-8 seed-9 seed-10 seed-11 seed-12 seed-13 seed-14)
+         tested-seeds (seed-7 seed-8 seed-9 seed-10 seed-11 seed-12 seed-13 seed-14 seed-15 seed-16)
          tick 3
          cap 2
          evidence (exp07-affinity-seed-variation-table)
-         selector-phases (first-candidate second-candidate first-candidate-repeat second-candidate-repeat first-candidate-late-draw second-candidate-late-draw first-candidate-draw-cycle-reset second-candidate-draw-cycle-reset)
+         selector-phases (first-candidate second-candidate first-candidate-repeat second-candidate-repeat first-candidate-late-draw second-candidate-late-draw first-candidate-draw-cycle-reset second-candidate-draw-cycle-reset first-candidate-extended-draw second-candidate-extended-draw)
          chamber-ticking directly-handed-to-exp00-chamber-ticking
-         current-boundary eight-seed-selector-phase-provenance-only
+         current-boundary ten-seed-selector-phase-provenance-only
          next-test broaden-seed-sweep-before-acs-frequency-claim
          terminal-forcing prohibited
          emergence-claim none))
