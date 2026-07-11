@@ -19,6 +19,8 @@ The third slice adds a first deterministic weak-guidance comparison table. It re
 
 The fourth slice starts that follow-up narrowly by varying only exp05 affinity strength `(0 1 2)` in the existing seed-7/tick-3 cap-2 fixture. It records the selected candidates handed to chamber ticking and marks strength 1 as the only tested value with both treatment and rotated-control selected catalysts present/productive in the current fixture. This is a productivity filter for later seed sweeps, not a frequency or ACS-uplift claim.
 
+The fifth slice expands the productive strength-1 case into an explicit selection-to-tick provenance trace. It records the treatment/control candidate pools, cap-2 bounded lists, deterministic selected candidates, and resulting exp00 chamber ticks in one smoke-tested atom, proving the selected weak-guidance candidates are exactly the candidates handed to chamber ticking. This remains a single-fixture provenance check only: no seed/frequency claim, no terminal forcing, no ACS uplift, and no emergence claim.
+
 Run with:
 
 ```bash

@@ -365,3 +365,46 @@
      next-test vary-seed-over-productive-strength-before-acs-frequency-claim
      terminal-forcing prohibited
      emergence-claim none))
+
+; ----- Productive affinity selection-to-tick trace -----
+;
+; This row makes the productive strength-1 path fully inspectable as a bounded
+; candidate-generation/cap/selection/tick trace.  It expands the treatment and
+; rotated-control pools, the cap-2 lists, the deterministic selected candidates,
+; and the resulting ordinary exp00 chamber ticks.  The trace is intentionally a
+; single-fixture provenance check: it proves the weak-guidance candidate chosen
+; by deterministic selection is exactly the one handed to chamber ticking, but
+; it still does not run an ACS scanner or make a frequency/uplift claim.
+
+(= (exp07-affinity-selection-to-tick-trace strength-1)
+   (affinity-selection-to-tick-trace
+     variable affinity-weight
+     strength 1
+     seed seed-7
+     tick 3
+     cap 2
+     treatment-pool (exp05-affinity-candidate-pool-2 seed-7 3 1)
+     treatment-bounded-candidates (cap-candidate-pool 2 (exp05-affinity-candidate-pool-2 seed-7 3 1))
+     treatment-selected (exp05-affinity-selected-candidate-2 seed-7 3 1)
+     treatment-after-tick (exp05-chamber-tick-affinity-2 seed-7 3 1)
+     control-pool (exp05-shuffled-affinity-candidate-pool-2 seed-7 3 1)
+     control-bounded-candidates (cap-candidate-pool 2 (exp05-shuffled-affinity-candidate-pool-2 seed-7 3 1))
+     control-selected (exp05-shuffled-affinity-selected-candidate-2 seed-7 3 1)
+     control-after-tick (exp05-chamber-tick-shuffled-affinity-2 seed-7 3 1)
+     deterministic-selector exp00-selected-candidate-from-list-2
+     selection-handed-to chamber-tick-with-candidate
+     scientific-boundary single-fixture-provenance-not-frequency-or-acs-uplift
+     terminal-forcing prohibited
+     emergence-claim none))
+
+(= (exp07-affinity-selection-to-tick-status)
+   (affinity-selection-to-tick-status
+     trace (exp07-affinity-selection-to-tick-trace strength-1)
+     bounded-candidate-generation exp05-affinity-candidate-pool-2
+     cap cap-2
+     deterministic-selection directly-handed-to-exp00-chamber-ticking
+     productive-strengths (1)
+     current-boundary selection-to-tick-provenance-only
+     next-test vary-seed-over-productive-strength-before-acs-frequency-claim
+     terminal-forcing prohibited
+     emergence-claim none))

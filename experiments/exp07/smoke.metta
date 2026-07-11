@@ -325,3 +325,77 @@
          next-test vary-seed-over-productive-strength-before-acs-frequency-claim
          terminal-forcing prohibited
          emergence-claim none))
+
+!(test (exp07-affinity-selection-to-tick-trace strength-1)
+       (affinity-selection-to-tick-trace
+         variable affinity-weight
+         strength 1
+         seed seed-7
+         tick 3
+         cap 2
+         treatment-pool (candidate-pool 3
+                           ((candidate 3 (rule e5r0 A B AB AB) 3)
+                            (candidate 3 (rule e5r1 A C AC AB) 2)))
+         treatment-bounded-candidates ((candidate 3 (rule e5r0 A B AB AB) 3)
+                                       (candidate 3 (rule e5r1 A C AC AB) 2))
+         treatment-selected (candidate 3 (rule e5r0 A B AB AB) 3)
+         treatment-after-tick (chamber exp05-treatment
+                                       (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AB 1))
+                                       ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                       ((event 3 e5r0 A B AB AB)))
+         control-pool (candidate-pool 3
+                         ((candidate 3 (rule e5r0 A B AB AC) 2)
+                          (candidate 3 (rule e5r1 A C AC AB) 2)))
+         control-bounded-candidates ((candidate 3 (rule e5r0 A B AB AC) 2)
+                                     (candidate 3 (rule e5r1 A C AC AB) 2))
+         control-selected (candidate 3 (rule e5r0 A B AB AC) 2)
+         control-after-tick (chamber exp05-rotated-control
+                                      (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AC 1))
+                                      ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                      ((event 3 e5r0 A B AB AC)))
+         deterministic-selector exp00-selected-candidate-from-list-2
+         selection-handed-to chamber-tick-with-candidate
+         scientific-boundary single-fixture-provenance-not-frequency-or-acs-uplift
+         terminal-forcing prohibited
+         emergence-claim none))
+!(test (exp07-affinity-selection-to-tick-status)
+       (affinity-selection-to-tick-status
+         trace (affinity-selection-to-tick-trace
+                 variable affinity-weight
+                 strength 1
+                 seed seed-7
+                 tick 3
+                 cap 2
+                 treatment-pool (candidate-pool 3
+                                   ((candidate 3 (rule e5r0 A B AB AB) 3)
+                                    (candidate 3 (rule e5r1 A C AC AB) 2)))
+                 treatment-bounded-candidates ((candidate 3 (rule e5r0 A B AB AB) 3)
+                                               (candidate 3 (rule e5r1 A C AC AB) 2))
+                 treatment-selected (candidate 3 (rule e5r0 A B AB AB) 3)
+                 treatment-after-tick (chamber exp05-treatment
+                                               (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AB 1))
+                                               ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                               ((event 3 e5r0 A B AB AB)))
+                 control-pool (candidate-pool 3
+                                 ((candidate 3 (rule e5r0 A B AB AC) 2)
+                                  (candidate 3 (rule e5r1 A C AC AB) 2)))
+                 control-bounded-candidates ((candidate 3 (rule e5r0 A B AB AC) 2)
+                                             (candidate 3 (rule e5r1 A C AC AB) 2))
+                 control-selected (candidate 3 (rule e5r0 A B AB AC) 2)
+                 control-after-tick (chamber exp05-rotated-control
+                                              (state 4 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol AC 1))
+                                              ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+                                              ((event 3 e5r0 A B AB AC)))
+                 deterministic-selector exp00-selected-candidate-from-list-2
+                 selection-handed-to chamber-tick-with-candidate
+                 scientific-boundary single-fixture-provenance-not-frequency-or-acs-uplift
+                 terminal-forcing prohibited
+                 emergence-claim none)
+         bounded-candidate-generation exp05-affinity-candidate-pool-2
+         cap cap-2
+         deterministic-selection directly-handed-to-exp00-chamber-ticking
+         productive-strengths (1)
+         current-boundary selection-to-tick-provenance-only
+         next-test vary-seed-over-productive-strength-before-acs-frequency-claim
+         terminal-forcing prohibited
+         emergence-claim none))
