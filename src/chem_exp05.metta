@@ -376,6 +376,36 @@
             ((exp05-source-rule) (exp05-second-source-rule))
             ()))
 
+; Eleventh and twelfth seed-sweep fixtures for exp07.  Seed-17 extends the
+; first-candidate phase with later weighted draws selecting `AC` in treatment
+; and `BC` in the rotated control.  Seed-18 extends the second-candidate phase
+; with both arms selecting `AC`.  The selected catalysts are explicitly
+; present, so these remain productive cap-2 selection-to-tick fixtures rather
+; than ACS/frequency evidence.
+(= (exp05-treatment-chamber seed-17 3)
+   (chamber exp05-treatment
+            (state 3 seed-17 (mol A 1) (mol B 1) (mol AB 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-17 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-17 (mol A 1) (mol B 1) (mol AB 0) (mol BC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-treatment-chamber seed-18 3)
+   (chamber exp05-treatment
+            (state 3 seed-18 (mol A 1) (mol C 1) (mol AC 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-18 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-18 (mol A 1) (mol C 1) (mol AC 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
 (= (exp05-affinity-selected-candidate-2 $seed $tick $strength)
    (let $pool (exp05-affinity-candidate-pool-2 $seed $tick $strength)
      (selected-candidate-from-list-2
