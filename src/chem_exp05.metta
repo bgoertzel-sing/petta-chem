@@ -318,6 +318,35 @@
             ((exp05-source-rule) (exp05-second-source-rule))
             ()))
 
+; Seventh and eighth seed-sweep fixtures for exp07.  Seed-13 adds another
+; first-candidate phase at the start of the weighted draw cycle, selecting `AB`
+; in both treatment and rotated control.  Seed-14 adds another second-candidate
+; phase at the start of the rotated draw cycle, selecting `CD` productively
+; in both treatment and rotated control.
+(= (exp05-treatment-chamber seed-13 3)
+   (chamber exp05-treatment
+            (state 3 seed-13 (mol A 1) (mol B 1) (mol AB 0) (mol AB 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-13 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-13 (mol A 1) (mol B 1) (mol AB 0) (mol AB 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-treatment-chamber seed-14 3)
+   (chamber exp05-treatment
+            (state 3 seed-14 (mol A 1) (mol C 1) (mol AC 0) (mol CD 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-14 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-14 (mol A 1) (mol C 1) (mol AC 0) (mol CD 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
 (= (exp05-affinity-selected-candidate-2 $seed $tick $strength)
    (let $pool (exp05-affinity-candidate-pool-2 $seed $tick $strength)
      (selected-candidate-from-list-2
