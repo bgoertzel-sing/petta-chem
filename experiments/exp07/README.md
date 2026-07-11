@@ -21,7 +21,7 @@ The fourth slice starts that follow-up narrowly by varying only exp05 affinity s
 
 The fifth slice expands the productive strength-1 case into an explicit selection-to-tick provenance trace. It records the treatment/control candidate pools, cap-2 bounded lists, deterministic selected candidates, and resulting exp00 chamber ticks in one smoke-tested atom, proving the selected weak-guidance candidates are exactly the candidates handed to chamber ticking. This remains a single-fixture provenance check only: no seed/frequency claim, no terminal forcing, no ACS uplift, and no emergence claim.
 
-The sixth slice broadens that productive strength-1/cap-2 provenance check from two seeds to sixteen PeTTa-defined chambers. Seeds 7/9/11/13/15/17/19/21 exercise first-candidate phases and seeds 8/10/12/14/16/18/20/22 exercise second-candidate phases with varied productive catalyst contexts; all selected candidates are handed directly to ordinary exp00 chamber ticking in treatment/control arms. This is still provenance/selector-phase coverage only, not a frequency claim, ACS scan, or terminal-forcing result.
+The sixth slice broadens that productive strength-1/cap-2 provenance check from two seeds to eighteen PeTTa-defined chambers. Seeds 7/9/11/13/15/17/19/21/23 exercise first-candidate phases and seeds 8/10/12/14/16/18/20/22/24 exercise second-candidate phases with varied productive catalyst contexts; all selected candidates are handed directly to ordinary exp00 chamber ticking in treatment/control arms. This is still provenance/selector-phase coverage only, not a frequency claim, ACS scan, or terminal-forcing result.
 
 Run with:
 

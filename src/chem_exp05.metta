@@ -464,6 +464,36 @@
             ((exp05-source-rule) (exp05-second-source-rule))
             ()))
 
+
+; Seventeenth and eighteenth seed-sweep fixtures for exp07.  Seed-23 repeats
+; the first-candidate selector phase with treatment/control catalyst divergence
+; (`AB` versus `AC`) while keeping both selected catalysts present.  Seed-24
+; repeats the second-candidate phase with both arms selecting `AB` as the
+; productive catalyst context.
+(= (exp05-treatment-chamber seed-23 3)
+   (chamber exp05-treatment
+            (state 3 seed-23 (mol A 1) (mol B 1) (mol AB 0) (mol AB 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-23 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-23 (mol A 1) (mol B 1) (mol AB 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-treatment-chamber seed-24 3)
+   (chamber exp05-treatment
+            (state 3 seed-24 (mol A 1) (mol C 1) (mol AC 0) (mol AB 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-24 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-24 (mol A 1) (mol C 1) (mol AC 0) (mol AB 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
 (= (exp05-affinity-selected-candidate-2 $seed $tick $strength)
    (let $pool (exp05-affinity-candidate-pool-2 $seed $tick $strength)
      (selected-candidate-from-list-2
