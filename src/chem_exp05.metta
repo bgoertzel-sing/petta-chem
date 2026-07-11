@@ -237,6 +237,22 @@
             ((exp05-source-rule) (exp05-second-source-rule))
             ()))
 
+; Matched second selector-phase fixture for exp07 seed variation.  With seed-8
+; at tick 3, `(seed + tick) % 2 = 1`, so deterministic cap-2 selection chooses
+; the second affinity-assigned source rule (`e5r1`).  The state makes that
+; selected AC-producing rule productive without changing the assignment path.
+(= (exp05-treatment-chamber seed-8 3)
+   (chamber exp05-treatment
+            (state 3 seed-8 (mol A 1) (mol C 1) (mol AC 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-8 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-8 (mol A 1) (mol C 1) (mol AC 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
 (= (exp05-affinity-selected-candidate-2 $seed $tick $strength)
    (let $pool (exp05-affinity-candidate-pool-2 $seed $tick $strength)
      (selected-candidate-from-list-2
