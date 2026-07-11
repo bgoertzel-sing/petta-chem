@@ -286,6 +286,38 @@
             ((exp05-source-rule) (exp05-second-source-rule))
             ()))
 
+
+; Fifth and sixth seed-sweep fixtures for exp07.  Seed-11 repeats the
+; first-candidate selector phase with later affinity draws that select `BC`
+; in treatment and `CD` in the rotated control.  Seed-12 repeats the
+; second-candidate phase with `BC` selected in both treatment and rotated
+; control.  The selected catalysts are present in-state, so each arm still
+; verifies the selected bounded candidate is handed to productive exp00
+; chamber ticking.
+(= (exp05-treatment-chamber seed-11 3)
+   (chamber exp05-treatment
+            (state 3 seed-11 (mol A 1) (mol B 1) (mol AB 0) (mol BC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-11 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-11 (mol A 1) (mol B 1) (mol AB 0) (mol CD 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-treatment-chamber seed-12 3)
+   (chamber exp05-treatment
+            (state 3 seed-12 (mol A 1) (mol C 1) (mol AC 0) (mol BC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-12 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-12 (mol A 1) (mol C 1) (mol AC 0) (mol BC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
 (= (exp05-affinity-selected-candidate-2 $seed $tick $strength)
    (let $pool (exp05-affinity-candidate-pool-2 $seed $tick $strength)
      (selected-candidate-from-list-2

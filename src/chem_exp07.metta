@@ -412,14 +412,12 @@
 ; ----- Productive-strength seed variation -----
 ;
 ; This is the first small follow-up to the seed-variation next-test.  It keeps
-; strength 1 and cap 2 fixed, varies only the seed/selector phase over four
+; strength 1 and cap 2 fixed, varies only the seed/selector phase over six
 ; PeTTa-defined chambers, and records that deterministic selection is still
-; handed directly to ordinary exp00 chamber ticking.  Seed-7/tick-3 selects the
-; first bounded candidate (`e5r0`), seed-8/tick-3 selects the second bounded
-; candidate (`e5r1`), seed-9/tick-3 returns to the first candidate with a
-; different selected catalyst context, and seed-10/tick-3 repeats the second
-; candidate phase with a different rotated-control catalyst.  This is still a
-; four-seed provenance/control slice, not a frequency claim and not an ACS scan.
+; handed directly to ordinary exp00 chamber ticking.  Seeds 7/9/11 exercise
+; first-candidate phases, and seeds 8/10/12 exercise second-candidate phases
+; with varied productive catalyst contexts.  This is still a six-seed
+; provenance/control slice, not a frequency claim and not an ACS scan.
 
 (= (exp07-affinity-seed-variation-row seed-7)
    (affinity-seed-variation-row
@@ -434,7 +432,7 @@
      control-after-tick (exp05-chamber-tick-shuffled-affinity-2 seed-7 3 1)
      selected-rule e5r0
      productivity treatment-and-control-productive
-     scientific-boundary four-seed-provenance-not-frequency-or-acs-uplift
+     scientific-boundary six-seed-provenance-not-frequency-or-acs-uplift
      terminal-forcing prohibited
      emergence-claim none))
 
@@ -451,7 +449,7 @@
      control-after-tick (exp05-chamber-tick-shuffled-affinity-2 seed-8 3 1)
      selected-rule e5r1
      productivity treatment-and-control-productive
-     scientific-boundary four-seed-provenance-not-frequency-or-acs-uplift
+     scientific-boundary six-seed-provenance-not-frequency-or-acs-uplift
      terminal-forcing prohibited
      emergence-claim none))
 
@@ -468,7 +466,7 @@
      control-after-tick (exp05-chamber-tick-shuffled-affinity-2 seed-9 3 1)
      selected-rule e5r0
      productivity treatment-and-control-productive
-     scientific-boundary four-seed-provenance-not-frequency-or-acs-uplift
+     scientific-boundary six-seed-provenance-not-frequency-or-acs-uplift
      terminal-forcing prohibited
      emergence-claim none))
 
@@ -485,7 +483,42 @@
      control-after-tick (exp05-chamber-tick-shuffled-affinity-2 seed-10 3 1)
      selected-rule e5r1
      productivity treatment-and-control-productive
-     scientific-boundary four-seed-provenance-not-frequency-or-acs-uplift
+     scientific-boundary six-seed-provenance-not-frequency-or-acs-uplift
+     terminal-forcing prohibited
+     emergence-claim none))
+
+
+(= (exp07-affinity-seed-variation-row seed-11)
+   (affinity-seed-variation-row
+     seed seed-11
+     tick 3
+     strength 1
+     cap 2
+     selector-phase first-candidate-late-draw
+     treatment-selected (exp05-affinity-selected-candidate-2 seed-11 3 1)
+     treatment-after-tick (exp05-chamber-tick-affinity-2 seed-11 3 1)
+     control-selected (exp05-shuffled-affinity-selected-candidate-2 seed-11 3 1)
+     control-after-tick (exp05-chamber-tick-shuffled-affinity-2 seed-11 3 1)
+     selected-rule e5r0
+     productivity treatment-and-control-productive
+     scientific-boundary six-seed-provenance-not-frequency-or-acs-uplift
+     terminal-forcing prohibited
+     emergence-claim none))
+
+(= (exp07-affinity-seed-variation-row seed-12)
+   (affinity-seed-variation-row
+     seed seed-12
+     tick 3
+     strength 1
+     cap 2
+     selector-phase second-candidate-late-draw
+     treatment-selected (exp05-affinity-selected-candidate-2 seed-12 3 1)
+     treatment-after-tick (exp05-chamber-tick-affinity-2 seed-12 3 1)
+     control-selected (exp05-shuffled-affinity-selected-candidate-2 seed-12 3 1)
+     control-after-tick (exp05-chamber-tick-shuffled-affinity-2 seed-12 3 1)
+     selected-rule e5r1
+     productivity treatment-and-control-productive
+     scientific-boundary six-seed-provenance-not-frequency-or-acs-uplift
      terminal-forcing prohibited
      emergence-claim none))
 
@@ -493,19 +526,21 @@
    ((exp07-affinity-seed-variation-row seed-7)
     (exp07-affinity-seed-variation-row seed-8)
     (exp07-affinity-seed-variation-row seed-9)
-    (exp07-affinity-seed-variation-row seed-10)))
+    (exp07-affinity-seed-variation-row seed-10)
+    (exp07-affinity-seed-variation-row seed-11)
+    (exp07-affinity-seed-variation-row seed-12)))
 
 (= (exp07-affinity-seed-variation-status)
    (affinity-seed-variation-status
      variable affinity-weight
      strength 1
-     tested-seeds (seed-7 seed-8 seed-9 seed-10)
+     tested-seeds (seed-7 seed-8 seed-9 seed-10 seed-11 seed-12)
      tick 3
      cap 2
      evidence (exp07-affinity-seed-variation-table)
-     selector-phases (first-candidate second-candidate first-candidate-repeat second-candidate-repeat)
+     selector-phases (first-candidate second-candidate first-candidate-repeat second-candidate-repeat first-candidate-late-draw second-candidate-late-draw)
      chamber-ticking directly-handed-to-exp00-chamber-ticking
-     current-boundary four-seed-selector-phase-provenance-only
+     current-boundary six-seed-selector-phase-provenance-only
      next-test broaden-seed-sweep-before-acs-frequency-claim
      terminal-forcing prohibited
      emergence-claim none))
