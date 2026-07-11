@@ -406,6 +406,35 @@
             ((exp05-source-rule) (exp05-second-source-rule))
             ()))
 
+; Thirteenth and fourteenth seed-sweep fixtures for exp07.  Seed-19 extends
+; the first-candidate phase with later weighted draws selecting `BC` in
+; treatment and `CD` in the rotated control.  Seed-20 extends the
+; second-candidate phase with both arms selecting `BC`.  These continue the
+; bounded selector-phase provenance path only.
+(= (exp05-treatment-chamber seed-19 3)
+   (chamber exp05-treatment
+            (state 3 seed-19 (mol A 1) (mol B 1) (mol AB 0) (mol BC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-19 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-19 (mol A 1) (mol B 1) (mol AB 0) (mol CD 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-treatment-chamber seed-20 3)
+   (chamber exp05-treatment
+            (state 3 seed-20 (mol A 1) (mol C 1) (mol AC 0) (mol BC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-20 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-20 (mol A 1) (mol C 1) (mol AC 0) (mol BC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
 (= (exp05-affinity-selected-candidate-2 $seed $tick $strength)
    (let $pool (exp05-affinity-candidate-pool-2 $seed $tick $strength)
      (selected-candidate-from-list-2
