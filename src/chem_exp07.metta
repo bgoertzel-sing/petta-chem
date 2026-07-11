@@ -300,3 +300,68 @@
      current-boundary deterministic-differences-without-acs-uplift
      next-test vary-affinity-strength-and-seed-before-frequency-claim
      emergence-claim none))
+
+; ----- Affinity-strength sweep slice -----
+;
+; This is the first narrow follow-up to the comparison-table next-test.  It
+; varies only the exp05 affinity strength in the existing seed-7/tick-3 fixture,
+; keeps candidate generation bounded at cap 2, and records the deterministic
+; candidate that is handed to chamber ticking.  The result is intentionally a
+; productivity filter for later seed/frequency comparisons: strength 1 is the
+; only tested value whose treatment and rotated-control selected catalysts are
+; present in the current fixture, so it is the only one we treat as a productive
+; chamber-tick probe.  No terminal state is fixed and no ACS uplift is claimed.
+
+(= (exp07-affinity-strength-sweep-row 0)
+   (affinity-strength-sweep-row
+     strength 0
+     treatment-selected (exp05-affinity-selected-candidate-2 seed-7 3 0)
+     control-selected (exp05-shuffled-affinity-selected-candidate-2 seed-7 3 0)
+     cap 2
+     deterministic-selector exp00-selected-candidate-from-list-2
+     first-tick-status selected-catalysts-absent-in-current-fixture
+     terminal-forcing prohibited
+     emergence-claim none))
+
+(= (exp07-affinity-strength-sweep-row 1)
+   (affinity-strength-sweep-row
+     strength 1
+     treatment-selected (exp05-affinity-selected-candidate-2 seed-7 3 1)
+     control-selected (exp05-shuffled-affinity-selected-candidate-2 seed-7 3 1)
+     treatment-after-tick (exp05-chamber-tick-affinity-2 seed-7 3 1)
+     control-after-tick (exp05-chamber-tick-shuffled-affinity-2 seed-7 3 1)
+     cap 2
+     deterministic-selector exp00-selected-candidate-from-list-2
+     first-tick-status treatment-and-control-productive
+     terminal-forcing prohibited
+     emergence-claim none))
+
+(= (exp07-affinity-strength-sweep-row 2)
+   (affinity-strength-sweep-row
+     strength 2
+     treatment-selected (exp05-affinity-selected-candidate-2 seed-7 3 2)
+     control-selected (exp05-shuffled-affinity-selected-candidate-2 seed-7 3 2)
+     cap 2
+     deterministic-selector exp00-selected-candidate-from-list-2
+     first-tick-status selected-catalysts-absent-in-current-fixture
+     terminal-forcing prohibited
+     emergence-claim none))
+
+(= (exp07-affinity-strength-sweep-table)
+   ((exp07-affinity-strength-sweep-row 0)
+    (exp07-affinity-strength-sweep-row 1)
+    (exp07-affinity-strength-sweep-row 2)))
+
+(= (exp07-affinity-strength-sweep-status)
+   (affinity-strength-sweep-status
+     variable affinity-weight
+     tested-strengths (0 1 2)
+     seed seed-7
+     tick 3
+     cap 2
+     evidence (exp07-affinity-strength-sweep-table)
+     productive-strengths (1)
+     current-boundary productivity-filter-not-frequency-claim
+     next-test vary-seed-over-productive-strength-before-acs-frequency-claim
+     terminal-forcing prohibited
+     emergence-claim none))

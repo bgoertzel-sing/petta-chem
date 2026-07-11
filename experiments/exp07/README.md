@@ -17,6 +17,8 @@ The second slice links the weak-guidance variables to existing PeTTa-native dyna
 
 The third slice adds a first deterministic weak-guidance comparison table. It records that affinity weighting changes the catalyst/product context while both treatment and rotated control remain first-tick productive, and that cap-1/cap-2 stateful paths diverge then block without passing the two-rule ACS closure check. This prepares a later seed/affinity-strength frequency comparison without claiming ACS uplift yet.
 
+The fourth slice starts that follow-up narrowly by varying only exp05 affinity strength `(0 1 2)` in the existing seed-7/tick-3 cap-2 fixture. It records the selected candidates handed to chamber ticking and marks strength 1 as the only tested value with both treatment and rotated-control selected catalysts present/productive in the current fixture. This is a productivity filter for later seed sweeps, not a frequency or ACS-uplift claim.
+
 Run with:
 
 ```bash
