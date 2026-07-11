@@ -253,6 +253,22 @@
             ((exp05-source-rule) (exp05-second-source-rule))
             ()))
 
+; Third small seed-sweep fixture for exp07.  Seed-9 returns to the first
+; cap-2 selector phase at tick 3, and the affinity draw assigns `AC` as the
+; selected catalyst.  The state keeps that catalyst present so the first
+; candidate is still an ordinary productive exp00 chamber tick.
+(= (exp05-treatment-chamber seed-9 3)
+   (chamber exp05-treatment
+            (state 3 seed-9 (mol A 1) (mol B 1) (mol AB 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-9 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-9 (mol A 1) (mol B 1) (mol AB 0) (mol BC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
 (= (exp05-affinity-selected-candidate-2 $seed $tick $strength)
    (let $pool (exp05-affinity-candidate-pool-2 $seed $tick $strength)
      (selected-candidate-from-list-2

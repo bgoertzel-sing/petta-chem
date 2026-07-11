@@ -84,6 +84,8 @@
 
 (= (seed-number seed-8) 8)
 
+(= (seed-number seed-9) 9)
+
 (= (state-tick (state $tick $seed $m0 $m1 $m2 $m3))
    $tick)
 
