@@ -299,6 +299,23 @@
                  (rule r2 A Cat ACat B))
                 ((event 0 r0 A B AB Cat))))
 
+!(test (cap-candidate-pool
+         1
+         (candidate-pool 0
+           ((candidate 0 r0 1) (candidate 0 r1 1) (candidate 0 r2 1)
+            (candidate 0 r3 1) (candidate 0 r4 1) (candidate 0 r5 1)
+            (candidate 0 r6 1) (candidate 0 r7 1))))
+       ((candidate 0 r0 1)))
+
+!(test (cap-candidate-pool
+         6
+         (candidate-pool 0
+           ((candidate 0 r0 1) (candidate 0 r1 1) (candidate 0 r2 1)
+            (candidate 0 r3 1) (candidate 0 r4 1) (candidate 0 r5 1)
+            (candidate 0 r6 1))))
+       ((candidate 0 r0 1) (candidate 0 r1 1) (candidate 0 r2 1)
+        (candidate 0 r3 1) (candidate 0 r4 1) (candidate 0 r5 1)))
+
 !(test (chamber-tick-generated-6
          (exp00-candidate-cap-6)
          (make-chamber
