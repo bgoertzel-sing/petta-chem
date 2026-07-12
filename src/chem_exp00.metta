@@ -468,6 +468,16 @@
       (make-candidate-for-rule $tick $rule-3))))
 
 (= (generate-candidate-pool
+      (chamber $id (state $tick $seed $m0 $m1 $m2 $m3) ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4) $events))
+   (candidate-pool
+     $tick
+     ((make-candidate-for-rule $tick $rule-0)
+      (make-candidate-for-rule $tick $rule-1)
+      (make-candidate-for-rule $tick $rule-2)
+      (make-candidate-for-rule $tick $rule-3)
+      (make-candidate-for-rule $tick $rule-4))))
+
+(= (generate-candidate-pool
       (chamber $id (state $tick $seed $m0 $m1 $m2 $m3) ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5) $events))
    (candidate-pool
      $tick
@@ -477,6 +487,18 @@
       (make-candidate-for-rule $tick $rule-3)
       (make-candidate-for-rule $tick $rule-4)
       (make-candidate-for-rule $tick $rule-5))))
+
+(= (generate-candidate-pool
+      (chamber $id (state $tick $seed $m0 $m1 $m2 $m3) ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6) $events))
+   (candidate-pool
+     $tick
+     ((make-candidate-for-rule $tick $rule-0)
+      (make-candidate-for-rule $tick $rule-1)
+      (make-candidate-for-rule $tick $rule-2)
+      (make-candidate-for-rule $tick $rule-3)
+      (make-candidate-for-rule $tick $rule-4)
+      (make-candidate-for-rule $tick $rule-5)
+      (make-candidate-for-rule $tick $rule-6))))
 
 (= (generate-candidate-pool
       (chamber $id (state $tick $seed $m0 $m1 $m2 $m3) ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7) $events))

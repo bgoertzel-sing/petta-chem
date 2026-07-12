@@ -289,9 +289,13 @@
        (candidate 0 (rule r0 A B AB Cat) 1))
 
 !(test (chamber-tick-candidate-pool-1
-         (candidate-cap 1)
+         (candidate-cap 1 1)
          (exp00-initial-chamber seed-7)
-         (exp00-generated-candidate-pool seed-7))
+         (candidate-pool
+           0
+           ((exp00-candidate seed-7)
+            (exp00-third-candidate seed-7)
+            (exp00-distractor-candidate seed-7))))
        (chamber exp00
                 (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
                 ((rule r1 B Cat BCat A)
@@ -300,7 +304,7 @@
                 ((event 0 r0 A B AB Cat))))
 
 !(test (chamber-tick-generated-1
-         (candidate-cap 1)
+         (candidate-cap 1 1)
          (make-chamber
            exp00-cap1
            (exp00-initial-state seed-7)
@@ -338,6 +342,66 @@
             (candidate 0 r6 1))))
        ((candidate 0 r0 1) (candidate 0 r1 1) (candidate 0 r2 1)
         (candidate 0 r3 1) (candidate 0 r4 1) (candidate 0 r5 1)))
+
+!(test (generate-candidate-pool
+         (make-chamber
+           exp00-cap5
+           (exp00-initial-state seed-7)
+           ((exp00-rule r0)
+            (exp00-rule r1)
+            (exp00-rule r2)
+            (exp00-rule r1)
+            (exp00-rule r0))
+           ()))
+       (candidate-pool
+         0
+         ((candidate 0 (rule r0 A B AB Cat) 1)
+          (candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r2 A Cat ACat B) 1)
+          (candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1))))
+
+!(test (chamber-tick-generated-5
+         (exp00-candidate-cap-5)
+         (make-chamber
+           exp00-cap5
+           (exp00-initial-state seed-7)
+           ((exp00-rule r1)
+            (exp00-rule r2)
+            (exp00-rule r0)
+            (exp00-rule r1)
+            (exp00-rule r2))
+           ()))
+       (chamber exp00-cap5
+                (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
+                ((rule r1 B Cat BCat A)
+                 (rule r2 A Cat ACat B)
+                 (rule r0 A B AB Cat)
+                 (rule r1 B Cat BCat A)
+                 (rule r2 A Cat ACat B))
+                ((event 0 r0 A B AB Cat))))
+
+!(test (generate-candidate-pool
+         (make-chamber
+           exp00-cap7
+           (exp00-initial-state seed-7)
+           ((exp00-rule r0)
+            (exp00-rule r1)
+            (exp00-rule r2)
+            (exp00-rule r1)
+            (exp00-rule r0)
+            (exp00-rule r2)
+            (exp00-rule r1))
+           ()))
+       (candidate-pool
+         0
+         ((candidate 0 (rule r0 A B AB Cat) 1)
+          (candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r2 A Cat ACat B) 1)
+          (candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1)
+          (candidate 0 (rule r2 A Cat ACat B) 1)
+          (candidate 0 (rule r1 B Cat BCat A) 1))))
 
 !(test (chamber-tick-generated-6
          (exp00-candidate-cap-6)
