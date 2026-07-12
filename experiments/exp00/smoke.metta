@@ -614,6 +614,22 @@
          (exp00-generated-candidate-pool seed-7))
        (exp00-chamber-after-generated-tick seed-7))
 
+; Selection is directly inspectable before firing and uses the same bounded
+; candidate path as the generic chamber tick.
+!(test (selected-candidate-from-pool
+         (exp00-candidate-cap)
+         (exp00-initial-chamber seed-7)
+         (exp00-generated-candidate-pool seed-7))
+       (candidate 0 (rule r0 A B AB Cat) 1))
+
+; A cap larger than the source pool selects by actual bounded cardinality (3),
+; not by requested cap (8): (7 + 0) mod 3 = 1, hence productive r0.
+!(test (selected-candidate-from-pool
+         (exp00-candidate-cap-8)
+         (exp00-initial-chamber seed-7)
+         (generate-candidate-pool (exp00-initial-chamber seed-7)))
+       (candidate 0 (rule r0 A B AB Cat) 1))
+
 ; The generic operation dispatches by the actual bounded cardinality rather
 ; than requiring callers to choose a cap-specific tick function. Here cap 8
 ; safely selects from the generated three-rule pool and fires r0 for seed 7.

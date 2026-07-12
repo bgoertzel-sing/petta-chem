@@ -920,14 +920,19 @@
 (= (selected-candidate-from-bounded-list $chamber ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6 $candidate-7))
    (selected-candidate-from-list-8 $chamber ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6 $candidate-7)))
 
+; Expose the exact candidate selected from an external/generated pool before
+; firing, while preserving the same cap and seed/tick semantics as ticking.
+(= (selected-candidate-from-pool $cap $chamber $candidate-pool)
+   (selected-candidate-from-bounded-list
+     $chamber
+     (cap-candidate-pool
+       (candidate-cap-per-tick $cap)
+       $candidate-pool)))
+
 (= (chamber-tick-candidate-pool $cap $chamber $candidate-pool)
    (chamber-tick-with-candidate
      $chamber
-     (selected-candidate-from-bounded-list
-       $chamber
-       (cap-candidate-pool
-         (candidate-cap-per-tick $cap)
-         $candidate-pool))))
+     (selected-candidate-from-pool $cap $chamber $candidate-pool)))
 
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-candidate-pool
