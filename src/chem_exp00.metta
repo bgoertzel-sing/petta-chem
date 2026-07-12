@@ -116,6 +116,10 @@
 
 (= (seed-number seed-24) 24)
 
+(= (seed-number seed-25) 25)
+
+(= (seed-number seed-26) 26)
+
 (= (state-tick (state $tick $seed $m0 $m1 $m2 $m3))
    $tick)
 

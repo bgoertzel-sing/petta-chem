@@ -494,6 +494,33 @@
             ((exp05-source-rule) (exp05-second-source-rule))
             ()))
 
+; Nineteenth and twentieth seed-sweep fixtures for exp07.  Seed-25 repeats
+; the first-candidate phase with productive `BC`/`CD` contexts; seed-26
+; repeats the second-candidate phase with productive `AC`/`BC` contexts.
+(= (exp05-treatment-chamber seed-25 3)
+   (chamber exp05-treatment
+            (state 3 seed-25 (mol A 1) (mol B 1) (mol AB 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-25 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-25 (mol A 1) (mol B 1) (mol AB 0) (mol BC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-treatment-chamber seed-26 3)
+   (chamber exp05-treatment
+            (state 3 seed-26 (mol A 1) (mol C 1) (mol AC 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
+(= (exp05-rotated-control-chamber seed-26 3)
+   (chamber exp05-rotated-control
+            (state 3 seed-26 (mol A 1) (mol C 1) (mol AC 0) (mol AC 1))
+            ((exp05-source-rule) (exp05-second-source-rule))
+            ()))
+
 (= (exp05-affinity-selected-candidate-2 $seed $tick $strength)
    (let $pool (exp05-affinity-candidate-pool-2 $seed $tick $strength)
      (selected-candidate-from-list-2
