@@ -640,6 +640,21 @@
          (exp00-generated-candidate-pool seed-7))
        (candidate 0 (rule r0 A B AB Cat) 1))
 
+; Caps are maxima for every smaller non-empty cardinality, not only cap 8 over
+; three candidates. Cap 7 preserves this two-candidate external pool.
+!(test (candidate-selection-from-pool
+         (exp00-candidate-cap-7)
+         (exp00-initial-chamber seed-7)
+         (candidate-pool
+           0
+           ((candidate 0 (rule r1 B Cat BCat A) 1)
+            (candidate 0 (rule r0 A B AB Cat) 1))))
+       (candidate-selection
+         7
+         ((candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1))
+         (candidate 0 (rule r0 A B AB Cat) 1)))
+
 ; A cap larger than the source pool selects by actual bounded cardinality (3),
 ; not by requested cap (8): (7 + 0) mod 3 = 1, hence productive r0.
 !(test (selected-candidate-from-pool

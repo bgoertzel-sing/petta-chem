@@ -330,6 +330,89 @@
 (= (cap-candidate-pool 0 (candidate-pool $tick $candidates))
    ())
 
+; Candidate caps are maxima: preserve every non-empty source pool smaller
+; than the requested cap, then truncate pools at or above that cap below.
+(= (cap-candidate-pool 2 (candidate-pool $tick ($candidate-0)))
+   ($candidate-0))
+
+(= (cap-candidate-pool 3 (candidate-pool $tick ($candidate-0)))
+   ($candidate-0))
+
+(= (cap-candidate-pool 3 (candidate-pool $tick ($candidate-0 $candidate-1)))
+   ($candidate-0 $candidate-1))
+
+(= (cap-candidate-pool 4 (candidate-pool $tick ($candidate-0)))
+   ($candidate-0))
+
+(= (cap-candidate-pool 4 (candidate-pool $tick ($candidate-0 $candidate-1)))
+   ($candidate-0 $candidate-1))
+
+(= (cap-candidate-pool 4 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2)))
+   ($candidate-0 $candidate-1 $candidate-2))
+
+(= (cap-candidate-pool 5 (candidate-pool $tick ($candidate-0)))
+   ($candidate-0))
+
+(= (cap-candidate-pool 5 (candidate-pool $tick ($candidate-0 $candidate-1)))
+   ($candidate-0 $candidate-1))
+
+(= (cap-candidate-pool 5 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2)))
+   ($candidate-0 $candidate-1 $candidate-2))
+
+(= (cap-candidate-pool 5 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3)))
+   ($candidate-0 $candidate-1 $candidate-2 $candidate-3))
+
+(= (cap-candidate-pool 6 (candidate-pool $tick ($candidate-0)))
+   ($candidate-0))
+
+(= (cap-candidate-pool 6 (candidate-pool $tick ($candidate-0 $candidate-1)))
+   ($candidate-0 $candidate-1))
+
+(= (cap-candidate-pool 6 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2)))
+   ($candidate-0 $candidate-1 $candidate-2))
+
+(= (cap-candidate-pool 6 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3)))
+   ($candidate-0 $candidate-1 $candidate-2 $candidate-3))
+
+(= (cap-candidate-pool 6 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4)))
+   ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4))
+
+(= (cap-candidate-pool 7 (candidate-pool $tick ($candidate-0)))
+   ($candidate-0))
+
+(= (cap-candidate-pool 7 (candidate-pool $tick ($candidate-0 $candidate-1)))
+   ($candidate-0 $candidate-1))
+
+(= (cap-candidate-pool 7 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2)))
+   ($candidate-0 $candidate-1 $candidate-2))
+
+(= (cap-candidate-pool 7 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3)))
+   ($candidate-0 $candidate-1 $candidate-2 $candidate-3))
+
+(= (cap-candidate-pool 7 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4)))
+   ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4))
+
+(= (cap-candidate-pool 7 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5)))
+   ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5))
+
+(= (cap-candidate-pool 8 (candidate-pool $tick ($candidate-0)))
+   ($candidate-0))
+
+(= (cap-candidate-pool 8 (candidate-pool $tick ($candidate-0 $candidate-1)))
+   ($candidate-0 $candidate-1))
+
+(= (cap-candidate-pool 8 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3)))
+   ($candidate-0 $candidate-1 $candidate-2 $candidate-3))
+
+(= (cap-candidate-pool 8 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4)))
+   ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4))
+
+(= (cap-candidate-pool 8 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5)))
+   ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5))
+
+(= (cap-candidate-pool 8 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6)))
+   ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6))
+
 (= (cap-candidate-pool 1 (candidate-pool $tick ($candidate-0)))
    ($candidate-0))
 
