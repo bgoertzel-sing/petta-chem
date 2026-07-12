@@ -614,8 +614,26 @@
          (exp00-generated-candidate-pool seed-7))
        (exp00-chamber-after-generated-tick seed-7))
 
-; Selection is directly inspectable before firing and uses the same bounded
-; candidate path as the generic chamber tick.
+; Selection provenance preserves the exact bounded list and selected candidate
+; in the same object consumed by generic chamber ticking.
+!(test (candidate-selection-from-pool
+         (exp00-candidate-cap)
+         (exp00-initial-chamber seed-7)
+         (exp00-generated-candidate-pool seed-7))
+       (candidate-selection
+         2
+         ((candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1))
+         (candidate 0 (rule r0 A B AB Cat) 1)))
+
+!(test (candidate-selection-bounded-pool
+         (candidate-selection-from-pool
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)
+           (exp00-generated-candidate-pool seed-7)))
+       ((candidate 0 (rule r1 B Cat BCat A) 1)
+        (candidate 0 (rule r0 A B AB Cat) 1)))
+
 !(test (selected-candidate-from-pool
          (exp00-candidate-cap)
          (exp00-initial-chamber seed-7)

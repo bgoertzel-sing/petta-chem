@@ -434,6 +434,11 @@
 (= (cap-candidate-pool 7 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6 $candidate-7)))
    ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6))
 
+; A cap is a maximum: preserve smaller pools rather than requiring callers to
+; lower the requested cap to the source cardinality.
+(= (cap-candidate-pool 8 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2)))
+   ($candidate-0 $candidate-1 $candidate-2))
+
 (= (cap-candidate-pool 8 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6 $candidate-7)))
    ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6 $candidate-7))
 
@@ -920,19 +925,39 @@
 (= (selected-candidate-from-bounded-list $chamber ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6 $candidate-7))
    (selected-candidate-from-list-8 $chamber ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6 $candidate-7)))
 
+; Preserve the bounded pool and deterministic choice in one inspectable atom.
+; This is the provenance object consumed directly by generic chamber ticking.
+(= (candidate-selection-bounded-pool
+      (candidate-selection $cap $bounded-pool $selected-candidate))
+   $bounded-pool)
+
+(= (candidate-selection-selected
+      (candidate-selection $cap $bounded-pool $selected-candidate))
+   $selected-candidate)
+
+(= (candidate-selection-from-pool $cap $chamber $candidate-pool)
+   (candidate-selection
+     (candidate-cap-per-tick $cap)
+     (cap-candidate-pool
+       (candidate-cap-per-tick $cap)
+       $candidate-pool)
+     (selected-candidate-from-bounded-list
+       $chamber
+       (cap-candidate-pool
+         (candidate-cap-per-tick $cap)
+         $candidate-pool))))
+
 ; Expose the exact candidate selected from an external/generated pool before
 ; firing, while preserving the same cap and seed/tick semantics as ticking.
 (= (selected-candidate-from-pool $cap $chamber $candidate-pool)
-   (selected-candidate-from-bounded-list
-     $chamber
-     (cap-candidate-pool
-       (candidate-cap-per-tick $cap)
-       $candidate-pool)))
+   (candidate-selection-selected
+     (candidate-selection-from-pool $cap $chamber $candidate-pool)))
 
 (= (chamber-tick-candidate-pool $cap $chamber $candidate-pool)
    (chamber-tick-with-candidate
      $chamber
-     (selected-candidate-from-pool $cap $chamber $candidate-pool)))
+     (candidate-selection-selected
+       (candidate-selection-from-pool $cap $chamber $candidate-pool))))
 
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-candidate-pool
