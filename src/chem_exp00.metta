@@ -640,13 +640,21 @@
      $chamber
      (selected-candidate-from-chamber-2 $chamber $candidate-0 $candidate-1)))
 
+; Direct deterministic chamber tick from an already generated candidate pool.
+; This keeps affinity/scoring producers outside the generic generator while
+; making bounded cap -> seeded selection -> firing one kernel operation.
+(= (chamber-tick-candidate-pool-2 $cap $chamber $candidate-pool)
+   (chamber-tick-with-candidate
+     $chamber
+     (selected-candidate-from-list-2
+       $chamber
+       (cap-candidate-pool
+         (candidate-cap-per-tick $cap)
+         $candidate-pool))))
+
 (= (chamber-tick-generated-2 $cap $chamber)
    (let $candidate-pool (bounded-candidate-pool $cap $chamber)
-     (chamber-tick-with-candidate
-       $chamber
-       (selected-candidate-from-list-2
-         $chamber
-         (candidate-pool-candidates $candidate-pool)))))
+     (chamber-tick-candidate-pool-2 $cap $chamber $candidate-pool)))
 
 ; 3-candidate deterministic selection from a bounded pool.
 (= (selected-candidate-from-list-3

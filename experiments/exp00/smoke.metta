@@ -454,6 +454,12 @@
                  (rule r2 A Cat ACat B))
                 ((event 0 r0 A B AB Cat))))
 
+!(test (chamber-tick-candidate-pool-2
+         (exp00-candidate-cap)
+         (exp00-initial-chamber seed-7)
+         (exp00-generated-candidate-pool seed-7))
+       (exp00-chamber-after-generated-tick seed-7))
+
 !(test (exp00-product-abundance seed-7) 1)
 
 !(test (exp00-product-metric seed-7)

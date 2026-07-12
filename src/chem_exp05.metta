@@ -534,14 +534,16 @@
        (cap-candidate-pool 2 $pool))))
 
 (= (exp05-chamber-tick-affinity-2 $seed $tick $strength)
-   (chamber-tick-with-candidate
+   (chamber-tick-candidate-pool-2
+     (make-candidate-cap 2 1)
      (exp05-treatment-chamber $seed $tick)
-     (exp05-affinity-selected-candidate-2 $seed $tick $strength)))
+     (exp05-affinity-candidate-pool-2 $seed $tick $strength)))
 
 (= (exp05-chamber-tick-shuffled-affinity-2 $seed $tick $strength)
-   (chamber-tick-with-candidate
+   (chamber-tick-candidate-pool-2
+     (make-candidate-cap 2 1)
      (exp05-rotated-control-chamber $seed $tick)
-     (exp05-shuffled-affinity-selected-candidate-2 $seed $tick $strength)))
+     (exp05-shuffled-affinity-candidate-pool-2 $seed $tick $strength)))
 
 (= (exp05-chamber-ticking-slice-status)
    (exp05-status catalyst-affinity-to-chamber-tick
