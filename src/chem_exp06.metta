@@ -635,6 +635,30 @@
    ((exp06-stateful-cap-sweep-acs-boundary cap-1)
     (exp06-stateful-cap-sweep-acs-boundary cap-2)))
 
+; Extend the closure boundary across the complete three-tick selected trace.
+; Every pair among ticks 3/4/5 is checked, rather than silently dropping the
+; bounded no-op selection at tick 5.  This remains a pairwise diagnostic, not
+; full RAF enumeration.
+(= (exp06-stateful-cap-three-tick-acs-boundary $cap)
+   (let $tick-3-candidate (exp06-stateful-cap-sweep-selected tick-3 $cap)
+     (let $tick-4-candidate (exp06-stateful-cap-sweep-selected tick-4 $cap)
+       (let $tick-5-candidate (exp06-stateful-cap-sweep-selected tick-5 $cap)
+         (stateful-cap-three-tick-acs-boundary
+           cap $cap
+           ticks (3 4 5)
+           selected-candidates ($tick-3-candidate $tick-4-candidate $tick-5-candidate)
+           pair-statuses ((3 4 (exp06-selected-candidate-pair-acs-status $tick-3-candidate $tick-4-candidate))
+                          (4 5 (exp06-selected-candidate-pair-acs-status $tick-4-candidate $tick-5-candidate))
+                          (3 5 (exp06-selected-candidate-pair-acs-status $tick-3-candidate $tick-5-candidate)))
+           acs-status rejected
+           interpretation all-selected-pairs-not-product-catalyst-closed
+           scientific-boundary three-tick-pairwise-closure-check-not-raf-enumeration
+           emergence-claim none)))))
+
+(= (exp06-stateful-cap-three-tick-acs-boundary-table)
+   ((exp06-stateful-cap-three-tick-acs-boundary cap-1)
+    (exp06-stateful-cap-three-tick-acs-boundary cap-2)))
+
 ; ----- Consolidation summary -----
 ;
 ; exp06 closes the candidate-cap route as not ACS-positive for the current

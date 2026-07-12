@@ -620,6 +620,33 @@
           scientific-boundary two-rule-closure-check-not-raf-enumeration
           emergence-claim none)))
 
+; The ACS boundary now covers every selected pair across ticks 3/4/5, including
+; the bounded no-op selection after reactant exhaustion.
+!(test (exp06-stateful-cap-three-tick-acs-boundary cap-1)
+       (stateful-cap-three-tick-acs-boundary
+         cap cap-1
+         ticks (3 4 5)
+         selected-candidates ((candidate 3 (rule e5r0 A B AB AB) 3)
+                              (candidate 4 (rule e5r0 A B AB AC) 2)
+                              (candidate 5 (rule e5r0 A B AB AC) 2))
+         pair-statuses ((3 4 rejected) (4 5 rejected) (3 5 rejected))
+         acs-status rejected
+         interpretation all-selected-pairs-not-product-catalyst-closed
+         scientific-boundary three-tick-pairwise-closure-check-not-raf-enumeration
+         emergence-claim none))
+!(test (exp06-stateful-cap-three-tick-acs-boundary cap-2)
+       (stateful-cap-three-tick-acs-boundary
+         cap cap-2
+         ticks (3 4 5)
+         selected-candidates ((candidate 3 (rule e5r0 A B AB AB) 3)
+                              (candidate 4 (rule e5r1 A C AC AC) 3)
+                              (candidate 5 (rule e5r0 A B AB AC) 2))
+         pair-statuses ((3 4 rejected) (4 5 rejected) (3 5 rejected))
+         acs-status rejected
+         interpretation all-selected-pairs-not-product-catalyst-closed
+         scientific-boundary three-tick-pairwise-closure-check-not-raf-enumeration
+         emergence-claim none))
+
 ; Consolidated exp06 closure: candidate-cap route is dynamically probed but not
 ; ACS-positive; the bridge table is retained as diagnostic intervention evidence.
 !(test (exp06-consolidation-summary)
