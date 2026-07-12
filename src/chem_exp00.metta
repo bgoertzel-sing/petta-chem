@@ -894,6 +894,47 @@
    (let $candidate-pool (bounded-candidate-pool $cap $chamber)
      (chamber-tick-candidate-pool-8 $cap $chamber $candidate-pool)))
 
+; Generic bounded candidate-pool tick. Dispatch on the actual bounded pool
+; cardinality, so a requested cap may safely exceed a smaller source pool.
+(= (selected-candidate-from-bounded-list $chamber ($candidate-0))
+   (selected-candidate-from-list-1 $chamber ($candidate-0)))
+
+(= (selected-candidate-from-bounded-list $chamber ($candidate-0 $candidate-1))
+   (selected-candidate-from-list-2 $chamber ($candidate-0 $candidate-1)))
+
+(= (selected-candidate-from-bounded-list $chamber ($candidate-0 $candidate-1 $candidate-2))
+   (selected-candidate-from-list-3 $chamber ($candidate-0 $candidate-1 $candidate-2)))
+
+(= (selected-candidate-from-bounded-list $chamber ($candidate-0 $candidate-1 $candidate-2 $candidate-3))
+   (selected-candidate-from-list-4 $chamber ($candidate-0 $candidate-1 $candidate-2 $candidate-3)))
+
+(= (selected-candidate-from-bounded-list $chamber ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4))
+   (selected-candidate-from-list-5 $chamber ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4)))
+
+(= (selected-candidate-from-bounded-list $chamber ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5))
+   (selected-candidate-from-list-6 $chamber ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5)))
+
+(= (selected-candidate-from-bounded-list $chamber ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6))
+   (selected-candidate-from-list-7 $chamber ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6)))
+
+(= (selected-candidate-from-bounded-list $chamber ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6 $candidate-7))
+   (selected-candidate-from-list-8 $chamber ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6 $candidate-7)))
+
+(= (chamber-tick-candidate-pool $cap $chamber $candidate-pool)
+   (chamber-tick-with-candidate
+     $chamber
+     (selected-candidate-from-bounded-list
+       $chamber
+       (cap-candidate-pool
+         (candidate-cap-per-tick $cap)
+         $candidate-pool))))
+
+(= (chamber-tick-generated $cap $chamber)
+   (chamber-tick-candidate-pool
+     $cap
+     $chamber
+     (generate-candidate-pool $chamber)))
+
 ; ----- exp00 fixture -----
 
 (= (exp00-rule r0)

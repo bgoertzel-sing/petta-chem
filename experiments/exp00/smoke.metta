@@ -608,6 +608,20 @@
          (exp00-generated-candidate-pool seed-7))
        (exp00-chamber-after-generated-tick seed-7))
 
+!(test (chamber-tick-candidate-pool
+         (exp00-candidate-cap)
+         (exp00-initial-chamber seed-7)
+         (exp00-generated-candidate-pool seed-7))
+       (exp00-chamber-after-generated-tick seed-7))
+
+; The generic operation dispatches by the actual bounded cardinality rather
+; than requiring callers to choose a cap-specific tick function. Here cap 8
+; safely selects from the generated three-rule pool and fires r0 for seed 7.
+!(test (chamber-tick-generated
+         (exp00-candidate-cap-8)
+         (exp00-initial-chamber seed-7))
+       (exp00-chamber-after-generated-tick seed-7))
+
 !(test (exp00-product-abundance seed-7) 1)
 
 !(test (exp00-product-metric seed-7)
