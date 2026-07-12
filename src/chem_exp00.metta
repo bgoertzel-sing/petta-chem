@@ -651,6 +651,25 @@
               $rules
               ((trace-event $trace)))))
 
+; 1-candidate deterministic selection from a bounded pool.
+(= (selected-candidate-from-list-1
+      (chamber $id $state $rules $events)
+      ($candidate-0))
+   $candidate-0)
+
+(= (chamber-tick-candidate-pool-1 $cap $chamber $candidate-pool)
+   (chamber-tick-with-candidate
+     $chamber
+     (selected-candidate-from-list-1
+       $chamber
+       (cap-candidate-pool
+         (candidate-cap-per-tick $cap)
+         $candidate-pool))))
+
+(= (chamber-tick-generated-1 $cap $chamber)
+   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
+     (chamber-tick-candidate-pool-1 $cap $chamber $candidate-pool)))
+
 (= (selected-candidate-from-chamber-2
       (chamber $id $state $rules $events)
       $candidate-0
