@@ -743,15 +743,16 @@
    (fire-binary-catalytic (candidate-rule $candidate) $state))
 
 (= (candidate-applicable?
-      (candidate $tick (rule $id $a $b $product $catalyst) $score)
-      (state $tick $seed
+      (candidate $candidate-tick (rule $id $a $b $product $catalyst) $score)
+      (state $state-tick $seed
              (mol $a $a-count)
              (mol $b $b-count)
              (mol $product $product-count)
              (mol $catalyst $catalyst-count)))
-   (and (> $a-count 0)
-        (and (> $b-count 0)
-             (> $catalyst-count 0))))
+   (and (== $candidate-tick $state-tick)
+        (and (> $a-count 0)
+             (and (> $b-count 0)
+                  (> $catalyst-count 0)))))
 
 (= (safe-fire-candidate $candidate $state)
    (if (candidate-applicable? $candidate $state)
