@@ -640,6 +640,25 @@
          (exp00-generated-candidate-pool seed-7))
        (candidate 0 (rule r0 A B AB Cat) 1))
 
+; The generic chamber tick projects from one object containing both the full
+; bounded-selection provenance and the chamber produced by that exact choice.
+!(test (selection-fire-record-from-pool
+         (exp00-candidate-cap)
+         (exp00-initial-chamber seed-7)
+         (exp00-generated-candidate-pool seed-7))
+       (selection-fire-record
+         (candidate-selection
+           2
+           ((candidate 0 (rule r1 B Cat BCat A) 1)
+            (candidate 0 (rule r0 A B AB Cat) 1))
+           (candidate 0 (rule r0 A B AB Cat) 1))
+         (chamber exp00
+                  (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
+                  ((rule r1 B Cat BCat A)
+                   (rule r0 A B AB Cat)
+                   (rule r2 A Cat ACat B))
+                  ((event 0 r0 A B AB Cat)))))
+
 ; Caps are maxima for every smaller non-empty cardinality, not only cap 8 over
 ; three candidates. Cap 7 preserves this two-candidate external pool.
 !(test (candidate-selection-from-pool

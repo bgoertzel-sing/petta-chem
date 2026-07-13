@@ -1036,11 +1036,28 @@
    (candidate-selection-selected
      (candidate-selection-from-pool $cap $chamber $candidate-pool)))
 
+(= (selection-fire-record-selection
+      (selection-fire-record $selection $after-chamber))
+   $selection)
+
+(= (selection-fire-record-after-chamber
+      (selection-fire-record $selection $after-chamber))
+   $after-chamber)
+
+; Keep the complete bounded-selection provenance beside the chamber produced
+; by firing that exact selected candidate. Generic ticking is a projection of
+; this object, so selection and firing cannot silently take separate paths.
+(= (selection-fire-record-from-pool $cap $chamber $candidate-pool)
+   (selection-fire-record
+     (candidate-selection-from-pool $cap $chamber $candidate-pool)
+     (chamber-tick-with-candidate
+       $chamber
+       (candidate-selection-selected
+         (candidate-selection-from-pool $cap $chamber $candidate-pool)))))
+
 (= (chamber-tick-candidate-pool $cap $chamber $candidate-pool)
-   (chamber-tick-with-candidate
-     $chamber
-     (candidate-selection-selected
-       (candidate-selection-from-pool $cap $chamber $candidate-pool))))
+   (selection-fire-record-after-chamber
+     (selection-fire-record-from-pool $cap $chamber $candidate-pool)))
 
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-candidate-pool
