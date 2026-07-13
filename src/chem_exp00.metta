@@ -759,6 +759,111 @@
        (fire-candidate $candidate $state)
        (blocked $candidate $state not-applicable)))
 
+; External/scored pools may only fire rule identities that belong to the
+; chamber. Keep the selected candidate visible in provenance, but reject a
+; foreign rule at the same safety boundary as stale or starved candidates.
+; Membership is by stable rule id because scoring layers such as exp05 may
+; assign a candidate catalyst without replacing the chamber's source rule.
+; The bounded exp00 kernel supports chamber rule lists through cardinality 8.
+(= (rule-id-in-chamber-rules? $id ()) False)
+
+(= (rule-id-in-chamber-rules? $id ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)))
+   (== $id $id-0))
+
+(= (rule-id-in-chamber-rules? $id
+      ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)))
+   (or (== $id $id-0) (== $id $id-1)))
+
+(= (rule-id-in-chamber-rules? $id
+      ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)))
+   (or (== $id $id-0)
+       (or (== $id $id-1) (== $id $id-2))))
+
+(= (rule-id-in-chamber-rules? $id
+      ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+       (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)))
+   (or (== $id $id-0)
+       (or (== $id $id-1)
+           (or (== $id $id-2) (== $id $id-3)))))
+
+(= (rule-id-in-chamber-rules? $id
+      ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+       (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+       (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)))
+   (or (== $id $id-0)
+       (or (== $id $id-1)
+           (or (== $id $id-2)
+               (or (== $id $id-3) (== $id $id-4))))))
+
+(= (rule-id-in-chamber-rules? $id
+      ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+       (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+       (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)
+       (rule $id-5 $a-5 $b-5 $product-5 $catalyst-5)))
+   (or (== $id $id-0)
+       (or (== $id $id-1)
+           (or (== $id $id-2)
+               (or (== $id $id-3)
+                   (or (== $id $id-4) (== $id $id-5)))))))
+
+(= (rule-id-in-chamber-rules? $id
+      ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+       (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+       (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)
+       (rule $id-5 $a-5 $b-5 $product-5 $catalyst-5)
+       (rule $id-6 $a-6 $b-6 $product-6 $catalyst-6)))
+   (or (== $id $id-0)
+       (or (== $id $id-1)
+           (or (== $id $id-2)
+               (or (== $id $id-3)
+                   (or (== $id $id-4)
+                       (or (== $id $id-5) (== $id $id-6))))))))
+
+(= (rule-id-in-chamber-rules? $id
+      ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
+       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
+       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
+       (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
+       (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)
+       (rule $id-5 $a-5 $b-5 $product-5 $catalyst-5)
+       (rule $id-6 $a-6 $b-6 $product-6 $catalyst-6)
+       (rule $id-7 $a-7 $b-7 $product-7 $catalyst-7)))
+   (or (== $id $id-0)
+       (or (== $id $id-1)
+           (or (== $id $id-2)
+               (or (== $id $id-3)
+                   (or (== $id $id-4)
+                       (or (== $id $id-5)
+                           (or (== $id $id-6) (== $id $id-7)))))))))
+
+(= (candidate-applicable-in-chamber?
+      (candidate $tick (rule $rule-id $a $b $product $catalyst) $score)
+      (chamber $id $state $rules $events))
+   (and (candidate-applicable?
+          (candidate $tick (rule $rule-id $a $b $product $catalyst) $score)
+          $state)
+        (rule-id-in-chamber-rules? $rule-id $rules)))
+
+(= (safe-fire-candidate-in-chamber
+      $candidate
+      (chamber $id $state $rules $events))
+   (if (candidate-applicable-in-chamber?
+         $candidate
+         (chamber $id $state $rules $events))
+       (fire-candidate $candidate $state)
+       (blocked $candidate $state not-applicable)))
+
 (= (trace-nonnegative? $trace)
    (state-nonnegative? (trace-state $trace)))
 
@@ -780,7 +885,9 @@
       $candidate)
    (chamber-tick-with-fire-result
      (chamber $id $state $rules $events)
-     (safe-fire-candidate $candidate $state)))
+     (safe-fire-candidate-in-chamber
+       $candidate
+       (chamber $id $state $rules $events))))
 
 ; 1-candidate deterministic selection from a bounded pool.
 (= (selected-candidate-from-list-1

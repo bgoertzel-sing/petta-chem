@@ -625,6 +625,27 @@
                   ((rule r0 A B AB Cat))
                   ())))
 
+; An externally supplied candidate can only mutate a chamber when its rule is
+; actually in that chamber's bounded rule list. The foreign choice remains in
+; selection provenance but is rejected at the chamber safety boundary.
+!(test (candidate-applicable-in-chamber?
+         (candidate 0 (rule foreign A B AB Cat) 1)
+         (exp00-initial-chamber seed-7))
+       False)
+
+!(test (selection-fire-record-from-pool
+         (make-candidate-cap 1 1)
+         (exp00-initial-chamber seed-7)
+         (candidate-pool
+           0
+           ((candidate 0 (rule foreign A B AB Cat) 1))))
+       (selection-fire-record
+         (candidate-selection
+           1
+           ((candidate 0 (rule foreign A B AB Cat) 1))
+           (candidate 0 (rule foreign A B AB Cat) 1))
+         (exp00-initial-chamber seed-7)))
+
 !(test (chamber-tick-generated
          (make-candidate-cap 1 1)
          (chamber exp00-starved
