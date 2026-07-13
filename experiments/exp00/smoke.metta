@@ -625,6 +625,36 @@
                   ((rule r0 A B AB Cat))
                   ())))
 
+; The candidate-pool envelope is also tick-scoped. A malformed stale envelope
+; cannot fire a candidate that independently claims the chamber's current tick.
+!(test (candidate-pool-current-for-chamber?
+         (candidate-pool 0 ((candidate 1 (exp00-rule r0) 1)))
+         (chamber exp00-later
+                  (state 1 seed-7
+                         (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1))
+                  ((exp00-rule r0))
+                  ()))
+       False)
+
+!(test (selection-fire-record-from-pool
+         (make-candidate-cap 1 1)
+         (chamber exp00-later
+                  (state 1 seed-7
+                         (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1))
+                  ((exp00-rule r0))
+                  ())
+         (candidate-pool 0 ((candidate 1 (exp00-rule r0) 1))))
+       (selection-fire-record
+         (candidate-selection
+           1
+           ((candidate 1 (rule r0 A B AB Cat) 1))
+           (candidate 1 (rule r0 A B AB Cat) 1))
+         (chamber exp00-later
+                  (state 1 seed-7
+                         (mol A 1) (mol B 1) (mol AB 0) (mol Cat 1))
+                  ((rule r0 A B AB Cat))
+                  ())))
+
 ; An externally supplied candidate can only mutate a chamber when its rule is
 ; actually in that chamber's bounded rule list. The foreign choice remains in
 ; selection provenance but is rejected at the chamber safety boundary.

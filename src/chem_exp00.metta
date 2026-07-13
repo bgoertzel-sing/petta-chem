@@ -1132,6 +1132,23 @@
      $chamber
      (candidate $tick $rule $score)))
 
+; Candidate-pool provenance is tick-scoped independently of each candidate.
+; A malformed external/scored pool whose envelope tick does not match the
+; chamber cannot mutate that chamber, even if its selected candidate claims
+; the current tick. Keep the complete selection visible for inspection.
+(= (candidate-pool-current-for-chamber?
+      (candidate-pool $pool-tick $candidates)
+      (chamber $id $state $rules $events))
+   (== $pool-tick (state-tick $state)))
+
+(= (chamber-tick-with-pool-selection
+      $chamber
+      $candidate-pool
+      $selected-candidate)
+   (if (candidate-pool-current-for-chamber? $candidate-pool $chamber)
+       (chamber-tick-with-selection $chamber $selected-candidate)
+       $chamber))
+
 ; Keep the complete bounded-selection provenance beside the chamber produced
 ; by firing that exact selected candidate. Generic ticking is a projection of
 ; this object, so selection and firing cannot silently take separate paths.
@@ -1140,8 +1157,9 @@
         (candidate-selection-from-pool $cap $chamber $candidate-pool)
      (selection-fire-record
        $selection
-       (chamber-tick-with-selection
+       (chamber-tick-with-pool-selection
          $chamber
+         $candidate-pool
          (candidate-selection-selected $selection)))))
 
 (= (chamber-tick-candidate-pool $cap $chamber $candidate-pool)
