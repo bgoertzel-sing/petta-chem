@@ -330,6 +330,10 @@
 (= (cap-candidate-pool 0 (candidate-pool $tick $candidates))
    ())
 
+; Empty generated/external pools remain empty under every positive cap.
+(= (cap-candidate-pool $cap (candidate-pool $tick ()))
+   ())
+
 ; Candidate caps are maxima: preserve every non-empty source pool smaller
 ; than the requested cap, then truncate pools at or above that cap below.
 (= (cap-candidate-pool 2 (candidate-pool $tick ($candidate-0)))
@@ -524,6 +528,10 @@
 
 (= (cap-candidate-pool 8 (candidate-pool $tick ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6 $candidate-7)))
    ($candidate-0 $candidate-1 $candidate-2 $candidate-3 $candidate-4 $candidate-5 $candidate-6 $candidate-7))
+
+(= (generate-candidate-pool
+      (chamber $id (state $tick $seed $m0 $m1 $m2 $m3) () $events))
+   (candidate-pool $tick ()))
 
 (= (generate-candidate-pool
       (chamber $id (state $tick $seed $m0 $m1 $m2 $m3) ($rule-0) $events))
@@ -929,6 +937,11 @@
 
 ; Generic bounded candidate-pool tick. Dispatch on the actual bounded pool
 ; cardinality, so a requested cap may safely exceed a smaller source pool.
+; Empty pools expose an explicit no-candidate result instead of leaving the
+; cap -> selection path irreducible.
+(= (selected-candidate-from-bounded-list $chamber ())
+   no-candidate)
+
 (= (selected-candidate-from-bounded-list $chamber ($candidate-0))
    (selected-candidate-from-list-1 $chamber ($candidate-0)))
 
@@ -988,6 +1001,18 @@
       (selection-fire-record $selection $after-chamber))
    $after-chamber)
 
+; Empty bounded pools suppress firing without inventing an event or state
+; transition. Non-empty selections continue through ordinary chamber firing.
+(= (chamber-tick-with-selection $chamber no-candidate)
+   $chamber)
+
+(= (chamber-tick-with-selection
+      $chamber
+      (candidate $tick $rule $score))
+   (chamber-tick-with-candidate
+     $chamber
+     (candidate $tick $rule $score)))
+
 ; Keep the complete bounded-selection provenance beside the chamber produced
 ; by firing that exact selected candidate. Generic ticking is a projection of
 ; this object, so selection and firing cannot silently take separate paths.
@@ -996,7 +1021,7 @@
         (candidate-selection-from-pool $cap $chamber $candidate-pool)
      (selection-fire-record
        $selection
-       (chamber-tick-with-candidate
+       (chamber-tick-with-selection
          $chamber
          (candidate-selection-selected $selection)))))
 

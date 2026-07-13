@@ -699,6 +699,34 @@
            (exp00-initial-chamber seed-7)))
        (candidate 0 (rule r0 A B AB Cat) 1))
 
+; Cap zero and empty source chambers now complete the same generic provenance
+; path without selecting/firing a candidate or changing the chamber.
+!(test (candidate-selection-from-pool
+         (make-candidate-cap 0 1)
+         (exp00-initial-chamber seed-7)
+         (exp00-generated-candidate-pool seed-7))
+       (candidate-selection 0 () no-candidate))
+
+!(test (chamber-tick-generated
+         (make-candidate-cap 0 1)
+         (exp00-initial-chamber seed-7))
+       (exp00-initial-chamber seed-7))
+
+!(test (generated-selection-fire-record-from-chamber
+         (make-candidate-cap 2 1)
+         (chamber exp00
+                  (exp00-initial-state seed-7)
+                  ()
+                  ()))
+       (generated-selection-fire-record
+         (candidate-pool 0 ())
+         (selection-fire-record
+           (candidate-selection 2 () no-candidate)
+           (chamber exp00
+                    (exp00-initial-state seed-7)
+                    ()
+                    ()))))
+
 ; Caps are maxima for every smaller non-empty cardinality, not only cap 8 over
 ; three candidates. Cap 7 preserves this two-candidate external pool.
 !(test (candidate-selection-from-pool
