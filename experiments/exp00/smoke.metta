@@ -684,6 +684,21 @@
            (exp00-initial-chamber seed-7)))
        (exp00-generated-candidate-pool seed-7))
 
+; The complete generated record directly projects the exact bounded pool and
+; selected candidate that were bound once and consumed by chamber firing.
+!(test (generated-selection-fire-record-bounded-pool
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       ((candidate 0 (rule r1 B Cat BCat A) 1)
+        (candidate 0 (rule r0 A B AB Cat) 1)))
+
+!(test (generated-selection-fire-record-selected
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       (candidate 0 (rule r0 A B AB Cat) 1))
+
 ; Caps are maxima for every smaller non-empty cardinality, not only cap 8 over
 ; three candidates. Cap 7 preserves this two-candidate external pool.
 !(test (candidate-selection-from-pool

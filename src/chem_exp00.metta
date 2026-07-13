@@ -1018,17 +1018,16 @@
       (candidate-selection $cap $bounded-pool $selected-candidate))
    $selected-candidate)
 
+; Bind the cap and bounded pool once before selecting. The provenance object and
+; selector therefore consume the exact same bounded value rather than relying
+; on repeated deterministic reconstruction.
 (= (candidate-selection-from-pool $cap $chamber $candidate-pool)
-   (candidate-selection
-     (candidate-cap-per-tick $cap)
-     (cap-candidate-pool
-       (candidate-cap-per-tick $cap)
-       $candidate-pool)
-     (selected-candidate-from-bounded-list
-       $chamber
-       (cap-candidate-pool
-         (candidate-cap-per-tick $cap)
-         $candidate-pool))))
+   (let $candidate-cap (candidate-cap-per-tick $cap)
+     (let $bounded-pool (cap-candidate-pool $candidate-cap $candidate-pool)
+       (candidate-selection
+         $candidate-cap
+         $bounded-pool
+         (selected-candidate-from-bounded-list $chamber $bounded-pool)))))
 
 ; Expose the exact candidate selected from an external/generated pool before
 ; firing, while preserving the same cap and seed/tick semantics as ticking.
@@ -1048,12 +1047,13 @@
 ; by firing that exact selected candidate. Generic ticking is a projection of
 ; this object, so selection and firing cannot silently take separate paths.
 (= (selection-fire-record-from-pool $cap $chamber $candidate-pool)
-   (selection-fire-record
-     (candidate-selection-from-pool $cap $chamber $candidate-pool)
-     (chamber-tick-with-candidate
-       $chamber
-       (candidate-selection-selected
-         (candidate-selection-from-pool $cap $chamber $candidate-pool)))))
+   (let $selection
+        (candidate-selection-from-pool $cap $chamber $candidate-pool)
+     (selection-fire-record
+       $selection
+       (chamber-tick-with-candidate
+         $chamber
+         (candidate-selection-selected $selection)))))
 
 (= (chamber-tick-candidate-pool $cap $chamber $candidate-pool)
    (selection-fire-record-after-chamber
@@ -1067,6 +1067,16 @@
       (generated-selection-fire-record $generated-pool $selection-fire-record))
    $selection-fire-record)
 
+(= (generated-selection-fire-record-bounded-pool
+      (generated-selection-fire-record $generated-pool $selection-fire-record))
+   (candidate-selection-bounded-pool
+     (selection-fire-record-selection $selection-fire-record)))
+
+(= (generated-selection-fire-record-selected
+      (generated-selection-fire-record $generated-pool $selection-fire-record))
+   (candidate-selection-selected
+     (selection-fire-record-selection $selection-fire-record)))
+
 (= (generated-selection-fire-record-after-chamber
       (generated-selection-fire-record $generated-pool $selection-fire-record))
    (selection-fire-record-after-chamber $selection-fire-record))
@@ -1075,12 +1085,10 @@
 ; fired chamber. This makes candidate generation, capping, deterministic
 ; selection, and ticking one inspectable PeTTa-native provenance chain.
 (= (generated-selection-fire-record-from-chamber $cap $chamber)
-   (generated-selection-fire-record
-     (generate-candidate-pool $chamber)
-     (selection-fire-record-from-pool
-       $cap
-       $chamber
-       (generate-candidate-pool $chamber))))
+   (let $generated-pool (generate-candidate-pool $chamber)
+     (generated-selection-fire-record
+       $generated-pool
+       (selection-fire-record-from-pool $cap $chamber $generated-pool))))
 
 (= (chamber-tick-generated $cap $chamber)
    (generated-selection-fire-record-after-chamber
