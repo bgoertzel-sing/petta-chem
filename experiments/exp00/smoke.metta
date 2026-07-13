@@ -568,6 +568,48 @@
          (state 0 seed-7 (mol A 0) (mol B 1) (mol AB 0) (mol Cat 1))
          not-applicable))
 
+!(test (chamber-tick-with-candidate
+         (chamber exp00-starved
+                  (exp00-starved-state seed-7)
+                  ((exp00-rule r0))
+                  ())
+         (exp00-candidate seed-7))
+       (chamber exp00-starved
+                (state 0 seed-7
+                       (mol A 0) (mol B 1) (mol AB 0) (mol Cat 1))
+                ((rule r0 A B AB Cat))
+                ()))
+
+!(test (selection-fire-record-from-pool
+         (make-candidate-cap 1 1)
+         (chamber exp00-starved
+                  (exp00-starved-state seed-7)
+                  ((exp00-rule r0))
+                  ())
+         (candidate-pool 0 ((exp00-candidate seed-7))))
+       (selection-fire-record
+         (candidate-selection
+           1
+           ((candidate 0 (rule r0 A B AB Cat) 1))
+           (candidate 0 (rule r0 A B AB Cat) 1))
+         (chamber exp00-starved
+                  (state 0 seed-7
+                         (mol A 0) (mol B 1) (mol AB 0) (mol Cat 1))
+                  ((rule r0 A B AB Cat))
+                  ())))
+
+!(test (chamber-tick-generated
+         (make-candidate-cap 1 1)
+         (chamber exp00-starved
+                  (exp00-starved-state seed-7)
+                  ((exp00-rule r0))
+                  ()))
+       (chamber exp00-starved
+                (state 0 seed-7
+                       (mol A 0) (mol B 1) (mol AB 0) (mol Cat 1))
+                ((rule r0 A B AB Cat))
+                ()))
+
 !(test (trace-nonnegative? (exp00-run seed-7)) True)
 
 !(test (exp00-run seed-7)

@@ -761,14 +761,25 @@
 (= (trace-nonnegative? $trace)
    (state-nonnegative? (trace-state $trace)))
 
+; Convert safe firing outcomes into chamber transitions. An inapplicable
+; deterministic selection remains inspectable in provenance but is a no-op:
+; it cannot create negative abundance or a fictitious event.
+(= (chamber-tick-with-fire-result
+      (chamber $id $state $rules $events)
+      (trace $after-state $event))
+   (chamber $id $after-state $rules ($event)))
+
+(= (chamber-tick-with-fire-result
+      $chamber
+      (blocked $candidate $state not-applicable))
+   $chamber)
+
 (= (chamber-tick-with-candidate
       (chamber $id $state $rules $events)
       $candidate)
-   (let $trace (fire-candidate $candidate $state)
-     (chamber $id
-              (trace-state $trace)
-              $rules
-              ((trace-event $trace)))))
+   (chamber-tick-with-fire-result
+     (chamber $id $state $rules $events)
+     (safe-fire-candidate $candidate $state)))
 
 ; 1-candidate deterministic selection from a bounded pool.
 (= (selected-candidate-from-list-1
