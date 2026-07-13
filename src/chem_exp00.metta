@@ -870,10 +870,40 @@
 ; Convert safe firing outcomes into chamber transitions. An inapplicable
 ; deterministic selection remains inspectable in provenance but is a no-op:
 ; it cannot create negative abundance or a fictitious event.
+; Successful ticks append to existing chamber history rather than replacing
+; it. The base kernel keeps the same explicit bounded-list style as candidate
+; pools and chamber rules.
+(= (append-chamber-event () $event)
+   ($event))
+
+(= (append-chamber-event ($event-0) $event)
+   ($event-0 $event))
+
+(= (append-chamber-event ($event-0 $event-1) $event)
+   ($event-0 $event-1 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2) $event)
+   ($event-0 $event-1 $event-2 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event))
+
 (= (chamber-tick-with-fire-result
       (chamber $id $state $rules $events)
       (trace $after-state $event))
-   (chamber $id $after-state $rules ($event)))
+   (chamber $id $after-state $rules (append-chamber-event $events $event)))
 
 (= (chamber-tick-with-fire-result
       $chamber

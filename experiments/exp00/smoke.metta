@@ -588,6 +588,21 @@
                 ((rule r0 A B AB Cat))
                 ()))
 
+; Unified chamber ticking must preserve existing provenance when a later
+; selected candidate fires; replacing the event list would erase history.
+!(test (chamber-tick-with-candidate
+         (chamber exp00-history
+                  (exp00-initial-state seed-7)
+                  ((exp00-rule r0))
+                  ((event prior-tick prior-rule X Y XY Z)))
+         (exp00-candidate seed-7))
+       (chamber exp00-history
+                (state 1 seed-7
+                       (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
+                ((rule r0 A B AB Cat))
+                ((event prior-tick prior-rule X Y XY Z)
+                 (event 0 r0 A B AB Cat))))
+
 !(test (selection-fire-record-from-pool
          (make-candidate-cap 1 1)
          (chamber exp00-starved
