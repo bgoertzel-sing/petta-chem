@@ -678,6 +678,39 @@
          (exp00-initial-chamber seed-7))
        False)
 
+; Reusing a chamber-owned rule id must not authorize an externally altered
+; rewrite. Catalyst reassignment remains allowed, but reactants/product are
+; part of the source-rule identity handed to chamber ticking.
+!(test (candidate-applicable-in-chamber?
+         (candidate 0 (rule r0 A B ACat Cat) 1)
+         (chamber exp00-altered-rewrite
+                  (state 0 seed-7
+                         (mol A 1) (mol B 1) (mol ACat 0) (mol Cat 1))
+                  ((exp00-rule r0))
+                  ()))
+       False)
+
+!(test (selection-fire-record-from-pool
+         (make-candidate-cap 1 1)
+         (chamber exp00-altered-rewrite
+                  (state 0 seed-7
+                         (mol A 1) (mol B 1) (mol ACat 0) (mol Cat 1))
+                  ((exp00-rule r0))
+                  ())
+         (candidate-pool
+           0
+           ((candidate 0 (rule r0 A B ACat Cat) 1))))
+       (selection-fire-record
+         (candidate-selection
+           1
+           ((candidate 0 (rule r0 A B ACat Cat) 1))
+           (candidate 0 (rule r0 A B ACat Cat) 1))
+         (chamber exp00-altered-rewrite
+                  (state 0 seed-7
+                         (mol A 1) (mol B 1) (mol ACat 0) (mol Cat 1))
+                  ((rule r0 A B AB Cat))
+                  ())))
+
 !(test (selection-fire-record-from-pool
          (make-candidate-cap 1 1)
          (exp00-initial-chamber seed-7)

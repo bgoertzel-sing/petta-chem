@@ -759,101 +759,86 @@
        (fire-candidate $candidate $state)
        (blocked $candidate $state not-applicable)))
 
-; External/scored pools may only fire rule identities that belong to the
-; chamber. Keep the selected candidate visible in provenance, but reject a
-; foreign rule at the same safety boundary as stale or starved candidates.
-; Membership is by stable rule id because scoring layers such as exp05 may
-; assign a candidate catalyst without replacing the chamber's source rule.
-; The bounded exp00 kernel supports chamber rule lists through cardinality 8.
-(= (rule-id-in-chamber-rules? $id ()) False)
+; External/scored pools may only fire rewrites that belong to the chamber.
+; Keep rejected selections visible in provenance at the same safety boundary as
+; stale or starved candidates. The bounded kernel supports up to eight rules.
+; Stable rule identity alone is not enough for externally scored pools: a
+; candidate must preserve the chamber rule's reactants and product. Scoring
+; layers may still reassign only the catalyst (as exp05 does).
+(= (same-rule-rewrite?
+      (rule $candidate-id $candidate-a $candidate-b $candidate-product $candidate-catalyst)
+      (rule $source-id $source-a $source-b $source-product $source-catalyst))
+   (and (== $candidate-id $source-id)
+        (and (== $candidate-a $source-a)
+             (and (== $candidate-b $source-b)
+                  (== $candidate-product $source-product)))))
 
-(= (rule-id-in-chamber-rules? $id ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)))
-   (== $id $id-0))
+(= (rule-rewrite-in-chamber-rules? $candidate-rule ()) False)
 
-(= (rule-id-in-chamber-rules? $id
-      ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
-       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)))
-   (or (== $id $id-0) (== $id $id-1)))
+(= (rule-rewrite-in-chamber-rules? $candidate-rule ($rule-0))
+   (same-rule-rewrite? $candidate-rule $rule-0))
 
-(= (rule-id-in-chamber-rules? $id
-      ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
-       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
-       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)))
-   (or (== $id $id-0)
-       (or (== $id $id-1) (== $id $id-2))))
+(= (rule-rewrite-in-chamber-rules? $candidate-rule ($rule-0 $rule-1))
+   (or (same-rule-rewrite? $candidate-rule $rule-0)
+       (same-rule-rewrite? $candidate-rule $rule-1)))
 
-(= (rule-id-in-chamber-rules? $id
-      ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
-       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
-       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
-       (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)))
-   (or (== $id $id-0)
-       (or (== $id $id-1)
-           (or (== $id $id-2) (== $id $id-3)))))
+(= (rule-rewrite-in-chamber-rules? $candidate-rule ($rule-0 $rule-1 $rule-2))
+   (or (same-rule-rewrite? $candidate-rule $rule-0)
+       (or (same-rule-rewrite? $candidate-rule $rule-1)
+           (same-rule-rewrite? $candidate-rule $rule-2))))
 
-(= (rule-id-in-chamber-rules? $id
-      ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
-       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
-       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
-       (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
-       (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)))
-   (or (== $id $id-0)
-       (or (== $id $id-1)
-           (or (== $id $id-2)
-               (or (== $id $id-3) (== $id $id-4))))))
+(= (rule-rewrite-in-chamber-rules? $candidate-rule
+      ($rule-0 $rule-1 $rule-2 $rule-3))
+   (or (same-rule-rewrite? $candidate-rule $rule-0)
+       (or (same-rule-rewrite? $candidate-rule $rule-1)
+           (or (same-rule-rewrite? $candidate-rule $rule-2)
+               (same-rule-rewrite? $candidate-rule $rule-3)))))
 
-(= (rule-id-in-chamber-rules? $id
-      ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
-       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
-       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
-       (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
-       (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)
-       (rule $id-5 $a-5 $b-5 $product-5 $catalyst-5)))
-   (or (== $id $id-0)
-       (or (== $id $id-1)
-           (or (== $id $id-2)
-               (or (== $id $id-3)
-                   (or (== $id $id-4) (== $id $id-5)))))))
+(= (rule-rewrite-in-chamber-rules? $candidate-rule
+      ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4))
+   (or (same-rule-rewrite? $candidate-rule $rule-0)
+       (or (same-rule-rewrite? $candidate-rule $rule-1)
+           (or (same-rule-rewrite? $candidate-rule $rule-2)
+               (or (same-rule-rewrite? $candidate-rule $rule-3)
+                   (same-rule-rewrite? $candidate-rule $rule-4))))))
 
-(= (rule-id-in-chamber-rules? $id
-      ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
-       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
-       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
-       (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
-       (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)
-       (rule $id-5 $a-5 $b-5 $product-5 $catalyst-5)
-       (rule $id-6 $a-6 $b-6 $product-6 $catalyst-6)))
-   (or (== $id $id-0)
-       (or (== $id $id-1)
-           (or (== $id $id-2)
-               (or (== $id $id-3)
-                   (or (== $id $id-4)
-                       (or (== $id $id-5) (== $id $id-6))))))))
+(= (rule-rewrite-in-chamber-rules? $candidate-rule
+      ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5))
+   (or (same-rule-rewrite? $candidate-rule $rule-0)
+       (or (same-rule-rewrite? $candidate-rule $rule-1)
+           (or (same-rule-rewrite? $candidate-rule $rule-2)
+               (or (same-rule-rewrite? $candidate-rule $rule-3)
+                   (or (same-rule-rewrite? $candidate-rule $rule-4)
+                       (same-rule-rewrite? $candidate-rule $rule-5)))))))
 
-(= (rule-id-in-chamber-rules? $id
-      ((rule $id-0 $a-0 $b-0 $product-0 $catalyst-0)
-       (rule $id-1 $a-1 $b-1 $product-1 $catalyst-1)
-       (rule $id-2 $a-2 $b-2 $product-2 $catalyst-2)
-       (rule $id-3 $a-3 $b-3 $product-3 $catalyst-3)
-       (rule $id-4 $a-4 $b-4 $product-4 $catalyst-4)
-       (rule $id-5 $a-5 $b-5 $product-5 $catalyst-5)
-       (rule $id-6 $a-6 $b-6 $product-6 $catalyst-6)
-       (rule $id-7 $a-7 $b-7 $product-7 $catalyst-7)))
-   (or (== $id $id-0)
-       (or (== $id $id-1)
-           (or (== $id $id-2)
-               (or (== $id $id-3)
-                   (or (== $id $id-4)
-                       (or (== $id $id-5)
-                           (or (== $id $id-6) (== $id $id-7)))))))))
+(= (rule-rewrite-in-chamber-rules? $candidate-rule
+      ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6))
+   (or (same-rule-rewrite? $candidate-rule $rule-0)
+       (or (same-rule-rewrite? $candidate-rule $rule-1)
+           (or (same-rule-rewrite? $candidate-rule $rule-2)
+               (or (same-rule-rewrite? $candidate-rule $rule-3)
+                   (or (same-rule-rewrite? $candidate-rule $rule-4)
+                       (or (same-rule-rewrite? $candidate-rule $rule-5)
+                           (same-rule-rewrite? $candidate-rule $rule-6))))))))
+
+(= (rule-rewrite-in-chamber-rules? $candidate-rule
+      ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7))
+   (or (same-rule-rewrite? $candidate-rule $rule-0)
+       (or (same-rule-rewrite? $candidate-rule $rule-1)
+           (or (same-rule-rewrite? $candidate-rule $rule-2)
+               (or (same-rule-rewrite? $candidate-rule $rule-3)
+                   (or (same-rule-rewrite? $candidate-rule $rule-4)
+                       (or (same-rule-rewrite? $candidate-rule $rule-5)
+                           (or (same-rule-rewrite? $candidate-rule $rule-6)
+                               (same-rule-rewrite? $candidate-rule $rule-7)))))))))
 
 (= (candidate-applicable-in-chamber?
-      (candidate $tick (rule $rule-id $a $b $product $catalyst) $score)
+      (candidate $tick $candidate-rule $score)
       (chamber $id $state $rules $events))
    (and (candidate-applicable?
-          (candidate $tick (rule $rule-id $a $b $product $catalyst) $score)
+          (candidate $tick $candidate-rule $score)
           $state)
-        (rule-id-in-chamber-rules? $rule-id $rules)))
+        (rule-rewrite-in-chamber-rules? $candidate-rule $rules)))
 
 (= (safe-fire-candidate-in-chamber
       $candidate
