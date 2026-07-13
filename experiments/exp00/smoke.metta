@@ -659,6 +659,31 @@
                    (rule r2 A Cat ACat B))
                   ((event 0 r0 A B AB Cat)))))
 
+; Generated ticking retains the uncapped generated pool in the same provenance
+; chain as capping, deterministic selection, and the resulting chamber.
+!(test (generated-selection-fire-record-from-chamber
+         (exp00-candidate-cap)
+         (exp00-initial-chamber seed-7))
+       (generated-selection-fire-record
+         (candidate-pool
+           0
+           ((candidate 0 (rule r1 B Cat BCat A) 1)
+            (candidate 0 (rule r0 A B AB Cat) 1)
+            (candidate 0 (rule r2 A Cat ACat B) 1)))
+         (selection-fire-record
+           (candidate-selection
+             2
+             ((candidate 0 (rule r1 B Cat BCat A) 1)
+              (candidate 0 (rule r0 A B AB Cat) 1))
+             (candidate 0 (rule r0 A B AB Cat) 1))
+           (exp00-chamber-after-generated-tick seed-7))))
+
+!(test (generated-selection-fire-record-pool
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       (exp00-generated-candidate-pool seed-7))
+
 ; Caps are maxima for every smaller non-empty cardinality, not only cap 8 over
 ; three candidates. Cap 7 preserves this two-candidate external pool.
 !(test (candidate-selection-from-pool

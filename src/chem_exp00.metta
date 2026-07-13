@@ -1059,11 +1059,32 @@
    (selection-fire-record-after-chamber
      (selection-fire-record-from-pool $cap $chamber $candidate-pool)))
 
+(= (generated-selection-fire-record-pool
+      (generated-selection-fire-record $generated-pool $selection-fire-record))
+   $generated-pool)
+
+(= (generated-selection-fire-record-selection-fire
+      (generated-selection-fire-record $generated-pool $selection-fire-record))
+   $selection-fire-record)
+
+(= (generated-selection-fire-record-after-chamber
+      (generated-selection-fire-record $generated-pool $selection-fire-record))
+   (selection-fire-record-after-chamber $selection-fire-record))
+
+; Preserve the uncapped generated pool as well as the bounded selection and
+; fired chamber. This makes candidate generation, capping, deterministic
+; selection, and ticking one inspectable PeTTa-native provenance chain.
+(= (generated-selection-fire-record-from-chamber $cap $chamber)
+   (generated-selection-fire-record
+     (generate-candidate-pool $chamber)
+     (selection-fire-record-from-pool
+       $cap
+       $chamber
+       (generate-candidate-pool $chamber))))
+
 (= (chamber-tick-generated $cap $chamber)
-   (chamber-tick-candidate-pool
-     $cap
-     $chamber
-     (generate-candidate-pool $chamber)))
+   (generated-selection-fire-record-after-chamber
+     (generated-selection-fire-record-from-chamber $cap $chamber)))
 
 ; ----- exp00 fixture -----
 
