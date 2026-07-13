@@ -699,11 +699,12 @@
       (make-candidate-for-rule $tick $rule-7))))
 
 (= (bounded-candidate-pool $cap $chamber)
-   (candidate-pool
-     (candidate-pool-tick (generate-candidate-pool $chamber))
-     (cap-candidate-pool
-       (candidate-cap-per-tick $cap)
-       (generate-candidate-pool $chamber))))
+   (let $generated-pool (generate-candidate-pool $chamber)
+     (candidate-pool
+       (candidate-pool-tick $generated-pool)
+       (cap-candidate-pool
+         (candidate-cap-per-tick $cap)
+         $generated-pool))))
 
 ; Generic deterministic firing for the exp00 state shape:
 ;   A + B --Cat--> AB
@@ -777,8 +778,8 @@
          $candidate-pool))))
 
 (= (chamber-tick-generated-1 $cap $chamber)
-   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
-     (chamber-tick-candidate-pool-1 $cap $chamber $candidate-pool)))
+   (let $generated-pool (generate-candidate-pool $chamber)
+     (chamber-tick-candidate-pool-1 $cap $chamber $generated-pool)))
 
 (= (selected-candidate-from-chamber-2
       (chamber $id $state $rules $events)
@@ -820,8 +821,8 @@
          $candidate-pool))))
 
 (= (chamber-tick-generated-2 $cap $chamber)
-   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
-     (chamber-tick-candidate-pool-2 $cap $chamber $candidate-pool)))
+   (let $generated-pool (generate-candidate-pool $chamber)
+     (chamber-tick-candidate-pool-2 $cap $chamber $generated-pool)))
 
 ; 3-candidate deterministic selection from a bounded pool.
 (= (selected-candidate-from-list-3
@@ -844,8 +845,8 @@
          $candidate-pool))))
 
 (= (chamber-tick-generated-3 $cap $chamber)
-   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
-     (chamber-tick-candidate-pool-3 $cap $chamber $candidate-pool)))
+   (let $generated-pool (generate-candidate-pool $chamber)
+     (chamber-tick-candidate-pool-3 $cap $chamber $generated-pool)))
 
 ; 4-candidate deterministic selection from a bounded pool.
 (= (selected-candidate-from-list-4
@@ -869,8 +870,8 @@
          $candidate-pool))))
 
 (= (chamber-tick-generated-4 $cap $chamber)
-   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
-     (chamber-tick-candidate-pool-4 $cap $chamber $candidate-pool)))
+   (let $generated-pool (generate-candidate-pool $chamber)
+     (chamber-tick-candidate-pool-4 $cap $chamber $generated-pool)))
 
 ; 5-candidate deterministic selection from a bounded pool.
 (= (selected-candidate-from-list-5
@@ -895,8 +896,8 @@
          $candidate-pool))))
 
 (= (chamber-tick-generated-5 $cap $chamber)
-   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
-     (chamber-tick-candidate-pool-5 $cap $chamber $candidate-pool)))
+   (let $generated-pool (generate-candidate-pool $chamber)
+     (chamber-tick-candidate-pool-5 $cap $chamber $generated-pool)))
 
 ; 6-candidate deterministic selection from a bounded pool.
 (= (selected-candidate-from-list-6
@@ -922,8 +923,8 @@
          $candidate-pool))))
 
 (= (chamber-tick-generated-6 $cap $chamber)
-   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
-     (chamber-tick-candidate-pool-6 $cap $chamber $candidate-pool)))
+   (let $generated-pool (generate-candidate-pool $chamber)
+     (chamber-tick-candidate-pool-6 $cap $chamber $generated-pool)))
 
 ; 7-candidate deterministic selection from a bounded pool.
 (= (selected-candidate-from-list-7
@@ -950,8 +951,8 @@
          $candidate-pool))))
 
 (= (chamber-tick-generated-7 $cap $chamber)
-   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
-     (chamber-tick-candidate-pool-7 $cap $chamber $candidate-pool)))
+   (let $generated-pool (generate-candidate-pool $chamber)
+     (chamber-tick-candidate-pool-7 $cap $chamber $generated-pool)))
 
 ; 8-candidate deterministic selection from a bounded pool.
 (= (selected-candidate-from-list-8
@@ -979,8 +980,8 @@
          $candidate-pool))))
 
 (= (chamber-tick-generated-8 $cap $chamber)
-   (let $candidate-pool (bounded-candidate-pool $cap $chamber)
-     (chamber-tick-candidate-pool-8 $cap $chamber $candidate-pool)))
+   (let $generated-pool (generate-candidate-pool $chamber)
+     (chamber-tick-candidate-pool-8 $cap $chamber $generated-pool)))
 
 ; Generic bounded candidate-pool tick. Dispatch on the actual bounded pool
 ; cardinality, so a requested cap may safely exceed a smaller source pool.
