@@ -202,6 +202,14 @@
 (= (candidate-cap-per-rule (candidate-cap $per-tick $per-rule))
    $per-rule)
 
+; Generic generation emits at most one candidate for each source rule. A
+; zero per-rule allowance must therefore close the selection boundary even
+; when the wider per-tick cap is positive.
+(= (effective-candidate-cap-per-tick $cap)
+   (if (> (candidate-cap-per-rule $cap) 0)
+       (candidate-cap-per-tick $cap)
+       0))
+
 (= (make-chamber $id $state $rules $events)
    (chamber $id $state $rules $events))
 
@@ -1114,7 +1122,7 @@
 ; selector therefore consume the exact same bounded value rather than relying
 ; on repeated deterministic reconstruction.
 (= (candidate-selection-from-pool $cap $chamber $candidate-pool)
-   (let $candidate-cap (candidate-cap-per-tick $cap)
+   (let $candidate-cap (effective-candidate-cap-per-tick $cap)
      (let $bounded-pool (cap-candidate-pool $candidate-cap $candidate-pool)
        (candidate-selection
          $candidate-cap

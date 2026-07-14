@@ -880,6 +880,19 @@
          (exp00-initial-chamber seed-7))
        (exp00-initial-chamber seed-7))
 
+; A zero per-rule allowance also closes the bounded selection path. Generic
+; generation emits one candidate per source rule, so none may cross this cap.
+!(test (candidate-selection-from-pool
+         (make-candidate-cap 2 0)
+         (exp00-initial-chamber seed-7)
+         (exp00-generated-candidate-pool seed-7))
+       (candidate-selection 0 () no-candidate))
+
+!(test (chamber-tick-generated
+         (make-candidate-cap 2 0)
+         (exp00-initial-chamber seed-7))
+       (exp00-initial-chamber seed-7))
+
 !(test (generated-selection-fire-record-from-chamber
          (make-candidate-cap 2 1)
          (chamber exp00
