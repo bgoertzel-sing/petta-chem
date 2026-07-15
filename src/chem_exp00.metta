@@ -623,6 +623,22 @@
       (make-candidate-for-rule $tick $rule-6)
       (make-candidate-for-rule $tick $rule-7))))
 
+; The base kernel admits at most eight candidates per generated pool.  Keep
+; oversized chamber rule lists total by taking the stable first-eight prefix;
+; the ordinary candidate cap may then impose a smaller per-tick bound.
+(= (generate-candidate-pool
+      (chamber $id (state $tick $seed $m0 $m1 $m2 $m3) ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7 $rule-8) $events))
+   (candidate-pool
+     $tick
+     ((make-candidate-for-rule $tick $rule-0)
+      (make-candidate-for-rule $tick $rule-1)
+      (make-candidate-for-rule $tick $rule-2)
+      (make-candidate-for-rule $tick $rule-3)
+      (make-candidate-for-rule $tick $rule-4)
+      (make-candidate-for-rule $tick $rule-5)
+      (make-candidate-for-rule $tick $rule-6)
+      (make-candidate-for-rule $tick $rule-7))))
+
 (= (generate-candidate-pool
       (chamber $id (state $tick $seed $m0 $m1 $m2 $m3 $m4 $m5 $m6 $m7 $m8 $m9) ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7) $events))
    (candidate-pool
@@ -775,7 +791,8 @@
 
 ; External/scored pools may only fire rewrites that belong to the chamber.
 ; Keep rejected selections visible in provenance at the same safety boundary as
-; stale or starved candidates. The bounded kernel supports up to eight rules.
+; stale or starved candidates. Generated pools remain bounded to eight even
+; when the chamber retains a ninth source rule as provenance.
 ; Stable rule identity alone is not enough for externally scored pools: a
 ; candidate must preserve the chamber rule's reactants and product. Scoring
 ; layers may still reassign only the catalyst (as exp05 does).
@@ -845,6 +862,18 @@
                        (or (same-rule-rewrite? $candidate-rule $rule-5)
                            (or (same-rule-rewrite? $candidate-rule $rule-6)
                                (same-rule-rewrite? $candidate-rule $rule-7)))))))))
+
+(= (rule-rewrite-in-chamber-rules? $candidate-rule
+      ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7 $rule-8))
+   (or (same-rule-rewrite? $candidate-rule $rule-0)
+       (or (same-rule-rewrite? $candidate-rule $rule-1)
+           (or (same-rule-rewrite? $candidate-rule $rule-2)
+               (or (same-rule-rewrite? $candidate-rule $rule-3)
+                   (or (same-rule-rewrite? $candidate-rule $rule-4)
+                       (or (same-rule-rewrite? $candidate-rule $rule-5)
+                           (or (same-rule-rewrite? $candidate-rule $rule-6)
+                               (or (same-rule-rewrite? $candidate-rule $rule-7)
+                                   (same-rule-rewrite? $candidate-rule $rule-8))))))))))
 
 (= (candidate-applicable-in-chamber?
       (candidate $tick $candidate-rule $score)
