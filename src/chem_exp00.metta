@@ -640,6 +640,19 @@
       (make-candidate-for-rule $tick $rule-7))))
 
 (= (generate-candidate-pool
+      (chamber $id (state $tick $seed $m0 $m1 $m2 $m3) ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7 $rule-8 $rule-9) $events))
+   (candidate-pool
+     $tick
+     ((make-candidate-for-rule $tick $rule-0)
+      (make-candidate-for-rule $tick $rule-1)
+      (make-candidate-for-rule $tick $rule-2)
+      (make-candidate-for-rule $tick $rule-3)
+      (make-candidate-for-rule $tick $rule-4)
+      (make-candidate-for-rule $tick $rule-5)
+      (make-candidate-for-rule $tick $rule-6)
+      (make-candidate-for-rule $tick $rule-7))))
+
+(= (generate-candidate-pool
       (chamber $id (state $tick $seed $m0 $m1 $m2 $m3 $m4 $m5 $m6 $m7 $m8 $m9) ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7) $events))
    (candidate-pool
      $tick
@@ -874,6 +887,19 @@
                            (or (same-rule-rewrite? $candidate-rule $rule-6)
                                (or (same-rule-rewrite? $candidate-rule $rule-7)
                                    (same-rule-rewrite? $candidate-rule $rule-8))))))))))
+
+(= (rule-rewrite-in-chamber-rules? $candidate-rule
+      ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7 $rule-8 $rule-9))
+   (or (same-rule-rewrite? $candidate-rule $rule-0)
+       (or (same-rule-rewrite? $candidate-rule $rule-1)
+           (or (same-rule-rewrite? $candidate-rule $rule-2)
+               (or (same-rule-rewrite? $candidate-rule $rule-3)
+                   (or (same-rule-rewrite? $candidate-rule $rule-4)
+                       (or (same-rule-rewrite? $candidate-rule $rule-5)
+                           (or (same-rule-rewrite? $candidate-rule $rule-6)
+                               (or (same-rule-rewrite? $candidate-rule $rule-7)
+                                   (or (same-rule-rewrite? $candidate-rule $rule-8)
+                                       (same-rule-rewrite? $candidate-rule $rule-9)))))))))))
 
 (= (candidate-applicable-in-chamber?
       (candidate $tick $candidate-rule $score)
