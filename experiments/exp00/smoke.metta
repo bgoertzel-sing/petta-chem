@@ -920,6 +920,38 @@
          (exp00-initial-chamber seed-7))
        (exp00-initial-chamber seed-7))
 
+; The base kernel explicitly supports at most eight generated candidates.
+; Oversized allowances clamp to that supported boundary while preserving a
+; smaller generated pool and the ordinary deterministic chamber tick.
+!(test (effective-candidate-cap-per-tick
+         (make-candidate-cap 9 1))
+       8)
+
+!(test (bounded-candidate-pool
+         (make-candidate-cap 9 1)
+         (exp00-initial-chamber seed-7))
+       (candidate-pool
+         0
+         ((candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1)
+          (candidate 0 (rule r2 A Cat ACat B) 1))))
+
+!(test (candidate-selection-from-pool
+         (make-candidate-cap 9 1)
+         (exp00-initial-chamber seed-7)
+         (exp00-generated-candidate-pool seed-7))
+       (candidate-selection
+         8
+         ((candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1)
+          (candidate 0 (rule r2 A Cat ACat B) 1))
+         (candidate 0 (rule r0 A B AB Cat) 1)))
+
+!(test (chamber-tick-generated
+         (make-candidate-cap 9 1)
+         (exp00-initial-chamber seed-7))
+       (exp00-chamber-after-generated-tick seed-7))
+
 !(test (generated-selection-fire-record-from-chamber
          (make-candidate-cap 2 1)
          (chamber exp00

@@ -202,14 +202,17 @@
 (= (candidate-cap-per-rule (candidate-cap $per-tick $per-rule))
    $per-rule)
 
-; Candidate caps are nonnegative bounds. Generic generation emits at most one
-; candidate for each source rule, so a nonpositive value on either side must
-; close the selection boundary rather than leaving an unsupported negative cap
-; irreducible.
+; Candidate caps are bounded by the base kernel's explicit eight-rule pool.
+; Generic generation emits at most one candidate for each source rule, so a
+; nonpositive value on either side closes the selection boundary and an
+; oversized per-tick allowance clamps to eight rather than leaving an
+; unsupported cap irreducible.
 (= (effective-candidate-cap-per-tick $cap)
    (if (> (candidate-cap-per-tick $cap) 0)
        (if (> (candidate-cap-per-rule $cap) 0)
-           (candidate-cap-per-tick $cap)
+           (if (> (candidate-cap-per-tick $cap) 8)
+               8
+               (candidate-cap-per-tick $cap))
            0)
        0))
 
