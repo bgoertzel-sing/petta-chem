@@ -882,6 +882,11 @@
 
 ; A zero per-rule allowance also closes the bounded selection path. Generic
 ; generation emits one candidate per source rule, so none may cross this cap.
+!(test (bounded-candidate-pool
+         (make-candidate-cap 2 0)
+         (exp00-initial-chamber seed-7))
+       (candidate-pool 0 ()))
+
 !(test (candidate-selection-from-pool
          (make-candidate-cap 2 0)
          (exp00-initial-chamber seed-7)

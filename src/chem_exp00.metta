@@ -719,7 +719,7 @@
      (candidate-pool
        (candidate-pool-tick $generated-pool)
        (cap-candidate-pool
-         (candidate-cap-per-tick $cap)
+         (effective-candidate-cap-per-tick $cap)
          $generated-pool))))
 
 ; Generic deterministic firing for the exp00 state shape:
