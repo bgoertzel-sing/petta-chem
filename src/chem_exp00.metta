@@ -202,12 +202,15 @@
 (= (candidate-cap-per-rule (candidate-cap $per-tick $per-rule))
    $per-rule)
 
-; Generic generation emits at most one candidate for each source rule. A
-; zero per-rule allowance must therefore close the selection boundary even
-; when the wider per-tick cap is positive.
+; Candidate caps are nonnegative bounds. Generic generation emits at most one
+; candidate for each source rule, so a nonpositive value on either side must
+; close the selection boundary rather than leaving an unsupported negative cap
+; irreducible.
 (= (effective-candidate-cap-per-tick $cap)
-   (if (> (candidate-cap-per-rule $cap) 0)
-       (candidate-cap-per-tick $cap)
+   (if (> (candidate-cap-per-tick $cap) 0)
+       (if (> (candidate-cap-per-rule $cap) 0)
+           (candidate-cap-per-tick $cap)
+           0)
        0))
 
 (= (make-chamber $id $state $rules $events)

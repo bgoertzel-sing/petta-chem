@@ -898,6 +898,28 @@
          (exp00-initial-chamber seed-7))
        (exp00-initial-chamber seed-7))
 
+; Malformed negative bounds are conservatively clamped to the same closed
+; boundary instead of reaching an unsupported cap-candidate-pool operation.
+!(test (effective-candidate-cap-per-tick
+         (make-candidate-cap -1 1))
+       0)
+
+!(test (bounded-candidate-pool
+         (make-candidate-cap -1 1)
+         (exp00-initial-chamber seed-7))
+       (candidate-pool 0 ()))
+
+!(test (candidate-selection-from-pool
+         (make-candidate-cap -1 1)
+         (exp00-initial-chamber seed-7)
+         (exp00-generated-candidate-pool seed-7))
+       (candidate-selection 0 () no-candidate))
+
+!(test (chamber-tick-generated
+         (make-candidate-cap 2 -1)
+         (exp00-initial-chamber seed-7))
+       (exp00-initial-chamber seed-7))
+
 !(test (generated-selection-fire-record-from-chamber
          (make-candidate-cap 2 1)
          (chamber exp00
