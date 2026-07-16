@@ -847,6 +847,33 @@
          replay exact-seed-tick
          current-boundary categorical-calibration-before-stateful-ensemble
          emergence-claim none))
+!(test (exp07-pilot-productive? unguided seed-7) False)
+!(test (exp07-pilot-productive? unguided seed-8) False)
+!(test (exp07-pilot-productive? unguided seed-9) False)
+!(test (exp07-pilot-productive? unguided seed-10) False)
+!(test (exp07-pilot-productive? weak-doob-h seed-7) True)
+!(test (exp07-pilot-productive? weak-doob-h seed-8) True)
+!(test (exp07-pilot-productive? weak-doob-h seed-9) True)
+!(test (exp07-pilot-productive? weak-doob-h seed-10) False)
+!(test (exp07-pilot-productive? shuffled-guidance seed-7) False)
+!(test (exp07-pilot-productive? shuffled-guidance seed-8) True)
+!(test (exp07-pilot-productive? shuffled-guidance seed-9) True)
+!(test (exp07-pilot-productive? shuffled-guidance seed-10) True)
+!(test (exp07-pilot-productive-count unguided) 0)
+!(test (exp07-pilot-productive-count weak-doob-h) 3)
+!(test (exp07-pilot-productive-count shuffled-guidance) 3)
+!(test (exp07-pilot-fixture-applicability-audit)
+       (fixture-applicability-audit
+         fixed-seeds (seed-7 seed-8 seed-9 seed-10)
+         draws-per-arm 4
+         productive-draws ((unguided 0)
+                           (weak-doob-h 3)
+                           (shuffled-guidance 3))
+         matched-fixture-gate failed
+         reason exp05-fixtures-cover-only-their-original-deterministic-selection
+         current-boundary do-not-run-stateful-ensemble-on-confounded-fixtures
+         required-next matched-multi-molecule-chamber-applicability
+         emergence-claim none))
 !(test (exp07-stochastic-pilot-contract)
        (stochastic-ensemble-contract
          arms (unguided weak-doob-h shuffled-guidance)
@@ -864,5 +891,5 @@
                             productivity diversity-collapse intervention-path-cost
                             replay catalyst-ablation rule-ablation)
          terminal-forcing prohibited
-         current-boundary sampler-and-direct-tick-gate
+         current-boundary sampler-calibrated-but-matched-fixture-gate-failed
          emergence-claim none))

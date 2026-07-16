@@ -885,6 +885,62 @@
      current-boundary categorical-calibration-before-stateful-ensemble
      emergence-claim none))
 
+; The exp05 fixtures were built around one deterministic selected candidate per
+; seed.  Before treating them as a matched stochastic ensemble, audit whether
+; every candidate reachable under the new categorical policy is actually
+; applicable to the corresponding four-molecule chamber.  This predicate is a
+; total, diagnostic mirror of exp00's four-molecule applicability shape; actual
+; mutation still goes through `chamber-tick-with-candidate` above.
+(= (exp07-pilot-candidate-fits-chamber?
+      (candidate $candidate-tick
+                 (rule $rule-id $a $b $product $catalyst)
+                 $score)
+      (chamber $chamber-id
+               (state $state-tick $seed
+                      (mol $state-a $a-count)
+                      (mol $state-b $b-count)
+                      (mol $state-product $product-count)
+                      (mol $state-catalyst $catalyst-count))
+               $rules
+               $events))
+   (and (== $candidate-tick $state-tick)
+        (and (== $a $state-a)
+             (and (== $b $state-b)
+                  (and (== $product $state-product)
+                       (and (== $catalyst $state-catalyst)
+                            (and (> $a-count 0)
+                                 (and (> $b-count 0)
+                                      (> $catalyst-count 0)))))))))
+
+(= (exp07-pilot-productive? $arm $seed)
+   (exp07-pilot-candidate-fits-chamber?
+     (exp07-pilot-selected-candidate $arm $seed)
+     (exp07-pilot-chamber $arm $seed)))
+
+(= (exp07-pilot-productive-int $arm $seed)
+   (if (exp07-pilot-productive? $arm $seed) 1 0))
+
+(= (exp07-pilot-productive-count $arm)
+   (+ (exp07-pilot-productive-int $arm seed-7)
+      (+ (exp07-pilot-productive-int $arm seed-8)
+         (+ (exp07-pilot-productive-int $arm seed-9)
+            (exp07-pilot-productive-int $arm seed-10)))))
+
+(= (exp07-pilot-fixture-applicability-audit)
+   (fixture-applicability-audit
+     fixed-seeds (seed-7 seed-8 seed-9 seed-10)
+     draws-per-arm 4
+     productive-draws ((unguided (exp07-pilot-productive-count unguided))
+                       (weak-doob-h
+                         (exp07-pilot-productive-count weak-doob-h))
+                       (shuffled-guidance
+                         (exp07-pilot-productive-count shuffled-guidance)))
+     matched-fixture-gate failed
+     reason exp05-fixtures-cover-only-their-original-deterministic-selection
+     current-boundary do-not-run-stateful-ensemble-on-confounded-fixtures
+     required-next matched-multi-molecule-chamber-applicability
+     emergence-claim none))
+
 (= (exp07-stochastic-pilot-contract)
    (stochastic-ensemble-contract
      arms (unguided weak-doob-h shuffled-guidance)
@@ -902,5 +958,5 @@
                         productivity diversity-collapse intervention-path-cost
                         replay catalyst-ablation rule-ablation)
      terminal-forcing prohibited
-     current-boundary sampler-and-direct-tick-gate
+     current-boundary sampler-calibrated-but-matched-fixture-gate-failed
      emergence-claim none))
