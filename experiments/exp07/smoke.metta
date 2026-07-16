@@ -921,6 +921,52 @@
          ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
          ((event 3 e5r0 A B AB AB)
           (event 4 e5r1 A C AC AC))))
+!(test (exp07-pilot-replenishment-tick? 8) True)
+!(test (exp07-pilot-replenishment-tick? 13) True)
+!(test (exp07-pilot-replenishment-tick? 18) True)
+!(test (exp07-pilot-replenishment-tick? 7) False)
+!(test (exp07-pilot-prepare-chamber
+         (chamber exp07-matched
+           (state 8 seed-7
+             (molecules ((mol A 0) (mol B 0) (mol C 0)
+                         (mol AB 2) (mol AC 2) (mol BC 1) (mol CD 1))))
+           ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+           ((event 3 e5r0 A B AB AB))))
+       (chamber exp07-matched
+         (state 8 seed-7
+           (molecules ((mol A 2) (mol B 1) (mol C 1)
+                       (mol AB 2) (mol AC 2) (mol BC 1) (mol CD 1))))
+         ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+         ((event 3 e5r0 A B AB AB))))
+!(test (exp07-pilot-total-tick
+         (chamber exp07-matched
+           (state 7 seed-7
+             (molecules ((mol A 0) (mol B 0) (mol C 0)
+                         (mol AB 2) (mol AC 2) (mol BC 1) (mol CD 1))))
+           ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+           ((event 3 e5r0 A B AB AB)))
+         (candidate 7 (rule e5r0 A B AB AB) 3))
+       (chamber exp07-matched
+         (state 8 seed-7
+           (molecules ((mol A 0) (mol B 0) (mol C 0)
+                       (mol AB 2) (mol AC 2) (mol BC 1) (mol CD 1))))
+         ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+         ((event 3 e5r0 A B AB AB))))
+!(test (exp07-pilot-total-tick
+         (chamber exp07-matched
+           (state 8 seed-7
+             (molecules ((mol A 0) (mol B 0) (mol C 0)
+                         (mol AB 2) (mol AC 2) (mol BC 1) (mol CD 1))))
+           ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+           ((event 3 e5r0 A B AB AB)))
+         (candidate 8 (rule e5r0 A B AB AB) 3))
+       (chamber exp07-matched
+         (state 9 seed-7
+           (molecules ((mol A 1) (mol B 0) (mol C 1)
+                       (mol AB 3) (mol AC 2) (mol BC 1) (mol CD 1))))
+         ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+         ((event 3 e5r0 A B AB AB)
+          (event 8 e5r0 A B AB AB))))
 !(test (exp07-pilot-two-tick-trajectory weak-doob-h seed-7)
        (stateful-trajectory
          arm weak-doob-h

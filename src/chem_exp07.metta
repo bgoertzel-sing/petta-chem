@@ -874,6 +874,48 @@
      (exp07-pilot-matched-after-tick $arm $seed)
      (exp07-pilot-selected-candidate-at $arm $seed 4)))
 
+; Longer-horizon trajectories need two time semantics that the successful
+; two-tick slice did not exercise: a blocked draw still consumes its tick, and
+; the frozen basal-food schedule resets A/B/C immediately before ticks
+; 8, 13, and 18.  Keep both operations PeTTa-native and independent of the
+; experimental arm so the complete registered matrix can reuse one seam.
+(= (exp07-pilot-advance-blocked-tick
+      (chamber $id
+        (state $tick $seed (molecules $molecules))
+        $rules $events))
+   (chamber $id
+     (state (+ $tick 1) $seed (molecules $molecules))
+     $rules $events))
+
+(= (exp07-pilot-replenish-food
+      (chamber $id
+        (state $tick $seed
+          (molecules ((mol A $a) (mol B $b) (mol C $c)
+                      (mol AB $ab) (mol AC $ac) (mol BC $bc) (mol CD $cd))))
+        $rules $events))
+   (chamber $id
+     (state $tick $seed
+       (molecules ((mol A 2) (mol B 1) (mol C 1)
+                   (mol AB $ab) (mol AC $ac) (mol BC $bc) (mol CD $cd))))
+     $rules $events))
+
+(= (exp07-pilot-replenishment-tick? $tick)
+   (or (== $tick 8)
+       (or (== $tick 13) (== $tick 18))))
+
+(= (exp07-pilot-prepare-chamber
+      (chamber $id $state $rules $events))
+   (if (exp07-pilot-replenishment-tick? (state-tick $state))
+       (exp07-pilot-replenish-food
+         (chamber $id $state $rules $events))
+       (chamber $id $state $rules $events)))
+
+(= (exp07-pilot-total-tick $chamber $candidate)
+   (let $prepared (exp07-pilot-prepare-chamber $chamber)
+     (if (candidate-applicable-in-chamber? $candidate $prepared)
+         (chamber-tick-with-candidate $prepared $candidate)
+         (exp07-pilot-advance-blocked-tick $prepared))))
+
 (= (exp07-pilot-two-tick-trajectory $arm $seed)
    (stateful-trajectory
      arm $arm
