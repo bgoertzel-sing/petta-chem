@@ -826,6 +826,8 @@
 !(test (exp07-pilot-select-2 unguided seed-7 3 first second) second)
 !(test (exp07-pilot-select-2 weak-doob-h seed-7 3 first second) first)
 !(test (exp07-pilot-select-2 shuffled-guidance seed-7 3 first second) second)
+!(test (exp07-registered-pool-identity-at? seed-7 3) True)
+!(test (exp07-registered-pool-identity-at? seed-10 22) True)
 !(test (exp07-pilot-after-tick weak-doob-h seed-7)
        (exp05-chamber-tick-affinity-2 seed-7 3 1))
 !(test (exp07-pilot-four-tick-first-count unguided seed-7) 2)
@@ -1070,3 +1072,13 @@
          frozen-seeds-changed false
          frozen-endpoints-changed false
          emergence-claim none))
+!(test (exp07-pool-identity-check-status)
+       (pool-identity-check
+         requirement identical-composition-across-arms-modulo-weights
+         check-scope all-arm-seed-tick-triples-in-horizon
+         pre-run-required true
+         post-run-required true
+         fail-action emergence-claim-none-regardless-of-outcome
+         construction one-shared-candidate-pool-before-arm-selection
+         evidence exact-pool-equality-for-arbitrary-seed-and-tick
+         status passed))

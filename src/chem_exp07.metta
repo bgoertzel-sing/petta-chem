@@ -821,6 +821,29 @@
 (= (exp07-pilot-candidate-pool-at shuffled-guidance $seed $tick)
    (exp05-shuffled-affinity-candidate-pool-2 $seed $tick 1))
 
+; The registered longer-horizon arms instead share one candidate pool exactly.
+; Guidance changes only categorical selection mass; it must not silently
+; replace a candidate's catalyst assignment.  Keep the earlier pilot
+; constructors above intact as frozen historical evidence of the confounded
+; pre-preregistration comparison.
+(= (exp07-registered-shared-candidate-pool-at $seed $tick)
+   (exp05-affinity-candidate-pool-2 $seed $tick 1))
+
+(= (exp07-registered-candidate-pool-at unguided $seed $tick)
+   (exp07-registered-shared-candidate-pool-at $seed $tick))
+
+(= (exp07-registered-candidate-pool-at weak-doob-h $seed $tick)
+   (exp07-registered-shared-candidate-pool-at $seed $tick))
+
+(= (exp07-registered-candidate-pool-at shuffled-guidance $seed $tick)
+   (exp07-registered-shared-candidate-pool-at $seed $tick))
+
+(= (exp07-registered-pool-identity-at? $seed $tick)
+   (and (== (exp07-registered-candidate-pool-at unguided $seed $tick)
+            (exp07-registered-candidate-pool-at weak-doob-h $seed $tick))
+        (== (exp07-registered-candidate-pool-at unguided $seed $tick)
+            (exp07-registered-candidate-pool-at shuffled-guidance $seed $tick))))
+
 (= (exp07-pilot-candidate-pool $arm $seed)
    (exp07-pilot-candidate-pool-at $arm $seed 3))
 
@@ -1220,7 +1243,9 @@
      pre-run-required true
      post-run-required true
      fail-action emergence-claim-none-regardless-of-outcome
-     status not-yet-run))
+     construction one-shared-candidate-pool-before-arm-selection
+     evidence exact-pool-equality-for-arbitrary-seed-and-tick
+     status passed))
 
 ; ----- Positive-control gate result (2026-07-16 08:13 PDT) -----
 ;

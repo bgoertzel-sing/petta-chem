@@ -27,6 +27,12 @@ The stochastic-pilot gate calibrates a replayable four-bin categorical selector 
 
 The first stateful matrix carries every arm/seed tick-3 chamber directly into tick 4. Ordinary exp00 ticking yields per-seed productive-event counts of unguided `[1,2,1,2]`, weak Doob-h `[2,2,1,1]`, and shuffled guidance `[1,2,2,1]` for seeds 7--10. All arms total six events and all 12 trajectories replay exactly, so the two-tick gate shows different seed-level paths but no aggregate productivity difference. This validates matched state carry, event accumulation, and replay only; preregistered ACS/RAF outcomes remain pending and `emergence-claim none`.
 
+The registered N=20 path passes its preregistered pre-run pool-identity gate by
+constructing one exact strength-1 affinity candidate pool per seed/tick and
+sharing it across all three arms. Only categorical selection mass varies by
+arm. The earlier pilot pool constructors remain unchanged as historical
+evidence; no registered N=20 outcome was inspected while closing this gate.
+
 Run with:
 
 ```bash
