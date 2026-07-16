@@ -1206,3 +1206,21 @@
      result pass
      horizon-extension-licensed true
      emergence-claim none))
+
+; Separately labelled seeded dynamic positive-control fixture for detector
+; regression checks. It is disjoint from the preregistered experimental arms:
+; the canonical exp04 detector/facts are evaluated A -> B -> A, through two
+; tick-history projections with identical detector inputs, and under static
+; single-result/mutation guards. See check_detector_invariance.py.
+(= (exp07-detector-invariance-fixture)
+   (detector-invariance-fixture
+     id exp07-seeded-dynamic-positive-control-seed-31
+     seed seed-31
+     detector experiments/exp04/run_rich_raf.py
+     petta-facts src/chem_exp04.metta
+     checks (call-order-invariance tick-path-invariance single-result-uniqueness)
+     experimental-arms-inspected false
+     frozen-horizon-changed false
+     frozen-seeds-changed false
+     frozen-endpoints-changed false
+     emergence-claim none))

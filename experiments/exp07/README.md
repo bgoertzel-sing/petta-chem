@@ -32,3 +32,16 @@ Run with:
 ```bash
 scripts/run_exp07.sh
 ```
+
+The separately labelled seeded detector-invariance fixture protects the
+per-tick RAF purity assumption without inspecting the registered N=20 arms. It
+uses only the canonical host detector in `experiments/exp04/run_rich_raf.py`
+and committed facts in `src/chem_exp04.metta`. It checks A -> unrelated B -> A
+call-order invariance, identical detector inputs reached through direct versus
+advanced tick histories, and committed PeTTa/host single-result and mutation
+guards. The JSON artifact cross-references each check to the source functions
+or PeTTa equation lines it protects. Run it with:
+
+```bash
+scripts/run_exp07_detector_invariance.sh /tmp/exp07-detector-invariance.json
+```

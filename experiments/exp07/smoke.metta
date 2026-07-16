@@ -1012,3 +1012,15 @@
          terminal-forcing prohibited
          current-boundary matched-fixture-gate-passed-before-stateful-ensemble
          emergence-claim none))
+!(test (exp07-detector-invariance-fixture)
+       (detector-invariance-fixture
+         id exp07-seeded-dynamic-positive-control-seed-31
+         seed seed-31
+         detector experiments/exp04/run_rich_raf.py
+         petta-facts src/chem_exp04.metta
+         checks (call-order-invariance tick-path-invariance single-result-uniqueness)
+         experimental-arms-inspected false
+         frozen-horizon-changed false
+         frozen-seeds-changed false
+         frozen-endpoints-changed false
+         emergence-claim none))
