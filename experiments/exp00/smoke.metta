@@ -1196,3 +1196,31 @@
 !(test (exp00-chamber-replay-ok? seed-7) True)
 
 !(test (exp00-generated-replay-equivalent? seed-7) True)
+
+; Named molecule lists let matched experiments share one chemistry containing
+; all reachable reactants, products, and catalysts while retaining the ordinary
+; candidate applicability -> chamber tick path.
+!(test (candidate-applicable-in-chamber?
+         (candidate 3 (rule e5r0 A B AB CD) 1)
+         (chamber exp00-multi
+           (state 3 seed-7
+             (molecules ((mol A 2) (mol B 1) (mol C 1)
+                         (mol AB 1) (mol AC 1) (mol BC 1) (mol CD 1))))
+           ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+           ()))
+       True)
+
+!(test (chamber-tick-with-candidate
+         (chamber exp00-multi
+           (state 3 seed-7
+             (molecules ((mol A 2) (mol B 1) (mol C 1)
+                         (mol AB 1) (mol AC 1) (mol BC 1) (mol CD 1))))
+           ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+           ())
+         (candidate 3 (rule e5r1 A C AC BC) 1))
+       (chamber exp00-multi
+         (state 4 seed-7
+           (molecules ((mol A 1) (mol B 1) (mol C 0)
+                       (mol AB 1) (mol AC 2) (mol BC 1) (mol CD 1))))
+         ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+         ((event 3 e5r1 A C AC BC))))

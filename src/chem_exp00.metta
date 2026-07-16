@@ -156,6 +156,48 @@
 (= (state-seed (state $tick $seed $m0 $m1 $m2 $m3 $m4 $m5 $m6 $m7 $m8 $m9 $m10 $m11 $m12 $m13 $m14 $m15 $m16))
    $seed)
 
+; A named molecule list is the extensible state shape used when matched
+; chemistry needs more than the legacy fixed-position smoke fixtures.
+(= (state-tick (state $tick $seed (molecules $molecules)))
+   $tick)
+
+(= (state-seed (state $tick $seed (molecules $molecules)))
+   $seed)
+
+(= (molecule-abundance-7 $name
+      ((mol $n0 $a0) (mol $n1 $a1) (mol $n2 $a2) (mol $n3 $a3)
+       (mol $n4 $a4) (mol $n5 $a5) (mol $n6 $a6)))
+   (if (== $name $n0) $a0
+       (if (== $name $n1) $a1
+           (if (== $name $n2) $a2
+               (if (== $name $n3) $a3
+                   (if (== $name $n4) $a4
+                       (if (== $name $n5) $a5
+                           (if (== $name $n6) $a6 0))))))))
+
+(= (reaction-abundance-delta $name $a $b $product)
+   (if (== $name $a)
+       -1
+       (if (== $name $b)
+           -1
+           (if (== $name $product) 1 0))))
+
+(= (update-reaction-molecule (mol $name $abundance) $a $b $product)
+   (mol $name (+ $abundance
+                 (reaction-abundance-delta $name $a $b $product))))
+
+(= (update-reaction-molecules-7
+      ((mol $n0 $a0) (mol $n1 $a1) (mol $n2 $a2) (mol $n3 $a3)
+       (mol $n4 $a4) (mol $n5 $a5) (mol $n6 $a6))
+      $a $b $product)
+   ((update-reaction-molecule (mol $n0 $a0) $a $b $product)
+    (update-reaction-molecule (mol $n1 $a1) $a $b $product)
+    (update-reaction-molecule (mol $n2 $a2) $a $b $product)
+    (update-reaction-molecule (mol $n3 $a3) $a $b $product)
+    (update-reaction-molecule (mol $n4 $a4) $a $b $product)
+    (update-reaction-molecule (mol $n5 $a5) $a $b $product)
+    (update-reaction-molecule (mol $n6 $a6) $a $b $product)))
+
 (= (state-nonnegative?
       (state $tick $seed $m0 $m1 $m2 $m3))
    (and (mol-nonnegative? $m0)
@@ -822,6 +864,23 @@
         (and (> $a-count 0)
              (and (> $b-count 0)
                   (> $catalyst-count 0)))))
+
+(= (candidate-applicable?
+      (candidate $candidate-tick (rule $id $a $b $product $catalyst) $score)
+      (state $state-tick $seed (molecules $molecules)))
+   (and (== $candidate-tick $state-tick)
+        (and (> (molecule-abundance-7 $a $molecules) 0)
+             (and (> (molecule-abundance-7 $b $molecules) 0)
+                  (> (molecule-abundance-7 $catalyst $molecules) 0)))))
+
+(= (fire-binary-catalytic
+      (rule $id $a $b $product $catalyst)
+      (state $tick $seed (molecules $molecules)))
+   (trace
+     (state (+ $tick 1) $seed
+            (molecules
+              (update-reaction-molecules-7 $molecules $a $b $product)))
+     (make-event $tick (rule $id $a $b $product $catalyst))))
 
 (= (safe-fire-candidate $candidate $state)
    (if (candidate-applicable? $candidate $state)

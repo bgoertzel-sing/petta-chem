@@ -874,6 +874,45 @@
          current-boundary do-not-run-stateful-ensemble-on-confounded-fixtures
          required-next matched-multi-molecule-chamber-applicability
          emergence-claim none))
+!(test (exp07-pilot-matched-productive? unguided seed-7) True)
+!(test (exp07-pilot-matched-productive? unguided seed-8) True)
+!(test (exp07-pilot-matched-productive? unguided seed-9) True)
+!(test (exp07-pilot-matched-productive? unguided seed-10) True)
+!(test (exp07-pilot-matched-productive? weak-doob-h seed-7) True)
+!(test (exp07-pilot-matched-productive? weak-doob-h seed-8) True)
+!(test (exp07-pilot-matched-productive? weak-doob-h seed-9) True)
+!(test (exp07-pilot-matched-productive? weak-doob-h seed-10) True)
+!(test (exp07-pilot-matched-productive? shuffled-guidance seed-7) True)
+!(test (exp07-pilot-matched-productive? shuffled-guidance seed-8) True)
+!(test (exp07-pilot-matched-productive? shuffled-guidance seed-9) True)
+!(test (exp07-pilot-matched-productive? shuffled-guidance seed-10) True)
+!(test (exp07-pilot-matched-productive-count unguided) 4)
+!(test (exp07-pilot-matched-productive-count weak-doob-h) 4)
+!(test (exp07-pilot-matched-productive-count shuffled-guidance) 4)
+!(test (exp07-pilot-matched-pool-applicable-count unguided) 4)
+!(test (exp07-pilot-matched-pool-applicable-count weak-doob-h) 4)
+!(test (exp07-pilot-matched-pool-applicable-count shuffled-guidance) 4)
+!(test (exp07-pilot-matched-applicability-audit)
+       (fixture-applicability-audit
+         fixed-seeds (seed-7 seed-8 seed-9 seed-10)
+         draws-per-arm 4
+         productive-draws ((unguided 4)
+                           (weak-doob-h 4)
+                           (shuffled-guidance 4))
+         fully-applicable-two-candidate-pools
+           ((unguided 4) (weak-doob-h 4) (shuffled-guidance 4))
+         matched-fixture-gate passed
+         initial-chemistry shared-seven-molecule-chamber
+         chamber-ticking exp00-named-molecule-state
+         current-boundary ready-for-stateful-ensemble
+         emergence-claim none))
+!(test (exp07-pilot-matched-after-tick weak-doob-h seed-7)
+       (chamber exp07-matched
+         (state 4 seed-7
+           (molecules ((mol A 1) (mol B 0) (mol C 1)
+                       (mol AB 2) (mol AC 1) (mol BC 1) (mol CD 1))))
+         ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+         ((event 3 e5r0 A B AB AB))))
 !(test (exp07-stochastic-pilot-contract)
        (stochastic-ensemble-contract
          arms (unguided weak-doob-h shuffled-guidance)
@@ -891,5 +930,5 @@
                             productivity diversity-collapse intervention-path-cost
                             replay catalyst-ablation rule-ablation)
          terminal-forcing prohibited
-         current-boundary sampler-calibrated-but-matched-fixture-gate-failed
+         current-boundary matched-fixture-gate-passed-before-stateful-ensemble
          emergence-claim none))

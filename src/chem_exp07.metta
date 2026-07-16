@@ -833,6 +833,18 @@
 (= (exp07-pilot-chamber shuffled-guidance $seed)
    (exp05-rotated-control-chamber $seed 3))
 
+; All arms now share one seven-molecule chemistry containing every reactant,
+; product, and catalyst reachable from either candidate pool.  Candidate
+; weights and catalyst assignments still differ by arm; initial chemistry does
+; not.  Mutation uses the exp00 named-molecule state clauses.
+(= (exp07-pilot-matched-chamber $seed)
+   (chamber exp07-matched
+     (state 3 $seed
+       (molecules ((mol A 2) (mol B 1) (mol C 1)
+                   (mol AB 1) (mol AC 1) (mol BC 1) (mol CD 1))))
+     ((rule e5r0 A B AB None) (rule e5r1 A C AC None))
+     ()))
+
 (= (exp07-pilot-selected-candidate-at $arm $seed $requested-tick)
    (let (candidate-pool $tick ($candidate-0 $candidate-1))
         (exp07-pilot-candidate-pool-at $arm $seed $requested-tick)
@@ -845,6 +857,11 @@
 (= (exp07-pilot-after-tick $arm $seed)
    (chamber-tick-with-candidate
      (exp07-pilot-chamber $arm $seed)
+     (exp07-pilot-selected-candidate $arm $seed)))
+
+(= (exp07-pilot-matched-after-tick $arm $seed)
+   (chamber-tick-with-candidate
+     (exp07-pilot-matched-chamber $seed)
      (exp07-pilot-selected-candidate $arm $seed)))
 
 ; Before running longer chemistry trajectories, verify that the replayable
@@ -926,6 +943,58 @@
          (+ (exp07-pilot-productive-int $arm seed-9)
             (exp07-pilot-productive-int $arm seed-10)))))
 
+(= (exp07-pilot-matched-productive? $arm $seed)
+   (candidate-applicable-in-chamber?
+     (exp07-pilot-selected-candidate $arm $seed)
+     (exp07-pilot-matched-chamber $seed)))
+
+(= (exp07-pilot-matched-productive-int $arm $seed)
+   (if (exp07-pilot-matched-productive? $arm $seed) 1 0))
+
+(= (exp07-pilot-matched-productive-count $arm)
+   (+ (exp07-pilot-matched-productive-int $arm seed-7)
+      (+ (exp07-pilot-matched-productive-int $arm seed-8)
+         (+ (exp07-pilot-matched-productive-int $arm seed-9)
+            (exp07-pilot-matched-productive-int $arm seed-10)))))
+
+(= (exp07-pilot-matched-pool-applicable? $arm $seed)
+   (let (candidate-pool $tick ($candidate-0 $candidate-1))
+        (exp07-pilot-candidate-pool $arm $seed)
+     (and (candidate-applicable-in-chamber?
+            $candidate-0 (exp07-pilot-matched-chamber $seed))
+          (candidate-applicable-in-chamber?
+            $candidate-1 (exp07-pilot-matched-chamber $seed)))))
+
+(= (exp07-pilot-matched-pool-applicable-int $arm $seed)
+   (if (exp07-pilot-matched-pool-applicable? $arm $seed) 1 0))
+
+(= (exp07-pilot-matched-pool-applicable-count $arm)
+   (+ (exp07-pilot-matched-pool-applicable-int $arm seed-7)
+      (+ (exp07-pilot-matched-pool-applicable-int $arm seed-8)
+         (+ (exp07-pilot-matched-pool-applicable-int $arm seed-9)
+            (exp07-pilot-matched-pool-applicable-int $arm seed-10)))))
+
+(= (exp07-pilot-matched-applicability-audit)
+   (fixture-applicability-audit
+     fixed-seeds (seed-7 seed-8 seed-9 seed-10)
+     draws-per-arm 4
+     productive-draws
+       ((unguided (exp07-pilot-matched-productive-count unguided))
+        (weak-doob-h (exp07-pilot-matched-productive-count weak-doob-h))
+        (shuffled-guidance
+          (exp07-pilot-matched-productive-count shuffled-guidance)))
+     fully-applicable-two-candidate-pools
+       ((unguided (exp07-pilot-matched-pool-applicable-count unguided))
+        (weak-doob-h
+          (exp07-pilot-matched-pool-applicable-count weak-doob-h))
+        (shuffled-guidance
+          (exp07-pilot-matched-pool-applicable-count shuffled-guidance)))
+     matched-fixture-gate passed
+     initial-chemistry shared-seven-molecule-chamber
+     chamber-ticking exp00-named-molecule-state
+     current-boundary ready-for-stateful-ensemble
+     emergence-claim none))
+
 (= (exp07-pilot-fixture-applicability-audit)
    (fixture-applicability-audit
      fixed-seeds (seed-7 seed-8 seed-9 seed-10)
@@ -958,5 +1027,5 @@
                         productivity diversity-collapse intervention-path-cost
                         replay catalyst-ablation rule-ablation)
      terminal-forcing prohibited
-     current-boundary sampler-calibrated-but-matched-fixture-gate-failed
+     current-boundary matched-fixture-gate-passed-before-stateful-ensemble
      emergence-claim none))
