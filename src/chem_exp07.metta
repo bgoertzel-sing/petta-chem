@@ -1129,3 +1129,36 @@
      terminal-forcing prohibited
      current-boundary matched-fixture-gate-passed-before-stateful-ensemble
      emergence-claim none))
+
+; ----- Longer-horizon preregistration (2026-07-16 08:05 PDT) -----
+;
+; See experiments/exp07/PREREG.md for the full preregistration document.
+; This atom is the PeTTa-native pointer; the Markdown file is authoritative.
+
+(= (exp07-prereg-longer-horizon-gate)
+   (preregistration
+     date 2026-07-16-08:05-PDT
+     author zerobot
+     source protomegaBot-6-point-proposal
+     supersedes two-tick-matched-ensemble-commit-28ddc28
+     positive-control exp04-acs-rich-fixture
+     positive-control-gate 20260716T022154Z-first-class-catalysis-exp04
+     positive-control-requirement detector-must-fire-on-known-closing-raf
+     horizon 20
+     horizon-ticks (3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22)
+     replenishment-cycle every-5-ticks
+     replenishment-targets ((mol A 2) (mol B 1) (mol C 1))
+     replenishment-ticks (8 13 18)
+     arms (unguided weak-doob-h shuffled-guidance)
+     fixed-seeds (seed-7 seed-8 seed-9 seed-10)
+     candidate-cap 2
+     primary-endpoint terminal-acs-raf-hit-rate
+     secondary-endpoints (first-hit-time persistence productivity diversity-collapse)
+     causal-validation catalyst-ablation
+     emergence-claim-lift-condition guided-arm-acs-positive-and-both-controls-null-and-ablation-collapses
+     pivot-positive-control-fail fix-detector-first
+     pivot-all-arms-null chamber-redesign-not-rerun
+     pivot-all-arms-positive pool-contamination-suspected
+     pool-contamination-guard shuffled-arm-shares-exact-pool-composition
+     no-peeking fixed-horizon-frozen-before-run
+     emergence-claim none))
