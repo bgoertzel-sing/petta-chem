@@ -1179,3 +1179,30 @@
      post-run-required true
      fail-action emergence-claim-none-regardless-of-outcome
      status not-yet-run))
+
+; ----- Positive-control gate result (2026-07-16 08:13 PDT) -----
+;
+; The detector (experiments/exp04/run_rich_raf.py) is fully deterministic:
+; maximal_raf_prune is iterative fixed-point elimination, greedy_minimize
+; is first-rule-out greedy.  No seed or stochasticity in the detector itself.
+;
+; Gate criteria (all three required):
+;   1. maximal_raf_size >= 1  (non-empty RAF in the known-closing fixture)
+;   2. minimal_core_is_raf    (closure is non-degenerate, not a 1-rule artifact)
+;   3. no_catalysis_maximal_raf_size == 0  (detector discriminates: empty catalysis -> zero)
+
+(= (exp07-positive-control-gate-result)
+   (positive-control-gate
+     fixture exp04-acs-rich-fixture
+     detector experiments/exp04/run_rich_raf.py
+     run-time 2026-07-16-08:13-PDT
+     maximal-raf-size 15
+     minimal-core-size 2
+     minimal-core (lCD lBCD2)
+     minimal-core-is-raf true
+     no-catalysis-maximal-raf-size 0
+     deterministic true
+     gate-criteria (maximal-raf-size-gte-1 minimal-core-is-raf no-catalysis-maximal-raf-size-eq-0)
+     result pass
+     horizon-extension-licensed true
+     emergence-claim none))
