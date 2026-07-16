@@ -1087,6 +1087,57 @@
           (rule r10 A B AB Cat))
          ((event 0 r0 A B AB Cat))))
 
+; Extend the explicit oversized boundary once more while preserving the same
+; stable generated prefix, complete source-rule provenance, and direct tick.
+!(test (generate-candidate-pool
+         (make-chamber
+           exp00-twelve-rules
+           (exp00-initial-state seed-7)
+           ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (rule r11 A B AB Cat))
+           ()))
+       (candidate-pool
+         0
+         ((candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1)
+          (candidate 0 (rule r2 A Cat ACat B) 1)
+          (candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1)
+          (candidate 0 (rule r2 A Cat ACat B) 1)
+          (candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1))))
+
+!(test (rule-rewrite-in-chamber-rules?
+         (rule r11 A B AB Cat)
+         ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+          (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+          (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+          (exp00-rule r1) (exp00-rule r0) (rule r11 A B AB Cat)))
+       True)
+
+!(test (chamber-tick-generated
+         (make-candidate-cap 2 1)
+         (make-chamber
+           exp00-twelve-rules
+           (exp00-initial-state seed-7)
+           ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (rule r11 A B AB Cat))
+           ()))
+       (chamber
+         exp00-twelve-rules
+         (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
+         ((rule r1 B Cat BCat A) (rule r0 A B AB Cat)
+          (rule r2 A Cat ACat B) (rule r1 B Cat BCat A)
+          (rule r0 A B AB Cat) (rule r2 A Cat ACat B)
+          (rule r1 B Cat BCat A) (rule r0 A B AB Cat)
+          (rule r2 A Cat ACat B) (rule r1 B Cat BCat A)
+          (rule r0 A B AB Cat) (rule r11 A B AB Cat))
+         ((event 0 r0 A B AB Cat))))
+
 !(test (generated-selection-fire-record-from-chamber
          (make-candidate-cap 2 1)
          (chamber exp00
