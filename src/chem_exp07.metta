@@ -864,6 +864,32 @@
      (exp07-pilot-matched-chamber $seed)
      (exp07-pilot-selected-candidate $arm $seed)))
 
+; The smallest stateful outcome slice carries the mutated tick-3 chamber into
+; tick 4 and samples again from the same replayable arm/seed policy.  This is
+; deliberately only a two-tick trajectory: it validates state carry-forward
+; and per-tick selection provenance before the complete fixed-seed ensemble is
+; expanded or any ACS/RAF outcome is interpreted.
+(= (exp07-pilot-matched-after-two-ticks $arm $seed)
+   (chamber-tick-with-candidate
+     (exp07-pilot-matched-after-tick $arm $seed)
+     (exp07-pilot-selected-candidate-at $arm $seed 4)))
+
+(= (exp07-pilot-two-tick-trajectory $arm $seed)
+   (stateful-trajectory
+     arm $arm
+     seed $seed
+     ticks (3 4)
+     initial (exp07-pilot-matched-chamber $seed)
+     selected
+       ((3 (exp07-pilot-selected-candidate-at $arm $seed 3))
+        (4 (exp07-pilot-selected-candidate-at $arm $seed 4)))
+     chambers
+       ((3 (exp07-pilot-matched-after-tick $arm $seed))
+        (4 (exp07-pilot-matched-after-two-ticks $arm $seed)))
+     replay exact-seed-tick-state-carry
+     outcome-boundary trajectory-plumbing-only
+     emergence-claim none))
+
 ; Before running longer chemistry trajectories, verify that the replayable
 ; sampler realizes its declared categorical masses over a complete four-draw
 ; cycle.  Each fixed seed visits every bin exactly once over ticks 3--6, so

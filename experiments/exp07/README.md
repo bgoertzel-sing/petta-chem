@@ -25,6 +25,8 @@ The sixth slice broadens that productive strength-1/cap-2 provenance check from 
 
 The stochastic-pilot gate calibrates a replayable four-bin categorical selector over seeds 7--10 and ticks 3--6, then audits chamber applicability before any stateful ensemble is run. The old exp05 fixtures fail that audit (productive first ticks 0/4 unguided, 3/4 weak Doob-h, 3/4 shuffled) because each contains only the molecules needed by its original deterministic choice. A shared seven-molecule PeTTa state now fixes that confound: all 24 candidates in the twelve arm/seed pools are applicable, and all twelve selected first draws produce ordinary exp00 chamber ticks. The gate is ready for a stateful outcome comparison; this is not an ACS/RAF or emergence result.
 
+The first stateful slice carries the weak Doob-h/seed-7 tick-3 chamber directly into tick 4. The replayable selector chooses `e5r0` and then `e5r1`; ordinary exp00 ticking appends both events and preserves the exact initial, intermediate, and terminal seven-molecule states in one trajectory record. This validates two-tick state carry and provenance only. The remaining matched arms/seeds and preregistered ACS/RAF outcomes are still pending, so `emergence-claim none`.
+
 Run with:
 
 ```bash
