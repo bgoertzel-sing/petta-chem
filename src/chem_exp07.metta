@@ -812,14 +812,17 @@
        $candidate-0
        $candidate-1))
 
-(= (exp07-pilot-candidate-pool unguided $seed)
-   (exp05-affinity-candidate-pool-2 $seed 3 0))
+(= (exp07-pilot-candidate-pool-at unguided $seed $tick)
+   (exp05-affinity-candidate-pool-2 $seed $tick 0))
 
-(= (exp07-pilot-candidate-pool weak-doob-h $seed)
-   (exp05-affinity-candidate-pool-2 $seed 3 1))
+(= (exp07-pilot-candidate-pool-at weak-doob-h $seed $tick)
+   (exp05-affinity-candidate-pool-2 $seed $tick 1))
 
-(= (exp07-pilot-candidate-pool shuffled-guidance $seed)
-   (exp05-shuffled-affinity-candidate-pool-2 $seed 3 1))
+(= (exp07-pilot-candidate-pool-at shuffled-guidance $seed $tick)
+   (exp05-shuffled-affinity-candidate-pool-2 $seed $tick 1))
+
+(= (exp07-pilot-candidate-pool $arm $seed)
+   (exp07-pilot-candidate-pool-at $arm $seed 3))
 
 (= (exp07-pilot-chamber unguided $seed)
    (exp05-treatment-chamber $seed 3))
@@ -830,16 +833,57 @@
 (= (exp07-pilot-chamber shuffled-guidance $seed)
    (exp05-rotated-control-chamber $seed 3))
 
-(= (exp07-pilot-selected-candidate $arm $seed)
+(= (exp07-pilot-selected-candidate-at $arm $seed $requested-tick)
    (let (candidate-pool $tick ($candidate-0 $candidate-1))
-        (exp07-pilot-candidate-pool $arm $seed)
+        (exp07-pilot-candidate-pool-at $arm $seed $requested-tick)
      (exp07-pilot-select-2
        $arm $seed $tick $candidate-0 $candidate-1)))
+
+(= (exp07-pilot-selected-candidate $arm $seed)
+   (exp07-pilot-selected-candidate-at $arm $seed 3))
 
 (= (exp07-pilot-after-tick $arm $seed)
    (chamber-tick-with-candidate
      (exp07-pilot-chamber $arm $seed)
      (exp07-pilot-selected-candidate $arm $seed)))
+
+; Before running longer chemistry trajectories, verify that the replayable
+; sampler realizes its declared categorical masses over a complete four-draw
+; cycle.  Each fixed seed visits every bin exactly once over ticks 3--6, so
+; these counts are an exact matched-arm gate rather than a noisy estimate.
+(= (exp07-pilot-first-selected? $arm $seed $tick)
+   (if (< (exp07-pilot-draw $seed $tick)
+          (exp07-pilot-first-candidate-weight $arm))
+       1
+       0))
+
+(= (exp07-pilot-four-tick-first-count $arm $seed)
+   (+ (exp07-pilot-first-selected? $arm $seed 3)
+      (+ (exp07-pilot-first-selected? $arm $seed 4)
+         (+ (exp07-pilot-first-selected? $arm $seed 5)
+            (exp07-pilot-first-selected? $arm $seed 6)))))
+
+(= (exp07-pilot-ensemble-first-count $arm)
+   (+ (exp07-pilot-four-tick-first-count $arm seed-7)
+      (+ (exp07-pilot-four-tick-first-count $arm seed-8)
+         (+ (exp07-pilot-four-tick-first-count $arm seed-9)
+            (exp07-pilot-four-tick-first-count $arm seed-10)))))
+
+(= (exp07-pilot-sampler-calibration)
+   (sampler-calibration
+     fixed-seeds (seed-7 seed-8 seed-9 seed-10)
+     ticks (3 4 5 6)
+     draws-per-arm 16
+     first-candidate-counts
+       ((unguided (exp07-pilot-ensemble-first-count unguided))
+        (weak-doob-h (exp07-pilot-ensemble-first-count weak-doob-h))
+        (shuffled-guidance
+          (exp07-pilot-ensemble-first-count shuffled-guidance)))
+     expected-counts ((unguided 8) (weak-doob-h 12)
+                      (shuffled-guidance 4))
+     replay exact-seed-tick
+     current-boundary categorical-calibration-before-stateful-ensemble
+     emergence-claim none))
 
 (= (exp07-stochastic-pilot-contract)
    (stochastic-ensemble-contract

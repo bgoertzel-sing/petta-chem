@@ -828,6 +828,25 @@
 !(test (exp07-pilot-select-2 shuffled-guidance seed-7 3 first second) second)
 !(test (exp07-pilot-after-tick weak-doob-h seed-7)
        (exp05-chamber-tick-affinity-2 seed-7 3 1))
+!(test (exp07-pilot-four-tick-first-count unguided seed-7) 2)
+!(test (exp07-pilot-four-tick-first-count weak-doob-h seed-7) 3)
+!(test (exp07-pilot-four-tick-first-count shuffled-guidance seed-7) 1)
+!(test (exp07-pilot-ensemble-first-count unguided) 8)
+!(test (exp07-pilot-ensemble-first-count weak-doob-h) 12)
+!(test (exp07-pilot-ensemble-first-count shuffled-guidance) 4)
+!(test (exp07-pilot-sampler-calibration)
+       (sampler-calibration
+         fixed-seeds (seed-7 seed-8 seed-9 seed-10)
+         ticks (3 4 5 6)
+         draws-per-arm 16
+         first-candidate-counts ((unguided 8)
+                                 (weak-doob-h 12)
+                                 (shuffled-guidance 4))
+         expected-counts ((unguided 8) (weak-doob-h 12)
+                          (shuffled-guidance 4))
+         replay exact-seed-tick
+         current-boundary categorical-calibration-before-stateful-ensemble
+         emergence-claim none))
 !(test (exp07-stochastic-pilot-contract)
        (stochastic-ensemble-contract
          arms (unguided weak-doob-h shuffled-guidance)
