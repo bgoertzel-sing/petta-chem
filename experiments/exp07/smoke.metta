@@ -815,3 +815,35 @@
          next-test broaden-seed-sweep-before-acs-frequency-claim
          terminal-forcing prohibited
          emergence-claim none))
+
+; Replayable weighted categorical sampling covers all four draw bins across the
+; fixed pilot seeds, and the selected ordinary candidate is handed directly to
+; the existing PeTTa-native chamber tick.
+!(test (exp07-pilot-draw seed-7 3) 2)
+!(test (exp07-pilot-draw seed-8 3) 3)
+!(test (exp07-pilot-draw seed-9 3) 0)
+!(test (exp07-pilot-draw seed-10 3) 1)
+!(test (exp07-pilot-select-2 unguided seed-7 3 first second) second)
+!(test (exp07-pilot-select-2 weak-doob-h seed-7 3 first second) first)
+!(test (exp07-pilot-select-2 shuffled-guidance seed-7 3 first second) second)
+!(test (exp07-pilot-after-tick weak-doob-h seed-7)
+       (exp05-chamber-tick-affinity-2 seed-7 3 1))
+!(test (exp07-stochastic-pilot-contract)
+       (stochastic-ensemble-contract
+         arms (unguided weak-doob-h shuffled-guidance)
+         fixed-seeds (seed-7 seed-8 seed-9 seed-10)
+         tick 3
+         categorical-denominator 4
+         first-candidate-weights ((unguided 2)
+                                  (weak-doob-h 3)
+                                  (shuffled-guidance 1))
+         candidate-cap 2
+         candidate-source exp05-affinity-assigned-pools
+         chamber-ticking exp00-chamber-tick-with-candidate
+         catalysis-interface first-class-binary-relation
+         required-outcomes (terminal-acs-raf-hit-rate first-hit-time persistence
+                            productivity diversity-collapse intervention-path-cost
+                            replay catalyst-ablation rule-ablation)
+         terminal-forcing prohibited
+         current-boundary sampler-and-direct-tick-gate
+         emergence-claim none))

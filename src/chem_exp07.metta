@@ -789,3 +789,74 @@
      next-test broaden-seed-sweep-before-acs-frequency-claim
      terminal-forcing prohibited
      emergence-claim none))
+
+; ----- Replayable stochastic-ensemble pilot -----
+;
+; A four-bin categorical draw is the smallest stochastic selection seam needed
+; to compare matched arms while retaining exact replay from seed and tick.  The
+; unguided arm is uniform, weak Doob-h guidance gives the first candidate 3/4
+; mass, and the shuffled control gives that same candidate 1/4 mass.  Candidate
+; construction and chamber mutation remain the existing PeTTa-native exp05 and
+; exp00 operations; this slice changes only sampling weights.
+
+(= (exp07-pilot-draw $seed $tick)
+   (#mod (+ (seed-number $seed) $tick) 4))
+
+(= (exp07-pilot-first-candidate-weight unguided) 2)
+(= (exp07-pilot-first-candidate-weight weak-doob-h) 3)
+(= (exp07-pilot-first-candidate-weight shuffled-guidance) 1)
+
+(= (exp07-pilot-select-2 $arm $seed $tick $candidate-0 $candidate-1)
+   (if (< (exp07-pilot-draw $seed $tick)
+          (exp07-pilot-first-candidate-weight $arm))
+       $candidate-0
+       $candidate-1))
+
+(= (exp07-pilot-candidate-pool unguided $seed)
+   (exp05-affinity-candidate-pool-2 $seed 3 0))
+
+(= (exp07-pilot-candidate-pool weak-doob-h $seed)
+   (exp05-affinity-candidate-pool-2 $seed 3 1))
+
+(= (exp07-pilot-candidate-pool shuffled-guidance $seed)
+   (exp05-shuffled-affinity-candidate-pool-2 $seed 3 1))
+
+(= (exp07-pilot-chamber unguided $seed)
+   (exp05-treatment-chamber $seed 3))
+
+(= (exp07-pilot-chamber weak-doob-h $seed)
+   (exp05-treatment-chamber $seed 3))
+
+(= (exp07-pilot-chamber shuffled-guidance $seed)
+   (exp05-rotated-control-chamber $seed 3))
+
+(= (exp07-pilot-selected-candidate $arm $seed)
+   (let (candidate-pool $tick ($candidate-0 $candidate-1))
+        (exp07-pilot-candidate-pool $arm $seed)
+     (exp07-pilot-select-2
+       $arm $seed $tick $candidate-0 $candidate-1)))
+
+(= (exp07-pilot-after-tick $arm $seed)
+   (chamber-tick-with-candidate
+     (exp07-pilot-chamber $arm $seed)
+     (exp07-pilot-selected-candidate $arm $seed)))
+
+(= (exp07-stochastic-pilot-contract)
+   (stochastic-ensemble-contract
+     arms (unguided weak-doob-h shuffled-guidance)
+     fixed-seeds (seed-7 seed-8 seed-9 seed-10)
+     tick 3
+     categorical-denominator 4
+     first-candidate-weights ((unguided 2)
+                              (weak-doob-h 3)
+                              (shuffled-guidance 1))
+     candidate-cap 2
+     candidate-source exp05-affinity-assigned-pools
+     chamber-ticking exp00-chamber-tick-with-candidate
+     catalysis-interface first-class-binary-relation
+     required-outcomes (terminal-acs-raf-hit-rate first-hit-time persistence
+                        productivity diversity-collapse intervention-path-cost
+                        replay catalyst-ablation rule-ablation)
+     terminal-forcing prohibited
+     current-boundary sampler-and-direct-tick-gate
+     emergence-claim none))
