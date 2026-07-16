@@ -1546,3 +1546,126 @@
      outcomes-evaluated false
      status pending
      emergence-claim none))
+
+; ----- Rich-pool implementation gate: shared generation and direct tick -----
+;
+; This section implements only pre-run plumbing.  No registered 24-tick
+; trajectory or RAF endpoint is constructed here.
+
+(= (exp07-rich-rules)
+   ((rule rp0 A B AB CD)
+    (rule rp1 A C AC AB)
+    (rule rp2 C D CD AC)
+    (rule rd0 A B W0 X)
+    (rule rd1 A C W1 X)
+    (rule rd2 B C W2 X)
+    (rule rd3 C D W3 X)
+    (rule rd4 A D W4 X)))
+
+(= (exp07-rich-initial-chamber $seed)
+   (chamber exp07-rich
+     (state 3 $seed
+       (molecules
+         ((mol A 4) (mol B 3) (mol C 4) (mol D 3)
+          (mol AB 0) (mol AC 0) (mol CD 1) (mol X 1)
+          (mol W0 0) (mol W1 0) (mol W2 0) (mol W3 0) (mol W4 0))))
+     (exp07-rich-rules)
+     ()))
+
+; First-class catalysis is independently queryable and is not inferred from
+; molecule spelling or rewrite structure.
+(= (exp07-rich-catalyzes? CD rp0) True)
+(= (exp07-rich-catalyzes? AB rp1) True)
+(= (exp07-rich-catalyzes? AC rp2) True)
+(= (exp07-rich-catalyzes? X rd0) True)
+(= (exp07-rich-catalyzes? X rd1) True)
+(= (exp07-rich-catalyzes? X rd2) True)
+(= (exp07-rich-catalyzes? X rd3) True)
+(= (exp07-rich-catalyzes? X rd4) True)
+
+(= (exp07-rich-catalysis-facts)
+   ((catalyzes CD rp0) (catalyzes AB rp1) (catalyzes AC rp2)
+    (catalyzes X rd0) (catalyzes X rd1) (catalyzes X rd2)
+    (catalyzes X rd3) (catalyzes X rd4)))
+
+(= (exp07-rich-generated-pool $seed)
+   (generate-candidate-pool (exp07-rich-initial-chamber $seed)))
+
+(= (exp07-rich-bounded-pool $seed)
+   (bounded-candidate-pool
+     (candidate-cap 8 1)
+     (exp07-rich-initial-chamber $seed)))
+
+; All arms consume this exact generated pool.  Only the categorical selector
+; below is arm-dependent.
+(= (exp07-rich-arm-pool $arm $seed)
+   (exp07-rich-generated-pool $seed))
+
+(= (exp07-rich-pool-identity? $seed)
+   (and (== (exp07-rich-arm-pool unguided $seed)
+            (exp07-rich-arm-pool weak-doob-h $seed))
+        (== (exp07-rich-arm-pool unguided $seed)
+            (exp07-rich-arm-pool shuffled-guidance $seed))))
+
+(= (exp07-rich-draw $seed $tick)
+   (#mod (+ (* 17 (seed-number $seed)) (* 31 $tick)) 88))
+
+; Return the selected bin for each frozen cumulative-mass partition.
+(= (exp07-rich-bin unguided $draw)
+   (if (< $draw 11) 0
+       (if (< $draw 22) 1
+           (if (< $draw 33) 2
+               (if (< $draw 44) 3
+                   (if (< $draw 55) 4
+                       (if (< $draw 66) 5
+                           (if (< $draw 77) 6 7))))))))
+
+(= (exp07-rich-bin weak-doob-h $draw)
+   (if (< $draw 16) 0
+       (if (< $draw 32) 1
+           (if (< $draw 48) 2
+               (if (< $draw 56) 3
+                   (if (< $draw 64) 4
+                       (if (< $draw 72) 5
+                           (if (< $draw 80) 6 7))))))))
+
+(= (exp07-rich-bin shuffled-guidance $draw)
+   (if (< $draw 8) 0
+       (if (< $draw 16) 1
+           (if (< $draw 24) 2
+               (if (< $draw 40) 3
+                   (if (< $draw 56) 4
+                       (if (< $draw 72) 5
+                           (if (< $draw 80) 6 7))))))))
+
+(= (exp07-rich-select-bin 0 ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7)) $c0)
+(= (exp07-rich-select-bin 1 ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7)) $c1)
+(= (exp07-rich-select-bin 2 ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7)) $c2)
+(= (exp07-rich-select-bin 3 ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7)) $c3)
+(= (exp07-rich-select-bin 4 ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7)) $c4)
+(= (exp07-rich-select-bin 5 ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7)) $c5)
+(= (exp07-rich-select-bin 6 ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7)) $c6)
+(= (exp07-rich-select-bin 7 ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7)) $c7)
+
+(= (exp07-rich-selected-candidate $arm $seed)
+   (let (candidate-pool $tick $candidates)
+        (exp07-rich-generated-pool $seed)
+     (exp07-rich-select-bin
+       (exp07-rich-bin $arm (exp07-rich-draw $seed $tick))
+       (cap-candidate-pool 8 (candidate-pool $tick $candidates)))))
+
+; One inspectable provenance object binds generated pool, bounded cap-8 pool,
+; weighted deterministic selection, and the ordinary chamber mutation.
+(= (exp07-rich-selection-fire-record $arm $seed)
+   (rich-selection-fire-record
+     generated (exp07-rich-generated-pool $seed)
+     bounded (exp07-rich-bounded-pool $seed)
+     selected (exp07-rich-selected-candidate $arm $seed)
+     after (chamber-tick-with-candidate
+             (exp07-rich-initial-chamber $seed)
+             (exp07-rich-selected-candidate $arm $seed))))
+
+(= (exp07-rich-after-one-tick $arm $seed)
+   (chamber-tick-with-candidate
+     (exp07-rich-initial-chamber $seed)
+     (exp07-rich-selected-candidate $arm $seed)))

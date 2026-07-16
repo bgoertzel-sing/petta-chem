@@ -175,6 +175,28 @@
                        (if (== $name $n5) $a5
                            (if (== $name $n6) $a6 0))))))))
 
+; Keep the named-molecule kernel total for the preregistered exp07 rich
+; chamber.  The operation name is retained for compatibility with the original
+; seven-species seam; dispatch is by the concrete list shape.
+(= (molecule-abundance-7 $name
+      ((mol $n0 $a0) (mol $n1 $a1) (mol $n2 $a2) (mol $n3 $a3)
+       (mol $n4 $a4) (mol $n5 $a5) (mol $n6 $a6) (mol $n7 $a7)
+       (mol $n8 $a8) (mol $n9 $a9) (mol $n10 $a10) (mol $n11 $a11)
+       (mol $n12 $a12)))
+   (if (== $name $n0) $a0
+       (if (== $name $n1) $a1
+           (if (== $name $n2) $a2
+               (if (== $name $n3) $a3
+                   (if (== $name $n4) $a4
+                       (if (== $name $n5) $a5
+                           (if (== $name $n6) $a6
+                               (if (== $name $n7) $a7
+                                   (if (== $name $n8) $a8
+                                       (if (== $name $n9) $a9
+                                           (if (== $name $n10) $a10
+                                               (if (== $name $n11) $a11
+                                                   (if (== $name $n12) $a12 0))))))))))))))
+
 (= (reaction-abundance-delta $name $a $b $product)
    (if (== $name $a)
        -1
@@ -197,6 +219,26 @@
     (update-reaction-molecule (mol $n4 $a4) $a $b $product)
     (update-reaction-molecule (mol $n5 $a5) $a $b $product)
     (update-reaction-molecule (mol $n6 $a6) $a $b $product)))
+
+(= (update-reaction-molecules-7
+      ((mol $n0 $a0) (mol $n1 $a1) (mol $n2 $a2) (mol $n3 $a3)
+       (mol $n4 $a4) (mol $n5 $a5) (mol $n6 $a6) (mol $n7 $a7)
+       (mol $n8 $a8) (mol $n9 $a9) (mol $n10 $a10) (mol $n11 $a11)
+       (mol $n12 $a12))
+      $a $b $product)
+   ((update-reaction-molecule (mol $n0 $a0) $a $b $product)
+    (update-reaction-molecule (mol $n1 $a1) $a $b $product)
+    (update-reaction-molecule (mol $n2 $a2) $a $b $product)
+    (update-reaction-molecule (mol $n3 $a3) $a $b $product)
+    (update-reaction-molecule (mol $n4 $a4) $a $b $product)
+    (update-reaction-molecule (mol $n5 $a5) $a $b $product)
+    (update-reaction-molecule (mol $n6 $a6) $a $b $product)
+    (update-reaction-molecule (mol $n7 $a7) $a $b $product)
+    (update-reaction-molecule (mol $n8 $a8) $a $b $product)
+    (update-reaction-molecule (mol $n9 $a9) $a $b $product)
+    (update-reaction-molecule (mol $n10 $a10) $a $b $product)
+    (update-reaction-molecule (mol $n11 $a11) $a $b $product)
+    (update-reaction-molecule (mol $n12 $a12) $a $b $product)))
 
 (= (state-nonnegative?
       (state $tick $seed $m0 $m1 $m2 $m3))
@@ -806,6 +848,25 @@
 
 (= (generate-candidate-pool
       (chamber $id (state $tick $seed $m0 $m1 $m2 $m3 $m4 $m5 $m6 $m7 $m8 $m9 $m10 $m11 $m12 $m13 $m14 $m15 $m16) ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7) $events))
+   (candidate-pool
+     $tick
+     ((make-candidate-for-rule $tick $rule-0)
+      (make-candidate-for-rule $tick $rule-1)
+      (make-candidate-for-rule $tick $rule-2)
+      (make-candidate-for-rule $tick $rule-3)
+      (make-candidate-for-rule $tick $rule-4)
+      (make-candidate-for-rule $tick $rule-5)
+      (make-candidate-for-rule $tick $rule-6)
+      (make-candidate-for-rule $tick $rule-7))))
+
+; Extensible named-molecule chambers use the same stable eight-rule generation
+; boundary as fixed-position fixtures.  This is the exp07 rich-pool entry point
+; and keeps chemistry construction inside PeTTa.
+(= (generate-candidate-pool
+      (chamber $id (state $tick $seed (molecules $molecules))
+               ($rule-0 $rule-1 $rule-2 $rule-3
+                $rule-4 $rule-5 $rule-6 $rule-7)
+               $events))
    (candidate-pool
      $tick
      ((make-candidate-for-rule $tick $rule-0)

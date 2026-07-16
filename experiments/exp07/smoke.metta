@@ -1166,3 +1166,60 @@
          outcomes-evaluated false
          status pending
          emergence-claim none))
+
+; ----- Rich-pool pre-run implementation: no registered outcomes -----
+
+!(test (exp07-rich-catalysis-facts)
+       ((catalyzes CD rp0) (catalyzes AB rp1) (catalyzes AC rp2)
+        (catalyzes X rd0) (catalyzes X rd1) (catalyzes X rd2)
+        (catalyzes X rd3) (catalyzes X rd4)))
+!(test (exp07-rich-catalyzes? CD rp0) True)
+!(test (exp07-rich-catalyzes? X rd4) True)
+
+!(test (exp07-rich-draw seed-11 3) 16)
+!(test (exp07-rich-bin unguided 10) 0)
+!(test (exp07-rich-bin unguided 11) 1)
+!(test (exp07-rich-bin weak-doob-h 47) 2)
+!(test (exp07-rich-bin weak-doob-h 48) 3)
+!(test (exp07-rich-bin shuffled-guidance 23) 2)
+!(test (exp07-rich-bin shuffled-guidance 24) 3)
+
+!(test (exp07-rich-generated-pool seed-12)
+       (candidate-pool 3
+         ((candidate 3 (rule rp0 A B AB CD) 1)
+          (candidate 3 (rule rp1 A C AC AB) 1)
+          (candidate 3 (rule rp2 C D CD AC) 1)
+          (candidate 3 (rule rd0 A B W0 X) 1)
+          (candidate 3 (rule rd1 A C W1 X) 1)
+          (candidate 3 (rule rd2 B C W2 X) 1)
+          (candidate 3 (rule rd3 C D W3 X) 1)
+          (candidate 3 (rule rd4 A D W4 X) 1))))
+!(test (exp07-rich-bounded-pool seed-12)
+       (candidate-pool 3
+         ((candidate 3 (rule rp0 A B AB CD) 1)
+          (candidate 3 (rule rp1 A C AC AB) 1)
+          (candidate 3 (rule rp2 C D CD AC) 1)
+          (candidate 3 (rule rd0 A B W0 X) 1)
+          (candidate 3 (rule rd1 A C W1 X) 1)
+          (candidate 3 (rule rd2 B C W2 X) 1)
+          (candidate 3 (rule rd3 C D W3 X) 1)
+          (candidate 3 (rule rd4 A D W4 X) 1))))
+!(test (exp07-rich-pool-identity? seed-12) True)
+!(test (exp07-rich-selected-candidate unguided seed-12)
+       (candidate 3 (rule rd0 A B W0 X) 1))
+!(test (exp07-rich-selected-candidate weak-doob-h seed-12)
+       (candidate 3 (rule rp2 C D CD AC) 1))
+!(test (exp07-rich-selected-candidate shuffled-guidance seed-12)
+       (candidate 3 (rule rd0 A B W0 X) 1))
+!(test (exp07-rich-after-one-tick unguided seed-12)
+       (chamber exp07-rich
+         (state 4 seed-12
+           (molecules
+             ((mol A 3) (mol B 2) (mol C 4) (mol D 3)
+              (mol AB 0) (mol AC 0) (mol CD 1) (mol X 1)
+              (mol W0 1) (mol W1 0) (mol W2 0) (mol W3 0) (mol W4 0))))
+         ((rule rp0 A B AB CD) (rule rp1 A C AC AB)
+          (rule rp2 C D CD AC) (rule rd0 A B W0 X)
+          (rule rd1 A C W1 X) (rule rd2 B C W2 X)
+          (rule rd3 C D W3 X) (rule rd4 A D W4 X))
+         ((event 3 rd0 A B W0 X))))
