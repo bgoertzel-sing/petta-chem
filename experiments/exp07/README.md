@@ -43,6 +43,13 @@ current shared two-rule pool supports RAF closure independently of guidance,
 so guiding-term ablation does not collapse the controls and
 `emergence-claim none` remains in force.
 
+The resulting all-arms-positive pivot is now frozen in
+`PREREG_RICH_POOL.md`. The next design uses one shared eight-rule pool with a
+latent three-rule RAF and five productive food-competing distractors. The
+PeTTa contract freezes seeds 11--18, cap 8, a 24-tick horizon, explicit
+first-class catalysis, matched controls, pre-run gates, ablations, and
+`emergence-claim none`. No rich-pool outcome trajectory has been evaluated.
+
 Run with:
 
 ```bash

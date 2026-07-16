@@ -1109,3 +1109,60 @@
          causal-ablation guiding-term-removal-does-not-collapse-controls
          pivot all-arms-positive-pool-composition-not-guidance
          emergence-claim none))
+
+; The richer-pool pivot is frozen before any outcome constructor exists.
+!(test (exp07-rich-pool-preregistration)
+       (preregistration
+         date 2026-07-16-14:30-PDT
+         predecessor registered-n20-all-arms-positive
+         design shared-eight-rule-pool
+         latent-raf-size 3
+         latent-raf-rule-ids (rp0 rp1 rp2)
+         distractor-rule-ids (rd0 rd1 rd2 rd3 rd4)
+         first-class-catalysis
+           ((CD rp0) (AB rp1) (AC rp2)
+            (X rd0) (X rd1) (X rd2) (X rd3) (X rd4))
+         rewrites ((rp0 A B AB) (rp1 A C AC) (rp2 C D CD)
+                   (rd0 A B W0) (rd1 A C W1) (rd2 B C W2)
+                   (rd3 C D W3) (rd4 A D W4))
+         initial-abundances ((mol A 4) (mol B 3) (mol C 4) (mol D 3)
+                             (mol AB 0) (mol AC 0) (mol CD 1) (mol X 1)
+                             (mol W0 0) (mol W1 0) (mol W2 0)
+                             (mol W3 0) (mol W4 0))
+         competing-food (A B C D)
+         arms (unguided weak-doob-h shuffled-guidance)
+         shared-pool-composition required-exactly
+         candidate-cap 8
+         horizon 24
+         horizon-ticks (3 4 5 6 7 8 9 10 11 12 13 14
+                        15 16 17 18 19 20 21 22 23 24 25 26)
+         fixed-seeds (seed-11 seed-12 seed-13 seed-14
+                      seed-15 seed-16 seed-17 seed-18)
+         categorical-denominator 88
+         draw-index modulo-88-of-seed-times-17-plus-tick-times-31
+         integer-masses
+           ((unguided (11 11 11 11 11 11 11 11))
+            (weak-doob-h (16 16 16 8 8 8 8 8))
+            (shuffled-guidance (8 8 8 16 16 16 8 8)))
+         replenishment-ticks (11 19)
+         replenishment-targets ((mol A 4) (mol B 3) (mol C 4) (mol D 3))
+         primary-endpoint rolling-eight-event-three-rule-raf-incidence
+         persistence consecutive-ticks-with-all-rp0-rp1-rp2-in-last-eight-events
+         required-outcomes (first-hit-time persistence productivity diversity-collapse
+                            intervention-path-cost replay catalyst-ablation rule-ablation)
+         pre-run-gates (positive-control initial-state-raf-negative
+                        exact-pool-identity first-class-catalysis-complete
+                        deterministic-88-bin-sampler-calibrated)
+         no-peeking freeze-before-outcome-implementation
+         terminal-forcing prohibited
+         current-boundary preregistered-design-only
+         emergence-claim none))
+!(test (exp07-rich-pool-implementation-gate)
+       (implementation-gate
+         required-before-outcomes
+           (materialize-shared-pool materialize-first-class-catalysis
+            connect-eight-bin-selection-directly-to-chamber-tick
+            verify-bounded-cap-eight-generation verify-all-pre-run-gates)
+         outcomes-evaluated false
+         status pending
+         emergence-claim none))
