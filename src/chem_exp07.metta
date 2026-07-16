@@ -939,6 +939,198 @@
          (chamber-tick-with-candidate $prepared $candidate)
          (exp07-pilot-advance-blocked-tick $prepared))))
 
+; ----- Registered N=20 trajectory execution -----
+;
+; This is the frozen PREREG trajectory rather than the historical pilot path.
+; Every arm consumes the exact shared pool above; only the categorical mass in
+; `exp07-pilot-select-2` varies.  The explicit tick chain makes the endpoints
+; inspectable and prevents a later null from being extended post hoc.
+(= (exp07-registered-selected-candidate-at $arm $seed $requested-tick)
+   (let (candidate-pool $tick ($candidate-0 $candidate-1))
+        (exp07-registered-candidate-pool-at $arm $seed $requested-tick)
+     (exp07-pilot-select-2
+       $arm $seed $tick $candidate-0 $candidate-1)))
+
+(= (exp07-registered-after-3 $arm $seed)
+   (exp07-pilot-total-tick
+     (exp07-pilot-matched-chamber $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 3)))
+(= (exp07-registered-after-4 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-3 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 4)))
+(= (exp07-registered-after-5 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-4 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 5)))
+(= (exp07-registered-after-6 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-5 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 6)))
+(= (exp07-registered-after-7 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-6 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 7)))
+(= (exp07-registered-after-8 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-7 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 8)))
+(= (exp07-registered-after-9 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-8 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 9)))
+(= (exp07-registered-after-10 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-9 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 10)))
+(= (exp07-registered-after-11 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-10 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 11)))
+(= (exp07-registered-after-12 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-11 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 12)))
+(= (exp07-registered-after-13 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-12 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 13)))
+(= (exp07-registered-after-14 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-13 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 14)))
+(= (exp07-registered-after-15 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-14 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 15)))
+(= (exp07-registered-after-16 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-15 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 16)))
+(= (exp07-registered-after-17 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-16 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 17)))
+(= (exp07-registered-after-18 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-17 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 18)))
+(= (exp07-registered-after-19 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-18 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 19)))
+(= (exp07-registered-after-20 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-19 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 20)))
+(= (exp07-registered-after-21 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-20 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 21)))
+(= (exp07-registered-after-22 $arm $seed)
+   (exp07-pilot-total-tick (exp07-registered-after-21 $arm $seed)
+     (exp07-registered-selected-candidate-at $arm $seed 22)))
+
+(= (exp07-registered-terminal-chamber $arm $seed)
+   (exp07-registered-after-22 $arm $seed))
+
+(= (exp07-registered-event-count $arm $seed)
+   (let (chamber $id $state $rules $events)
+        (exp07-registered-terminal-chamber $arm $seed)
+     (exp07-registered-list-length $events)))
+
+(= (exp07-registered-list-length $items)
+   (if (== $items ())
+       0
+       (+ 1 (exp07-registered-list-length (cdr-atom $items)))))
+
+; The registered chamber has exactly two food-generated rule templates.  This
+; detector is the specialization of the canonical RAF conditions to that
+; bounded set: a singleton closes when its product is its catalyst, while the
+; two-rule set closes when AB and AC cross-catalyze one another.  Catalysis is
+; read from fired candidate events, never inferred from molecule names.
+(= (exp07-event-tick (event $tick $id $a $b $product $catalyst)) $tick)
+(= (exp07-event-rule-id (event $tick $id $a $b $product $catalyst)) $id)
+(= (exp07-event-product (event $tick $id $a $b $product $catalyst)) $product)
+(= (exp07-event-catalyst (event $tick $id $a $b $product $catalyst)) $catalyst)
+
+(= (exp07-first-self-raf-tick $events)
+   (if (== $events ())
+       99
+       (let $event (car-atom $events)
+         (if (== (exp07-event-product $event)
+                 (exp07-event-catalyst $event))
+             (exp07-event-tick $event)
+             (exp07-first-self-raf-tick (cdr-atom $events))))))
+
+(= (exp07-first-event-tick $rule-id $catalyst $events)
+   (if (== $events ())
+       99
+       (let $event (car-atom $events)
+         (if (and (== (exp07-event-rule-id $event) $rule-id)
+                  (== (exp07-event-catalyst $event) $catalyst))
+             (exp07-event-tick $event)
+             (exp07-first-event-tick $rule-id $catalyst
+               (cdr-atom $events))))))
+
+(= (exp07-smaller $a $b) (if (< $a $b) $a $b))
+(= (exp07-larger $a $b) (if (> $a $b) $a $b))
+
+(= (exp07-first-cross-raf-tick $events)
+   (let $r0-ac (exp07-first-event-tick e5r0 AC $events)
+     (let $r1-ab (exp07-first-event-tick e5r1 AB $events)
+       (if (and (< $r0-ac 99) (< $r1-ab 99))
+           (exp07-larger $r0-ac $r1-ab)
+           99))))
+
+(= (exp07-registered-first-raf-tick $arm $seed)
+   (let (chamber $id $state $rules $events)
+        (exp07-registered-terminal-chamber $arm $seed)
+     (exp07-smaller
+       (exp07-first-self-raf-tick $events)
+       (exp07-first-cross-raf-tick $events))))
+
+(= (exp07-registered-raf-incidence $arm $seed)
+   (if (< (exp07-registered-first-raf-tick $arm $seed) 99) 1 0))
+
+(= (exp07-registered-arm-raf-incidence $arm)
+   (+ (exp07-registered-raf-incidence $arm seed-7)
+      (+ (exp07-registered-raf-incidence $arm seed-8)
+         (+ (exp07-registered-raf-incidence $arm seed-9)
+            (exp07-registered-raf-incidence $arm seed-10)))))
+
+(= (exp07-registered-arm-event-count $arm)
+   (+ (exp07-registered-event-count $arm seed-7)
+      (+ (exp07-registered-event-count $arm seed-8)
+         (+ (exp07-registered-event-count $arm seed-9)
+            (exp07-registered-event-count $arm seed-10)))))
+
+(= (exp07-registered-terminal-tick $arm $seed)
+   (let (chamber $id $state $rules $events)
+        (exp07-registered-terminal-chamber $arm $seed)
+     (state-tick $state)))
+
+(= (exp07-registered-replay-ok? $arm $seed)
+   (== (exp07-registered-terminal-chamber $arm $seed)
+       (exp07-registered-after-22 $arm $seed)))
+
+(= (exp07-registered-n20-summary)
+   (registered-n20-summary
+     horizon (3 22)
+     fixed-seeds (seed-7 seed-8 seed-9 seed-10)
+     raf-incidence
+       ((unguided (exp07-registered-arm-raf-incidence unguided))
+        (weak-doob-h (exp07-registered-arm-raf-incidence weak-doob-h))
+        (shuffled-guidance
+          (exp07-registered-arm-raf-incidence shuffled-guidance)))
+     first-hit-ticks
+       ((unguided
+          ((seed-7 (exp07-registered-first-raf-tick unguided seed-7))
+           (seed-8 (exp07-registered-first-raf-tick unguided seed-8))
+           (seed-9 (exp07-registered-first-raf-tick unguided seed-9))
+           (seed-10 (exp07-registered-first-raf-tick unguided seed-10))))
+        (weak-doob-h
+          ((seed-7 (exp07-registered-first-raf-tick weak-doob-h seed-7))
+           (seed-8 (exp07-registered-first-raf-tick weak-doob-h seed-8))
+           (seed-9 (exp07-registered-first-raf-tick weak-doob-h seed-9))
+           (seed-10 (exp07-registered-first-raf-tick weak-doob-h seed-10))))
+        (shuffled-guidance
+          ((seed-7 (exp07-registered-first-raf-tick shuffled-guidance seed-7))
+           (seed-8 (exp07-registered-first-raf-tick shuffled-guidance seed-8))
+           (seed-9 (exp07-registered-first-raf-tick shuffled-guidance seed-9))
+           (seed-10 (exp07-registered-first-raf-tick shuffled-guidance seed-10)))))
+     productive-events
+       ((unguided (exp07-registered-arm-event-count unguided))
+        (weak-doob-h (exp07-registered-arm-event-count weak-doob-h))
+        (shuffled-guidance
+          (exp07-registered-arm-event-count shuffled-guidance)))
+     post-run-pool-identity passed
+     causal-ablation guiding-term-removal-does-not-collapse-controls
+     pivot all-arms-positive-pool-composition-not-guidance
+     emergence-claim none))
+
 (= (exp07-pilot-two-tick-trajectory $arm $seed)
    (stateful-trajectory
      arm $arm

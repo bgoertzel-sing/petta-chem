@@ -1082,3 +1082,30 @@
          construction one-shared-candidate-pool-before-arm-selection
          evidence exact-pool-equality-for-arbitrary-seed-and-tick
          status passed))
+
+; Execute the complete preregistered horizon before interpreting any endpoint.
+; Terminal tick 23 means ticks 3--22 were each consumed, including blocked
+; draws; event counts are derived from the terminal PeTTa chamber.
+!(test (exp07-registered-terminal-tick unguided seed-7) 23)
+!(test (exp07-registered-terminal-tick weak-doob-h seed-8) 23)
+!(test (exp07-registered-terminal-tick shuffled-guidance seed-10) 23)
+!(test (exp07-registered-replay-ok? unguided seed-7) True)
+!(test (exp07-registered-replay-ok? weak-doob-h seed-8) True)
+!(test (exp07-registered-replay-ok? shuffled-guidance seed-10) True)
+!(test (exp07-registered-n20-summary)
+       (registered-n20-summary
+         horizon (3 22)
+         fixed-seeds (seed-7 seed-8 seed-9 seed-10)
+         raf-incidence
+           ((unguided 4) (weak-doob-h 4) (shuffled-guidance 4))
+         first-hit-ticks
+           ((unguided ((seed-7 5) (seed-8 3) (seed-9 8) (seed-10 10)))
+            (weak-doob-h ((seed-7 3) (seed-8 3) (seed-9 8) (seed-10 8)))
+            (shuffled-guidance
+              ((seed-7 5) (seed-8 3) (seed-9 4) (seed-10 3))))
+         productive-events
+           ((unguided 32) (weak-doob-h 32) (shuffled-guidance 32))
+         post-run-pool-identity passed
+         causal-ablation guiding-term-removal-does-not-collapse-controls
+         pivot all-arms-positive-pool-composition-not-guidance
+         emergence-claim none))

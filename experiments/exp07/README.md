@@ -31,7 +31,17 @@ The registered N=20 path passes its preregistered pre-run pool-identity gate by
 constructing one exact strength-1 affinity candidate pool per seed/tick and
 sharing it across all three arms. Only categorical selection mass varies by
 arm. The earlier pilot pool constructors remain unchanged as historical
-evidence; no registered N=20 outcome was inspected while closing this gate.
+evidence.
+
+The frozen N=20 matrix is now complete. All twelve trajectories consume ticks
+3--22, apply the identical replenishment schedule at ticks 8/13/18, replay
+exactly, and produce eight events per seed (32 per arm). The event-derived
+bounded RAF specialization finds incidence 4/4 in every arm. First-hit ticks
+are unguided `[5,3,8,10]`, weak Doob-h `[3,3,8,8]`, and shuffled guidance
+`[5,3,4,3]`. This triggers the preregistered all-arms-positive pivot: the
+current shared two-rule pool supports RAF closure independently of guidance,
+so guiding-term ablation does not collapse the controls and
+`emergence-claim none` remains in force.
 
 Run with:
 
