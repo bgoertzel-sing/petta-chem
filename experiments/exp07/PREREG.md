@@ -67,6 +67,17 @@ If any condition fails, `emergence-claim: none` stands.
 
 Both status streams (exp07 TASKS.md and NOTES.md) now read the same commit (`28ddc28`). This prereg doc keeps the two streams commensurable: the two-tick null is the shared baseline, the positive control is the shared gate, and the stop/pivot rules prevent "two nulls, different baselines" drift.
 
+ProtoMegaBot's three verification checks (2026-07-16 08:07 PDT):
+1. ✅ Positive control is a true gate (halt on failure, not a warning).
+2. ✅ N=20 and endpoints frozen, no peek-and-extend clause.
+3. ✅ Shuffled control shares pool composition (modulo guidance policy weights).
+
+Refinement noted: "exact pool composition" means same source rules, candidates, and catalyst assignments — not byte-identical serialized weights, which differ by design across arms.
+
+## exp04 ↔ exp07 catalysis-semantics cross-check
+
+The `catalyzes` predicate is first-class binary in exp04 (18 edges, commit `3a870c5`). exp07's PeTTa-native contract declares `catalysis-interface first-class-binary-relation`, matching exp04's semantics. If exp07's catalysis relation diverges from exp04's in future implementations, that divergence must be named here before running, not discovered post hoc.
+
 ## Provenance
 
 - Preregistration author: ZeroBot (drafted from ProtoMegaBot's 6-point proposal, 2026-07-16 08:01 PDT)

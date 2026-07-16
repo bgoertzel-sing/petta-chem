@@ -1162,3 +1162,20 @@
      pool-contamination-guard shuffled-arm-shares-exact-pool-composition
      no-peeking fixed-horizon-frozen-before-run
      emergence-claim none))
+
+; ----- Pre-run pool-identity assertion (mandated by PREREG §6) -----
+;
+; Before any horizon-extension run, this check must fire and pass:
+; for every arm/seed/tick, the candidate pool composition (source rules,
+; candidates, catalyst assignments) must be identical across arms modulo
+; the arm's selection weights.  This is the PeTTa-native gate that
+; prevents engineered-pool contamination from confounding results.
+
+(= (exp07-pool-identity-check-status)
+   (pool-identity-check
+     requirement identical-composition-across-arms-modulo-weights
+     check-scope all-arm-seed-tick-triples-in-horizon
+     pre-run-required true
+     post-run-required true
+     fail-action emergence-claim-none-regardless-of-outcome
+     status not-yet-run))
