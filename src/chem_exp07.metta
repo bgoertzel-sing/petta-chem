@@ -890,6 +890,80 @@
      outcome-boundary trajectory-plumbing-only
      emergence-claim none))
 
+; Expand the two-tick stateful gate across the complete matched pilot matrix.
+; Event counts are read from the terminal chamber produced by ordinary exp00
+; ticking; the replay check reconstructs both ticks from the shared initial
+; chamber and the recorded seed/tick selections.
+(= (exp07-pilot-event-list-count ()) 0)
+(= (exp07-pilot-event-list-count ($event-0)) 1)
+(= (exp07-pilot-event-list-count ($event-0 $event-1)) 2)
+
+(= (exp07-pilot-two-tick-event-count $arm $seed)
+   (let (chamber $id $state $rules $events)
+        (exp07-pilot-matched-after-two-ticks $arm $seed)
+     (exp07-pilot-event-list-count $events)))
+
+(= (exp07-pilot-replayed-after-two-ticks $arm $seed)
+   (chamber-tick-with-candidate
+     (chamber-tick-with-candidate
+       (exp07-pilot-matched-chamber $seed)
+       (exp07-pilot-selected-candidate-at $arm $seed 3))
+     (exp07-pilot-selected-candidate-at $arm $seed 4)))
+
+(= (exp07-pilot-two-tick-replay-ok? $arm $seed)
+   (== (exp07-pilot-matched-after-two-ticks $arm $seed)
+       (exp07-pilot-replayed-after-two-ticks $arm $seed)))
+
+(= (exp07-pilot-two-tick-arm-event-count $arm)
+   (+ (exp07-pilot-two-tick-event-count $arm seed-7)
+      (+ (exp07-pilot-two-tick-event-count $arm seed-8)
+         (+ (exp07-pilot-two-tick-event-count $arm seed-9)
+            (exp07-pilot-two-tick-event-count $arm seed-10)))))
+
+(= (exp07-pilot-two-tick-replay-int $arm $seed)
+   (if (exp07-pilot-two-tick-replay-ok? $arm $seed) 1 0))
+
+(= (exp07-pilot-two-tick-arm-replay-count $arm)
+   (+ (exp07-pilot-two-tick-replay-int $arm seed-7)
+      (+ (exp07-pilot-two-tick-replay-int $arm seed-8)
+         (+ (exp07-pilot-two-tick-replay-int $arm seed-9)
+            (exp07-pilot-two-tick-replay-int $arm seed-10)))))
+
+(= (exp07-pilot-two-tick-ensemble-summary)
+   (stateful-ensemble-summary
+     arms (unguided weak-doob-h shuffled-guidance)
+     fixed-seeds (seed-7 seed-8 seed-9 seed-10)
+     ticks (3 4)
+     productive-events-by-seed
+       ((unguided
+          ((seed-7 (exp07-pilot-two-tick-event-count unguided seed-7))
+           (seed-8 (exp07-pilot-two-tick-event-count unguided seed-8))
+           (seed-9 (exp07-pilot-two-tick-event-count unguided seed-9))
+           (seed-10 (exp07-pilot-two-tick-event-count unguided seed-10))))
+        (weak-doob-h
+          ((seed-7 (exp07-pilot-two-tick-event-count weak-doob-h seed-7))
+           (seed-8 (exp07-pilot-two-tick-event-count weak-doob-h seed-8))
+           (seed-9 (exp07-pilot-two-tick-event-count weak-doob-h seed-9))
+           (seed-10 (exp07-pilot-two-tick-event-count weak-doob-h seed-10))))
+        (shuffled-guidance
+          ((seed-7 (exp07-pilot-two-tick-event-count shuffled-guidance seed-7))
+           (seed-8 (exp07-pilot-two-tick-event-count shuffled-guidance seed-8))
+           (seed-9 (exp07-pilot-two-tick-event-count shuffled-guidance seed-9))
+           (seed-10 (exp07-pilot-two-tick-event-count shuffled-guidance seed-10)))))
+     productive-event-totals
+       ((unguided (exp07-pilot-two-tick-arm-event-count unguided))
+        (weak-doob-h (exp07-pilot-two-tick-arm-event-count weak-doob-h))
+        (shuffled-guidance
+          (exp07-pilot-two-tick-arm-event-count shuffled-guidance)))
+     exact-replays
+       ((unguided (exp07-pilot-two-tick-arm-replay-count unguided))
+        (weak-doob-h (exp07-pilot-two-tick-arm-replay-count weak-doob-h))
+        (shuffled-guidance
+          (exp07-pilot-two-tick-arm-replay-count shuffled-guidance)))
+     observed-result equal-arm-event-totals-with-different-seed-patterns
+     outcome-boundary two-tick-productivity-and-replay-only
+     emergence-claim none))
+
 ; Before running longer chemistry trajectories, verify that the replayable
 ; sampler realizes its declared categorical masses over a complete four-draw
 ; cycle.  Each fixed seed visits every bin exactly once over ticks 3--6, so

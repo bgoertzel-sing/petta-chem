@@ -953,6 +953,46 @@
          replay exact-seed-tick-state-carry
          outcome-boundary trajectory-plumbing-only
          emergence-claim none))
+!(test (exp07-pilot-two-tick-event-count unguided seed-7) 1)
+!(test (exp07-pilot-two-tick-event-count unguided seed-8) 2)
+!(test (exp07-pilot-two-tick-event-count unguided seed-9) 1)
+!(test (exp07-pilot-two-tick-event-count unguided seed-10) 2)
+!(test (exp07-pilot-two-tick-event-count weak-doob-h seed-7) 2)
+!(test (exp07-pilot-two-tick-event-count weak-doob-h seed-8) 2)
+!(test (exp07-pilot-two-tick-event-count weak-doob-h seed-9) 1)
+!(test (exp07-pilot-two-tick-event-count weak-doob-h seed-10) 1)
+!(test (exp07-pilot-two-tick-event-count shuffled-guidance seed-7) 1)
+!(test (exp07-pilot-two-tick-event-count shuffled-guidance seed-8) 2)
+!(test (exp07-pilot-two-tick-event-count shuffled-guidance seed-9) 2)
+!(test (exp07-pilot-two-tick-event-count shuffled-guidance seed-10) 1)
+!(test (exp07-pilot-two-tick-replay-ok? unguided seed-7) True)
+!(test (exp07-pilot-two-tick-replay-ok? unguided seed-8) True)
+!(test (exp07-pilot-two-tick-replay-ok? unguided seed-9) True)
+!(test (exp07-pilot-two-tick-replay-ok? unguided seed-10) True)
+!(test (exp07-pilot-two-tick-replay-ok? weak-doob-h seed-7) True)
+!(test (exp07-pilot-two-tick-replay-ok? weak-doob-h seed-8) True)
+!(test (exp07-pilot-two-tick-replay-ok? weak-doob-h seed-9) True)
+!(test (exp07-pilot-two-tick-replay-ok? weak-doob-h seed-10) True)
+!(test (exp07-pilot-two-tick-replay-ok? shuffled-guidance seed-7) True)
+!(test (exp07-pilot-two-tick-replay-ok? shuffled-guidance seed-8) True)
+!(test (exp07-pilot-two-tick-replay-ok? shuffled-guidance seed-9) True)
+!(test (exp07-pilot-two-tick-replay-ok? shuffled-guidance seed-10) True)
+!(test (exp07-pilot-two-tick-ensemble-summary)
+       (stateful-ensemble-summary
+         arms (unguided weak-doob-h shuffled-guidance)
+         fixed-seeds (seed-7 seed-8 seed-9 seed-10)
+         ticks (3 4)
+         productive-events-by-seed
+           ((unguided ((seed-7 1) (seed-8 2) (seed-9 1) (seed-10 2)))
+            (weak-doob-h ((seed-7 2) (seed-8 2) (seed-9 1) (seed-10 1)))
+            (shuffled-guidance ((seed-7 1) (seed-8 2) (seed-9 2) (seed-10 1))))
+         productive-event-totals
+           ((unguided 6) (weak-doob-h 6) (shuffled-guidance 6))
+         exact-replays
+           ((unguided 4) (weak-doob-h 4) (shuffled-guidance 4))
+         observed-result equal-arm-event-totals-with-different-seed-patterns
+         outcome-boundary two-tick-productivity-and-replay-only
+         emergence-claim none))
 !(test (exp07-stochastic-pilot-contract)
        (stochastic-ensemble-contract
          arms (unguided weak-doob-h shuffled-guidance)
