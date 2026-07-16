@@ -140,6 +140,67 @@
 (= (template-catalyzes? AC AC None ACstar) True)
 (= (template-catalyzes? CD CD None CDstar) True)
 
+; ----- First-class catalysis relation -----
+;
+; The template facts above record how exp04's initial specificity-filtered map
+; was constructed.  RAF detection does not query those structural heuristics.
+; It queries only these materialized molecule -> rule edges.
+(= (catalyzes ABC lAB) True)
+(= (catalyzes ABC lBC) True)
+(= (catalyzes BCD lCD) True)
+(= (catalyzes ACD lAC) True)
+(= (catalyzes AB lABC1) True)
+(= (catalyzes BC lABC2) True)
+(= (catalyzes BC lBCD1) True)
+(= (catalyzes CD lBCD2) True)
+(= (catalyzes ABC cAB) True)
+(= (catalyzes ABC cBC) True)
+(= (catalyzes BCD cCD) True)
+(= (catalyzes ABC cABC1) True)
+(= (catalyzes ABCstar cABC2) True)
+(= (catalyzes BCD cBCD) True)
+(= (catalyzes ABC mAB) True)
+(= (catalyzes ABC mBC) True)
+(= (catalyzes AC mAC) True)
+(= (catalyzes CD mCD) True)
+
+(= (exp04-catalysis-map)
+   ((catalyzes ABC lAB)
+    (catalyzes ABC lBC)
+    (catalyzes BCD lCD)
+    (catalyzes ACD lAC)
+    (catalyzes AB lABC1)
+    (catalyzes BC lABC2)
+    (catalyzes BC lBCD1)
+    (catalyzes CD lBCD2)
+    (catalyzes ABC cAB)
+    (catalyzes ABC cBC)
+    (catalyzes BCD cCD)
+    (catalyzes ABC cABC1)
+    (catalyzes ABCstar cABC2)
+    (catalyzes BCD cBCD)
+    (catalyzes ABC mAB)
+    (catalyzes ABC mBC)
+    (catalyzes AC mAC)
+    (catalyzes CD mCD)))
+
+(= (exp04-catalysis-edge-count) 18)
+(= (exp04-no-catalysis-map) ())
+
+; Positive and ablated runs share the same predicate.  Ablation changes only
+; the relation supplied to it, not the RAF logic.
+(= (catalyzes-in-map? exp04-specific $molecule $rule-id)
+   (catalyzes $molecule $rule-id))
+(= (catalyzes-in-map? exp04-none $molecule $rule-id) False)
+
+(= (rich-rule-first-class-catalyzed-in?
+      $map
+      (rich-rule $id $type $a $b $product $secondary $catalyst))
+   (catalyzes-in-map? $map $catalyst $id))
+
+(= (rich-rule-first-class-catalyzed? $rule)
+   (rich-rule-first-class-catalyzed-in? exp04-specific $rule))
+
 (= (rich-rule-template-catalyzed? (rich-rule $id $type $a $b $product $secondary $catalyst))
    (template-catalyzes? $catalyst $a $b $product))
 
@@ -291,16 +352,11 @@
 
 ; Each member has a catalytic molecule supplied in the RAF closure.  These are
 ; not monomer-only matches: catalysts are non-food products or modified products.
-(= (exp04-raf5-catalyzed-by-set? (rich-rule lAB ligation A B AB None ABC))
-   (template-catalyzes? ABC A B AB))
-(= (exp04-raf5-catalyzed-by-set? (rich-rule lBC ligation B C BC None ABC))
-   (template-catalyzes? ABC B C BC))
-(= (exp04-raf5-catalyzed-by-set? (rich-rule lABC1 ligation AB C ABC None AB))
-   (template-catalyzes? AB AB C ABC))
-(= (exp04-raf5-catalyzed-by-set? (rich-rule cABC1 cleavage ABC None AB C ABC))
-   (template-catalyzes? ABC ABC None AB))
-(= (exp04-raf5-catalyzed-by-set? (rich-rule mAB modification AB None ABstar None ABC))
-   (template-catalyzes? ABC AB None ABstar))
+(= (exp04-raf5-catalyzed-by-set? $rule)
+   (rich-rule-first-class-catalyzed? $rule))
+
+(= (exp04-raf5-catalyzed-by-set-in? $map $rule)
+   (rich-rule-first-class-catalyzed-in? $map $rule))
 
 (= (exp04-raf5-ra-ok?)
    (and (exp04-raf5-catalyzed-by-set? (rich-rule lAB ligation A B AB None ABC))
@@ -308,6 +364,18 @@
    (and (exp04-raf5-catalyzed-by-set? (rich-rule lABC1 ligation AB C ABC None AB))
    (and (exp04-raf5-catalyzed-by-set? (rich-rule cABC1 cleavage ABC None AB C ABC))
         (exp04-raf5-catalyzed-by-set? (rich-rule mAB modification AB None ABstar None ABC)))))))
+
+(= (exp04-raf5-ra-ok-in? $map)
+   (and (exp04-raf5-catalyzed-by-set-in? $map (rich-rule lAB ligation A B AB None ABC))
+   (and (exp04-raf5-catalyzed-by-set-in? $map (rich-rule lBC ligation B C BC None ABC))
+   (and (exp04-raf5-catalyzed-by-set-in? $map (rich-rule lABC1 ligation AB C ABC None AB))
+   (and (exp04-raf5-catalyzed-by-set-in? $map (rich-rule cABC1 cleavage ABC None AB C ABC))
+        (exp04-raf5-catalyzed-by-set-in? $map (rich-rule mAB modification AB None ABstar None ABC)))))))
+
+(= (exp04-first-class-catalysis-ablation-check)
+   (catalysis-ablation
+     positive (exp04-raf5-ra-ok-in? exp04-specific)
+     ablated (exp04-raf5-ra-ok-in? exp04-none)))
 
 (= (exp04-raf5-fg-ok?)
    (and (exp04-rule-food-generated? (rich-rule lAB ligation A B AB None ABC))
