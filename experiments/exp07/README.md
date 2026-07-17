@@ -60,7 +60,19 @@ incidence is 5/8 unguided, 7/8 weak Doob-h, and 3/8 shuffled, while longest-run
 persistence totals are 13/49/11 ticks. Terminal distinct-rule diversity totals
 are 61/61/54 out of 64 possible seed-rule presences, corresponding to collapse
 deficits of 3/3/10 from the full eight-rule pool. Both controls are positive;
-intervention cost and causal ablations remain, and `emergence-claim none`.
+matched intervention cost and causal ablations are complete, and
+`emergence-claim none`. Removing the full latent catalyst set or any one cycle
+rule collapses RAF incidence to zero in every arm, but removing guidance does
+not: unguided remains 5/8. The result is therefore closed as evidence that the
+pre-bootstrapped shared pool supports closure, not that guidance causes it.
+
+The successor is frozen in `PREREG_ORDERED_BOOTSTRAP.md` before any new
+outcome is evaluated. It removes the initial cycle catalyst and adds one
+non-RAF bootstrap rule, forcing productive access through the ordered frontier
+`ob0 -> op1 -> op2 -> op0`. State-aware weak guidance and a shuffled-frontier
+control use identical per-draw mass multisets and cost over held-out seeds
+19--26. Implementation and pre-run calibration remain next; no trajectory has
+been constructed and `emergence-claim none` remains.
 
 Run with:
 

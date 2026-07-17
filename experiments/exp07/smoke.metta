@@ -1424,3 +1424,39 @@
          replay deterministic-seed-tick-state-carry
          terminal-forcing prohibited
          emergence-claim none))
+!(test (exp07-rich-interpretation)
+       (rich-pool-interpretation
+         frozen-matrix complete
+         raf-incidence ((unguided 5) (weak-doob-h 7)
+                        (shuffled-guidance 3))
+         cycle-necessary-under-ablation true
+         guidance-necessary false
+         evidence pool-composition
+         horizon-extension prohibited
+         emergence-claim none))
+!(test (exp07-ordered-bootstrap-preregistration)
+       (ordered-bootstrap-preregistration
+         status design-only
+         outcomes-evaluated false
+         pool-order (ob0 op1 op2 op0 od0 od1 od2 od3)
+         initial-catalyst-abundances ((AB 0) (AC 0) (CD 0) (X 1))
+         raf-rules (op1 op2 op0)
+         bootstrap-rule ob0
+         frontier-phases ((AB-zero ob0 od0) (AC-zero op1 od1)
+                          (CD-zero op2 od2) (cycle-ready op0 od3))
+         arms (unguided weak-doob-h shuffled-frontier-guidance)
+         held-out-seeds (seed-19 seed-20 seed-21 seed-22
+                         seed-23 seed-24 seed-25 seed-26)
+         horizon (3 26)
+         candidate-cap 8
+         selector-denominator 96
+         selector-mass-multisets
+           ((unguided (12 12 12 12 12 12 12 12))
+            (weak-doob-h (20 4 12 12 12 12 12 12))
+            (shuffled-frontier-guidance (20 4 12 12 12 12 12 12)))
+         shifted-mass-units-per-guided-draw 8
+         state-read-boundary (AB-present AC-present CD-present)
+         direct-bounded-tick required
+         adaptive-extension prohibited
+         terminal-forcing prohibited
+         emergence-claim none))
