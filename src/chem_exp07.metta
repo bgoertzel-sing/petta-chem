@@ -2329,16 +2329,46 @@
      (exp07-ordered-rules)
      ()))
 
-; All arms call the same state-parametric constructor.  Arm identity is
-; deliberately ignored here; categorical policy is a later gate.
+; All arms call the same state-parametric constructor.  Keep the ordered
+; generator local and explicit: imported equation heads are data to this PeTTa
+; compiler boundary, while this clause executes as chemistry code and mirrors
+; exp00's stable one-candidate-per-rule cap-8 contract.
+(= (exp07-ordered-generate-candidate-pool
+      (chamber $id
+        (state $tick $seed (molecules $molecules))
+        ((rule $r0 $a0 $b0 $p0 $c0)
+         (rule $r1 $a1 $b1 $p1 $c1)
+         (rule $r2 $a2 $b2 $p2 $c2)
+         (rule $r3 $a3 $b3 $p3 $c3)
+         (rule $r4 $a4 $b4 $p4 $c4)
+         (rule $r5 $a5 $b5 $p5 $c5)
+         (rule $r6 $a6 $b6 $p6 $c6)
+         (rule $r7 $a7 $b7 $p7 $c7))
+        $events))
+   (candidate-pool $tick
+     ((candidate $tick (rule $r0 $a0 $b0 $p0 $c0) 1)
+      (candidate $tick (rule $r1 $a1 $b1 $p1 $c1) 1)
+      (candidate $tick (rule $r2 $a2 $b2 $p2 $c2) 1)
+      (candidate $tick (rule $r3 $a3 $b3 $p3 $c3) 1)
+      (candidate $tick (rule $r4 $a4 $b4 $p4 $c4) 1)
+      (candidate $tick (rule $r5 $a5 $b5 $p5 $c5) 1)
+      (candidate $tick (rule $r6 $a6 $b6 $p6 $c6) 1)
+      (candidate $tick (rule $r7 $a7 $b7 $p7 $c7) 1))))
+
 (= (exp07-ordered-shared-pool $chamber)
-   (generate-candidate-pool $chamber))
+   (exp07-ordered-generate-candidate-pool $chamber))
 
 (= (exp07-ordered-arm-pool $arm $chamber)
    (exp07-ordered-shared-pool $chamber))
 
+(= (exp07-ordered-cap-8
+      (candidate-pool $tick
+        ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7)))
+   (candidate-pool $tick
+     ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7)))
+
 (= (exp07-ordered-bounded-pool $chamber)
-   (bounded-candidate-pool (candidate-cap 8 1) $chamber))
+   (exp07-ordered-cap-8 (exp07-ordered-shared-pool $chamber)))
 
 (= (exp07-ordered-pool-identity? $chamber)
    (and (== (exp07-ordered-arm-pool unguided $chamber)
@@ -2427,8 +2457,16 @@
         (and (exp07-ordered-event-rule-fired? op2 $events)
              (exp07-ordered-event-rule-fired? op0 $events))))
 
-(= (exp07-ordered-draw $seed $tick)
-   (#mod (+ (* 17 (seed-number $seed)) (* 31 $tick)) 96))
+; The registered seeds are explicit here so the frozen draw remains a simple
+; PeTTa arithmetic reduction inside recursive chamber evaluation.
+(= (exp07-ordered-draw seed-19 $tick) (#mod (+ 323 (* 31 $tick)) 96))
+(= (exp07-ordered-draw seed-20 $tick) (#mod (+ 340 (* 31 $tick)) 96))
+(= (exp07-ordered-draw seed-21 $tick) (#mod (+ 357 (* 31 $tick)) 96))
+(= (exp07-ordered-draw seed-22 $tick) (#mod (+ 374 (* 31 $tick)) 96))
+(= (exp07-ordered-draw seed-23 $tick) (#mod (+ 391 (* 31 $tick)) 96))
+(= (exp07-ordered-draw seed-24 $tick) (#mod (+ 408 (* 31 $tick)) 96))
+(= (exp07-ordered-draw seed-25 $tick) (#mod (+ 425 (* 31 $tick)) 96))
+(= (exp07-ordered-draw seed-26 $tick) (#mod (+ 442 (* 31 $tick)) 96))
 
 ; Bin order is the frozen pool order: ob0 op1 op2 op0 od0 od1 od2 od3.
 (= (exp07-ordered-unguided-bin $draw)
@@ -2500,12 +2538,29 @@
     (exp07-ordered-bin-count-from $arm $phase 6 0)
     (exp07-ordered-bin-count-from $arm $phase 7 0)))
 
+(= (exp07-ordered-select-for-chamber unguided $chamber $draw $candidates)
+   (exp07-rich-select-bin
+     (exp07-ordered-unguided-bin $draw) $candidates))
+(= (exp07-ordered-select-for-chamber weak-doob-h $chamber $draw $candidates)
+   (exp07-rich-select-bin
+     (exp07-ordered-guided-bin
+       (exp07-ordered-phase $chamber) $draw)
+     $candidates))
+(= (exp07-ordered-select-for-chamber
+      shuffled-frontier-guidance $chamber $draw $candidates)
+   (exp07-rich-select-bin
+     (exp07-ordered-shuffled-bin
+       (exp07-ordered-phase $chamber) $draw)
+     $candidates))
+
+(= (exp07-ordered-select-from-pool
+      $arm $chamber $draw (candidate-pool $tick $candidates))
+   (exp07-ordered-select-for-chamber
+     $arm $chamber $draw $candidates))
+
 (= (exp07-ordered-selected-with-draw $arm $chamber $draw)
-   (let (candidate-pool $tick $candidates)
-        (exp07-ordered-bounded-pool $chamber)
-     (exp07-rich-select-bin
-       (exp07-ordered-bin $arm (exp07-ordered-phase $chamber) $draw)
-       $candidates)))
+   (exp07-ordered-select-from-pool
+     $arm $chamber $draw (exp07-ordered-bounded-pool $chamber)))
 
 (= (exp07-ordered-direct-tick-with-draw $arm $chamber $draw)
    (chamber-tick-with-candidate
@@ -2543,4 +2598,236 @@
      matched-cost true
      chemistry-outcomes-used false
      trajectory-evaluated false
+     emergence-claim none))
+
+; ----- Frozen ordered-bootstrap trajectory matrix -----
+;
+; Consume exactly ticks 3--26 for held-out seeds 19--26.  The chamber is
+; replenished immediately before ticks 11 and 19, selection reads only the
+; current AB/AC/CD frontier phase, and every draw comes from the regenerated
+; bounded cap-8 pool.  Inapplicable selections advance time without events.
+(= (exp07-ordered-replenishment-tick? $tick)
+   (or (== $tick 11) (== $tick 19)))
+
+(= (exp07-ordered-replenish-food
+      (chamber $id
+        (state $tick $seed
+          (molecules
+            ((mol A $a) (mol B $b) (mol C $c) (mol D $d)
+             (mol AB $ab) (mol AC $ac) (mol CD $cd) (mol X $x)
+             (mol W0 $w0) (mol W1 $w1) (mol W2 $w2) (mol W3 $w3))))
+        $rules $events))
+   (chamber $id
+     (state $tick $seed
+       (molecules
+         ((mol A 4) (mol B 3) (mol C 4) (mol D 3)
+          (mol AB $ab) (mol AC $ac) (mol CD $cd) (mol X $x)
+          (mol W0 $w0) (mol W1 $w1) (mol W2 $w2) (mol W3 $w3))))
+     $rules $events))
+
+(= (exp07-ordered-prepare-chamber
+      (chamber $id $state $rules $events))
+   (if (exp07-ordered-replenishment-tick? (state-tick $state))
+       (exp07-ordered-replenish-food
+         (chamber $id $state $rules $events))
+       (chamber $id $state $rules $events)))
+
+(= (exp07-ordered-selected-for-chamber $arm
+      (chamber $id
+        (state $tick $seed (molecules $molecules)) $rules $events))
+   (exp07-ordered-selected-with-draw
+     $arm
+     (chamber $id
+       (state $tick $seed (molecules $molecules)) $rules $events)
+     (exp07-ordered-draw $seed $tick)))
+
+(= (exp07-ordered-abundance $name
+      ((mol $n0 $v0) (mol $n1 $v1) (mol $n2 $v2) (mol $n3 $v3)
+       (mol $n4 $v4) (mol $n5 $v5) (mol $n6 $v6) (mol $n7 $v7)
+       (mol $n8 $v8) (mol $n9 $v9) (mol $n10 $v10) (mol $n11 $v11)))
+   (if (== $name $n0) $v0 (if (== $name $n1) $v1
+     (if (== $name $n2) $v2 (if (== $name $n3) $v3
+       (if (== $name $n4) $v4 (if (== $name $n5) $v5
+         (if (== $name $n6) $v6 (if (== $name $n7) $v7
+           (if (== $name $n8) $v8 (if (== $name $n9) $v9
+             (if (== $name $n10) $v10
+               (if (== $name $n11) $v11 0)))))))))))))
+
+(= (exp07-ordered-candidate-applicable?
+      (candidate $tick (rule $rid $a $b $product $catalyst) $priority)
+      (chamber $id
+        (state $tick $seed (molecules $molecules)) $rules $events))
+   (and (> (exp07-ordered-abundance $a $molecules) 0)
+        (and (> (exp07-ordered-abundance $b $molecules) 0)
+             (> (exp07-ordered-abundance $catalyst $molecules) 0))))
+
+(= (exp07-ordered-reaction-delta $name $a $b $product)
+   (if (== $name $a) -1
+       (if (== $name $b) -1
+           (if (== $name $product) 1 0))))
+
+(= (exp07-ordered-update-molecule
+      (mol $name $abundance) $a $b $product)
+   (mol $name
+     (+ $abundance
+        (exp07-ordered-reaction-delta $name $a $b $product))))
+
+(= (exp07-ordered-fire-candidate
+      (candidate $tick (rule $rid $a $b $product $catalyst) $priority)
+      (chamber $id
+        (state $tick $seed
+          (molecules
+            ($m0 $m1 $m2 $m3 $m4 $m5 $m6 $m7 $m8 $m9 $m10 $m11)))
+        $rules $events))
+   (chamber $id
+     (state (+ $tick 1) $seed
+       (molecules
+         ((exp07-ordered-update-molecule $m0 $a $b $product)
+          (exp07-ordered-update-molecule $m1 $a $b $product)
+          (exp07-ordered-update-molecule $m2 $a $b $product)
+          (exp07-ordered-update-molecule $m3 $a $b $product)
+          (exp07-ordered-update-molecule $m4 $a $b $product)
+          (exp07-ordered-update-molecule $m5 $a $b $product)
+          (exp07-ordered-update-molecule $m6 $a $b $product)
+          (exp07-ordered-update-molecule $m7 $a $b $product)
+          (exp07-ordered-update-molecule $m8 $a $b $product)
+          (exp07-ordered-update-molecule $m9 $a $b $product)
+          (exp07-ordered-update-molecule $m10 $a $b $product)
+          (exp07-ordered-update-molecule $m11 $a $b $product))))
+     $rules
+     (exp07-rich-append-event
+       $events (event $tick $rid $a $b $product $catalyst))))
+
+(= (exp07-ordered-total-tick $arm $chamber)
+   (let $prepared (exp07-ordered-prepare-chamber $chamber)
+     (let $selected (exp07-ordered-selected-for-chamber $arm $prepared)
+       (if (exp07-ordered-candidate-applicable? $selected $prepared)
+           (exp07-ordered-fire-candidate $selected $prepared)
+           (exp07-pilot-advance-blocked-tick $prepared)))))
+
+(= (exp07-ordered-run-to-state-tick $arm
+      (chamber $id
+        (state $tick $seed (molecules $molecules)) $rules $events)
+      $terminal-state-tick)
+   (if (>= $tick $terminal-state-tick)
+       (chamber $id
+         (state $tick $seed (molecules $molecules)) $rules $events)
+       (exp07-ordered-run-to-state-tick
+         $arm
+         (exp07-ordered-total-tick
+           $arm
+           (chamber $id
+             (state $tick $seed (molecules $molecules)) $rules $events))
+         $terminal-state-tick)))
+
+(= (exp07-ordered-terminal-chamber $arm $seed)
+   (exp07-ordered-run-to-state-tick
+     $arm (exp07-ordered-initial-chamber $seed) 27))
+
+(= (exp07-ordered-event-count-from-terminal
+      (chamber $id $state $rules $events))
+   (exp07-registered-list-length $events))
+
+(= (exp07-ordered-event-count $arm $seed)
+   (exp07-ordered-event-count-from-terminal
+     (exp07-ordered-terminal-chamber $arm $seed)))
+
+(= (exp07-ordered-first-raf-tick-from-terminal
+      (chamber $id $state $rules $events))
+   (exp07-rich-first-rolling-raf-from
+     $events ()))
+
+(= (exp07-ordered-first-raf-tick $arm $seed)
+   (exp07-ordered-first-raf-tick-from-terminal
+     (exp07-ordered-terminal-chamber $arm $seed)))
+
+(= (exp07-ordered-raf-incidence $arm $seed)
+   (if (< (exp07-ordered-first-raf-tick $arm $seed) 99) 1 0))
+
+(= (exp07-ordered-replay-ok? $arm $seed)
+   (== (exp07-ordered-terminal-chamber $arm $seed)
+       (exp07-ordered-run-to-state-tick
+         $arm (exp07-ordered-initial-chamber $seed) 27)))
+
+(= (exp07-ordered-arm-raf-incidence $arm)
+   (+ (exp07-ordered-raf-incidence $arm seed-19)
+      (+ (exp07-ordered-raf-incidence $arm seed-20)
+         (+ (exp07-ordered-raf-incidence $arm seed-21)
+            (+ (exp07-ordered-raf-incidence $arm seed-22)
+               (+ (exp07-ordered-raf-incidence $arm seed-23)
+                  (+ (exp07-ordered-raf-incidence $arm seed-24)
+                     (+ (exp07-ordered-raf-incidence $arm seed-25)
+                        (exp07-ordered-raf-incidence $arm seed-26)))))))))
+
+(= (exp07-ordered-arm-event-count $arm)
+   (+ (exp07-ordered-event-count $arm seed-19)
+      (+ (exp07-ordered-event-count $arm seed-20)
+         (+ (exp07-ordered-event-count $arm seed-21)
+            (+ (exp07-ordered-event-count $arm seed-22)
+               (+ (exp07-ordered-event-count $arm seed-23)
+                  (+ (exp07-ordered-event-count $arm seed-24)
+                     (+ (exp07-ordered-event-count $arm seed-25)
+                        (exp07-ordered-event-count $arm seed-26)))))))))
+
+(= (exp07-ordered-arm-replay-count $arm)
+   (+ (if (exp07-ordered-replay-ok? $arm seed-19) 1 0)
+      (+ (if (exp07-ordered-replay-ok? $arm seed-20) 1 0)
+         (+ (if (exp07-ordered-replay-ok? $arm seed-21) 1 0)
+            (+ (if (exp07-ordered-replay-ok? $arm seed-22) 1 0)
+               (+ (if (exp07-ordered-replay-ok? $arm seed-23) 1 0)
+                  (+ (if (exp07-ordered-replay-ok? $arm seed-24) 1 0)
+                     (+ (if (exp07-ordered-replay-ok? $arm seed-25) 1 0)
+                        (if (exp07-ordered-replay-ok? $arm seed-26)
+                            1 0)))))))))
+
+(= (exp07-ordered-matrix-summary)
+   (ordered-bootstrap-matrix-summary
+     arms (unguided weak-doob-h shuffled-frontier-guidance)
+     seeds (seed-19 seed-20 seed-21 seed-22
+            seed-23 seed-24 seed-25 seed-26)
+     ticks (3 26)
+     raf-incidence
+       ((unguided (exp07-ordered-arm-raf-incidence unguided))
+        (weak-doob-h (exp07-ordered-arm-raf-incidence weak-doob-h))
+        (shuffled-frontier-guidance
+          (exp07-ordered-arm-raf-incidence shuffled-frontier-guidance)))
+     first-hit-ticks
+       ((unguided
+          ((exp07-ordered-first-raf-tick unguided seed-19)
+           (exp07-ordered-first-raf-tick unguided seed-20)
+           (exp07-ordered-first-raf-tick unguided seed-21)
+           (exp07-ordered-first-raf-tick unguided seed-22)
+           (exp07-ordered-first-raf-tick unguided seed-23)
+           (exp07-ordered-first-raf-tick unguided seed-24)
+           (exp07-ordered-first-raf-tick unguided seed-25)
+           (exp07-ordered-first-raf-tick unguided seed-26)))
+        (weak-doob-h
+          ((exp07-ordered-first-raf-tick weak-doob-h seed-19)
+           (exp07-ordered-first-raf-tick weak-doob-h seed-20)
+           (exp07-ordered-first-raf-tick weak-doob-h seed-21)
+           (exp07-ordered-first-raf-tick weak-doob-h seed-22)
+           (exp07-ordered-first-raf-tick weak-doob-h seed-23)
+           (exp07-ordered-first-raf-tick weak-doob-h seed-24)
+           (exp07-ordered-first-raf-tick weak-doob-h seed-25)
+           (exp07-ordered-first-raf-tick weak-doob-h seed-26)))
+        (shuffled-frontier-guidance
+          ((exp07-ordered-first-raf-tick shuffled-frontier-guidance seed-19)
+           (exp07-ordered-first-raf-tick shuffled-frontier-guidance seed-20)
+           (exp07-ordered-first-raf-tick shuffled-frontier-guidance seed-21)
+           (exp07-ordered-first-raf-tick shuffled-frontier-guidance seed-22)
+           (exp07-ordered-first-raf-tick shuffled-frontier-guidance seed-23)
+           (exp07-ordered-first-raf-tick shuffled-frontier-guidance seed-24)
+           (exp07-ordered-first-raf-tick shuffled-frontier-guidance seed-25)
+           (exp07-ordered-first-raf-tick shuffled-frontier-guidance seed-26))))
+     productive-event-totals
+       ((unguided (exp07-ordered-arm-event-count unguided))
+        (weak-doob-h (exp07-ordered-arm-event-count weak-doob-h))
+        (shuffled-frontier-guidance
+          (exp07-ordered-arm-event-count shuffled-frontier-guidance)))
+     exact-replays
+       ((unguided (exp07-ordered-arm-replay-count unguided))
+        (weak-doob-h (exp07-ordered-arm-replay-count weak-doob-h))
+        (shuffled-frontier-guidance
+          (exp07-ordered-arm-replay-count shuffled-frontier-guidance)))
+     adaptive-extension none
      emergence-claim none))

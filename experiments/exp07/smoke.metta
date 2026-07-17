@@ -1562,6 +1562,20 @@
           (rule od0 A C W0 X) (rule od1 B C W1 X)
           (rule od2 C D W2 X) (rule od3 A D W3 X))
          ((event 3 ob0 A B AB X))))
+!(test (exp07-ordered-fire-candidate
+         (candidate 3 (rule ob0 A B AB X) 1)
+         (exp07-ordered-initial-chamber seed-19))
+       (chamber exp07-ordered-bootstrap
+         (state 4 seed-19
+           (molecules
+             ((mol A 3) (mol B 2) (mol C 4) (mol D 3)
+              (mol AB 1) (mol AC 0) (mol CD 0) (mol X 1)
+              (mol W0 0) (mol W1 0) (mol W2 0) (mol W3 0))))
+         ((rule ob0 A B AB X) (rule op1 A C AC AB)
+          (rule op2 C D CD AC) (rule op0 A B AB CD)
+          (rule od0 A C W0 X) (rule od1 B C W1 X)
+          (rule od2 C D W2 X) (rule od3 A D W3 X))
+         ((event 3 ob0 A B AB X))))
 !(test (exp07-ordered-selector-pre-run-gate)
        (ordered-selector-pre-run-gate
          phases
@@ -1577,3 +1591,31 @@
          shifted-mass-units-per-guided-draw 8
          matched-cost true chemistry-outcomes-used false
          trajectory-evaluated false emergence-claim none))
+
+; Frozen ordered-bootstrap matrix: all three arms are RAF-null over the exact
+; held-out seeds and horizon, with deterministic replay and no extension.
+!(test (exp07-ordered-arm-replay-count unguided) 8)
+!(test (exp07-ordered-arm-replay-count weak-doob-h) 8)
+!(test (exp07-ordered-arm-replay-count shuffled-frontier-guidance) 8)
+!(test (exp07-ordered-matrix-summary)
+       (ordered-bootstrap-matrix-summary
+         arms (unguided weak-doob-h shuffled-frontier-guidance)
+         seeds (seed-19 seed-20 seed-21 seed-22
+                seed-23 seed-24 seed-25 seed-26)
+         ticks (3 26)
+         raf-incidence
+           ((unguided 0) (weak-doob-h 0)
+            (shuffled-frontier-guidance 0))
+         first-hit-ticks
+           ((unguided (99 99 99 99 99 99 99 99))
+            (weak-doob-h (99 99 99 99 99 99 99 99))
+            (shuffled-frontier-guidance
+              (99 99 99 99 99 99 99 99)))
+         productive-event-totals
+           ((unguided 103) (weak-doob-h 119)
+            (shuffled-frontier-guidance 104))
+         exact-replays
+           ((unguided 8) (weak-doob-h 8)
+            (shuffled-frontier-guidance 8))
+         adaptive-extension none
+         emergence-claim none))

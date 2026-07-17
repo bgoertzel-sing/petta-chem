@@ -915,13 +915,17 @@
       (make-candidate-for-rule $tick $rule-6)
       (make-candidate-for-rule $tick $rule-7))))
 
+(= (bounded-candidate-pool-from-generated
+      $cap (candidate-pool $tick $candidates))
+   (candidate-pool
+     $tick
+     (cap-candidate-pool
+       (effective-candidate-cap-per-tick $cap)
+       (candidate-pool $tick $candidates))))
+
 (= (bounded-candidate-pool $cap $chamber)
-   (let $generated-pool (generate-candidate-pool $chamber)
-     (candidate-pool
-       (candidate-pool-tick $generated-pool)
-       (cap-candidate-pool
-         (effective-candidate-cap-per-tick $cap)
-         $generated-pool))))
+   (bounded-candidate-pool-from-generated
+     $cap (generate-candidate-pool $chamber)))
 
 ; Generic deterministic firing for the exp00 state shape:
 ;   A + B --Cat--> AB

@@ -1,8 +1,8 @@
 # exp07 Preregistration: Ordered Bootstrap Frontier
 
-**Status:** Preregistered 2026-07-17 08:34 PDT; design/contract only. No
-ordered-bootstrap selector, chamber, trajectory, or outcome has been
-evaluated.
+**Status:** Preregistered 2026-07-17 08:34 PDT; frozen primary matrix executed
+once at 2026-07-17 14:30 PDT after all fail-closed gates passed. Secondary
+endpoints and causal ablations remain.
 **Predecessor:** `PREREG_RICH_POOL.md`, whose frozen matrix reached rolling
 three-rule RAF closure in 5/8 unguided, 7/8 weak-Doob-h, and 3/8 shuffled
 trajectories.
@@ -103,4 +103,3 @@ both unguided and shuffled controls are RAF-null, replay passes, removal of
 the guiding term collapses the weak result, and the catalyst/rule ablations
 confirm dependence on the three-rule cycle. Otherwise the result is reported
 as a null or pool-composition/control result without adding seeds or ticks.
-
