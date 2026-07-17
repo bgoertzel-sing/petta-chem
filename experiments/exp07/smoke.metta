@@ -1460,3 +1460,58 @@
          adaptive-extension prohibited
          terminal-forcing prohibited
          emergence-claim none))
+
+; Ordered-bootstrap materialization gate only.  No selection, chamber tick, or
+; held-out trajectory is evaluated by these assertions.
+!(test (exp07-ordered-rules)
+       ((rule ob0 A B AB X)
+        (rule op1 A C AC AB)
+        (rule op2 C D CD AC)
+        (rule op0 A B AB CD)
+        (rule od0 A C W0 X)
+        (rule od1 B C W1 X)
+        (rule od2 C D W2 X)
+        (rule od3 A D W3 X)))
+!(test (exp07-ordered-shared-pool
+         (exp07-ordered-initial-chamber seed-19))
+       (candidate-pool 3
+         ((candidate 3 (rule ob0 A B AB X) 1)
+          (candidate 3 (rule op1 A C AC AB) 1)
+          (candidate 3 (rule op2 C D CD AC) 1)
+          (candidate 3 (rule op0 A B AB CD) 1)
+          (candidate 3 (rule od0 A C W0 X) 1)
+          (candidate 3 (rule od1 B C W1 X) 1)
+          (candidate 3 (rule od2 C D W2 X) 1)
+          (candidate 3 (rule od3 A D W3 X) 1))))
+!(test (exp07-ordered-bounded-pool
+         (exp07-ordered-initial-chamber seed-19))
+       (exp07-ordered-shared-pool
+         (exp07-ordered-initial-chamber seed-19)))
+!(test (exp07-ordered-pool-identity?
+         (exp07-ordered-initial-chamber seed-19))
+       True)
+!(test (exp07-ordered-catalysis-facts)
+       ((catalysis-edge X ob0) (catalysis-edge AB op1)
+        (catalysis-edge AC op2) (catalysis-edge CD op0)
+        (catalysis-edge X od0) (catalysis-edge X od1)
+        (catalysis-edge X od2) (catalysis-edge X od3)))
+!(test (exp07-ordered-catalysis-fact-count) 8)
+!(test (exp07-ordered-catalyzes? AB op1) True)
+!(test (exp07-ordered-catalyzes? X op1) False)
+!(test (exp07-ordered-catalyzes? CD ob0) False)
+!(test (exp07-ordered-materialization-gate seed-19)
+       (ordered-materialization-gate
+         pool-order (ob0 op1 op2 op0 od0 od1 od2 od3)
+         shared-pool-identical True
+         bounded-cap 8
+         catalysis-facts
+           ((catalysis-edge X ob0) (catalysis-edge AB op1)
+            (catalysis-edge AC op2) (catalysis-edge CD op0)
+            (catalysis-edge X od0) (catalysis-edge X od1)
+            (catalysis-edge X od2) (catalysis-edge X od3))
+         catalysis-fact-count 8
+         selector-implemented false
+         chamber-tick-evaluated false
+         trajectory-evaluated false
+         status partial-pre-run-gate
+         emergence-claim none))

@@ -2304,3 +2304,89 @@
      adaptive-extension prohibited
      terminal-forcing prohibited
      emergence-claim none))
+
+; ----- Ordered-bootstrap pre-run gate: shared pool and catalysis -----
+;
+; Materialize only the frozen chemistry inputs.  These constructors do not
+; select a candidate, tick a chamber, or inspect any held-out outcome.
+(= (exp07-ordered-rules)
+   ((rule ob0 A B AB X)
+    (rule op1 A C AC AB)
+    (rule op2 C D CD AC)
+    (rule op0 A B AB CD)
+    (rule od0 A C W0 X)
+    (rule od1 B C W1 X)
+    (rule od2 C D W2 X)
+    (rule od3 A D W3 X)))
+
+(= (exp07-ordered-initial-chamber $seed)
+   (chamber exp07-ordered-bootstrap
+     (state 3 $seed
+       (molecules
+         ((mol A 4) (mol B 3) (mol C 4) (mol D 3)
+          (mol AB 0) (mol AC 0) (mol CD 0) (mol X 1)
+          (mol W0 0) (mol W1 0) (mol W2 0) (mol W3 0))))
+     (exp07-ordered-rules)
+     ()))
+
+; All arms call the same state-parametric constructor.  Arm identity is
+; deliberately ignored here; categorical policy is a later gate.
+(= (exp07-ordered-shared-pool $chamber)
+   (generate-candidate-pool $chamber))
+
+(= (exp07-ordered-arm-pool $arm $chamber)
+   (exp07-ordered-shared-pool $chamber))
+
+(= (exp07-ordered-bounded-pool $chamber)
+   (bounded-candidate-pool (candidate-cap 8 1) $chamber))
+
+(= (exp07-ordered-pool-identity? $chamber)
+   (and (== (exp07-ordered-arm-pool unguided $chamber)
+            (exp07-ordered-arm-pool weak-doob-h $chamber))
+        (== (exp07-ordered-arm-pool unguided $chamber)
+            (exp07-ordered-arm-pool shuffled-frontier-guidance $chamber))))
+
+; The first-class relation is explicit data.  The total query below scans
+; only these atoms, so rule or molecule spelling cannot imply catalysis.
+!(add-atom &self (catalyzes X ob0))
+!(add-atom &self (catalyzes AB op1))
+!(add-atom &self (catalyzes AC op2))
+!(add-atom &self (catalyzes CD op0))
+!(add-atom &self (catalyzes X od0))
+!(add-atom &self (catalyzes X od1))
+!(add-atom &self (catalyzes X od2))
+!(add-atom &self (catalyzes X od3))
+
+(= (exp07-ordered-catalysis-facts)
+   ((catalysis-edge X ob0)
+    (catalysis-edge AB op1)
+    (catalysis-edge AC op2)
+    (catalysis-edge CD op0)
+    (catalysis-edge X od0)
+    (catalysis-edge X od1)
+    (catalysis-edge X od2)
+    (catalysis-edge X od3)))
+
+(= (exp07-ordered-catalyzes? $molecule $rule-id)
+   (if (== (collapse
+             (match &self (catalyzes $molecule $rule-id) matched))
+           ())
+       False
+       True))
+
+(= (exp07-ordered-catalysis-fact-count)
+   (exp07-registered-list-length (exp07-ordered-catalysis-facts)))
+
+(= (exp07-ordered-materialization-gate $seed)
+   (ordered-materialization-gate
+     pool-order (ob0 op1 op2 op0 od0 od1 od2 od3)
+     shared-pool-identical
+       (exp07-ordered-pool-identity? (exp07-ordered-initial-chamber $seed))
+     bounded-cap 8
+     catalysis-facts (exp07-ordered-catalysis-facts)
+     catalysis-fact-count (exp07-ordered-catalysis-fact-count)
+     selector-implemented false
+     chamber-tick-evaluated false
+     trajectory-evaluated false
+     status partial-pre-run-gate
+     emergence-claim none))
