@@ -1286,6 +1286,24 @@
 !(test (exp07-rich-replay-ok? shuffled-guidance seed-14) True)
 !(test (exp07-rich-rule-diversity unguided seed-11) 6)
 !(test (exp07-rich-diversity-collapse shuffled-guidance seed-13) 3)
+!(test (exp07-rich-intervention-cost-per-draw unguided) 0)
+!(test (exp07-rich-intervention-cost-per-draw weak-doob-h) 15)
+!(test (exp07-rich-intervention-cost-per-draw shuffled-guidance) 15)
+!(test (exp07-rich-intervention-cost-report)
+       (rich-intervention-cost
+         reference-policy unguided
+         metric total-variation-shifted-mass-numerator
+         denominator-per-draw 88
+         registered-draws-per-trajectory 24
+         fixed-trajectories-per-arm 8
+         per-draw
+           ((unguided 0) (weak-doob-h 15) (shuffled-guidance 15))
+         per-trajectory
+           ((unguided 0) (weak-doob-h 360) (shuffled-guidance 360))
+         full-matrix
+           ((unguided 0) (weak-doob-h 2880) (shuffled-guidance 2880))
+         matched-guidance-budget true
+         chemistry-outcomes-used false))
 !(test (exp07-rich-registered-summary)
        (rich-registered-summary
          horizon (3 26)
@@ -1331,6 +1349,21 @@
            ((unguided 61) (weak-doob-h 61) (shuffled-guidance 54))
          total-diversity-collapse-from-full-pool
            ((unguided 3) (weak-doob-h 3) (shuffled-guidance 10))
+         intervention-cost
+           (rich-intervention-cost
+             reference-policy unguided
+             metric total-variation-shifted-mass-numerator
+             denominator-per-draw 88
+             registered-draws-per-trajectory 24
+             fixed-trajectories-per-arm 8
+             per-draw
+               ((unguided 0) (weak-doob-h 15) (shuffled-guidance 15))
+             per-trajectory
+               ((unguided 0) (weak-doob-h 360) (shuffled-guidance 360))
+             full-matrix
+               ((unguided 0) (weak-doob-h 2880) (shuffled-guidance 2880))
+             matched-guidance-budget true
+             chemistry-outcomes-used false)
          replay deterministic-seed-tick-state-carry
          terminal-forcing prohibited
          emergence-claim none))

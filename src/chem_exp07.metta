@@ -1940,6 +1940,66 @@
 (= (exp07-rich-arm-total-diversity-collapse $arm)
    (- 64 (exp07-rich-arm-total-rule-diversity $arm)))
 
+; Intervention cost is the exact total-variation numerator of an arm's frozen
+; 88-bin categorical policy relative to unguided: the number of integer mass
+; units shifted onto bins whose mass increased.  This avoids floating point or
+; host-side chemistry bookkeeping.  Weak and shuffled guidance deliberately
+; have the same matched deformation budget even though they move it to
+; different rule IDs.
+(= (exp07-rich-positive-mass-shift $arm-mass $unguided-mass)
+   (if (> $arm-mass $unguided-mass)
+       (- $arm-mass $unguided-mass)
+       0))
+
+(= (exp07-rich-shifted-mass-units
+      ($a0 $a1 $a2 $a3 $a4 $a5 $a6 $a7)
+      ($u0 $u1 $u2 $u3 $u4 $u5 $u6 $u7))
+   (+ (exp07-rich-positive-mass-shift $a0 $u0)
+      (+ (exp07-rich-positive-mass-shift $a1 $u1)
+         (+ (exp07-rich-positive-mass-shift $a2 $u2)
+            (+ (exp07-rich-positive-mass-shift $a3 $u3)
+               (+ (exp07-rich-positive-mass-shift $a4 $u4)
+                  (+ (exp07-rich-positive-mass-shift $a5 $u5)
+                     (+ (exp07-rich-positive-mass-shift $a6 $u6)
+                        (exp07-rich-positive-mass-shift $a7 $u7)))))))))
+
+(= (exp07-rich-intervention-cost-per-draw $arm)
+   (exp07-rich-shifted-mass-units
+     (exp07-rich-bin-counts $arm)
+     (exp07-rich-bin-counts unguided)))
+
+(= (exp07-rich-intervention-cost-per-trajectory $arm)
+   (* 24 (exp07-rich-intervention-cost-per-draw $arm)))
+
+(= (exp07-rich-intervention-cost-full-matrix $arm)
+   (* 8 (exp07-rich-intervention-cost-per-trajectory $arm)))
+
+(= (exp07-rich-intervention-cost-report)
+   (rich-intervention-cost
+     reference-policy unguided
+     metric total-variation-shifted-mass-numerator
+     denominator-per-draw 88
+     registered-draws-per-trajectory 24
+     fixed-trajectories-per-arm 8
+     per-draw
+       ((unguided (exp07-rich-intervention-cost-per-draw unguided))
+        (weak-doob-h (exp07-rich-intervention-cost-per-draw weak-doob-h))
+        (shuffled-guidance
+          (exp07-rich-intervention-cost-per-draw shuffled-guidance)))
+     per-trajectory
+       ((unguided (exp07-rich-intervention-cost-per-trajectory unguided))
+        (weak-doob-h
+          (exp07-rich-intervention-cost-per-trajectory weak-doob-h))
+        (shuffled-guidance
+          (exp07-rich-intervention-cost-per-trajectory shuffled-guidance)))
+     full-matrix
+       ((unguided (exp07-rich-intervention-cost-full-matrix unguided))
+        (weak-doob-h (exp07-rich-intervention-cost-full-matrix weak-doob-h))
+        (shuffled-guidance
+          (exp07-rich-intervention-cost-full-matrix shuffled-guidance)))
+     matched-guidance-budget true
+     chemistry-outcomes-used false))
+
 (= (exp07-rich-registered-summary)
    (rich-registered-summary
      horizon (3 26)
@@ -2053,6 +2113,7 @@
         (weak-doob-h (exp07-rich-arm-total-diversity-collapse weak-doob-h))
         (shuffled-guidance
           (exp07-rich-arm-total-diversity-collapse shuffled-guidance)))
+     intervention-cost (exp07-rich-intervention-cost-report)
      replay deterministic-seed-tick-state-carry
      terminal-forcing prohibited
      emergence-claim none))
