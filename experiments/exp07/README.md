@@ -66,13 +66,18 @@ rule collapses RAF incidence to zero in every arm, but removing guidance does
 not: unguided remains 5/8. The result is therefore closed as evidence that the
 pre-bootstrapped shared pool supports closure, not that guidance causes it.
 
-The successor is frozen in `PREREG_ORDERED_BOOTSTRAP.md` before any new
-outcome is evaluated. It removes the initial cycle catalyst and adds one
-non-RAF bootstrap rule, forcing productive access through the ordered frontier
-`ob0 -> op1 -> op2 -> op0`. State-aware weak guidance and a shuffled-frontier
-control use identical per-draw mass multisets and cost over held-out seeds
-19--26. Implementation and pre-run calibration remain next; no trajectory has
-been constructed and `emergence-claim none` remains.
+The successor frozen in `PREREG_ORDERED_BOOTSTRAP.md` removes the initial
+cycle catalyst and adds one non-RAF bootstrap rule, forcing productive access
+through `ob0 -> op1 -> op2 -> op0`. Its completed held-out matrix has ordered
+rolling-RAF incidence 0/8 unguided, 6/8 weak Doob-h, and 0/8 matched shuffled
+guidance. Weak first hits are `[99,12,15,14,99,19,19,18]`; persistence totals
+are 0/41/0 and distinct-rule totals are 42/59/39 of 64. All 24 trajectories
+replay. Removing guidance, `ob0`, all three cycle catalyst edges, or any one
+of `op1/op2/op0` collapses weak incidence to zero. This supports a bounded
+guided causal RAF-uplift result on the frozen fixture, not spontaneous
+emergence. The originally reported all-arm null came from accidentally routing
+the ordered endpoint through the historical `rp0/rp1/rp2` detector; smoke
+tests now bind it explicitly to `op1/op2/op0`.
 
 Run with:
 

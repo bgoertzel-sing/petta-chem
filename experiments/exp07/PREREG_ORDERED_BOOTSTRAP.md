@@ -1,12 +1,16 @@
 # exp07 Preregistration: Ordered Bootstrap Frontier
 
-**Status:** Preregistered 2026-07-17 08:34 PDT; frozen primary matrix executed
-once at 2026-07-17 14:30 PDT after all fail-closed gates passed. Secondary
-endpoints and causal ablations remain.
+**Status:** Complete 2026-07-17 16:30 PDT. The frozen primary matrix was
+executed once at 14:30 after all fail-closed gates passed; a post-run audit
+found that its reporting function called the historical rich-pool detector.
+The corrected ordered `op1/op2/op0` detector, secondary endpoints, and all
+prespecified causal ablations are now smoke-tested without changing the frozen
+seeds, horizon, draws, pool, or schedule.
 **Predecessor:** `PREREG_RICH_POOL.md`, whose frozen matrix reached rolling
 three-rule RAF closure in 5/8 unguided, 7/8 weak-Doob-h, and 3/8 shuffled
 trajectories.
-**Emergence claim:** none.
+**Result boundary:** guided causal RAF uplift supported; spontaneous emergence
+claim none.
 
 ## Why the rich-pool result is a null
 
@@ -103,3 +107,14 @@ both unguided and shuffled controls are RAF-null, replay passes, removal of
 the guiding term collapses the weak result, and the catalyst/rule ablations
 confirm dependence on the three-rule cycle. Otherwise the result is reported
 as a null or pool-composition/control result without adding seeds or ticks.
+
+## Frozen result
+
+The corrected ordered detector reports RAF incidence 0/8 unguided, 6/8 weak
+Doob-h, and 0/8 shuffled-frontier guidance. Weak first hits are
+`[99,12,15,14,99,19,19,18]`; persistence totals are 0/41/0 and terminal
+distinct-rule totals are 42/59/39 out of 64. All 24 trajectories replay.
+Guiding-term removal gives 0/8; bootstrap removal, removal of all three RAF
+catalyst edges, and each individual `op1/op2/op0` removal also give 0/8.
+These outcomes meet the preregistered guided causal-uplift condition. They do
+not establish spontaneous emergence, and no seeds or ticks were added.

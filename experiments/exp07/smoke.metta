@@ -1597,6 +1597,45 @@
 !(test (exp07-ordered-arm-replay-count unguided) 8)
 !(test (exp07-ordered-arm-replay-count weak-doob-h) 8)
 !(test (exp07-ordered-arm-replay-count shuffled-frontier-guidance) 8)
+!(test (exp07-ordered-secondary-summary)
+       (ordered-bootstrap-secondary-summary
+         longest-consecutive-raf-ticks
+           ((unguided (0 0 0 0 0 0 0 0))
+            (weak-doob-h (0 9 6 7 0 4 8 7))
+            (shuffled-frontier-guidance (0 0 0 0 0 0 0 0)))
+         total-persistence
+           ((unguided 0) (weak-doob-h 41)
+            (shuffled-frontier-guidance 0))
+         terminal-rule-diversity
+           ((unguided (5 5 6 5 6 4 6 5))
+            (weak-doob-h (7 8 8 7 6 7 8 8))
+            (shuffled-frontier-guidance (4 5 6 5 5 4 5 5)))
+         total-rule-diversity
+           ((unguided 42) (weak-doob-h 59)
+            (shuffled-frontier-guidance 39))
+         total-diversity-collapse-from-full-pool
+           ((unguided 22) (weak-doob-h 5)
+            (shuffled-frontier-guidance 25))
+         fixed-seeds-and-horizon true
+         guided-causal-raf-uplift supported
+         spontaneous-emergence-claim none))
+!(test (exp07-ordered-causal-ablation-summary)
+       (ordered-bootstrap-causal-ablation
+         guiding-term-removal
+           (weak-policy-replaced-by unguided raf-incidence 0)
+         bootstrap-ablation
+           ((unguided 0) (weak-doob-h 0)
+            (shuffled-frontier-guidance 0))
+         catalyst-ablation
+           (removed-edges ((AB op1) (AC op2) (CD op0))
+            raf-incidence
+              ((unguided 0) (weak-doob-h 0)
+               (shuffled-frontier-guidance 0)))
+         rule-ablation ((op1 0) (op2 0) (op0 0))
+         fixed-seeds-pool-draws-schedule true
+         terminal-forcing prohibited
+         guided-causal-raf-uplift supported
+         spontaneous-emergence-claim none))
 !(test (exp07-ordered-matrix-summary)
        (ordered-bootstrap-matrix-summary
          arms (unguided weak-doob-h shuffled-frontier-guidance)
@@ -1604,11 +1643,11 @@
                 seed-23 seed-24 seed-25 seed-26)
          ticks (3 26)
          raf-incidence
-           ((unguided 0) (weak-doob-h 0)
+           ((unguided 0) (weak-doob-h 6)
             (shuffled-frontier-guidance 0))
          first-hit-ticks
            ((unguided (99 99 99 99 99 99 99 99))
-            (weak-doob-h (99 99 99 99 99 99 99 99))
+            (weak-doob-h (99 12 15 14 99 19 19 18))
             (shuffled-frontier-guidance
               (99 99 99 99 99 99 99 99)))
          productive-event-totals
@@ -1617,5 +1656,46 @@
          exact-replays
            ((unguided 8) (weak-doob-h 8)
             (shuffled-frontier-guidance 8))
+         rolling-detector ordered-op1-op2-op0
+         secondary-endpoints
+           (ordered-bootstrap-secondary-summary
+             longest-consecutive-raf-ticks
+               ((unguided (0 0 0 0 0 0 0 0))
+                (weak-doob-h (0 9 6 7 0 4 8 7))
+                (shuffled-frontier-guidance (0 0 0 0 0 0 0 0)))
+             total-persistence
+               ((unguided 0) (weak-doob-h 41)
+                (shuffled-frontier-guidance 0))
+             terminal-rule-diversity
+               ((unguided (5 5 6 5 6 4 6 5))
+                (weak-doob-h (7 8 8 7 6 7 8 8))
+                (shuffled-frontier-guidance (4 5 6 5 5 4 5 5)))
+             total-rule-diversity
+               ((unguided 42) (weak-doob-h 59)
+                (shuffled-frontier-guidance 39))
+             total-diversity-collapse-from-full-pool
+               ((unguided 22) (weak-doob-h 5)
+                (shuffled-frontier-guidance 25))
+             fixed-seeds-and-horizon true
+             guided-causal-raf-uplift supported
+             spontaneous-emergence-claim none)
+         causal-ablations
+           (ordered-bootstrap-causal-ablation
+             guiding-term-removal
+               (weak-policy-replaced-by unguided raf-incidence 0)
+             bootstrap-ablation
+               ((unguided 0) (weak-doob-h 0)
+                (shuffled-frontier-guidance 0))
+             catalyst-ablation
+               (removed-edges ((AB op1) (AC op2) (CD op0))
+                raf-incidence
+                  ((unguided 0) (weak-doob-h 0)
+                   (shuffled-frontier-guidance 0)))
+             rule-ablation ((op1 0) (op2 0) (op0 0))
+             fixed-seeds-pool-draws-schedule true
+             terminal-forcing prohibited
+             guided-causal-raf-uplift supported
+             spontaneous-emergence-claim none)
          adaptive-extension none
-         emergence-claim none))
+         guided-causal-raf-uplift supported
+         spontaneous-emergence-claim none))

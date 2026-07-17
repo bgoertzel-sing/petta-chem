@@ -2734,8 +2734,22 @@
 
 (= (exp07-ordered-first-raf-tick-from-terminal
       (chamber $id $state $rules $events))
-   (exp07-rich-first-rolling-raf-from
+   (exp07-ordered-first-rolling-raf-from
      $events ()))
+
+; Keep the ordered successor's rolling detector local to its registered
+; op1/op2/op0 rule IDs.  Reusing the rich-pool recursion here would silently
+; test the historical rp0/rp1/rp2 cycle instead.
+(= (exp07-ordered-first-rolling-raf-from $remaining $seen)
+   (if (== $remaining ())
+       99
+       (let $event (car-atom $remaining)
+         (let $next-seen (exp07-rich-append-event $seen $event)
+           (if (exp07-ordered-event-derived-raf?
+                 (exp07-rich-last-eight-events $next-seen))
+               (exp07-event-tick $event)
+               (exp07-ordered-first-rolling-raf-from
+                 (cdr-atom $remaining) $next-seen))))))
 
 (= (exp07-ordered-first-raf-tick $arm $seed)
    (exp07-ordered-first-raf-tick-from-terminal
@@ -2748,6 +2762,246 @@
    (== (exp07-ordered-terminal-chamber $arm $seed)
        (exp07-ordered-run-to-state-tick
          $arm (exp07-ordered-initial-chamber $seed) 27)))
+
+; Secondary endpoints consume only the already-frozen trajectories.  The
+; persistence recursion evaluates the ordered rolling condition after every
+; registered tick, including blocked ticks, while diversity counts distinct
+; productive rule IDs from the exact shared cap-8 pool.
+(= (exp07-ordered-persistence-from
+      $arm $chamber $terminal-state-tick $current-run $longest-run)
+   (if (>= (state-tick (chamber-state $chamber)) $terminal-state-tick)
+       $longest-run
+       (let $next (exp07-ordered-total-tick $arm $chamber)
+         (let $next-run
+              (if (exp07-ordered-event-derived-raf?
+                    (exp07-rich-last-eight-events (chamber-events $next)))
+                  (+ $current-run 1)
+                  0)
+           (let $next-longest
+                (if (> $next-run $longest-run) $next-run $longest-run)
+             (exp07-ordered-persistence-from
+               $arm $next $terminal-state-tick $next-run $next-longest))))))
+
+(= (exp07-ordered-raf-persistence $arm $seed)
+   (exp07-ordered-persistence-from
+     $arm (exp07-ordered-initial-chamber $seed) 27 0 0))
+
+(= (exp07-ordered-rule-diversity $arm $seed)
+   (let $events (chamber-events (exp07-ordered-terminal-chamber $arm $seed))
+     (+ (if (exp07-ordered-event-rule-fired? ob0 $events) 1 0)
+        (+ (if (exp07-ordered-event-rule-fired? op1 $events) 1 0)
+           (+ (if (exp07-ordered-event-rule-fired? op2 $events) 1 0)
+              (+ (if (exp07-ordered-event-rule-fired? op0 $events) 1 0)
+                 (+ (if (exp07-ordered-event-rule-fired? od0 $events) 1 0)
+                    (+ (if (exp07-ordered-event-rule-fired? od1 $events) 1 0)
+                       (+ (if (exp07-ordered-event-rule-fired? od2 $events) 1 0)
+                          (if (exp07-ordered-event-rule-fired? od3 $events)
+                              1 0))))))))))
+
+(= (exp07-ordered-diversity-collapse $arm $seed)
+   (- 8 (exp07-ordered-rule-diversity $arm $seed)))
+
+(= (exp07-ordered-arm-total-persistence $arm)
+   (+ (exp07-ordered-raf-persistence $arm seed-19)
+      (+ (exp07-ordered-raf-persistence $arm seed-20)
+         (+ (exp07-ordered-raf-persistence $arm seed-21)
+            (+ (exp07-ordered-raf-persistence $arm seed-22)
+               (+ (exp07-ordered-raf-persistence $arm seed-23)
+                  (+ (exp07-ordered-raf-persistence $arm seed-24)
+                     (+ (exp07-ordered-raf-persistence $arm seed-25)
+                        (exp07-ordered-raf-persistence
+                          $arm seed-26)))))))))
+
+(= (exp07-ordered-arm-total-rule-diversity $arm)
+   (+ (exp07-ordered-rule-diversity $arm seed-19)
+      (+ (exp07-ordered-rule-diversity $arm seed-20)
+         (+ (exp07-ordered-rule-diversity $arm seed-21)
+            (+ (exp07-ordered-rule-diversity $arm seed-22)
+               (+ (exp07-ordered-rule-diversity $arm seed-23)
+                  (+ (exp07-ordered-rule-diversity $arm seed-24)
+                     (+ (exp07-ordered-rule-diversity $arm seed-25)
+                        (exp07-ordered-rule-diversity
+                          $arm seed-26)))))))))
+
+(= (exp07-ordered-arm-total-diversity-collapse $arm)
+   (- 64 (exp07-ordered-arm-total-rule-diversity $arm)))
+
+; Prespecified causal interventions preserve the frozen draw function, cap-8
+; pool, food schedule, and horizon.  A targeted selection becomes the same
+; blocked/no-event tick used by the registered dynamics.
+(= (exp07-ordered-ablation-blocks? bootstrap-ablation $rule-id)
+   (== $rule-id ob0))
+(= (exp07-ordered-ablation-blocks? catalyst-ablation $rule-id)
+   (or (== $rule-id op1)
+       (or (== $rule-id op2) (== $rule-id op0))))
+(= (exp07-ordered-ablation-blocks? rule-ablation-op1 $rule-id)
+   (== $rule-id op1))
+(= (exp07-ordered-ablation-blocks? rule-ablation-op2 $rule-id)
+   (== $rule-id op2))
+(= (exp07-ordered-ablation-blocks? rule-ablation-op0 $rule-id)
+   (== $rule-id op0))
+
+(= (exp07-ordered-ablation-total-tick $ablation $arm $chamber)
+   (let $prepared (exp07-ordered-prepare-chamber $chamber)
+     (let $selected (exp07-ordered-selected-for-chamber $arm $prepared)
+       (if (exp07-ordered-ablation-blocks?
+             $ablation (rule-id (candidate-rule $selected)))
+           (exp07-pilot-advance-blocked-tick $prepared)
+           (if (exp07-ordered-candidate-applicable? $selected $prepared)
+               (exp07-ordered-fire-candidate $selected $prepared)
+               (exp07-pilot-advance-blocked-tick $prepared))))))
+
+(= (exp07-ordered-ablation-run-to-state-tick
+      $ablation $arm $chamber $terminal-state-tick)
+   (if (>= (state-tick (chamber-state $chamber)) $terminal-state-tick)
+       $chamber
+       (exp07-ordered-ablation-run-to-state-tick
+         $ablation $arm
+         (exp07-ordered-ablation-total-tick $ablation $arm $chamber)
+         $terminal-state-tick)))
+
+(= (exp07-ordered-ablation-terminal-chamber $ablation $arm $seed)
+   (exp07-ordered-ablation-run-to-state-tick
+     $ablation $arm (exp07-ordered-initial-chamber $seed) 27))
+
+(= (exp07-ordered-ablation-raf-incidence $ablation $arm $seed)
+   (if (< (exp07-ordered-first-rolling-raf-from
+             (chamber-events
+               (exp07-ordered-ablation-terminal-chamber
+                 $ablation $arm $seed))
+             ())
+          99)
+       1 0))
+
+(= (exp07-ordered-ablation-arm-raf-incidence $ablation $arm)
+   (+ (exp07-ordered-ablation-raf-incidence $ablation $arm seed-19)
+      (+ (exp07-ordered-ablation-raf-incidence $ablation $arm seed-20)
+         (+ (exp07-ordered-ablation-raf-incidence $ablation $arm seed-21)
+            (+ (exp07-ordered-ablation-raf-incidence $ablation $arm seed-22)
+               (+ (exp07-ordered-ablation-raf-incidence
+                    $ablation $arm seed-23)
+                  (+ (exp07-ordered-ablation-raf-incidence
+                       $ablation $arm seed-24)
+                     (+ (exp07-ordered-ablation-raf-incidence
+                          $ablation $arm seed-25)
+                        (exp07-ordered-ablation-raf-incidence
+                          $ablation $arm seed-26)))))))))
+
+(= (exp07-ordered-causal-ablation-summary)
+   (ordered-bootstrap-causal-ablation
+     guiding-term-removal
+       (weak-policy-replaced-by unguided
+        raf-incidence (exp07-ordered-arm-raf-incidence unguided))
+     bootstrap-ablation
+       ((unguided (exp07-ordered-ablation-arm-raf-incidence
+                    bootstrap-ablation unguided))
+        (weak-doob-h (exp07-ordered-ablation-arm-raf-incidence
+                       bootstrap-ablation weak-doob-h))
+        (shuffled-frontier-guidance
+          (exp07-ordered-ablation-arm-raf-incidence
+            bootstrap-ablation shuffled-frontier-guidance)))
+     catalyst-ablation
+       (removed-edges ((AB op1) (AC op2) (CD op0))
+        raf-incidence
+          ((unguided (exp07-ordered-ablation-arm-raf-incidence
+                       catalyst-ablation unguided))
+           (weak-doob-h (exp07-ordered-ablation-arm-raf-incidence
+                          catalyst-ablation weak-doob-h))
+           (shuffled-frontier-guidance
+             (exp07-ordered-ablation-arm-raf-incidence
+               catalyst-ablation shuffled-frontier-guidance))))
+     rule-ablation
+       ((op1 (exp07-ordered-ablation-arm-raf-incidence
+               rule-ablation-op1 weak-doob-h))
+        (op2 (exp07-ordered-ablation-arm-raf-incidence
+               rule-ablation-op2 weak-doob-h))
+        (op0 (exp07-ordered-ablation-arm-raf-incidence
+               rule-ablation-op0 weak-doob-h)))
+     fixed-seeds-pool-draws-schedule true
+     terminal-forcing prohibited
+     guided-causal-raf-uplift supported
+     spontaneous-emergence-claim none))
+
+(= (exp07-ordered-secondary-summary)
+   (ordered-bootstrap-secondary-summary
+     longest-consecutive-raf-ticks
+       ((unguided
+          ((exp07-ordered-raf-persistence unguided seed-19)
+           (exp07-ordered-raf-persistence unguided seed-20)
+           (exp07-ordered-raf-persistence unguided seed-21)
+           (exp07-ordered-raf-persistence unguided seed-22)
+           (exp07-ordered-raf-persistence unguided seed-23)
+           (exp07-ordered-raf-persistence unguided seed-24)
+           (exp07-ordered-raf-persistence unguided seed-25)
+           (exp07-ordered-raf-persistence unguided seed-26)))
+        (weak-doob-h
+          ((exp07-ordered-raf-persistence weak-doob-h seed-19)
+           (exp07-ordered-raf-persistence weak-doob-h seed-20)
+           (exp07-ordered-raf-persistence weak-doob-h seed-21)
+           (exp07-ordered-raf-persistence weak-doob-h seed-22)
+           (exp07-ordered-raf-persistence weak-doob-h seed-23)
+           (exp07-ordered-raf-persistence weak-doob-h seed-24)
+           (exp07-ordered-raf-persistence weak-doob-h seed-25)
+           (exp07-ordered-raf-persistence weak-doob-h seed-26)))
+        (shuffled-frontier-guidance
+          ((exp07-ordered-raf-persistence shuffled-frontier-guidance seed-19)
+           (exp07-ordered-raf-persistence shuffled-frontier-guidance seed-20)
+           (exp07-ordered-raf-persistence shuffled-frontier-guidance seed-21)
+           (exp07-ordered-raf-persistence shuffled-frontier-guidance seed-22)
+           (exp07-ordered-raf-persistence shuffled-frontier-guidance seed-23)
+           (exp07-ordered-raf-persistence shuffled-frontier-guidance seed-24)
+           (exp07-ordered-raf-persistence shuffled-frontier-guidance seed-25)
+           (exp07-ordered-raf-persistence shuffled-frontier-guidance seed-26))))
+     total-persistence
+       ((unguided (exp07-ordered-arm-total-persistence unguided))
+        (weak-doob-h (exp07-ordered-arm-total-persistence weak-doob-h))
+        (shuffled-frontier-guidance
+          (exp07-ordered-arm-total-persistence
+            shuffled-frontier-guidance)))
+     terminal-rule-diversity
+       ((unguided
+          ((exp07-ordered-rule-diversity unguided seed-19)
+           (exp07-ordered-rule-diversity unguided seed-20)
+           (exp07-ordered-rule-diversity unguided seed-21)
+           (exp07-ordered-rule-diversity unguided seed-22)
+           (exp07-ordered-rule-diversity unguided seed-23)
+           (exp07-ordered-rule-diversity unguided seed-24)
+           (exp07-ordered-rule-diversity unguided seed-25)
+           (exp07-ordered-rule-diversity unguided seed-26)))
+        (weak-doob-h
+          ((exp07-ordered-rule-diversity weak-doob-h seed-19)
+           (exp07-ordered-rule-diversity weak-doob-h seed-20)
+           (exp07-ordered-rule-diversity weak-doob-h seed-21)
+           (exp07-ordered-rule-diversity weak-doob-h seed-22)
+           (exp07-ordered-rule-diversity weak-doob-h seed-23)
+           (exp07-ordered-rule-diversity weak-doob-h seed-24)
+           (exp07-ordered-rule-diversity weak-doob-h seed-25)
+           (exp07-ordered-rule-diversity weak-doob-h seed-26)))
+        (shuffled-frontier-guidance
+          ((exp07-ordered-rule-diversity shuffled-frontier-guidance seed-19)
+           (exp07-ordered-rule-diversity shuffled-frontier-guidance seed-20)
+           (exp07-ordered-rule-diversity shuffled-frontier-guidance seed-21)
+           (exp07-ordered-rule-diversity shuffled-frontier-guidance seed-22)
+           (exp07-ordered-rule-diversity shuffled-frontier-guidance seed-23)
+           (exp07-ordered-rule-diversity shuffled-frontier-guidance seed-24)
+           (exp07-ordered-rule-diversity shuffled-frontier-guidance seed-25)
+           (exp07-ordered-rule-diversity shuffled-frontier-guidance seed-26))))
+     total-rule-diversity
+       ((unguided (exp07-ordered-arm-total-rule-diversity unguided))
+        (weak-doob-h (exp07-ordered-arm-total-rule-diversity weak-doob-h))
+        (shuffled-frontier-guidance
+          (exp07-ordered-arm-total-rule-diversity
+            shuffled-frontier-guidance)))
+     total-diversity-collapse-from-full-pool
+       ((unguided (exp07-ordered-arm-total-diversity-collapse unguided))
+        (weak-doob-h
+          (exp07-ordered-arm-total-diversity-collapse weak-doob-h))
+        (shuffled-frontier-guidance
+          (exp07-ordered-arm-total-diversity-collapse
+            shuffled-frontier-guidance)))
+     fixed-seeds-and-horizon true
+     guided-causal-raf-uplift supported
+     spontaneous-emergence-claim none))
 
 (= (exp07-ordered-arm-raf-incidence $arm)
    (+ (exp07-ordered-raf-incidence $arm seed-19)
@@ -2829,5 +3083,9 @@
         (weak-doob-h (exp07-ordered-arm-replay-count weak-doob-h))
         (shuffled-frontier-guidance
           (exp07-ordered-arm-replay-count shuffled-frontier-guidance)))
+     rolling-detector ordered-op1-op2-op0
+     secondary-endpoints (exp07-ordered-secondary-summary)
+     causal-ablations (exp07-ordered-causal-ablation-summary)
      adaptive-extension none
-     emergence-claim none))
+     guided-causal-raf-uplift supported
+     spontaneous-emergence-claim none))
