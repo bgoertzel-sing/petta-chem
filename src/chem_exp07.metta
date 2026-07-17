@@ -1638,6 +1638,43 @@
                        (if (< $draw 72) 5
                            (if (< $draw 80) 6 7))))))))
 
+; Exhaust the complete synthetic draw cycle without constructing chemistry
+; outcomes.  This independently checks that each frozen cumulative partition
+; realizes its declared integer masses over draw bins 0--87.
+(= (exp07-rich-bin-count-from $arm $bin $draw)
+   (if (>= $draw 88)
+       0
+       (+ (if (== (exp07-rich-bin $arm $draw) $bin) 1 0)
+          (exp07-rich-bin-count-from $arm $bin (+ $draw 1)))))
+
+(= (exp07-rich-bin-counts $arm)
+   ((exp07-rich-bin-count-from $arm 0 0)
+    (exp07-rich-bin-count-from $arm 1 0)
+    (exp07-rich-bin-count-from $arm 2 0)
+    (exp07-rich-bin-count-from $arm 3 0)
+    (exp07-rich-bin-count-from $arm 4 0)
+    (exp07-rich-bin-count-from $arm 5 0)
+    (exp07-rich-bin-count-from $arm 6 0)
+    (exp07-rich-bin-count-from $arm 7 0)))
+
+(= (exp07-rich-sampler-calibration)
+   (sampler-calibration
+     synthetic-draw-bins 0-through-87
+     draws-per-arm 88
+     candidate-order (rp0 rp1 rp2 rd0 rd1 rd2 rd3 rd4)
+     realized-masses
+       ((unguided (exp07-rich-bin-counts unguided))
+        (weak-doob-h (exp07-rich-bin-counts weak-doob-h))
+        (shuffled-guidance
+          (exp07-rich-bin-counts shuffled-guidance)))
+     expected-masses
+       ((unguided (11 11 11 11 11 11 11 11))
+        (weak-doob-h (16 16 16 8 8 8 8 8))
+        (shuffled-guidance (8 8 8 16 16 16 8 8)))
+     replay deterministic-complete-cycle
+     outcomes-evaluated false
+     emergence-claim none))
+
 (= (exp07-rich-select-bin 0 ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7)) $c0)
 (= (exp07-rich-select-bin 1 ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7)) $c1)
 (= (exp07-rich-select-bin 2 ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7)) $c2)

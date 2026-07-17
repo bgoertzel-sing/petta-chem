@@ -1183,6 +1183,25 @@
 !(test (exp07-rich-bin weak-doob-h 48) 3)
 !(test (exp07-rich-bin shuffled-guidance 23) 2)
 !(test (exp07-rich-bin shuffled-guidance 24) 3)
+!(test (exp07-rich-bin-counts unguided) (11 11 11 11 11 11 11 11))
+!(test (exp07-rich-bin-counts weak-doob-h) (16 16 16 8 8 8 8 8))
+!(test (exp07-rich-bin-counts shuffled-guidance) (8 8 8 16 16 16 8 8))
+!(test (exp07-rich-sampler-calibration)
+       (sampler-calibration
+         synthetic-draw-bins 0-through-87
+         draws-per-arm 88
+         candidate-order (rp0 rp1 rp2 rd0 rd1 rd2 rd3 rd4)
+         realized-masses
+           ((unguided (11 11 11 11 11 11 11 11))
+            (weak-doob-h (16 16 16 8 8 8 8 8))
+            (shuffled-guidance (8 8 8 16 16 16 8 8)))
+         expected-masses
+           ((unguided (11 11 11 11 11 11 11 11))
+            (weak-doob-h (16 16 16 8 8 8 8 8))
+            (shuffled-guidance (8 8 8 16 16 16 8 8)))
+         replay deterministic-complete-cycle
+         outcomes-evaluated false
+         emergence-claim none))
 
 !(test (exp07-rich-generated-pool seed-12)
        (candidate-pool 3
