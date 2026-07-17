@@ -1289,6 +1289,39 @@
 !(test (exp07-rich-intervention-cost-per-draw unguided) 0)
 !(test (exp07-rich-intervention-cost-per-draw weak-doob-h) 15)
 !(test (exp07-rich-intervention-cost-per-draw shuffled-guidance) 15)
+!(test (exp07-rich-ablation-arm-raf-incidence
+         catalyst-ablation weak-doob-h)
+       0)
+!(test (exp07-rich-ablation-arm-raf-incidence
+         rule-ablation-rp0 unguided)
+       0)
+!(test (exp07-rich-ablation-arm-raf-incidence
+         rule-ablation-rp1 weak-doob-h)
+       0)
+!(test (exp07-rich-ablation-arm-raf-incidence
+         rule-ablation-rp2 shuffled-guidance)
+       0)
+!(test (exp07-rich-causal-ablation-report)
+       (rich-causal-ablation
+         fixed-horizon (3 26)
+         fixed-seeds (seed-11 seed-12 seed-13 seed-14
+                      seed-15 seed-16 seed-17 seed-18)
+         guiding-term-removal
+           (unguided-raf-incidence 5 outcome does-not-collapse)
+         catalyst-ablation
+           (removed-edges ((CD rp0) (AB rp1) (AC rp2))
+            raf-incidence
+              ((unguided 0) (weak-doob-h 0) (shuffled-guidance 0))
+            productive-events
+              ((unguided 116) (weak-doob-h 83) (shuffled-guidance 117))
+            outcome collapses)
+         rule-ablation
+           ((rp0 ((unguided 0) (weak-doob-h 0) (shuffled-guidance 0)))
+            (rp1 ((unguided 0) (weak-doob-h 0) (shuffled-guidance 0)))
+            (rp2 ((unguided 0) (weak-doob-h 0) (shuffled-guidance 0))))
+         matched-pool-selector-schedule true
+         terminal-forcing prohibited
+         emergence-claim none))
 !(test (exp07-rich-intervention-cost-report)
        (rich-intervention-cost
          reference-policy unguided
@@ -1364,6 +1397,30 @@
                ((unguided 0) (weak-doob-h 2880) (shuffled-guidance 2880))
              matched-guidance-budget true
              chemistry-outcomes-used false)
+         causal-ablations
+           (rich-causal-ablation
+             fixed-horizon (3 26)
+             fixed-seeds (seed-11 seed-12 seed-13 seed-14
+                          seed-15 seed-16 seed-17 seed-18)
+             guiding-term-removal
+               (unguided-raf-incidence 5 outcome does-not-collapse)
+             catalyst-ablation
+               (removed-edges ((CD rp0) (AB rp1) (AC rp2))
+                raf-incidence
+                  ((unguided 0) (weak-doob-h 0) (shuffled-guidance 0))
+                productive-events
+                  ((unguided 116) (weak-doob-h 83) (shuffled-guidance 117))
+                outcome collapses)
+             rule-ablation
+               ((rp0 ((unguided 0) (weak-doob-h 0)
+                      (shuffled-guidance 0)))
+                (rp1 ((unguided 0) (weak-doob-h 0)
+                      (shuffled-guidance 0)))
+                (rp2 ((unguided 0) (weak-doob-h 0)
+                      (shuffled-guidance 0))))
+             matched-pool-selector-schedule true
+             terminal-forcing prohibited
+             emergence-claim none)
          replay deterministic-seed-tick-state-carry
          terminal-forcing prohibited
          emergence-claim none))

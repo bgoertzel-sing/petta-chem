@@ -1940,6 +1940,149 @@
 (= (exp07-rich-arm-total-diversity-collapse $arm)
    (- 64 (exp07-rich-arm-total-rule-diversity $arm)))
 
+; ----- Frozen rich-pool causal ablations -----
+;
+; These counterfactuals rerun the exact registered seeds, ticks, selector,
+; replenishment schedule, and eight-candidate pool.  An ablated catalytic edge
+; or rule turns only its selected draw into the same blocked/no-event tick used
+; by the registered dynamics.  This keeps the intervention inside the PeTTa
+; chemistry loop instead of post-filtering terminal event histories.
+(= (exp07-rich-ablation-blocks? catalyst-ablation $rule-id)
+   (or (== $rule-id rp0)
+       (or (== $rule-id rp1) (== $rule-id rp2))))
+(= (exp07-rich-ablation-blocks? rule-ablation-rp0 $rule-id)
+   (== $rule-id rp0))
+(= (exp07-rich-ablation-blocks? rule-ablation-rp1 $rule-id)
+   (== $rule-id rp1))
+(= (exp07-rich-ablation-blocks? rule-ablation-rp2 $rule-id)
+   (== $rule-id rp2))
+
+(= (exp07-rich-ablation-total-tick $ablation $arm $chamber)
+   (let $prepared (exp07-rich-prepare-chamber $chamber)
+     (let $selected (exp07-rich-selected-for-chamber $arm $prepared)
+       (if (exp07-rich-ablation-blocks?
+             $ablation (rule-id (candidate-rule $selected)))
+           (exp07-pilot-advance-blocked-tick $prepared)
+           (if (candidate-applicable-in-chamber? $selected $prepared)
+               (chamber-tick-with-candidate $prepared $selected)
+               (exp07-pilot-advance-blocked-tick $prepared))))))
+
+(= (exp07-rich-ablation-run-to-state-tick
+      $ablation $arm $chamber $terminal-state-tick)
+   (if (>= (state-tick (chamber-state $chamber)) $terminal-state-tick)
+       $chamber
+       (exp07-rich-ablation-run-to-state-tick
+         $ablation $arm
+         (exp07-rich-ablation-total-tick $ablation $arm $chamber)
+         $terminal-state-tick)))
+
+(= (exp07-rich-ablation-terminal-chamber $ablation $arm $seed)
+   (exp07-rich-ablation-run-to-state-tick
+     $ablation $arm (exp07-rich-initial-chamber $seed) 27))
+
+(= (exp07-rich-ablation-event-count $ablation $arm $seed)
+   (exp07-registered-list-length
+     (chamber-events
+       (exp07-rich-ablation-terminal-chamber $ablation $arm $seed))))
+
+(= (exp07-rich-ablation-raf-incidence $ablation $arm $seed)
+   (if (< (exp07-rich-first-rolling-raf-from
+             (chamber-events
+               (exp07-rich-ablation-terminal-chamber $ablation $arm $seed))
+             ())
+          99)
+       1 0))
+
+(= (exp07-rich-ablation-arm-raf-incidence $ablation $arm)
+   (+ (exp07-rich-ablation-raf-incidence $ablation $arm seed-11)
+      (+ (exp07-rich-ablation-raf-incidence $ablation $arm seed-12)
+         (+ (exp07-rich-ablation-raf-incidence $ablation $arm seed-13)
+            (+ (exp07-rich-ablation-raf-incidence $ablation $arm seed-14)
+               (+ (exp07-rich-ablation-raf-incidence $ablation $arm seed-15)
+                  (+ (exp07-rich-ablation-raf-incidence $ablation $arm seed-16)
+                     (+ (exp07-rich-ablation-raf-incidence
+                          $ablation $arm seed-17)
+                        (exp07-rich-ablation-raf-incidence
+                          $ablation $arm seed-18)))))))))
+
+(= (exp07-rich-ablation-arm-event-count $ablation $arm)
+   (+ (exp07-rich-ablation-event-count $ablation $arm seed-11)
+      (+ (exp07-rich-ablation-event-count $ablation $arm seed-12)
+         (+ (exp07-rich-ablation-event-count $ablation $arm seed-13)
+            (+ (exp07-rich-ablation-event-count $ablation $arm seed-14)
+               (+ (exp07-rich-ablation-event-count $ablation $arm seed-15)
+                  (+ (exp07-rich-ablation-event-count $ablation $arm seed-16)
+                     (+ (exp07-rich-ablation-event-count
+                          $ablation $arm seed-17)
+                        (exp07-rich-ablation-event-count
+                          $ablation $arm seed-18)))))))))
+
+(= (exp07-rich-causal-ablation-report)
+   (rich-causal-ablation
+     fixed-horizon (3 26)
+     fixed-seeds (seed-11 seed-12 seed-13 seed-14
+                  seed-15 seed-16 seed-17 seed-18)
+     guiding-term-removal
+       (unguided-raf-incidence (exp07-rich-arm-raf-incidence unguided)
+        outcome does-not-collapse)
+     catalyst-ablation
+       (removed-edges ((CD rp0) (AB rp1) (AC rp2))
+        raf-incidence
+          ((unguided
+             (exp07-rich-ablation-arm-raf-incidence
+               catalyst-ablation unguided))
+           (weak-doob-h
+             (exp07-rich-ablation-arm-raf-incidence
+               catalyst-ablation weak-doob-h))
+           (shuffled-guidance
+             (exp07-rich-ablation-arm-raf-incidence
+               catalyst-ablation shuffled-guidance)))
+        productive-events
+          ((unguided
+             (exp07-rich-ablation-arm-event-count
+               catalyst-ablation unguided))
+           (weak-doob-h
+             (exp07-rich-ablation-arm-event-count
+               catalyst-ablation weak-doob-h))
+           (shuffled-guidance
+             (exp07-rich-ablation-arm-event-count
+               catalyst-ablation shuffled-guidance)))
+        outcome collapses)
+     rule-ablation
+       ((rp0
+          ((unguided
+             (exp07-rich-ablation-arm-raf-incidence
+               rule-ablation-rp0 unguided))
+           (weak-doob-h
+             (exp07-rich-ablation-arm-raf-incidence
+               rule-ablation-rp0 weak-doob-h))
+           (shuffled-guidance
+             (exp07-rich-ablation-arm-raf-incidence
+               rule-ablation-rp0 shuffled-guidance))))
+        (rp1
+          ((unguided
+             (exp07-rich-ablation-arm-raf-incidence
+               rule-ablation-rp1 unguided))
+           (weak-doob-h
+             (exp07-rich-ablation-arm-raf-incidence
+               rule-ablation-rp1 weak-doob-h))
+           (shuffled-guidance
+             (exp07-rich-ablation-arm-raf-incidence
+               rule-ablation-rp1 shuffled-guidance))))
+        (rp2
+          ((unguided
+             (exp07-rich-ablation-arm-raf-incidence
+               rule-ablation-rp2 unguided))
+           (weak-doob-h
+             (exp07-rich-ablation-arm-raf-incidence
+               rule-ablation-rp2 weak-doob-h))
+           (shuffled-guidance
+             (exp07-rich-ablation-arm-raf-incidence
+               rule-ablation-rp2 shuffled-guidance)))))
+     matched-pool-selector-schedule true
+     terminal-forcing prohibited
+     emergence-claim none))
+
 ; Intervention cost is the exact total-variation numerator of an arm's frozen
 ; 88-bin categorical policy relative to unguided: the number of integer mass
 ; units shifted onto bins whose mass increased.  This avoids floating point or
@@ -2114,6 +2257,7 @@
         (shuffled-guidance
           (exp07-rich-arm-total-diversity-collapse shuffled-guidance)))
      intervention-cost (exp07-rich-intervention-cost-report)
+     causal-ablations (exp07-rich-causal-ablation-report)
      replay deterministic-seed-tick-state-carry
      terminal-forcing prohibited
      emergence-claim none))
