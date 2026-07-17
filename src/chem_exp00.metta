@@ -1129,6 +1129,51 @@
 (= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7) $event)
    ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event))
 
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event))
+
 (= (chamber-tick-with-fire-result
       (chamber $id $state $rules $events)
       (trace $after-state $event))

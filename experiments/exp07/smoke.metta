@@ -1273,3 +1273,36 @@
          status passed
          outcomes-evaluated false
          emergence-claim none))
+
+; Execute the frozen rich-pool matrix exactly once: ticks 3--26 for all three
+; arms and seeds 11--18.  Controls remain RAF-positive, so the preregistered
+; emergence-claim lift condition is not met even though weak guidance has the
+; largest raw incidence.
+!(test (exp07-rich-terminal-tick unguided seed-11) 27)
+!(test (exp07-rich-terminal-tick weak-doob-h seed-18) 27)
+!(test (exp07-rich-terminal-tick shuffled-guidance seed-14) 27)
+!(test (exp07-rich-replay-ok? unguided seed-11) True)
+!(test (exp07-rich-replay-ok? weak-doob-h seed-18) True)
+!(test (exp07-rich-replay-ok? shuffled-guidance seed-14) True)
+!(test (exp07-rich-registered-summary)
+       (rich-registered-summary
+         horizon (3 26)
+         fixed-seeds (seed-11 seed-12 seed-13 seed-14
+                      seed-15 seed-16 seed-17 seed-18)
+         raf-incidence
+           ((unguided 5) (weak-doob-h 7) (shuffled-guidance 3))
+         first-hit-ticks
+           ((unguided
+              ((seed-11 99) (seed-12 14) (seed-13 22) (seed-14 13)
+               (seed-15 23) (seed-16 99) (seed-17 22) (seed-18 99)))
+            (weak-doob-h
+              ((seed-11 15) (seed-12 20) (seed-13 99) (seed-14 19)
+               (seed-15 16) (seed-16 15) (seed-17 23) (seed-18 14)))
+            (shuffled-guidance
+              ((seed-11 99) (seed-12 11) (seed-13 99) (seed-14 99)
+               (seed-15 99) (seed-16 99) (seed-17 14) (seed-18 22))))
+         productive-events
+           ((unguided 130) (weak-doob-h 120) (shuffled-guidance 123))
+         replay deterministic-seed-tick-state-carry
+         terminal-forcing prohibited
+         emergence-claim none))

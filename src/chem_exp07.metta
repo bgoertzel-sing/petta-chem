@@ -1748,3 +1748,175 @@
    (chamber-tick-with-candidate
      (exp07-rich-initial-chamber $seed)
      (exp07-rich-selected-candidate $arm $seed)))
+
+; ----- Registered rich-pool trajectory execution -----
+;
+; Consume exactly ticks 3--26.  Selection is recomputed from the current
+; chamber on every tick, after the frozen food reset at ticks 11 and 19.  A
+; selected but inapplicable candidate still consumes its tick without adding
+; an event, matching the already-tested total-tick semantics of the N=20 run.
+(= (exp07-rich-replenishment-tick? $tick)
+   (or (== $tick 11) (== $tick 19)))
+
+(= (exp07-rich-replenish-food
+      (chamber $id
+        (state $tick $seed
+          (molecules
+            ((mol A $a) (mol B $b) (mol C $c) (mol D $d)
+             (mol AB $ab) (mol AC $ac) (mol CD $cd) (mol X $x)
+             (mol W0 $w0) (mol W1 $w1) (mol W2 $w2)
+             (mol W3 $w3) (mol W4 $w4))))
+        $rules $events))
+   (chamber $id
+     (state $tick $seed
+       (molecules
+         ((mol A 4) (mol B 3) (mol C 4) (mol D 3)
+          (mol AB $ab) (mol AC $ac) (mol CD $cd) (mol X $x)
+          (mol W0 $w0) (mol W1 $w1) (mol W2 $w2)
+          (mol W3 $w3) (mol W4 $w4))))
+     $rules $events))
+
+(= (exp07-rich-prepare-chamber
+      (chamber $id $state $rules $events))
+   (if (exp07-rich-replenishment-tick? (state-tick $state))
+       (exp07-rich-replenish-food
+         (chamber $id $state $rules $events))
+       (chamber $id $state $rules $events)))
+
+(= (exp07-rich-selected-for-chamber $arm
+      (chamber $id $state $rules $events))
+   (let (candidate-pool $tick $candidates)
+        (generate-candidate-pool
+          (chamber $id $state $rules $events))
+     (exp07-rich-select-bin
+       (exp07-rich-bin $arm
+         (exp07-rich-draw (state-seed $state) $tick))
+       (cap-candidate-pool 8 (candidate-pool $tick $candidates)))))
+
+(= (exp07-rich-total-tick $arm $chamber)
+   (let $prepared (exp07-rich-prepare-chamber $chamber)
+     (let $selected (exp07-rich-selected-for-chamber $arm $prepared)
+       (if (candidate-applicable-in-chamber? $selected $prepared)
+           (chamber-tick-with-candidate $prepared $selected)
+           (exp07-pilot-advance-blocked-tick $prepared)))))
+
+(= (exp07-rich-run-to-state-tick $arm $chamber $terminal-state-tick)
+   (if (>= (state-tick (chamber-state $chamber)) $terminal-state-tick)
+       $chamber
+       (exp07-rich-run-to-state-tick
+         $arm
+         (exp07-rich-total-tick $arm $chamber)
+         $terminal-state-tick)))
+
+(= (exp07-rich-terminal-chamber $arm $seed)
+   (exp07-rich-run-to-state-tick
+     $arm (exp07-rich-initial-chamber $seed) 27))
+
+(= (exp07-rich-terminal-tick $arm $seed)
+   (state-tick (chamber-state (exp07-rich-terminal-chamber $arm $seed))))
+
+(= (exp07-rich-event-count $arm $seed)
+   (exp07-registered-list-length
+     (chamber-events (exp07-rich-terminal-chamber $arm $seed))))
+
+(= (exp07-rich-replay-ok? $arm $seed)
+   (== (exp07-rich-terminal-chamber $arm $seed)
+       (exp07-rich-run-to-state-tick
+         $arm (exp07-rich-initial-chamber $seed) 27)))
+
+; Rolling endpoint helpers.  Event histories are chronological, so dropping
+; the oldest entries until eight remain gives the preregistered event window.
+(= (exp07-rich-last-eight-events $events)
+   (if (> (exp07-registered-list-length $events) 8)
+       (exp07-rich-last-eight-events (cdr-atom $events))
+       $events))
+
+(= (exp07-rich-append-event $events $event)
+   (if (== $events ())
+       ($event)
+       (cons-atom (car-atom $events)
+         (exp07-rich-append-event (cdr-atom $events) $event))))
+
+(= (exp07-rich-first-rolling-raf-from $remaining $seen)
+   (if (== $remaining ())
+       99
+       (let $event (car-atom $remaining)
+         (let $next-seen (exp07-rich-append-event $seen $event)
+           (if (exp07-rich-event-derived-raf?
+                 (exp07-rich-last-eight-events $next-seen))
+               (exp07-event-tick $event)
+               (exp07-rich-first-rolling-raf-from
+                 (cdr-atom $remaining) $next-seen))))))
+
+(= (exp07-rich-first-raf-tick $arm $seed)
+   (exp07-rich-first-rolling-raf-from
+     (chamber-events (exp07-rich-terminal-chamber $arm $seed)) ()))
+
+(= (exp07-rich-raf-incidence $arm $seed)
+   (if (< (exp07-rich-first-raf-tick $arm $seed) 99) 1 0))
+
+(= (exp07-rich-arm-raf-incidence $arm)
+   (+ (exp07-rich-raf-incidence $arm seed-11)
+      (+ (exp07-rich-raf-incidence $arm seed-12)
+         (+ (exp07-rich-raf-incidence $arm seed-13)
+            (+ (exp07-rich-raf-incidence $arm seed-14)
+               (+ (exp07-rich-raf-incidence $arm seed-15)
+                  (+ (exp07-rich-raf-incidence $arm seed-16)
+                     (+ (exp07-rich-raf-incidence $arm seed-17)
+                        (exp07-rich-raf-incidence $arm seed-18)))))))))
+
+(= (exp07-rich-arm-event-count $arm)
+   (+ (exp07-rich-event-count $arm seed-11)
+      (+ (exp07-rich-event-count $arm seed-12)
+         (+ (exp07-rich-event-count $arm seed-13)
+            (+ (exp07-rich-event-count $arm seed-14)
+               (+ (exp07-rich-event-count $arm seed-15)
+                  (+ (exp07-rich-event-count $arm seed-16)
+                     (+ (exp07-rich-event-count $arm seed-17)
+                        (exp07-rich-event-count $arm seed-18)))))))))
+
+(= (exp07-rich-registered-summary)
+   (rich-registered-summary
+     horizon (3 26)
+     fixed-seeds (seed-11 seed-12 seed-13 seed-14
+                  seed-15 seed-16 seed-17 seed-18)
+     raf-incidence
+       ((unguided (exp07-rich-arm-raf-incidence unguided))
+        (weak-doob-h (exp07-rich-arm-raf-incidence weak-doob-h))
+        (shuffled-guidance
+          (exp07-rich-arm-raf-incidence shuffled-guidance)))
+     first-hit-ticks
+       ((unguided
+          ((seed-11 (exp07-rich-first-raf-tick unguided seed-11))
+           (seed-12 (exp07-rich-first-raf-tick unguided seed-12))
+           (seed-13 (exp07-rich-first-raf-tick unguided seed-13))
+           (seed-14 (exp07-rich-first-raf-tick unguided seed-14))
+           (seed-15 (exp07-rich-first-raf-tick unguided seed-15))
+           (seed-16 (exp07-rich-first-raf-tick unguided seed-16))
+           (seed-17 (exp07-rich-first-raf-tick unguided seed-17))
+           (seed-18 (exp07-rich-first-raf-tick unguided seed-18))))
+        (weak-doob-h
+          ((seed-11 (exp07-rich-first-raf-tick weak-doob-h seed-11))
+           (seed-12 (exp07-rich-first-raf-tick weak-doob-h seed-12))
+           (seed-13 (exp07-rich-first-raf-tick weak-doob-h seed-13))
+           (seed-14 (exp07-rich-first-raf-tick weak-doob-h seed-14))
+           (seed-15 (exp07-rich-first-raf-tick weak-doob-h seed-15))
+           (seed-16 (exp07-rich-first-raf-tick weak-doob-h seed-16))
+           (seed-17 (exp07-rich-first-raf-tick weak-doob-h seed-17))
+           (seed-18 (exp07-rich-first-raf-tick weak-doob-h seed-18))))
+        (shuffled-guidance
+          ((seed-11 (exp07-rich-first-raf-tick shuffled-guidance seed-11))
+           (seed-12 (exp07-rich-first-raf-tick shuffled-guidance seed-12))
+           (seed-13 (exp07-rich-first-raf-tick shuffled-guidance seed-13))
+           (seed-14 (exp07-rich-first-raf-tick shuffled-guidance seed-14))
+           (seed-15 (exp07-rich-first-raf-tick shuffled-guidance seed-15))
+           (seed-16 (exp07-rich-first-raf-tick shuffled-guidance seed-16))
+           (seed-17 (exp07-rich-first-raf-tick shuffled-guidance seed-17))
+           (seed-18 (exp07-rich-first-raf-tick shuffled-guidance seed-18)))))
+     productive-events
+       ((unguided (exp07-rich-arm-event-count unguided))
+        (weak-doob-h (exp07-rich-arm-event-count weak-doob-h))
+        (shuffled-guidance (exp07-rich-arm-event-count shuffled-guidance)))
+     replay deterministic-seed-tick-state-carry
+     terminal-forcing prohibited
+     emergence-claim none))
