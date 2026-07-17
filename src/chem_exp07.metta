@@ -1819,6 +1819,25 @@
    (exp07-registered-list-length
      (chamber-events (exp07-rich-terminal-chamber $arm $seed))))
 
+; Terminal rule diversity is the number of the shared pool's eight rule IDs
+; represented by at least one productive event.  Diversity collapse is the
+; complementary count relative to that fixed pool, so blocked ticks do not
+; masquerade as lost chemical diversity.
+(= (exp07-rich-rule-diversity $arm $seed)
+   (let $events (chamber-events (exp07-rich-terminal-chamber $arm $seed))
+     (+ (if (exp07-rich-event-rule-fired? rp0 $events) 1 0)
+        (+ (if (exp07-rich-event-rule-fired? rp1 $events) 1 0)
+           (+ (if (exp07-rich-event-rule-fired? rp2 $events) 1 0)
+              (+ (if (exp07-rich-event-rule-fired? rd0 $events) 1 0)
+                 (+ (if (exp07-rich-event-rule-fired? rd1 $events) 1 0)
+                    (+ (if (exp07-rich-event-rule-fired? rd2 $events) 1 0)
+                       (+ (if (exp07-rich-event-rule-fired? rd3 $events) 1 0)
+                          (if (exp07-rich-event-rule-fired? rd4 $events)
+                              1 0))))))))))
+
+(= (exp07-rich-diversity-collapse $arm $seed)
+   (- 8 (exp07-rich-rule-diversity $arm $seed)))
+
 (= (exp07-rich-replay-ok? $arm $seed)
    (== (exp07-rich-terminal-chamber $arm $seed)
        (exp07-rich-run-to-state-tick
@@ -1908,6 +1927,19 @@
                      (+ (exp07-rich-event-count $arm seed-17)
                         (exp07-rich-event-count $arm seed-18)))))))))
 
+(= (exp07-rich-arm-total-rule-diversity $arm)
+   (+ (exp07-rich-rule-diversity $arm seed-11)
+      (+ (exp07-rich-rule-diversity $arm seed-12)
+         (+ (exp07-rich-rule-diversity $arm seed-13)
+            (+ (exp07-rich-rule-diversity $arm seed-14)
+               (+ (exp07-rich-rule-diversity $arm seed-15)
+                  (+ (exp07-rich-rule-diversity $arm seed-16)
+                     (+ (exp07-rich-rule-diversity $arm seed-17)
+                        (exp07-rich-rule-diversity $arm seed-18)))))))))
+
+(= (exp07-rich-arm-total-diversity-collapse $arm)
+   (- 64 (exp07-rich-arm-total-rule-diversity $arm)))
+
 (= (exp07-rich-registered-summary)
    (rich-registered-summary
      horizon (3 26)
@@ -1983,6 +2015,44 @@
         (weak-doob-h (exp07-rich-arm-total-persistence weak-doob-h))
         (shuffled-guidance
           (exp07-rich-arm-total-persistence shuffled-guidance)))
+     terminal-rule-diversity
+       ((unguided
+          ((seed-11 (exp07-rich-rule-diversity unguided seed-11))
+           (seed-12 (exp07-rich-rule-diversity unguided seed-12))
+           (seed-13 (exp07-rich-rule-diversity unguided seed-13))
+           (seed-14 (exp07-rich-rule-diversity unguided seed-14))
+           (seed-15 (exp07-rich-rule-diversity unguided seed-15))
+           (seed-16 (exp07-rich-rule-diversity unguided seed-16))
+           (seed-17 (exp07-rich-rule-diversity unguided seed-17))
+           (seed-18 (exp07-rich-rule-diversity unguided seed-18))))
+        (weak-doob-h
+          ((seed-11 (exp07-rich-rule-diversity weak-doob-h seed-11))
+           (seed-12 (exp07-rich-rule-diversity weak-doob-h seed-12))
+           (seed-13 (exp07-rich-rule-diversity weak-doob-h seed-13))
+           (seed-14 (exp07-rich-rule-diversity weak-doob-h seed-14))
+           (seed-15 (exp07-rich-rule-diversity weak-doob-h seed-15))
+           (seed-16 (exp07-rich-rule-diversity weak-doob-h seed-16))
+           (seed-17 (exp07-rich-rule-diversity weak-doob-h seed-17))
+           (seed-18 (exp07-rich-rule-diversity weak-doob-h seed-18))))
+        (shuffled-guidance
+          ((seed-11 (exp07-rich-rule-diversity shuffled-guidance seed-11))
+           (seed-12 (exp07-rich-rule-diversity shuffled-guidance seed-12))
+           (seed-13 (exp07-rich-rule-diversity shuffled-guidance seed-13))
+           (seed-14 (exp07-rich-rule-diversity shuffled-guidance seed-14))
+           (seed-15 (exp07-rich-rule-diversity shuffled-guidance seed-15))
+           (seed-16 (exp07-rich-rule-diversity shuffled-guidance seed-16))
+           (seed-17 (exp07-rich-rule-diversity shuffled-guidance seed-17))
+           (seed-18 (exp07-rich-rule-diversity shuffled-guidance seed-18)))))
+     total-rule-diversity
+       ((unguided (exp07-rich-arm-total-rule-diversity unguided))
+        (weak-doob-h (exp07-rich-arm-total-rule-diversity weak-doob-h))
+        (shuffled-guidance
+          (exp07-rich-arm-total-rule-diversity shuffled-guidance)))
+     total-diversity-collapse-from-full-pool
+       ((unguided (exp07-rich-arm-total-diversity-collapse unguided))
+        (weak-doob-h (exp07-rich-arm-total-diversity-collapse weak-doob-h))
+        (shuffled-guidance
+          (exp07-rich-arm-total-diversity-collapse shuffled-guidance)))
      replay deterministic-seed-tick-state-carry
      terminal-forcing prohibited
      emergence-claim none))

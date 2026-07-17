@@ -1284,6 +1284,8 @@
 !(test (exp07-rich-replay-ok? unguided seed-11) True)
 !(test (exp07-rich-replay-ok? weak-doob-h seed-18) True)
 !(test (exp07-rich-replay-ok? shuffled-guidance seed-14) True)
+!(test (exp07-rich-rule-diversity unguided seed-11) 6)
+!(test (exp07-rich-diversity-collapse shuffled-guidance seed-13) 3)
 !(test (exp07-rich-registered-summary)
        (rich-registered-summary
          horizon (3 26)
@@ -1315,6 +1317,20 @@
                (seed-15 0) (seed-16 0) (seed-17 3) (seed-18 2))))
          total-persistence
            ((unguided 13) (weak-doob-h 49) (shuffled-guidance 11))
+         terminal-rule-diversity
+           ((unguided
+              ((seed-11 6) (seed-12 8) (seed-13 8) (seed-14 8)
+               (seed-15 8) (seed-16 7) (seed-17 8) (seed-18 8)))
+            (weak-doob-h
+              ((seed-11 8) (seed-12 7) (seed-13 6) (seed-14 8)
+               (seed-15 8) (seed-16 8) (seed-17 8) (seed-18 8)))
+            (shuffled-guidance
+              ((seed-11 7) (seed-12 7) (seed-13 5) (seed-14 5)
+               (seed-15 7) (seed-16 7) (seed-17 8) (seed-18 8))))
+         total-rule-diversity
+           ((unguided 61) (weak-doob-h 61) (shuffled-guidance 54))
+         total-diversity-collapse-from-full-pool
+           ((unguided 3) (weak-doob-h 3) (shuffled-guidance 10))
          replay deterministic-seed-tick-state-carry
          terminal-forcing prohibited
          emergence-claim none))

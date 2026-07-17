@@ -48,14 +48,19 @@ The resulting all-arms-positive pivot is now frozen in
 latent three-rule RAF and five productive food-competing distractors. The
 PeTTa contract freezes seeds 11--18, cap 8, a 24-tick horizon, explicit
 first-class catalysis, matched controls, pre-run gates, ablations, and
-`emergence-claim none`. No rich-pool outcome trajectory has been evaluated.
+`emergence-claim none`.
 
 All rich-pool pre-run gates now pass. PeTTa checks the initial empty event
 history as RAF-negative, discriminates complete and incomplete latent-cycle
 histories, exposes exactly eight catalysis facts, realizes the frozen masses
 over all 88 draw bins, and connects selection to ordinary cap-8 chamber
-ticking. The canonical exp04 detector controls also pass. The next boundary is
-the frozen 24-tick trajectory constructor; no seed-11--18 outcome was evaluated.
+ticking. The canonical exp04 detector controls also pass. The complete frozen
+matrix has since executed over seeds 11--18 and ticks 3--26. Its rolling RAF
+incidence is 5/8 unguided, 7/8 weak Doob-h, and 3/8 shuffled, while longest-run
+persistence totals are 13/49/11 ticks. Terminal distinct-rule diversity totals
+are 61/61/54 out of 64 possible seed-rule presences, corresponding to collapse
+deficits of 3/3/10 from the full eight-rule pool. Both controls are positive;
+intervention cost and causal ablations remain, and `emergence-claim none`.
 
 Run with:
 
