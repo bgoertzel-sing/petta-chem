@@ -1303,6 +1303,18 @@
                (seed-15 99) (seed-16 99) (seed-17 14) (seed-18 22))))
          productive-events
            ((unguided 130) (weak-doob-h 120) (shuffled-guidance 123))
+         longest-consecutive-raf-ticks
+           ((unguided
+              ((seed-11 0) (seed-12 3) (seed-13 1) (seed-14 1)
+               (seed-15 3) (seed-16 0) (seed-17 5) (seed-18 0)))
+            (weak-doob-h
+              ((seed-11 7) (seed-12 7) (seed-13 0) (seed-14 6)
+               (seed-15 11) (seed-16 7) (seed-17 4) (seed-18 7)))
+            (shuffled-guidance
+              ((seed-11 0) (seed-12 6) (seed-13 0) (seed-14 0)
+               (seed-15 0) (seed-16 0) (seed-17 3) (seed-18 2))))
+         total-persistence
+           ((unguided 13) (weak-doob-h 49) (shuffled-guidance 11))
          replay deterministic-seed-tick-state-carry
          terminal-forcing prohibited
          emergence-claim none))

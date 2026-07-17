@@ -1855,6 +1855,39 @@
 (= (exp07-rich-raf-incidence $arm $seed)
    (if (< (exp07-rich-first-raf-tick $arm $seed) 99) 1 0))
 
+; Persistence is evaluated after every registered tick, including blocked
+; draws.  The rolling window still contains only productive events, exactly as
+; preregistered; a blocked tick therefore extends a true run when its unchanged
+; last-eight-event window remains RAF-positive.
+(= (exp07-rich-persistence-from
+      $arm $chamber $terminal-state-tick $current-run $longest-run)
+   (if (>= (state-tick (chamber-state $chamber)) $terminal-state-tick)
+       $longest-run
+       (let $next (exp07-rich-total-tick $arm $chamber)
+         (let $next-run
+              (if (exp07-rich-event-derived-raf?
+                    (exp07-rich-last-eight-events (chamber-events $next)))
+                  (+ $current-run 1)
+                  0)
+           (let $next-longest
+                (if (> $next-run $longest-run) $next-run $longest-run)
+             (exp07-rich-persistence-from
+               $arm $next $terminal-state-tick $next-run $next-longest))))))
+
+(= (exp07-rich-raf-persistence $arm $seed)
+   (exp07-rich-persistence-from
+     $arm (exp07-rich-initial-chamber $seed) 27 0 0))
+
+(= (exp07-rich-arm-total-persistence $arm)
+   (+ (exp07-rich-raf-persistence $arm seed-11)
+      (+ (exp07-rich-raf-persistence $arm seed-12)
+         (+ (exp07-rich-raf-persistence $arm seed-13)
+            (+ (exp07-rich-raf-persistence $arm seed-14)
+               (+ (exp07-rich-raf-persistence $arm seed-15)
+                  (+ (exp07-rich-raf-persistence $arm seed-16)
+                     (+ (exp07-rich-raf-persistence $arm seed-17)
+                        (exp07-rich-raf-persistence $arm seed-18)))))))))
+
 (= (exp07-rich-arm-raf-incidence $arm)
    (+ (exp07-rich-raf-incidence $arm seed-11)
       (+ (exp07-rich-raf-incidence $arm seed-12)
@@ -1917,6 +1950,39 @@
        ((unguided (exp07-rich-arm-event-count unguided))
         (weak-doob-h (exp07-rich-arm-event-count weak-doob-h))
         (shuffled-guidance (exp07-rich-arm-event-count shuffled-guidance)))
+     longest-consecutive-raf-ticks
+       ((unguided
+          ((seed-11 (exp07-rich-raf-persistence unguided seed-11))
+           (seed-12 (exp07-rich-raf-persistence unguided seed-12))
+           (seed-13 (exp07-rich-raf-persistence unguided seed-13))
+           (seed-14 (exp07-rich-raf-persistence unguided seed-14))
+           (seed-15 (exp07-rich-raf-persistence unguided seed-15))
+           (seed-16 (exp07-rich-raf-persistence unguided seed-16))
+           (seed-17 (exp07-rich-raf-persistence unguided seed-17))
+           (seed-18 (exp07-rich-raf-persistence unguided seed-18))))
+        (weak-doob-h
+          ((seed-11 (exp07-rich-raf-persistence weak-doob-h seed-11))
+           (seed-12 (exp07-rich-raf-persistence weak-doob-h seed-12))
+           (seed-13 (exp07-rich-raf-persistence weak-doob-h seed-13))
+           (seed-14 (exp07-rich-raf-persistence weak-doob-h seed-14))
+           (seed-15 (exp07-rich-raf-persistence weak-doob-h seed-15))
+           (seed-16 (exp07-rich-raf-persistence weak-doob-h seed-16))
+           (seed-17 (exp07-rich-raf-persistence weak-doob-h seed-17))
+           (seed-18 (exp07-rich-raf-persistence weak-doob-h seed-18))))
+        (shuffled-guidance
+          ((seed-11 (exp07-rich-raf-persistence shuffled-guidance seed-11))
+           (seed-12 (exp07-rich-raf-persistence shuffled-guidance seed-12))
+           (seed-13 (exp07-rich-raf-persistence shuffled-guidance seed-13))
+           (seed-14 (exp07-rich-raf-persistence shuffled-guidance seed-14))
+           (seed-15 (exp07-rich-raf-persistence shuffled-guidance seed-15))
+           (seed-16 (exp07-rich-raf-persistence shuffled-guidance seed-16))
+           (seed-17 (exp07-rich-raf-persistence shuffled-guidance seed-17))
+           (seed-18 (exp07-rich-raf-persistence shuffled-guidance seed-18)))))
+     total-persistence
+       ((unguided (exp07-rich-arm-total-persistence unguided))
+        (weak-doob-h (exp07-rich-arm-total-persistence weak-doob-h))
+        (shuffled-guidance
+          (exp07-rich-arm-total-persistence shuffled-guidance)))
      replay deterministic-seed-tick-state-carry
      terminal-forcing prohibited
      emergence-claim none))
