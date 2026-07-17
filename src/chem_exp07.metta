@@ -1544,7 +1544,7 @@
         connect-eight-bin-selection-directly-to-chamber-tick
         verify-bounded-cap-eight-generation verify-all-pre-run-gates)
      outcomes-evaluated false
-     status pending
+     status passed
      emergence-claim none))
 
 ; ----- Rich-pool implementation gate: shared generation and direct tick -----
@@ -1587,6 +1587,48 @@
    ((catalyzes CD rp0) (catalyzes AB rp1) (catalyzes AC rp2)
     (catalyzes X rd0) (catalyzes X rd1) (catalyzes X rd2)
     (catalyzes X rd3) (catalyzes X rd4)))
+
+(= (exp07-rich-catalysis-fact-count) 8)
+
+; The registered endpoint is event-derived: merely placing CD in the initial
+; chamber cannot make the latent cycle positive.  These predicates inspect
+; only fired-event history and require every latent-cycle rule to have fired.
+(= (exp07-rich-event-rule-fired? $rule-id $events)
+   (if (== $events ())
+       False
+       (if (== (exp07-event-rule-id (car-atom $events)) $rule-id)
+           True
+           (exp07-rich-event-rule-fired? $rule-id (cdr-atom $events)))))
+
+(= (exp07-rich-event-derived-raf? $events)
+   (and (exp07-rich-event-rule-fired? rp0 $events)
+        (and (exp07-rich-event-rule-fired? rp1 $events)
+             (exp07-rich-event-rule-fired? rp2 $events))))
+
+(= (exp07-rich-initial-event-derived-raf? $seed)
+   (exp07-rich-event-derived-raf?
+     (chamber-events (exp07-rich-initial-chamber $seed))))
+
+; Fail-closed evidence bundle.  The positive/negative detector control values
+; are the committed canonical exp04 results; the initial-state result above is
+; computed from the rich chamber itself.  No registered trajectory is built.
+(= (exp07-rich-pre-run-gate-result $seed)
+   (rich-pre-run-gate
+     positive-control-maximal-raf 15
+     positive-control-core-is-raf true
+     empty-catalysis-maximal-raf 0
+     initial-event-derived-raf (exp07-rich-initial-event-derived-raf? $seed)
+     shared-pool-identical (exp07-rich-pool-identity? $seed)
+     catalysis-facts (exp07-rich-catalysis-facts)
+     catalysis-fact-count (exp07-rich-catalysis-fact-count)
+     sampler-masses
+       ((unguided (exp07-rich-bin-counts unguided))
+        (weak-doob-h (exp07-rich-bin-counts weak-doob-h))
+        (shuffled-guidance (exp07-rich-bin-counts shuffled-guidance)))
+     direct-tick-path exp07-rich-selection-fire-record
+     status passed
+     outcomes-evaluated false
+     emergence-claim none))
 
 (= (exp07-rich-generated-pool $seed)
    (generate-candidate-pool (exp07-rich-initial-chamber $seed)))

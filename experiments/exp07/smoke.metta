@@ -1164,7 +1164,7 @@
             connect-eight-bin-selection-directly-to-chamber-tick
             verify-bounded-cap-eight-generation verify-all-pre-run-gates)
          outcomes-evaluated false
-         status pending
+         status passed
          emergence-claim none))
 
 ; ----- Rich-pool pre-run implementation: no registered outcomes -----
@@ -1175,6 +1175,17 @@
         (catalyzes X rd3) (catalyzes X rd4)))
 !(test (exp07-rich-catalyzes? CD rp0) True)
 !(test (exp07-rich-catalyzes? X rd4) True)
+!(test (exp07-rich-initial-event-derived-raf? seed-11) False)
+!(test (exp07-rich-event-derived-raf?
+         ((event 3 rp0 A B AB CD)
+          (event 4 rp1 A C AC AB)
+          (event 5 rp2 C D CD AC)))
+       True)
+!(test (exp07-rich-event-derived-raf?
+         ((event 3 rp0 A B AB CD)
+          (event 4 rp1 A C AC AB)))
+       False)
+!(test (exp07-rich-catalysis-fact-count) 8)
 
 !(test (exp07-rich-draw seed-11 3) 16)
 !(test (exp07-rich-bin unguided 10) 0)
@@ -1242,3 +1253,23 @@
           (rule rd1 A C W1 X) (rule rd2 B C W2 X)
           (rule rd3 C D W3 X) (rule rd4 A D W4 X))
          ((event 3 rd0 A B W0 X))))
+!(test (exp07-rich-pre-run-gate-result seed-12)
+       (rich-pre-run-gate
+         positive-control-maximal-raf 15
+         positive-control-core-is-raf true
+         empty-catalysis-maximal-raf 0
+         initial-event-derived-raf False
+         shared-pool-identical True
+         catalysis-facts
+           ((catalyzes CD rp0) (catalyzes AB rp1) (catalyzes AC rp2)
+            (catalyzes X rd0) (catalyzes X rd1) (catalyzes X rd2)
+            (catalyzes X rd3) (catalyzes X rd4))
+         catalysis-fact-count 8
+         sampler-masses
+           ((unguided (11 11 11 11 11 11 11 11))
+            (weak-doob-h (16 16 16 8 8 8 8 8))
+            (shuffled-guidance (8 8 8 16 16 16 8 8)))
+         direct-tick-path exp07-rich-selection-fire-record
+         status passed
+         outcomes-evaluated false
+         emergence-claim none))
