@@ -175,6 +175,25 @@
                        (if (== $name $n5) $a5
                            (if (== $name $n6) $a6 0))))))))
 
+; Ordered-bootstrap exp07 uses twelve named species.  Keep this on the same
+; generic named-molecule seam as the seven- and thirteen-species chambers.
+(= (molecule-abundance-7 $name
+      ((mol $n0 $a0) (mol $n1 $a1) (mol $n2 $a2) (mol $n3 $a3)
+       (mol $n4 $a4) (mol $n5 $a5) (mol $n6 $a6) (mol $n7 $a7)
+       (mol $n8 $a8) (mol $n9 $a9) (mol $n10 $a10) (mol $n11 $a11)))
+   (if (== $name $n0) $a0
+       (if (== $name $n1) $a1
+           (if (== $name $n2) $a2
+               (if (== $name $n3) $a3
+                   (if (== $name $n4) $a4
+                       (if (== $name $n5) $a5
+                           (if (== $name $n6) $a6
+                               (if (== $name $n7) $a7
+                                   (if (== $name $n8) $a8
+                                       (if (== $name $n9) $a9
+                                           (if (== $name $n10) $a10
+                                               (if (== $name $n11) $a11 0)))))))))))))
+
 ; Keep the named-molecule kernel total for the preregistered exp07 rich
 ; chamber.  The operation name is retained for compatibility with the original
 ; seven-species seam; dispatch is by the concrete list shape.
@@ -219,6 +238,24 @@
     (update-reaction-molecule (mol $n4 $a4) $a $b $product)
     (update-reaction-molecule (mol $n5 $a5) $a $b $product)
     (update-reaction-molecule (mol $n6 $a6) $a $b $product)))
+
+(= (update-reaction-molecules-7
+      ((mol $n0 $a0) (mol $n1 $a1) (mol $n2 $a2) (mol $n3 $a3)
+       (mol $n4 $a4) (mol $n5 $a5) (mol $n6 $a6) (mol $n7 $a7)
+       (mol $n8 $a8) (mol $n9 $a9) (mol $n10 $a10) (mol $n11 $a11))
+      $a $b $product)
+   ((update-reaction-molecule (mol $n0 $a0) $a $b $product)
+    (update-reaction-molecule (mol $n1 $a1) $a $b $product)
+    (update-reaction-molecule (mol $n2 $a2) $a $b $product)
+    (update-reaction-molecule (mol $n3 $a3) $a $b $product)
+    (update-reaction-molecule (mol $n4 $a4) $a $b $product)
+    (update-reaction-molecule (mol $n5 $a5) $a $b $product)
+    (update-reaction-molecule (mol $n6 $a6) $a $b $product)
+    (update-reaction-molecule (mol $n7 $a7) $a $b $product)
+    (update-reaction-molecule (mol $n8 $a8) $a $b $product)
+    (update-reaction-molecule (mol $n9 $a9) $a $b $product)
+    (update-reaction-molecule (mol $n10 $a10) $a $b $product)
+    (update-reaction-molecule (mol $n11 $a11) $a $b $product)))
 
 (= (update-reaction-molecules-7
       ((mol $n0 $a0) (mol $n1 $a1) (mol $n2 $a2) (mol $n3 $a3)

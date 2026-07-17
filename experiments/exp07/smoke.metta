@@ -1515,3 +1515,65 @@
          trajectory-evaluated false
          status partial-pre-run-gate
          emergence-claim none))
+!(test (exp07-ordered-initial-applicability-gate seed-19)
+       (initial-applicability-gate phase ab-zero ob0 True op1 False
+         op2 False op0 False initial-event-raf false))
+!(test (exp07-ordered-phase (exp07-ordered-phase-fixture 0 0 0)) ab-zero)
+!(test (exp07-ordered-phase (exp07-ordered-phase-fixture 1 0 0)) ac-zero)
+!(test (exp07-ordered-phase (exp07-ordered-phase-fixture 1 1 0)) cd-zero)
+!(test (exp07-ordered-phase (exp07-ordered-phase-fixture 1 1 1)) cycle-ready)
+!(test (exp07-ordered-event-derived-raf? ()) False)
+!(test (exp07-ordered-event-derived-raf?
+         ((event 3 op1 A C AC AB) (event 4 op2 C D CD AC))) False)
+!(test (exp07-ordered-event-derived-raf?
+         ((event 3 op1 A C AC AB) (event 4 op2 C D CD AC)
+          (event 5 op0 A B AB CD))) True)
+!(test (exp07-ordered-bin-counts unguided ab-zero)
+       (12 12 12 12 12 12 12 12))
+!(test (exp07-ordered-bin-counts weak-doob-h ab-zero)
+       (20 12 12 12 4 12 12 12))
+!(test (exp07-ordered-bin-counts weak-doob-h ac-zero)
+       (12 20 12 12 12 4 12 12))
+!(test (exp07-ordered-bin-counts weak-doob-h cd-zero)
+       (12 12 20 12 12 12 4 12))
+!(test (exp07-ordered-bin-counts weak-doob-h cycle-ready)
+       (12 12 12 20 12 12 12 4))
+!(test (exp07-ordered-bin-counts shuffled-frontier-guidance ab-zero)
+       (4 12 12 12 20 12 12 12))
+!(test (exp07-ordered-bin-counts shuffled-frontier-guidance ac-zero)
+       (12 4 12 12 12 20 12 12))
+!(test (exp07-ordered-bin-counts shuffled-frontier-guidance cd-zero)
+       (12 12 4 12 12 12 20 12))
+!(test (exp07-ordered-bin-counts shuffled-frontier-guidance cycle-ready)
+       (12 12 12 4 12 12 12 20))
+!(test (exp07-ordered-selected-with-draw weak-doob-h
+         (exp07-ordered-initial-chamber seed-19) 0)
+       (candidate 3 (rule ob0 A B AB X) 1))
+!(test (exp07-ordered-direct-tick-with-draw weak-doob-h
+         (exp07-ordered-initial-chamber seed-19) 0)
+       (chamber exp07-ordered-bootstrap
+         (state 4 seed-19
+           (molecules
+             ((mol A 3) (mol B 2) (mol C 4) (mol D 3)
+              (mol AB 1) (mol AC 0) (mol CD 0) (mol X 1)
+              (mol W0 0) (mol W1 0) (mol W2 0) (mol W3 0))))
+         ((rule ob0 A B AB X) (rule op1 A C AC AB)
+          (rule op2 C D CD AC) (rule op0 A B AB CD)
+          (rule od0 A C W0 X) (rule od1 B C W1 X)
+          (rule od2 C D W2 X) (rule od3 A D W3 X))
+         ((event 3 ob0 A B AB X))))
+!(test (exp07-ordered-selector-pre-run-gate)
+       (ordered-selector-pre-run-gate
+         phases
+           ((ab-zero (20 12 12 12 4 12 12 12)
+                     (4 12 12 12 20 12 12 12))
+            (ac-zero (12 20 12 12 12 4 12 12)
+                     (12 4 12 12 12 20 12 12))
+            (cd-zero (12 12 20 12 12 12 4 12)
+                     (12 12 4 12 12 12 20 12))
+            (cycle-ready (12 12 12 20 12 12 12 4)
+                         (12 12 12 4 12 12 12 20)))
+         unguided (12 12 12 12 12 12 12 12)
+         shifted-mass-units-per-guided-draw 8
+         matched-cost true chemistry-outcomes-used false
+         trajectory-evaluated false emergence-claim none))

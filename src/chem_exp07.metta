@@ -2390,3 +2390,157 @@
      trajectory-evaluated false
      status partial-pre-run-gate
      emergence-claim none))
+
+; ----- Ordered-bootstrap pre-run gates: frontier selector and direct tick -----
+;
+; These functions are calibrated only against synthetic draw bins and
+; explicit phase fixtures.  They do not recursively construct any held-out
+; seed trajectory or evaluate a RAF endpoint.
+(= (exp07-ordered-phase
+      (chamber $id (state $tick $seed (molecules $molecules)) $rules $events))
+   (if (== (molecule-abundance-7 AB $molecules) 0)
+       ab-zero
+       (if (== (molecule-abundance-7 AC $molecules) 0)
+           ac-zero
+           (if (== (molecule-abundance-7 CD $molecules) 0)
+               cd-zero
+               cycle-ready))))
+
+(= (exp07-ordered-phase-fixture $ab $ac $cd)
+   (chamber exp07-ordered-phase-fixture
+     (state 3 seed-7
+       (molecules
+         ((mol A 4) (mol B 3) (mol C 4) (mol D 3)
+          (mol AB $ab) (mol AC $ac) (mol CD $cd) (mol X 1)
+          (mol W0 0) (mol W1 0) (mol W2 0) (mol W3 0))))
+     (exp07-ordered-rules) ()))
+
+(= (exp07-ordered-event-rule-fired? $rule-id $events)
+   (if (== $events ())
+       False
+       (if (== (exp07-event-rule-id (car-atom $events)) $rule-id)
+           True
+           (exp07-ordered-event-rule-fired? $rule-id (cdr-atom $events)))))
+
+(= (exp07-ordered-event-derived-raf? $events)
+   (and (exp07-ordered-event-rule-fired? op1 $events)
+        (and (exp07-ordered-event-rule-fired? op2 $events)
+             (exp07-ordered-event-rule-fired? op0 $events))))
+
+(= (exp07-ordered-draw $seed $tick)
+   (#mod (+ (* 17 (seed-number $seed)) (* 31 $tick)) 96))
+
+; Bin order is the frozen pool order: ob0 op1 op2 op0 od0 od1 od2 od3.
+(= (exp07-ordered-unguided-bin $draw)
+   (if (< $draw 12) 0
+       (if (< $draw 24) 1
+           (if (< $draw 36) 2
+               (if (< $draw 48) 3
+                   (if (< $draw 60) 4
+                       (if (< $draw 72) 5
+                           (if (< $draw 84) 6 7))))))))
+
+; Move eight units from the phase-paired distractor to the true frontier.
+(= (exp07-ordered-guided-bin ab-zero $draw)
+   (if (< $draw 20) 0 (if (< $draw 32) 1 (if (< $draw 44) 2
+       (if (< $draw 56) 3 (if (< $draw 60) 4 (if (< $draw 72) 5
+       (if (< $draw 84) 6 7))))))))
+(= (exp07-ordered-guided-bin ac-zero $draw)
+   (if (< $draw 12) 0 (if (< $draw 32) 1 (if (< $draw 44) 2
+       (if (< $draw 56) 3 (if (< $draw 68) 4 (if (< $draw 72) 5
+       (if (< $draw 84) 6 7))))))))
+(= (exp07-ordered-guided-bin cd-zero $draw)
+   (if (< $draw 12) 0 (if (< $draw 24) 1 (if (< $draw 44) 2
+       (if (< $draw 56) 3 (if (< $draw 68) 4 (if (< $draw 80) 5
+       (if (< $draw 84) 6 7))))))))
+(= (exp07-ordered-guided-bin cycle-ready $draw)
+   (if (< $draw 12) 0 (if (< $draw 24) 1 (if (< $draw 36) 2
+       (if (< $draw 56) 3 (if (< $draw 68) 4 (if (< $draw 80) 5
+       (if (< $draw 92) 6 7))))))))
+
+; Shuffled guidance reverses each phase pair while retaining the identical
+; mass multiset and total-variation cost.
+(= (exp07-ordered-shuffled-bin ab-zero $draw)
+   (if (< $draw 4) 0 (if (< $draw 16) 1 (if (< $draw 28) 2
+       (if (< $draw 40) 3 (if (< $draw 60) 4 (if (< $draw 72) 5
+       (if (< $draw 84) 6 7))))))))
+(= (exp07-ordered-shuffled-bin ac-zero $draw)
+   (if (< $draw 12) 0 (if (< $draw 16) 1 (if (< $draw 28) 2
+       (if (< $draw 40) 3 (if (< $draw 52) 4 (if (< $draw 72) 5
+       (if (< $draw 84) 6 7))))))))
+(= (exp07-ordered-shuffled-bin cd-zero $draw)
+   (if (< $draw 12) 0 (if (< $draw 24) 1 (if (< $draw 28) 2
+       (if (< $draw 40) 3 (if (< $draw 52) 4 (if (< $draw 64) 5
+       (if (< $draw 84) 6 7))))))))
+(= (exp07-ordered-shuffled-bin cycle-ready $draw)
+   (if (< $draw 12) 0 (if (< $draw 24) 1 (if (< $draw 36) 2
+       (if (< $draw 40) 3 (if (< $draw 52) 4 (if (< $draw 64) 5
+       (if (< $draw 76) 6 7))))))))
+
+(= (exp07-ordered-bin unguided $phase $draw)
+   (exp07-ordered-unguided-bin $draw))
+(= (exp07-ordered-bin weak-doob-h $phase $draw)
+   (exp07-ordered-guided-bin $phase $draw))
+(= (exp07-ordered-bin shuffled-frontier-guidance $phase $draw)
+   (exp07-ordered-shuffled-bin $phase $draw))
+
+(= (exp07-ordered-bin-count-from $arm $phase $bin $draw)
+   (if (>= $draw 96)
+       0
+       (+ (if (== (exp07-ordered-bin $arm $phase $draw) $bin) 1 0)
+          (exp07-ordered-bin-count-from $arm $phase $bin (+ $draw 1)))))
+
+(= (exp07-ordered-bin-counts $arm $phase)
+   ((exp07-ordered-bin-count-from $arm $phase 0 0)
+    (exp07-ordered-bin-count-from $arm $phase 1 0)
+    (exp07-ordered-bin-count-from $arm $phase 2 0)
+    (exp07-ordered-bin-count-from $arm $phase 3 0)
+    (exp07-ordered-bin-count-from $arm $phase 4 0)
+    (exp07-ordered-bin-count-from $arm $phase 5 0)
+    (exp07-ordered-bin-count-from $arm $phase 6 0)
+    (exp07-ordered-bin-count-from $arm $phase 7 0)))
+
+(= (exp07-ordered-selected-with-draw $arm $chamber $draw)
+   (let (candidate-pool $tick $candidates)
+        (exp07-ordered-bounded-pool $chamber)
+     (exp07-rich-select-bin
+       (exp07-ordered-bin $arm (exp07-ordered-phase $chamber) $draw)
+       $candidates)))
+
+(= (exp07-ordered-direct-tick-with-draw $arm $chamber $draw)
+   (chamber-tick-with-candidate
+     $chamber
+     (exp07-ordered-selected-with-draw $arm $chamber $draw)))
+
+(= (exp07-ordered-initial-applicability-gate $seed)
+   (let $chamber (exp07-ordered-initial-chamber $seed)
+     (initial-applicability-gate
+       phase (exp07-ordered-phase $chamber)
+       ob0 (candidate-applicable-in-chamber?
+             (candidate 3 (rule ob0 A B AB X) 1) $chamber)
+       op1 (candidate-applicable-in-chamber?
+             (candidate 3 (rule op1 A C AC AB) 1) $chamber)
+       op2 (candidate-applicable-in-chamber?
+             (candidate 3 (rule op2 C D CD AC) 1) $chamber)
+       op0 (candidate-applicable-in-chamber?
+             (candidate 3 (rule op0 A B AB CD) 1) $chamber)
+       initial-event-raf (exp07-ordered-event-derived-raf?
+                           (chamber-events $chamber)))))
+
+(= (exp07-ordered-selector-pre-run-gate)
+   (ordered-selector-pre-run-gate
+     phases
+       ((ab-zero (exp07-ordered-bin-counts weak-doob-h ab-zero)
+                 (exp07-ordered-bin-counts shuffled-frontier-guidance ab-zero))
+        (ac-zero (exp07-ordered-bin-counts weak-doob-h ac-zero)
+                 (exp07-ordered-bin-counts shuffled-frontier-guidance ac-zero))
+        (cd-zero (exp07-ordered-bin-counts weak-doob-h cd-zero)
+                 (exp07-ordered-bin-counts shuffled-frontier-guidance cd-zero))
+        (cycle-ready (exp07-ordered-bin-counts weak-doob-h cycle-ready)
+                     (exp07-ordered-bin-counts shuffled-frontier-guidance cycle-ready)))
+     unguided (exp07-ordered-bin-counts unguided ab-zero)
+     shifted-mass-units-per-guided-draw 8
+     matched-cost true
+     chemistry-outcomes-used false
+     trajectory-evaluated false
+     emergence-claim none))
