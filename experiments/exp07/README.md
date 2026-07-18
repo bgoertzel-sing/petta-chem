@@ -120,8 +120,18 @@ negativity, produces identical cap-8 identity sets from the canonical and
 frozen-permuted sources in all three distractor phases, and exhaustively
 calibrates both guided policies over every frontier/phase combination. A
 permuted-source selection is addressed by rule identity and handed directly to
-ordinary chamber ticking. Seed-201--232 support and every successor trajectory
-and outcome remain unimplemented.
+ordinary chamber ticking. At that gate, seed-201--232 support and every
+successor trajectory and outcome remained unimplemented.
+
+The frozen dual-bootstrap matrix is now complete over exactly seeds 201--232
+and ticks 3--34. Rolling four-rule RAF incidence is 13/32 unguided, 9/32 weak
+Doob-h, and 0/32 shuffled. All 96 trajectories replay; persistence totals are
+95/51/0, productive-event totals are 549/523/396, and rule-diversity totals
+are 336/278/219. Both bootstrap ablations, the complete cycle-catalyst
+ablation, and every individual cycle-rule ablation are 0/32, but guidance
+removal retains unguided 13/32. The preregistered guided-uplift result is
+therefore negative, with no extension and no spontaneous-emergence claim.
+See `DUAL_BOOTSTRAP_REPORT.md`.
 
 Run with:
 

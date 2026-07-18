@@ -1,7 +1,7 @@
 # exp07 Preregistration: Dual-Bootstrap, Order-Invariant Bounded Pool
 
-**Status:** Design only; no seed support, generator, selector, trajectory, or
-outcome has been implemented or evaluated.
+**Status:** Completed exactly once over the frozen matrix on 2026-07-18; the
+registered result is negative. See `DUAL_BOOTSTRAP_REPORT.md`.
 **Predecessor:** `PREREG_ORDERED_REPLICATION.md`, closed as two negative gates.
 **Claim boundary:** bounded guided causal RAF uplift only; spontaneous
 emergence claim none.

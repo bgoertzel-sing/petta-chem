@@ -4312,3 +4312,360 @@
      adaptive-extension none
      guided-causal-raf-uplift supported
      spontaneous-emergence-claim none))
+
+; ----- Frozen dual-bootstrap trajectory matrix -----
+;
+; Consume exactly ticks 3--34 for seeds 201--232.  Candidate generation,
+; identity-addressed selection, applicability, firing, abundance updates, and
+; event logging remain in PeTTa; the host runner only executes this file.
+(= (exp07-dual-seeds)
+   (seed-201 seed-202 seed-203 seed-204 seed-205 seed-206 seed-207 seed-208
+    seed-209 seed-210 seed-211 seed-212 seed-213 seed-214 seed-215 seed-216
+    seed-217 seed-218 seed-219 seed-220 seed-221 seed-222 seed-223 seed-224
+    seed-225 seed-226 seed-227 seed-228 seed-229 seed-230 seed-231 seed-232))
+
+(= (exp07-dual-initial-chamber $seed)
+   (chamber exp07-dual-bootstrap
+     (state 3 $seed
+       (molecules
+         ((mol A 3) (mol B 2) (mol C 3) (mol D 2) (mol E 2)
+          (mol X 1) (mol AB 0) (mol CD 0) (mol AC 0) (mol BD 0) (mol CE 0)
+          (mol W0 0) (mol W1 0) (mol W2 0) (mol W3 0) (mol W4 0) (mol W5 0))))
+     (exp07-dual-rules canonical) ()))
+
+(= (exp07-dual-replenishment-tick? $tick)
+   (or (== $tick 11) (or (== $tick 19) (== $tick 27))))
+
+(= (exp07-dual-replenish-food
+      (chamber $id
+        (state $tick $seed
+          (molecules
+            ((mol A $a) (mol B $b) (mol C $c) (mol D $d) (mol E $e)
+             (mol X $x) (mol AB $ab) (mol CD $cd) (mol AC $ac)
+             (mol BD $bd) (mol CE $ce) (mol W0 $w0) (mol W1 $w1)
+             (mol W2 $w2) (mol W3 $w3) (mol W4 $w4) (mol W5 $w5))))
+        $rules $events))
+   (chamber $id
+     (state $tick $seed
+       (molecules
+         ((mol A 3) (mol B 2) (mol C 3) (mol D 2) (mol E 2)
+          (mol X $x) (mol AB $ab) (mol CD $cd) (mol AC $ac)
+          (mol BD $bd) (mol CE $ce) (mol W0 $w0) (mol W1 $w1)
+          (mol W2 $w2) (mol W3 $w3) (mol W4 $w4) (mol W5 $w5))))
+     $rules $events))
+
+(= (exp07-dual-prepare-chamber (chamber $id $state $rules $events))
+   (if (exp07-dual-replenishment-tick? (state-tick $state))
+       (exp07-dual-replenish-food (chamber $id $state $rules $events))
+       (chamber $id $state $rules $events)))
+
+(= (exp07-dual-draw $seed $tick)
+   (#mod (+ (* 71 (seed-number $seed)) (+ (* 67 $tick) 19)) 96))
+
+(= (exp07-dual-candidate-applicable?
+      (candidate $tick (rule $rid $a $b $product $catalyst) $priority)
+      (chamber $id
+        (state $tick $seed (molecules $molecules)) $rules $events))
+   (and (> (molecule-abundance-7 $a $molecules) 0)
+        (and (> (molecule-abundance-7 $b $molecules) 0)
+             (> (molecule-abundance-7 $catalyst $molecules) 0))))
+
+(= (exp07-dual-reaction-delta $name $a $b $product)
+   (if (== $name $a) -1
+       (if (== $name $b) -1
+           (if (== $name $product) 1 0))))
+(= (exp07-dual-update-molecule (mol $name $abundance) $a $b $product)
+   (mol $name
+     (+ $abundance (exp07-dual-reaction-delta $name $a $b $product))))
+
+(= (exp07-dual-fire-candidate
+      (candidate $tick (rule $rid $a $b $product $catalyst) $priority)
+      (chamber $id
+        (state $tick $seed
+          (molecules
+            ($m0 $m1 $m2 $m3 $m4 $m5 $m6 $m7 $m8 $m9 $m10 $m11
+             $m12 $m13 $m14 $m15 $m16)))
+        $rules $events))
+   (chamber $id
+     (state (+ $tick 1) $seed
+       (molecules
+         ((exp07-dual-update-molecule $m0 $a $b $product)
+          (exp07-dual-update-molecule $m1 $a $b $product)
+          (exp07-dual-update-molecule $m2 $a $b $product)
+          (exp07-dual-update-molecule $m3 $a $b $product)
+          (exp07-dual-update-molecule $m4 $a $b $product)
+          (exp07-dual-update-molecule $m5 $a $b $product)
+          (exp07-dual-update-molecule $m6 $a $b $product)
+          (exp07-dual-update-molecule $m7 $a $b $product)
+          (exp07-dual-update-molecule $m8 $a $b $product)
+          (exp07-dual-update-molecule $m9 $a $b $product)
+          (exp07-dual-update-molecule $m10 $a $b $product)
+          (exp07-dual-update-molecule $m11 $a $b $product)
+          (exp07-dual-update-molecule $m12 $a $b $product)
+          (exp07-dual-update-molecule $m13 $a $b $product)
+          (exp07-dual-update-molecule $m14 $a $b $product)
+          (exp07-dual-update-molecule $m15 $a $b $product)
+          (exp07-dual-update-molecule $m16 $a $b $product))))
+     $rules
+     (exp07-rich-append-event
+       $events (event $tick $rid $a $b $product $catalyst))))
+
+(= (exp07-dual-total-tick $arm $chamber)
+   (let $prepared (exp07-dual-prepare-chamber $chamber)
+     (let $selected (exp07-dual-selected-with-draw
+          $arm $prepared
+          (exp07-dual-draw
+            (state-seed (chamber-state $prepared))
+            (state-tick (chamber-state $prepared))))
+       (if (exp07-dual-candidate-applicable? $selected $prepared)
+           (exp07-dual-fire-candidate $selected $prepared)
+           (exp07-pilot-advance-blocked-tick $prepared)))))
+
+(= (exp07-dual-run-to-state-tick $arm $chamber $terminal-state-tick)
+   (if (>= (state-tick (chamber-state $chamber)) $terminal-state-tick)
+       $chamber
+       (exp07-dual-run-to-state-tick
+         $arm (exp07-dual-total-tick $arm $chamber) $terminal-state-tick)))
+
+(= (exp07-dual-terminal-chamber $arm $seed)
+   (exp07-dual-run-to-state-tick
+     $arm (exp07-dual-initial-chamber $seed) 35))
+
+(= (exp07-dual-last-twelve-events $events)
+   (if (> (exp07-registered-list-length $events) 12)
+       (exp07-dual-last-twelve-events (cdr-atom $events))
+       $events))
+
+(= (exp07-dual-first-rolling-raf-from $remaining $seen)
+   (if (== $remaining ()) 99
+       (let $event (car-atom $remaining)
+         (let $next-seen (exp07-rich-append-event $seen $event)
+           (if (exp07-dual-event-derived-raf?
+                 (exp07-dual-last-twelve-events $next-seen))
+               (exp07-event-tick $event)
+               (exp07-dual-first-rolling-raf-from
+                 (cdr-atom $remaining) $next-seen))))))
+
+(= (exp07-dual-first-raf-tick $arm $seed)
+   (exp07-dual-first-rolling-raf-from
+     (chamber-events (exp07-dual-terminal-chamber $arm $seed)) ()))
+(= (exp07-dual-raf-incidence $arm $seed)
+   (if (< (exp07-dual-first-raf-tick $arm $seed) 99) 1 0))
+(= (exp07-dual-event-count $arm $seed)
+   (exp07-registered-list-length
+     (chamber-events (exp07-dual-terminal-chamber $arm $seed))))
+(= (exp07-dual-replay-ok? $arm $seed)
+   (== (exp07-dual-terminal-chamber $arm $seed)
+       (exp07-dual-run-to-state-tick
+         $arm (exp07-dual-initial-chamber $seed) 35)))
+
+(= (exp07-dual-persistence-from
+      $arm $chamber $terminal-state-tick $current-run $longest-run)
+   (if (>= (state-tick (chamber-state $chamber)) $terminal-state-tick)
+       $longest-run
+       (let $next (exp07-dual-total-tick $arm $chamber)
+         (let $next-run
+              (if (exp07-dual-event-derived-raf?
+                    (exp07-dual-last-twelve-events (chamber-events $next)))
+                  (+ $current-run 1) 0)
+           (exp07-dual-persistence-from
+             $arm $next $terminal-state-tick $next-run
+             (if (> $next-run $longest-run) $next-run $longest-run))))))
+(= (exp07-dual-raf-persistence $arm $seed)
+   (exp07-dual-persistence-from
+     $arm (exp07-dual-initial-chamber $seed) 35 0 0))
+
+(= (exp07-dual-rule-diversity $arm $seed)
+   (let $events (chamber-events (exp07-dual-terminal-chamber $arm $seed))
+     (+ (if (exp07-dual-event-rule-fired? db0 $events) 1 0)
+       (+ (if (exp07-dual-event-rule-fired? db1 $events) 1 0)
+        (+ (if (exp07-dual-event-rule-fired? dp1 $events) 1 0)
+         (+ (if (exp07-dual-event-rule-fired? dp2 $events) 1 0)
+          (+ (if (exp07-dual-event-rule-fired? dp3 $events) 1 0)
+           (+ (if (exp07-dual-event-rule-fired? dp0 $events) 1 0)
+            (+ (if (exp07-dual-event-rule-fired? dd0 $events) 1 0)
+             (+ (if (exp07-dual-event-rule-fired? dd1 $events) 1 0)
+              (+ (if (exp07-dual-event-rule-fired? dd2 $events) 1 0)
+               (+ (if (exp07-dual-event-rule-fired? dd3 $events) 1 0)
+                (+ (if (exp07-dual-event-rule-fired? dd4 $events) 1 0)
+                   (if (exp07-dual-event-rule-fired? dd5 $events) 1 0))))))))))))))
+
+; Fixed-seed folds keep all endpoint computation and per-seed provenance in
+; PeTTa while avoiding duplicated 32-term expressions.
+(= (exp07-dual-value raf $arm $seed) (exp07-dual-raf-incidence $arm $seed))
+(= (exp07-dual-value events $arm $seed) (exp07-dual-event-count $arm $seed))
+(= (exp07-dual-value replay $arm $seed)
+   (if (exp07-dual-replay-ok? $arm $seed) 1 0))
+(= (exp07-dual-value persistence $arm $seed)
+   (exp07-dual-raf-persistence $arm $seed))
+(= (exp07-dual-value diversity $arm $seed)
+   (exp07-dual-rule-diversity $arm $seed))
+(= (exp07-dual-sum $metric $arm $seeds)
+   (if (== $seeds ()) 0
+       (+ (exp07-dual-value $metric $arm (car-atom $seeds))
+          (exp07-dual-sum $metric $arm (cdr-atom $seeds)))))
+(= (exp07-dual-values first-hit $arm $seeds)
+   (if (== $seeds ()) ()
+       (cons-atom (exp07-dual-first-raf-tick $arm (car-atom $seeds))
+         (exp07-dual-values first-hit $arm (cdr-atom $seeds)))))
+(= (exp07-dual-values persistence $arm $seeds)
+   (if (== $seeds ()) ()
+       (cons-atom (exp07-dual-raf-persistence $arm (car-atom $seeds))
+         (exp07-dual-values persistence $arm (cdr-atom $seeds)))))
+(= (exp07-dual-values diversity $arm $seeds)
+   (if (== $seeds ()) ()
+       (cons-atom (exp07-dual-rule-diversity $arm (car-atom $seeds))
+         (exp07-dual-values diversity $arm (cdr-atom $seeds)))))
+
+(= (exp07-dual-ablation-blocks? bootstrap-ablation-db0 $rule-id)
+   (== $rule-id db0))
+(= (exp07-dual-ablation-blocks? bootstrap-ablation-db1 $rule-id)
+   (== $rule-id db1))
+(= (exp07-dual-ablation-blocks? catalyst-ablation $rule-id)
+   (or (== $rule-id dp1) (or (== $rule-id dp2)
+     (or (== $rule-id dp3) (== $rule-id dp0)))))
+(= (exp07-dual-ablation-blocks? rule-ablation-dp1 $rule-id)
+   (== $rule-id dp1))
+(= (exp07-dual-ablation-blocks? rule-ablation-dp2 $rule-id)
+   (== $rule-id dp2))
+(= (exp07-dual-ablation-blocks? rule-ablation-dp3 $rule-id)
+   (== $rule-id dp3))
+(= (exp07-dual-ablation-blocks? rule-ablation-dp0 $rule-id)
+   (== $rule-id dp0))
+
+(= (exp07-dual-ablation-total-tick $ablation $arm $chamber)
+   (let $prepared (exp07-dual-prepare-chamber $chamber)
+     (let $selected (exp07-dual-selected-with-draw
+          $arm $prepared
+          (exp07-dual-draw (state-seed (chamber-state $prepared))
+                           (state-tick (chamber-state $prepared))))
+       (if (exp07-dual-ablation-blocks?
+             $ablation (rule-id (candidate-rule $selected)))
+           (exp07-pilot-advance-blocked-tick $prepared)
+           (if (exp07-dual-candidate-applicable? $selected $prepared)
+               (exp07-dual-fire-candidate $selected $prepared)
+               (exp07-pilot-advance-blocked-tick $prepared))))))
+(= (exp07-dual-ablation-run-to-state-tick
+      $ablation $arm $chamber $terminal-state-tick)
+   (if (>= (state-tick (chamber-state $chamber)) $terminal-state-tick)
+       $chamber
+       (exp07-dual-ablation-run-to-state-tick $ablation $arm
+         (exp07-dual-ablation-total-tick $ablation $arm $chamber)
+         $terminal-state-tick)))
+(= (exp07-dual-ablation-raf-incidence $ablation $arm $seed)
+   (if (< (exp07-dual-first-rolling-raf-from
+             (chamber-events
+               (exp07-dual-ablation-run-to-state-tick $ablation $arm
+                 (exp07-dual-initial-chamber $seed) 35)) ()) 99) 1 0))
+(= (exp07-dual-sum-ablation-raf $ablation $arm $seeds)
+   (if (== $seeds ()) 0
+       (+ (exp07-dual-ablation-raf-incidence
+            $ablation $arm (car-atom $seeds))
+          (exp07-dual-sum-ablation-raf
+            $ablation $arm (cdr-atom $seeds)))))
+
+(= (exp07-dual-result-supported?)
+   (let $seeds (exp07-dual-seeds)
+     (let $weak (exp07-dual-sum raf weak-doob-h $seeds)
+       (and (>= (- $weak (exp07-dual-sum raf unguided $seeds)) 10)
+        (and (>= (- $weak
+                    (exp07-dual-sum raf shuffled-frontier-guidance $seeds)) 10)
+         (and (== (exp07-dual-sum replay unguided $seeds) 32)
+          (and (== (exp07-dual-sum replay weak-doob-h $seeds) 32)
+           (and (== (exp07-dual-sum replay
+                     shuffled-frontier-guidance $seeds) 32)
+            (and (<= (exp07-dual-sum raf unguided $seeds) 4)
+             (and (<= (exp07-dual-sum-ablation-raf
+                        bootstrap-ablation-db0 weak-doob-h $seeds) 4)
+              (and (<= (exp07-dual-sum-ablation-raf
+                         bootstrap-ablation-db1 weak-doob-h $seeds) 4)
+               (and (<= (exp07-dual-sum-ablation-raf
+                          catalyst-ablation weak-doob-h $seeds) 4)
+                (and (<= (exp07-dual-sum-ablation-raf
+                           rule-ablation-dp1 weak-doob-h $seeds) 4)
+                 (and (<= (exp07-dual-sum-ablation-raf
+                            rule-ablation-dp2 weak-doob-h $seeds) 4)
+                  (and (<= (exp07-dual-sum-ablation-raf
+                             rule-ablation-dp3 weak-doob-h $seeds) 4)
+                       (<= (exp07-dual-sum-ablation-raf
+                             rule-ablation-dp0 weak-doob-h $seeds) 4))))))))))))))))
+
+(= (exp07-dual-matrix-report)
+   (let $seeds (exp07-dual-seeds)
+     (dual-bootstrap-matrix-report
+       arms (unguided weak-doob-h shuffled-frontier-guidance)
+       seeds $seeds ticks (3 34) candidate-cap 8
+       raf-incidence
+         ((unguided (exp07-dual-sum raf unguided $seeds))
+          (weak-doob-h (exp07-dual-sum raf weak-doob-h $seeds))
+          (shuffled-frontier-guidance
+            (exp07-dual-sum raf shuffled-frontier-guidance $seeds)))
+       first-hit-ticks
+         ((unguided (exp07-dual-values first-hit unguided $seeds))
+          (weak-doob-h (exp07-dual-values first-hit weak-doob-h $seeds))
+          (shuffled-frontier-guidance
+            (exp07-dual-values first-hit shuffled-frontier-guidance $seeds)))
+       longest-consecutive-raf-ticks
+         ((unguided (exp07-dual-values persistence unguided $seeds))
+          (weak-doob-h (exp07-dual-values persistence weak-doob-h $seeds))
+          (shuffled-frontier-guidance
+            (exp07-dual-values persistence
+              shuffled-frontier-guidance $seeds)))
+       total-persistence
+         ((unguided (exp07-dual-sum persistence unguided $seeds))
+          (weak-doob-h (exp07-dual-sum persistence weak-doob-h $seeds))
+          (shuffled-frontier-guidance
+            (exp07-dual-sum persistence shuffled-frontier-guidance $seeds)))
+       productive-event-totals
+         ((unguided (exp07-dual-sum events unguided $seeds))
+          (weak-doob-h (exp07-dual-sum events weak-doob-h $seeds))
+          (shuffled-frontier-guidance
+            (exp07-dual-sum events shuffled-frontier-guidance $seeds)))
+       terminal-rule-diversity
+         ((unguided (exp07-dual-values diversity unguided $seeds))
+          (weak-doob-h (exp07-dual-values diversity weak-doob-h $seeds))
+          (shuffled-frontier-guidance
+            (exp07-dual-values diversity shuffled-frontier-guidance $seeds)))
+       total-rule-diversity
+         ((unguided (exp07-dual-sum diversity unguided $seeds))
+          (weak-doob-h (exp07-dual-sum diversity weak-doob-h $seeds))
+          (shuffled-frontier-guidance
+            (exp07-dual-sum diversity shuffled-frontier-guidance $seeds)))
+       exact-replays
+         ((unguided (exp07-dual-sum replay unguided $seeds))
+          (weak-doob-h (exp07-dual-sum replay weak-doob-h $seeds))
+          (shuffled-frontier-guidance
+            (exp07-dual-sum replay shuffled-frontier-guidance $seeds)))
+       intervention-cost
+         (denominator-per-draw 96 draws-per-trajectory 32
+          trajectories-per-arm 32
+          full-matrix ((unguided 0) (weak-doob-h 8192)
+                       (shuffled-frontier-guidance 8192))
+          matched-guidance-budget true)
+       causal-ablations
+         (guiding-term-removal
+            (weak-policy-replaced-by unguided
+             raf-incidence (exp07-dual-sum raf unguided $seeds))
+          bootstrap-ablation
+            ((db0 (exp07-dual-sum-ablation-raf
+                    bootstrap-ablation-db0 weak-doob-h $seeds))
+             (db1 (exp07-dual-sum-ablation-raf
+                    bootstrap-ablation-db1 weak-doob-h $seeds)))
+          catalyst-ablation
+            (removed-edges ((CD dp1) (AC dp2) (BD dp3) (CE dp0))
+             raf-incidence (exp07-dual-sum-ablation-raf
+               catalyst-ablation weak-doob-h $seeds))
+          rule-ablation
+            ((dp1 (exp07-dual-sum-ablation-raf
+                    rule-ablation-dp1 weak-doob-h $seeds))
+             (dp2 (exp07-dual-sum-ablation-raf
+                    rule-ablation-dp2 weak-doob-h $seeds))
+             (dp3 (exp07-dual-sum-ablation-raf
+                    rule-ablation-dp3 weak-doob-h $seeds))
+             (dp0 (exp07-dual-sum-ablation-raf
+                    rule-ablation-dp0 weak-doob-h $seeds))))
+       rolling-detector last-twelve-dp1-dp2-dp3-dp0
+       registered-result
+         (if (exp07-dual-result-supported?) supported not-supported)
+       adaptive-extension none
+       spontaneous-emergence-claim none)))

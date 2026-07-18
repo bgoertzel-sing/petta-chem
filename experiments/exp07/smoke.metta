@@ -1995,6 +1995,47 @@
          chemistry-outcomes-used false
          emergence-claim none))
 
+; Frozen dual-bootstrap matrix.  These are the exact seed-201--232 outcomes;
+; no seeds, ticks, pool identities, or thresholds were extended after access.
+!(test (seed-number seed-201) 201)
+!(test (seed-number seed-232) 232)
+!(test (exp07-dual-draw seed-201 3) 91)
+!(test (exp07-dual-draw seed-232 34) 49)
+!(test (exp07-dual-sum raf unguided (exp07-dual-seeds)) 13)
+!(test (exp07-dual-sum raf weak-doob-h (exp07-dual-seeds)) 9)
+!(test (exp07-dual-sum raf shuffled-frontier-guidance (exp07-dual-seeds)) 0)
+!(test (exp07-dual-sum events unguided (exp07-dual-seeds)) 549)
+!(test (exp07-dual-sum events weak-doob-h (exp07-dual-seeds)) 523)
+!(test (exp07-dual-sum events shuffled-frontier-guidance
+         (exp07-dual-seeds)) 396)
+!(test (exp07-dual-sum persistence unguided (exp07-dual-seeds)) 95)
+!(test (exp07-dual-sum persistence weak-doob-h (exp07-dual-seeds)) 51)
+!(test (exp07-dual-sum persistence shuffled-frontier-guidance
+         (exp07-dual-seeds)) 0)
+!(test (exp07-dual-sum diversity unguided (exp07-dual-seeds)) 336)
+!(test (exp07-dual-sum diversity weak-doob-h (exp07-dual-seeds)) 278)
+!(test (exp07-dual-sum diversity shuffled-frontier-guidance
+         (exp07-dual-seeds)) 219)
+!(test (exp07-dual-sum replay unguided (exp07-dual-seeds)) 32)
+!(test (exp07-dual-sum replay weak-doob-h (exp07-dual-seeds)) 32)
+!(test (exp07-dual-sum replay shuffled-frontier-guidance
+         (exp07-dual-seeds)) 32)
+!(test (exp07-dual-sum-ablation-raf
+         bootstrap-ablation-db0 weak-doob-h (exp07-dual-seeds)) 0)
+!(test (exp07-dual-sum-ablation-raf
+         bootstrap-ablation-db1 weak-doob-h (exp07-dual-seeds)) 0)
+!(test (exp07-dual-sum-ablation-raf
+         catalyst-ablation weak-doob-h (exp07-dual-seeds)) 0)
+!(test (exp07-dual-sum-ablation-raf
+         rule-ablation-dp1 weak-doob-h (exp07-dual-seeds)) 0)
+!(test (exp07-dual-sum-ablation-raf
+         rule-ablation-dp2 weak-doob-h (exp07-dual-seeds)) 0)
+!(test (exp07-dual-sum-ablation-raf
+         rule-ablation-dp3 weak-doob-h (exp07-dual-seeds)) 0)
+!(test (exp07-dual-sum-ablation-raf
+         rule-ablation-dp0 weak-doob-h (exp07-dual-seeds)) 0)
+!(test (exp07-dual-result-supported?) False)
+
 ; Frozen ordered-bootstrap matrix: all three arms are RAF-null over the exact
 ; held-out seeds and horizon, with deterministic replay and no extension.
 !(test (exp07-ordered-arm-replay-count unguided) 8)
