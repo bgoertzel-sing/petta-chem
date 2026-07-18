@@ -2407,6 +2407,324 @@
      terminal-forcing prohibited
      spontaneous-emergence-claim none))
 
+; ----- Dual-bootstrap fail-closed implementation gates -----
+;
+; Materialize the complete frozen twelve-rule source, then derive the cap by
+; rule identity.  Both accepted source orders deliberately emit the same
+; canonical cap order, so source position cannot decide which rules survive.
+; These clauses use only seed-7 synthetic fixtures and never construct a
+; registered seed-201--232 trajectory.
+(= (exp07-dual-rules canonical)
+   ((rule db0 A B AB X)
+    (rule db1 C D CD AB)
+    (rule dp1 A C AC CD)
+    (rule dp2 B D BD AC)
+    (rule dp3 C E CE BD)
+    (rule dp0 C D CD CE)
+    (rule dd0 A D W0 X)
+    (rule dd1 B C W1 X)
+    (rule dd2 A E W2 X)
+    (rule dd3 B E W3 X)
+    (rule dd4 A C W4 X)
+    (rule dd5 D E W5 X)))
+
+(= (exp07-dual-rules permuted)
+   ((rule dd4 A C W4 X)
+    (rule dp2 B D BD AC)
+    (rule db0 A B AB X)
+    (rule dd1 B C W1 X)
+    (rule dp0 C D CD CE)
+    (rule dd5 D E W5 X)
+    (rule db1 C D CD AB)
+    (rule dp3 C E CE BD)
+    (rule dd2 A E W2 X)
+    (rule dp1 A C AC CD)
+    (rule dd0 A D W0 X)
+    (rule dd3 B E W3 X)))
+
+(= (exp07-dual-fixture $order $tick $ab $cd $ac $bd $ce)
+   (chamber exp07-dual-bootstrap-synthetic
+     (state $tick seed-7
+       (molecules
+         ((mol A 3) (mol B 2) (mol C 3) (mol D 2) (mol E 2)
+          (mol X 1) (mol AB $ab) (mol CD $cd) (mol AC $ac)
+          (mol BD $bd) (mol CE $ce) (mol W0 0) (mol W1 0)
+          (mol W2 0) (mol W3 0) (mol W4 0) (mol W5 0))))
+     (exp07-dual-rules $order) ()))
+
+(= (exp07-dual-distractor-phase $seed $tick)
+   (#mod (+ (seed-number $seed) $tick) 3))
+
+(= (exp07-dual-matched-distractor 0) dd0)
+(= (exp07-dual-matched-distractor 1) dd2)
+(= (exp07-dual-matched-distractor 2) dd4)
+(= (exp07-dual-partner-distractor 0) dd1)
+(= (exp07-dual-partner-distractor 1) dd3)
+(= (exp07-dual-partner-distractor 2) dd5)
+
+(= (exp07-dual-cap-for-phase 0 $tick)
+   (candidate-pool $tick
+     ((candidate $tick (rule db0 A B AB X) 1)
+      (candidate $tick (rule db1 C D CD AB) 1)
+      (candidate $tick (rule dp1 A C AC CD) 1)
+      (candidate $tick (rule dp2 B D BD AC) 1)
+      (candidate $tick (rule dp3 C E CE BD) 1)
+      (candidate $tick (rule dp0 C D CD CE) 1)
+      (candidate $tick (rule dd0 A D W0 X) 1)
+      (candidate $tick (rule dd1 B C W1 X) 1))))
+(= (exp07-dual-cap-for-phase 1 $tick)
+   (candidate-pool $tick
+     ((candidate $tick (rule db0 A B AB X) 1)
+      (candidate $tick (rule db1 C D CD AB) 1)
+      (candidate $tick (rule dp1 A C AC CD) 1)
+      (candidate $tick (rule dp2 B D BD AC) 1)
+      (candidate $tick (rule dp3 C E CE BD) 1)
+      (candidate $tick (rule dp0 C D CD CE) 1)
+      (candidate $tick (rule dd2 A E W2 X) 1)
+      (candidate $tick (rule dd3 B E W3 X) 1))))
+(= (exp07-dual-cap-for-phase 2 $tick)
+   (candidate-pool $tick
+     ((candidate $tick (rule db0 A B AB X) 1)
+      (candidate $tick (rule db1 C D CD AB) 1)
+      (candidate $tick (rule dp1 A C AC CD) 1)
+      (candidate $tick (rule dp2 B D BD AC) 1)
+      (candidate $tick (rule dp3 C E CE BD) 1)
+      (candidate $tick (rule dp0 C D CD CE) 1)
+      (candidate $tick (rule dd4 A C W4 X) 1)
+      (candidate $tick (rule dd5 D E W5 X) 1))))
+
+(= (exp07-dual-generate-cap
+      (chamber $id (state $tick $seed (molecules $molecules))
+        ((rule db0 A B AB X) (rule db1 C D CD AB)
+         (rule dp1 A C AC CD) (rule dp2 B D BD AC)
+         (rule dp3 C E CE BD) (rule dp0 C D CD CE)
+         (rule dd0 A D W0 X) (rule dd1 B C W1 X)
+         (rule dd2 A E W2 X) (rule dd3 B E W3 X)
+         (rule dd4 A C W4 X) (rule dd5 D E W5 X)) $events))
+   (exp07-dual-cap-for-phase
+     (exp07-dual-distractor-phase $seed $tick) $tick))
+(= (exp07-dual-generate-cap
+      (chamber $id (state $tick $seed (molecules $molecules))
+        ((rule dd4 A C W4 X) (rule dp2 B D BD AC)
+         (rule db0 A B AB X) (rule dd1 B C W1 X)
+         (rule dp0 C D CD CE) (rule dd5 D E W5 X)
+         (rule db1 C D CD AB) (rule dp3 C E CE BD)
+         (rule dd2 A E W2 X) (rule dp1 A C AC CD)
+         (rule dd0 A D W0 X) (rule dd3 B E W3 X)) $events))
+   (exp07-dual-cap-for-phase
+     (exp07-dual-distractor-phase $seed $tick) $tick))
+
+(= (exp07-dual-arm-pool $arm $chamber)
+   (exp07-dual-generate-cap $chamber))
+(= (exp07-dual-arm-pools-identical? $chamber)
+   (and (== (exp07-dual-arm-pool unguided $chamber)
+            (exp07-dual-arm-pool weak-doob-h $chamber))
+        (== (exp07-dual-arm-pool unguided $chamber)
+            (exp07-dual-arm-pool shuffled-frontier-guidance $chamber))))
+
+; First-class catalysis is explicit and closed-world for the new chemistry.
+!(add-atom &self (catalyzes X db0))
+!(add-atom &self (catalyzes AB db1))
+!(add-atom &self (catalyzes CD dp1))
+!(add-atom &self (catalyzes AC dp2))
+!(add-atom &self (catalyzes BD dp3))
+!(add-atom &self (catalyzes CE dp0))
+!(add-atom &self (catalyzes X dd0))
+!(add-atom &self (catalyzes X dd1))
+!(add-atom &self (catalyzes X dd2))
+!(add-atom &self (catalyzes X dd3))
+!(add-atom &self (catalyzes X dd4))
+!(add-atom &self (catalyzes X dd5))
+
+(= (exp07-dual-catalysis-facts)
+   ((catalysis-edge X db0) (catalysis-edge AB db1)
+    (catalysis-edge CD dp1) (catalysis-edge AC dp2)
+    (catalysis-edge BD dp3) (catalysis-edge CE dp0)
+    (catalysis-edge X dd0) (catalysis-edge X dd1)
+    (catalysis-edge X dd2) (catalysis-edge X dd3)
+    (catalysis-edge X dd4) (catalysis-edge X dd5)))
+(= (exp07-dual-catalyzes? $molecule $rule-id)
+   (if (== (collapse
+             (match &self (catalyzes $molecule $rule-id) matched)) ())
+       False True))
+
+(= (exp07-dual-event-rule-fired? $rule-id $events)
+   (if (== $events ()) False
+       (if (== (exp07-event-rule-id (car-atom $events)) $rule-id) True
+           (exp07-dual-event-rule-fired? $rule-id (cdr-atom $events)))))
+(= (exp07-dual-event-derived-raf? $events)
+   (and (exp07-dual-event-rule-fired? dp1 $events)
+        (and (exp07-dual-event-rule-fired? dp2 $events)
+             (and (exp07-dual-event-rule-fired? dp3 $events)
+                  (exp07-dual-event-rule-fired? dp0 $events)))))
+
+; The selector frontier is derived only from the current PeTTa chamber.
+(= (exp07-dual-frontier
+      (chamber $id (state $tick $seed (molecules $molecules)) $rules $events))
+   (if (== (molecule-abundance-7 AB $molecules) 0) db0
+       (if (== (molecule-abundance-7 CD $molecules) 0) db1
+           (if (== (molecule-abundance-7 AC $molecules) 0) dp1
+               (if (== (molecule-abundance-7 BD $molecules) 0) dp2
+                   (if (== (molecule-abundance-7 CE $molecules) 0)
+                       dp3 dp0))))))
+
+(= (exp07-dual-remove-id $wanted $ids)
+   (if (== $ids ()) ()
+       (if (== (car-atom $ids) $wanted)
+           (exp07-dual-remove-id $wanted (cdr-atom $ids))
+           (cons-atom (car-atom $ids)
+             (exp07-dual-remove-id $wanted (cdr-atom $ids))))))
+(= (exp07-dual-nth-id $index $ids)
+   (if (== $index 0)
+       (car-atom $ids)
+       (exp07-dual-nth-id (- $index 1) (cdr-atom $ids))))
+(= (exp07-dual-exposed-ids $matched $partner)
+   (db0 db1 dp1 dp2 dp3 dp0 $matched $partner))
+(= (exp07-dual-other-ids $frontier $matched $partner)
+   (exp07-dual-remove-id $matched
+     (exp07-dual-remove-id $frontier
+       (exp07-dual-exposed-ids $matched $partner))))
+(= (exp07-dual-other-index $draw)
+   (if (< $draw 36) 0 (if (< $draw 48) 1 (if (< $draw 60) 2
+       (if (< $draw 72) 3 (if (< $draw 84) 4 5))))))
+
+(= (exp07-dual-selected-id unguided $frontier $matched $partner $draw)
+   (exp07-dual-nth-id (exp07-ordered-unguided-bin $draw)
+     (exp07-dual-exposed-ids $matched $partner)))
+(= (exp07-dual-selected-id weak-doob-h $frontier $matched $partner $draw)
+   (if (< $draw 20) $frontier
+       (if (< $draw 24) $matched
+           (exp07-dual-nth-id (exp07-dual-other-index $draw)
+             (exp07-dual-other-ids $frontier $matched $partner)))))
+(= (exp07-dual-selected-id
+      shuffled-frontier-guidance $frontier $matched $partner $draw)
+   (if (< $draw 4) $frontier
+       (if (< $draw 24) $matched
+           (exp07-dual-nth-id (exp07-dual-other-index $draw)
+             (exp07-dual-other-ids $frontier $matched $partner)))))
+
+(= (exp07-dual-id-count-from
+      $arm $frontier $matched $partner $wanted $draw)
+   (if (>= $draw 96) 0
+       (+ (if (== (exp07-dual-selected-id
+                     $arm $frontier $matched $partner $draw) $wanted) 1 0)
+          (exp07-dual-id-count-from
+            $arm $frontier $matched $partner $wanted (+ $draw 1)))))
+(= (exp07-dual-other-masses-12? $arm $frontier $matched $partner $ids)
+   (if (== $ids ()) True
+       (and (== (exp07-dual-id-count-from
+                  $arm $frontier $matched $partner (car-atom $ids) 0) 12)
+            (exp07-dual-other-masses-12?
+              $arm $frontier $matched $partner (cdr-atom $ids)))))
+(= (exp07-dual-selector-calibrated?
+      weak-doob-h $frontier $matched $partner)
+   (and (== (exp07-dual-id-count-from
+              weak-doob-h $frontier $matched $partner $frontier 0) 20)
+        (and (== (exp07-dual-id-count-from
+                   weak-doob-h $frontier $matched $partner $matched 0) 4)
+             (exp07-dual-other-masses-12?
+               weak-doob-h $frontier $matched $partner
+               (exp07-dual-other-ids $frontier $matched $partner)))))
+(= (exp07-dual-selector-calibrated?
+      shuffled-frontier-guidance $frontier $matched $partner)
+   (and (== (exp07-dual-id-count-from shuffled-frontier-guidance
+              $frontier $matched $partner $frontier 0) 4)
+        (and (== (exp07-dual-id-count-from shuffled-frontier-guidance
+                   $frontier $matched $partner $matched 0) 20)
+             (exp07-dual-other-masses-12? shuffled-frontier-guidance
+               $frontier $matched $partner
+               (exp07-dual-other-ids $frontier $matched $partner)))))
+(= (exp07-dual-all-frontiers-calibrated? $arm $matched $partner $frontiers)
+   (if (== $frontiers ()) True
+       (and (exp07-dual-selector-calibrated?
+              $arm (car-atom $frontiers) $matched $partner)
+            (exp07-dual-all-frontiers-calibrated?
+              $arm $matched $partner (cdr-atom $frontiers)))))
+(= (exp07-dual-complete-selector-calibration? $arm)
+   (and (exp07-dual-all-frontiers-calibrated?
+          $arm dd0 dd1 (db0 db1 dp1 dp2 dp3 dp0))
+        (and (exp07-dual-all-frontiers-calibrated?
+               $arm dd2 dd3 (db0 db1 dp1 dp2 dp3 dp0))
+             (exp07-dual-all-frontiers-calibrated?
+               $arm dd4 dd5 (db0 db1 dp1 dp2 dp3 dp0)))))
+
+(= (exp07-dual-selected-with-draw $arm $chamber $draw)
+   (exp07-dual-selected-from-pool
+     $arm $chamber $draw (exp07-dual-generate-cap $chamber)))
+(= (exp07-dual-selected-from-pool
+      $arm $chamber $draw (candidate-pool $tick $candidates))
+   (let $phase (exp07-dual-distractor-phase
+                 (state-seed (chamber-state $chamber)) $tick)
+     (exp07-ordered-candidate-by-rule-id
+       (exp07-dual-selected-id $arm (exp07-dual-frontier $chamber)
+         (exp07-dual-matched-distractor $phase)
+         (exp07-dual-partner-distractor $phase) $draw)
+       $candidates)))
+(= (exp07-dual-direct-tick-with-draw $arm $chamber $draw)
+   (chamber-tick-with-candidate
+     $chamber (exp07-dual-selected-with-draw $arm $chamber $draw)))
+
+(= (exp07-dual-initial-applicability-gate)
+   (let $chamber (exp07-dual-fixture canonical 3 0 0 0 0 0)
+     (dual-initial-applicability-gate
+       db0 (candidate-applicable-in-chamber?
+             (candidate 3 (rule db0 A B AB X) 1) $chamber)
+       db1 (candidate-applicable-in-chamber?
+             (candidate 3 (rule db1 C D CD AB) 1) $chamber)
+       dp1 (candidate-applicable-in-chamber?
+             (candidate 3 (rule dp1 A C AC CD) 1) $chamber)
+       dp2 (candidate-applicable-in-chamber?
+             (candidate 3 (rule dp2 B D BD AC) 1) $chamber)
+       dp3 (candidate-applicable-in-chamber?
+             (candidate 3 (rule dp3 C E CE BD) 1) $chamber)
+       dp0 (candidate-applicable-in-chamber?
+             (candidate 3 (rule dp0 C D CD CE) 1) $chamber)
+       exposed-distractors
+         ((dd2 (candidate-applicable-in-chamber?
+                  (candidate 3 (rule dd2 A E W2 X) 1) $chamber))
+          (dd3 (candidate-applicable-in-chamber?
+                  (candidate 3 (rule dd3 B E W3 X) 1) $chamber)))
+       initial-event-raf
+         (exp07-dual-event-derived-raf? (chamber-events $chamber)))))
+
+(= (exp07-dual-pre-run-gate)
+   (dual-bootstrap-pre-run-gate
+     source-rule-count (exp07-registered-list-length
+                         (exp07-dual-rules canonical))
+     catalysis-fact-count (exp07-registered-list-length
+                            (exp07-dual-catalysis-facts))
+     initial-applicability (exp07-dual-initial-applicability-gate)
+     source-order-invariant-cap-phases
+       ((phase-0 (== (exp07-dual-generate-cap
+                       (exp07-dual-fixture canonical 5 0 0 0 0 0))
+                     (exp07-dual-generate-cap
+                       (exp07-dual-fixture permuted 5 0 0 0 0 0))))
+        (phase-1 (== (exp07-dual-generate-cap
+                       (exp07-dual-fixture canonical 3 0 0 0 0 0))
+                     (exp07-dual-generate-cap
+                       (exp07-dual-fixture permuted 3 0 0 0 0 0))))
+        (phase-2 (== (exp07-dual-generate-cap
+                       (exp07-dual-fixture canonical 4 0 0 0 0 0))
+                     (exp07-dual-generate-cap
+                       (exp07-dual-fixture permuted 4 0 0 0 0 0)))))
+     complete-96-bin-calibration
+       ((weak-doob-h
+          (exp07-dual-complete-selector-calibration? weak-doob-h))
+        (shuffled-frontier-guidance
+          (exp07-dual-complete-selector-calibration?
+            shuffled-frontier-guidance)))
+     matched-guidance-cost-units
+       ((weak-doob-h 8) (shuffled-frontier-guidance 8))
+     identical-arm-pools
+       (exp07-dual-arm-pools-identical?
+         (exp07-dual-fixture canonical 3 0 0 0 0 0))
+     selection-addressing rule-identity
+     synthetic-direct-tick required
+     registered-seed-support-implemented false
+     registered-trajectory-evaluated false
+     chemistry-outcomes-used false
+     emergence-claim none))
+
 ; ----- Ordered-bootstrap pre-run gate: shared pool and catalysis -----
 ;
 ; Materialize only the frozen chemistry inputs.  These constructors do not

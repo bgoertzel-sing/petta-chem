@@ -113,6 +113,16 @@ before implementation: a six-step dual-bootstrap/four-rule RAF, a twelve-rule
 source reduced to an order-invariant identity-addressed cap of eight, and
 fresh seeds 201--232. No successor trajectory or outcome has been evaluated.
 
+The successor's complete fail-closed implementation gate now passes using
+only a nonregistered seed-7 fixture and synthetic draw bins. PeTTa materializes
+all twelve rules and catalysis edges, derives initial applicability and RAF
+negativity, produces identical cap-8 identity sets from the canonical and
+frozen-permuted sources in all three distractor phases, and exhaustively
+calibrates both guided policies over every frontier/phase combination. A
+permuted-source selection is addressed by rule identity and handed directly to
+ordinary chamber ticking. Seed-201--232 support and every successor trajectory
+and outcome remain unimplemented.
+
 Run with:
 
 ```bash

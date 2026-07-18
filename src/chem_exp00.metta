@@ -251,6 +251,32 @@
                                                (if (== $name $n11) $a11
                                                    (if (== $name $n12) $a12 0))))))))))))))
 
+; The dual-bootstrap exp07 chemistry has seventeen named species.  Keep the
+; state transition on the same PeTTa-native named-molecule kernel.
+(= (molecule-abundance-7 $name
+      ((mol $n0 $a0) (mol $n1 $a1) (mol $n2 $a2) (mol $n3 $a3)
+       (mol $n4 $a4) (mol $n5 $a5) (mol $n6 $a6) (mol $n7 $a7)
+       (mol $n8 $a8) (mol $n9 $a9) (mol $n10 $a10) (mol $n11 $a11)
+       (mol $n12 $a12) (mol $n13 $a13) (mol $n14 $a14)
+       (mol $n15 $a15) (mol $n16 $a16)))
+   (if (== $name $n0) $a0
+       (if (== $name $n1) $a1
+           (if (== $name $n2) $a2
+               (if (== $name $n3) $a3
+                   (if (== $name $n4) $a4
+                       (if (== $name $n5) $a5
+                           (if (== $name $n6) $a6
+                               (if (== $name $n7) $a7
+                                   (if (== $name $n8) $a8
+                                       (if (== $name $n9) $a9
+                                           (if (== $name $n10) $a10
+                                               (if (== $name $n11) $a11
+                                                   (if (== $name $n12) $a12
+                                                       (if (== $name $n13) $a13
+                                                           (if (== $name $n14) $a14
+                                                               (if (== $name $n15) $a15
+                                                                   (if (== $name $n16) $a16 0))))))))))))))))))
+
 (= (reaction-abundance-delta $name $a $b $product)
    (if (== $name $a)
        -1
@@ -311,6 +337,31 @@
     (update-reaction-molecule (mol $n10 $a10) $a $b $product)
     (update-reaction-molecule (mol $n11 $a11) $a $b $product)
     (update-reaction-molecule (mol $n12 $a12) $a $b $product)))
+
+(= (update-reaction-molecules-7
+      ((mol $n0 $a0) (mol $n1 $a1) (mol $n2 $a2) (mol $n3 $a3)
+       (mol $n4 $a4) (mol $n5 $a5) (mol $n6 $a6) (mol $n7 $a7)
+       (mol $n8 $a8) (mol $n9 $a9) (mol $n10 $a10) (mol $n11 $a11)
+       (mol $n12 $a12) (mol $n13 $a13) (mol $n14 $a14)
+       (mol $n15 $a15) (mol $n16 $a16))
+      $a $b $product)
+   ((update-reaction-molecule (mol $n0 $a0) $a $b $product)
+    (update-reaction-molecule (mol $n1 $a1) $a $b $product)
+    (update-reaction-molecule (mol $n2 $a2) $a $b $product)
+    (update-reaction-molecule (mol $n3 $a3) $a $b $product)
+    (update-reaction-molecule (mol $n4 $a4) $a $b $product)
+    (update-reaction-molecule (mol $n5 $a5) $a $b $product)
+    (update-reaction-molecule (mol $n6 $a6) $a $b $product)
+    (update-reaction-molecule (mol $n7 $a7) $a $b $product)
+    (update-reaction-molecule (mol $n8 $a8) $a $b $product)
+    (update-reaction-molecule (mol $n9 $a9) $a $b $product)
+    (update-reaction-molecule (mol $n10 $a10) $a $b $product)
+    (update-reaction-molecule (mol $n11 $a11) $a $b $product)
+    (update-reaction-molecule (mol $n12 $a12) $a $b $product)
+    (update-reaction-molecule (mol $n13 $a13) $a $b $product)
+    (update-reaction-molecule (mol $n14 $a14) $a $b $product)
+    (update-reaction-molecule (mol $n15 $a15) $a $b $product)
+    (update-reaction-molecule (mol $n16 $a16) $a $b $product)))
 
 (= (state-nonnegative?
       (state $tick $seed $m0 $m1 $m2 $m3))

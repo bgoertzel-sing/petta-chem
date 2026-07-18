@@ -1903,6 +1903,98 @@
          adaptive-extension none
          spontaneous-emergence-claim none))
 
+; Dual-bootstrap fail-closed implementation gate.  These fixtures use only
+; seed-7 and synthetic draw bins, never the registered seed-201--232 matrix.
+!(test (exp07-dual-rules canonical)
+       ((rule db0 A B AB X) (rule db1 C D CD AB)
+        (rule dp1 A C AC CD) (rule dp2 B D BD AC)
+        (rule dp3 C E CE BD) (rule dp0 C D CD CE)
+        (rule dd0 A D W0 X) (rule dd1 B C W1 X)
+        (rule dd2 A E W2 X) (rule dd3 B E W3 X)
+        (rule dd4 A C W4 X) (rule dd5 D E W5 X)))
+!(test (exp07-dual-catalyzes? X db0) True)
+!(test (exp07-dual-catalyzes? CE dp0) True)
+!(test (exp07-dual-catalyzes? X dp0) False)
+!(test (exp07-dual-initial-applicability-gate)
+       (dual-initial-applicability-gate
+         db0 True db1 False dp1 False dp2 False dp3 False dp0 False
+         exposed-distractors ((dd2 True) (dd3 True))
+         initial-event-raf False))
+!(test (exp07-dual-generate-cap
+         (exp07-dual-fixture canonical 5 0 0 0 0 0))
+       (candidate-pool 5
+         ((candidate 5 (rule db0 A B AB X) 1)
+          (candidate 5 (rule db1 C D CD AB) 1)
+          (candidate 5 (rule dp1 A C AC CD) 1)
+          (candidate 5 (rule dp2 B D BD AC) 1)
+          (candidate 5 (rule dp3 C E CE BD) 1)
+          (candidate 5 (rule dp0 C D CD CE) 1)
+          (candidate 5 (rule dd0 A D W0 X) 1)
+          (candidate 5 (rule dd1 B C W1 X) 1))))
+!(test (exp07-dual-generate-cap
+         (exp07-dual-fixture permuted 5 0 0 0 0 0))
+       (exp07-dual-generate-cap
+         (exp07-dual-fixture canonical 5 0 0 0 0 0)))
+!(test (exp07-dual-generate-cap
+         (exp07-dual-fixture permuted 3 0 0 0 0 0))
+       (exp07-dual-generate-cap
+         (exp07-dual-fixture canonical 3 0 0 0 0 0)))
+!(test (exp07-dual-generate-cap
+         (exp07-dual-fixture permuted 4 0 0 0 0 0))
+       (exp07-dual-generate-cap
+         (exp07-dual-fixture canonical 4 0 0 0 0 0)))
+!(test (exp07-dual-complete-selector-calibration? weak-doob-h) True)
+!(test (exp07-dual-complete-selector-calibration?
+         shuffled-frontier-guidance) True)
+!(test (exp07-dual-id-count-from
+         weak-doob-h dp3 dd4 dd5 dp3 0) 20)
+!(test (exp07-dual-id-count-from
+         weak-doob-h dp3 dd4 dd5 dd4 0) 4)
+!(test (exp07-dual-id-count-from
+         shuffled-frontier-guidance dp3 dd4 dd5 dp3 0) 4)
+!(test (exp07-dual-id-count-from
+         shuffled-frontier-guidance dp3 dd4 dd5 dd4 0) 20)
+!(test (rule-id (candidate-rule
+         (exp07-dual-selected-with-draw weak-doob-h
+           (exp07-dual-fixture permuted 3 0 0 0 0 0) 0))) db0)
+!(test (exp07-dual-direct-tick-with-draw weak-doob-h
+         (exp07-dual-fixture permuted 3 0 0 0 0 0) 0)
+       (chamber exp07-dual-bootstrap-synthetic
+         (state 4 seed-7
+           (molecules
+             ((mol A 2) (mol B 1) (mol C 3) (mol D 2) (mol E 2)
+              (mol X 1) (mol AB 1) (mol CD 0) (mol AC 0)
+              (mol BD 0) (mol CE 0) (mol W0 0) (mol W1 0)
+              (mol W2 0) (mol W3 0) (mol W4 0) (mol W5 0))))
+         ((rule dd4 A C W4 X) (rule dp2 B D BD AC)
+          (rule db0 A B AB X) (rule dd1 B C W1 X)
+          (rule dp0 C D CD CE) (rule dd5 D E W5 X)
+          (rule db1 C D CD AB) (rule dp3 C E CE BD)
+          (rule dd2 A E W2 X) (rule dp1 A C AC CD)
+          (rule dd0 A D W0 X) (rule dd3 B E W3 X))
+         ((event 3 db0 A B AB X))))
+!(test (exp07-dual-pre-run-gate)
+       (dual-bootstrap-pre-run-gate
+         source-rule-count 12 catalysis-fact-count 12
+         initial-applicability
+           (dual-initial-applicability-gate
+             db0 True db1 False dp1 False dp2 False dp3 False dp0 False
+             exposed-distractors ((dd2 True) (dd3 True))
+             initial-event-raf False)
+         source-order-invariant-cap-phases
+           ((phase-0 True) (phase-1 True) (phase-2 True))
+         complete-96-bin-calibration
+           ((weak-doob-h True) (shuffled-frontier-guidance True))
+         matched-guidance-cost-units
+           ((weak-doob-h 8) (shuffled-frontier-guidance 8))
+         identical-arm-pools True
+         selection-addressing rule-identity
+         synthetic-direct-tick required
+         registered-seed-support-implemented false
+         registered-trajectory-evaluated false
+         chemistry-outcomes-used false
+         emergence-claim none))
+
 ; Frozen ordered-bootstrap matrix: all three arms are RAF-null over the exact
 ; held-out seeds and horizon, with deterministic replay and no extension.
 !(test (exp07-ordered-arm-replay-count unguided) 8)
