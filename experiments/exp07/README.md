@@ -88,6 +88,15 @@ factor. Both cohorts retain the original chemistry, horizon, matched-cost
 controls, replay, and causal ablations. No replication outcome has been
 evaluated and spontaneous-emergence claim remains none.
 
+Its fail-closed implementation gates now pass without constructing either
+registered cohort. PeTTa explicitly supports seeds 101--132, exhaustively
+calibrates both frozen hashes over all 96 draw bins, verifies identical arm
+pools, and addresses cohort-B candidates by rule identity across the fixed
+permutation and all frontier phases. The calibrated weak and shuffled masses
+retain equal eight-unit cost, and a nonregistered seed-7 fixture connects an
+identity-selected cohort-B candidate directly to ordinary chamber ticking.
+Cohort A execution remains pending; no replication endpoint has been read.
+
 Run with:
 
 ```bash

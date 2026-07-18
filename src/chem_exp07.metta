@@ -2642,6 +2642,142 @@
      trajectory-evaluated false
      emergence-claim none))
 
+; ----- Ordered-replication fail-closed implementation gates -----
+;
+; These clauses calibrate the frozen hashes and selection semantics only.
+; The chamber fixture deliberately uses seed-7, so no registered cohort
+; trajectory or endpoint is constructed by this gate.
+(= (exp07-ordered-replication-rules cohort-a)
+   (exp07-ordered-rules))
+(= (exp07-ordered-replication-rules cohort-b)
+   ((rule od2 C D W2 X)
+    (rule op0 A B AB CD)
+    (rule ob0 A B AB X)
+    (rule od1 B C W1 X)
+    (rule op2 C D CD AC)
+    (rule od3 A D W3 X)
+    (rule op1 A C AC AB)
+    (rule od0 A C W0 X)))
+
+(= (exp07-ordered-replication-fixture $cohort $ab $ac $cd)
+   (chamber exp07-ordered-replication-synthetic
+     (state 3 seed-7
+       (molecules
+         ((mol A 4) (mol B 3) (mol C 4) (mol D 3)
+          (mol AB $ab) (mol AC $ac) (mol CD $cd) (mol X 1)
+          (mol W0 0) (mol W1 0) (mol W2 0) (mol W3 0))))
+     (exp07-ordered-replication-rules $cohort) ()))
+
+(= (exp07-ordered-replication-pool $arm $cohort $chamber)
+   (exp07-ordered-generate-candidate-pool $chamber))
+
+(= (exp07-ordered-replication-pool-identity? $cohort $chamber)
+   (and
+     (== (exp07-ordered-replication-pool unguided $cohort $chamber)
+         (exp07-ordered-replication-pool weak-doob-h $cohort $chamber))
+     (== (exp07-ordered-replication-pool unguided $cohort $chamber)
+         (exp07-ordered-replication-pool
+           shuffled-frontier-guidance $cohort $chamber))))
+
+(= (exp07-ordered-replication-draw cohort-a $seed $tick)
+   (#mod (+ (* 29 (seed-number $seed)) (+ (* 43 $tick) 7)) 96))
+(= (exp07-ordered-replication-draw cohort-b $seed $tick)
+   (#mod (+ (* 47 (seed-number $seed)) (+ (* 53 $tick) 11)) 96))
+
+(= (exp07-ordered-replication-draw-count-from
+      $cohort $seed $wanted $tick)
+   (if (>= $tick 96)
+       0
+       (+ (if (== (exp07-ordered-replication-draw
+                     $cohort $seed $tick) $wanted) 1 0)
+          (exp07-ordered-replication-draw-count-from
+            $cohort $seed $wanted (+ $tick 1)))))
+
+(= (exp07-ordered-replication-calibrated-from $cohort $seed $wanted)
+   (if (>= $wanted 96)
+       True
+       (and
+         (== (exp07-ordered-replication-draw-count-from
+               $cohort $seed $wanted 0) 1)
+         (exp07-ordered-replication-calibrated-from
+           $cohort $seed (+ $wanted 1)))))
+
+(= (exp07-ordered-replication-draw-calibrated? $cohort $seed)
+   (exp07-ordered-replication-calibrated-from $cohort $seed 0))
+
+; Convert the frozen categorical bin to its rule identity before searching
+; the generated pool.  Thus cohort B's permutation cannot silently retarget
+; selector mass through inherited list positions.
+(= (exp07-ordered-rule-id-for-bin 0) ob0)
+(= (exp07-ordered-rule-id-for-bin 1) op1)
+(= (exp07-ordered-rule-id-for-bin 2) op2)
+(= (exp07-ordered-rule-id-for-bin 3) op0)
+(= (exp07-ordered-rule-id-for-bin 4) od0)
+(= (exp07-ordered-rule-id-for-bin 5) od1)
+(= (exp07-ordered-rule-id-for-bin 6) od2)
+(= (exp07-ordered-rule-id-for-bin 7) od3)
+
+(= (exp07-ordered-candidate-by-rule-id $wanted
+      ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7))
+   (if (== (rule-id (candidate-rule $c0)) $wanted) $c0
+       (if (== (rule-id (candidate-rule $c1)) $wanted) $c1
+           (if (== (rule-id (candidate-rule $c2)) $wanted) $c2
+               (if (== (rule-id (candidate-rule $c3)) $wanted) $c3
+                   (if (== (rule-id (candidate-rule $c4)) $wanted) $c4
+                       (if (== (rule-id (candidate-rule $c5)) $wanted) $c5
+                           (if (== (rule-id (candidate-rule $c6)) $wanted)
+                               $c6 $c7))))))))
+
+(= (exp07-ordered-replication-selected-with-draw
+      $arm $cohort $chamber $draw)
+   (exp07-ordered-replication-selected-from-pool
+     $arm $chamber $draw
+     (exp07-ordered-replication-pool $arm $cohort $chamber)))
+
+(= (exp07-ordered-replication-selected-from-pool
+      $arm $chamber $draw (candidate-pool $tick $candidates))
+   (exp07-ordered-candidate-by-rule-id
+     (exp07-ordered-rule-id-for-bin
+       (exp07-ordered-bin $arm (exp07-ordered-phase $chamber) $draw))
+     $candidates))
+
+(= (exp07-ordered-replication-direct-tick-with-draw
+      $arm $cohort $chamber $draw)
+   (chamber-tick-with-candidate
+     $chamber
+     (exp07-ordered-replication-selected-with-draw
+       $arm $cohort $chamber $draw)))
+
+(= (exp07-ordered-replication-pre-run-gate)
+   (ordered-replication-pre-run-gate
+     seed-support-boundaries
+       ((seed-101 (seed-number seed-101)) (seed-132 (seed-number seed-132)))
+     complete-96-bin-calibration
+       ((cohort-a (exp07-ordered-replication-draw-calibrated?
+                    cohort-a seed-101))
+        (cohort-b (exp07-ordered-replication-draw-calibrated?
+                    cohort-b seed-117)))
+     identical-arm-pools
+       ((cohort-a (exp07-ordered-replication-pool-identity?
+                    cohort-a
+                    (exp07-ordered-replication-fixture cohort-a 0 0 0)))
+        (cohort-b (exp07-ordered-replication-pool-identity?
+                    cohort-b
+                    (exp07-ordered-replication-fixture cohort-b 0 0 0))))
+     cohort-b-selection-addressing rule-identity
+     selector-mass-calibration
+       ((unguided (exp07-ordered-bin-counts unguided ab-zero))
+        (weak-doob-h (exp07-ordered-bin-counts weak-doob-h ab-zero))
+        (shuffled-frontier-guidance
+          (exp07-ordered-bin-counts
+            shuffled-frontier-guidance ab-zero)))
+     matched-guidance-cost-units ((weak-doob-h 8)
+                                  (shuffled-frontier-guidance 8))
+     synthetic-direct-tick required
+     registered-trajectory-evaluated false
+     chemistry-outcomes-used false
+     emergence-claim none))
+
 ; ----- Frozen ordered-bootstrap trajectory matrix -----
 ;
 ; Consume exactly ticks 3--26 for held-out seeds 19--26.  The chamber is

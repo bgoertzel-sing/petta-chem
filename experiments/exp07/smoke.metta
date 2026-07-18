@@ -1631,6 +1631,91 @@
          matched-cost true chemistry-outcomes-used false
          trajectory-evaluated false emergence-claim none))
 
+; Independent-replication implementation gates.  All chamber checks use the
+; synthetic seed-7 fixture; no seed-101--132 trajectory is constructed.
+!(test (seed-number seed-101) 101)
+!(test (seed-number seed-132) 132)
+!(test (exp07-ordered-replication-draw cohort-a seed-101 0) 56)
+!(test (exp07-ordered-replication-draw cohort-a seed-116 95) 64)
+!(test (exp07-ordered-replication-draw cohort-b seed-117 0) 38)
+!(test (exp07-ordered-replication-draw cohort-b seed-132 95) 18)
+!(test (exp07-ordered-replication-draw-calibrated? cohort-a seed-101) True)
+!(test (exp07-ordered-replication-draw-calibrated? cohort-b seed-117) True)
+!(test (exp07-ordered-replication-pool-identity?
+         cohort-a (exp07-ordered-replication-fixture cohort-a 0 0 0))
+       True)
+!(test (exp07-ordered-replication-pool-identity?
+         cohort-b (exp07-ordered-replication-fixture cohort-b 0 0 0))
+       True)
+!(test (exp07-ordered-replication-pool weak-doob-h cohort-b
+         (exp07-ordered-replication-fixture cohort-b 0 0 0))
+       (candidate-pool 3
+         ((candidate 3 (rule od2 C D W2 X) 1)
+          (candidate 3 (rule op0 A B AB CD) 1)
+          (candidate 3 (rule ob0 A B AB X) 1)
+          (candidate 3 (rule od1 B C W1 X) 1)
+          (candidate 3 (rule op2 C D CD AC) 1)
+          (candidate 3 (rule od3 A D W3 X) 1)
+          (candidate 3 (rule op1 A C AC AB) 1)
+          (candidate 3 (rule od0 A C W0 X) 1))))
+!(test (rule-id (candidate-rule
+         (exp07-ordered-replication-selected-with-draw weak-doob-h cohort-b
+           (exp07-ordered-replication-fixture cohort-b 0 0 0) 0))) ob0)
+!(test (rule-id (candidate-rule
+         (exp07-ordered-replication-selected-with-draw weak-doob-h cohort-b
+           (exp07-ordered-replication-fixture cohort-b 1 0 0) 12))) op1)
+!(test (rule-id (candidate-rule
+         (exp07-ordered-replication-selected-with-draw weak-doob-h cohort-b
+           (exp07-ordered-replication-fixture cohort-b 1 1 0) 24))) op2)
+!(test (rule-id (candidate-rule
+         (exp07-ordered-replication-selected-with-draw weak-doob-h cohort-b
+           (exp07-ordered-replication-fixture cohort-b 1 1 1) 36))) op0)
+!(test (rule-id (candidate-rule
+         (exp07-ordered-replication-selected-with-draw
+           shuffled-frontier-guidance cohort-b
+           (exp07-ordered-replication-fixture cohort-b 0 0 0) 40))) od0)
+!(test (rule-id (candidate-rule
+         (exp07-ordered-replication-selected-with-draw
+           shuffled-frontier-guidance cohort-b
+           (exp07-ordered-replication-fixture cohort-b 1 0 0) 52))) od1)
+!(test (rule-id (candidate-rule
+         (exp07-ordered-replication-selected-with-draw
+           shuffled-frontier-guidance cohort-b
+           (exp07-ordered-replication-fixture cohort-b 1 1 0) 64))) od2)
+!(test (rule-id (candidate-rule
+         (exp07-ordered-replication-selected-with-draw
+           shuffled-frontier-guidance cohort-b
+           (exp07-ordered-replication-fixture cohort-b 1 1 1) 76))) od3)
+!(test (exp07-ordered-replication-direct-tick-with-draw weak-doob-h cohort-b
+         (exp07-ordered-replication-fixture cohort-b 0 0 0) 0)
+       (chamber exp07-ordered-replication-synthetic
+         (state 4 seed-7
+           (molecules
+             ((mol A 3) (mol B 2) (mol C 4) (mol D 3)
+              (mol AB 1) (mol AC 0) (mol CD 0) (mol X 1)
+              (mol W0 0) (mol W1 0) (mol W2 0) (mol W3 0))))
+         ((rule od2 C D W2 X) (rule op0 A B AB CD)
+          (rule ob0 A B AB X) (rule od1 B C W1 X)
+          (rule op2 C D CD AC) (rule od3 A D W3 X)
+          (rule op1 A C AC AB) (rule od0 A C W0 X))
+         ((event 3 ob0 A B AB X))))
+!(test (exp07-ordered-replication-pre-run-gate)
+       (ordered-replication-pre-run-gate
+         seed-support-boundaries ((seed-101 101) (seed-132 132))
+         complete-96-bin-calibration ((cohort-a True) (cohort-b True))
+         identical-arm-pools ((cohort-a True) (cohort-b True))
+         cohort-b-selection-addressing rule-identity
+         selector-mass-calibration
+           ((unguided (12 12 12 12 12 12 12 12))
+            (weak-doob-h (20 12 12 12 4 12 12 12))
+            (shuffled-frontier-guidance (4 12 12 12 20 12 12 12)))
+         matched-guidance-cost-units
+           ((weak-doob-h 8) (shuffled-frontier-guidance 8))
+         synthetic-direct-tick required
+         registered-trajectory-evaluated false
+         chemistry-outcomes-used false
+         emergence-claim none))
+
 ; Frozen ordered-bootstrap matrix: all three arms are RAF-null over the exact
 ; held-out seeds and horizon, with deterministic replay and no extension.
 !(test (exp07-ordered-arm-replay-count unguided) 8)
