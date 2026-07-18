@@ -95,7 +95,15 @@ pools, and addresses cohort-B candidates by rule identity across the fixed
 permutation and all frontier phases. The calibrated weak and shuffled masses
 retain equal eight-unit cost, and a nonregistered seed-7 fixture connects an
 identity-selected cohort-B candidate directly to ordinary chamber ticking.
-Cohort A execution remains pending; no replication endpoint has been read.
+Cohort A is now complete over exactly seeds 101--116 and ticks 3--26. RAF
+incidence is 1/16 unguided, 4/16 weak Doob-h, and 0/16 shuffled-frontier
+guidance, so weak misses the preregistered six-seed advantage over both
+controls and the primary replication is not supported. All 48 trajectories
+replay; persistence totals are 1/15/0, productive-event totals are
+259/263/250, and distinct-rule totals are 112/116/85 of 128. Every structural
+ablation leaves weak incidence at zero, but this cannot rescue the failed
+primary contrast. Cohort B remains unevaluated and spontaneous-emergence claim
+remains none.
 
 Run with:
 

@@ -2778,6 +2778,459 @@
      chemistry-outcomes-used false
      emergence-claim none))
 
+; ----- Ordered-replication cohort A: frozen trajectory matrix -----
+;
+; Cohort A is evaluated before cohort B, as preregistered.  These operations
+; retain the ordinary ordered chamber transition and differ from the
+; predecessor only in the frozen seed set and draw hash.
+(= (exp07-ordered-replication-cohort-a-seeds)
+   (seed-101 seed-102 seed-103 seed-104
+    seed-105 seed-106 seed-107 seed-108
+    seed-109 seed-110 seed-111 seed-112
+    seed-113 seed-114 seed-115 seed-116))
+
+(= (exp07-ordered-replication-initial-chamber cohort-a $seed)
+   (chamber exp07-ordered-replication
+     (state 3 $seed
+       (molecules
+         ((mol A 4) (mol B 3) (mol C 4) (mol D 3)
+          (mol AB 0) (mol AC 0) (mol CD 0) (mol X 1)
+          (mol W0 0) (mol W1 0) (mol W2 0) (mol W3 0))))
+     ((rule ob0 A B AB X)
+      (rule op1 A C AC AB)
+      (rule op2 C D CD AC)
+      (rule op0 A B AB CD)
+      (rule od0 A C W0 X)
+      (rule od1 B C W1 X)
+      (rule od2 C D W2 X)
+      (rule od3 A D W3 X)) ()))
+
+; Explicit cohort-A reductions avoid the same imported-equation boundary as
+; the predecessor's registered seed draw clauses while preserving the frozen
+; ((29 * seed) + (43 * tick) + 7) mod 96 hash exactly.
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-101 $tick)
+   (#mod (+ 2936 (* 43 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-102 $tick)
+   (#mod (+ 2965 (* 43 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-103 $tick)
+   (#mod (+ 2994 (* 43 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-104 $tick)
+   (#mod (+ 3023 (* 43 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-105 $tick)
+   (#mod (+ 3052 (* 43 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-106 $tick)
+   (#mod (+ 3081 (* 43 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-107 $tick)
+   (#mod (+ 3110 (* 43 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-108 $tick)
+   (#mod (+ 3139 (* 43 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-109 $tick)
+   (#mod (+ 3168 (* 43 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-110 $tick)
+   (#mod (+ 3197 (* 43 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-111 $tick)
+   (#mod (+ 3226 (* 43 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-112 $tick)
+   (#mod (+ 3255 (* 43 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-113 $tick)
+   (#mod (+ 3284 (* 43 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-114 $tick)
+   (#mod (+ 3313 (* 43 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-115 $tick)
+   (#mod (+ 3342 (* 43 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-a seed-116 $tick)
+   (#mod (+ 3371 (* 43 $tick)) 96))
+
+(= (exp07-ordered-replication-selected-for-chamber $arm $cohort
+      (chamber $id
+        (state $tick $seed (molecules $molecules)) $rules $events))
+   (exp07-ordered-replication-selected-with-draw
+     $arm $cohort
+     (chamber $id
+       (state $tick $seed (molecules $molecules)) $rules $events)
+     (exp07-ordered-replication-trajectory-draw $cohort $seed $tick)))
+
+(= (exp07-ordered-replication-prepare-chamber
+      (chamber $id
+        (state $tick $seed (molecules $molecules)) $rules $events))
+   (if (exp07-ordered-replenishment-tick? $tick)
+       (exp07-ordered-replenish-food
+         (chamber $id
+           (state $tick $seed (molecules $molecules)) $rules $events))
+       (chamber $id
+         (state $tick $seed (molecules $molecules)) $rules $events)))
+
+(= (exp07-ordered-replication-total-tick $arm $cohort $chamber)
+   (let $prepared (exp07-ordered-replication-prepare-chamber $chamber)
+     (let $selected
+          (exp07-ordered-replication-selected-for-chamber
+            $arm $cohort $prepared)
+       (if (exp07-ordered-candidate-applicable? $selected $prepared)
+           (exp07-ordered-fire-candidate $selected $prepared)
+           (exp07-pilot-advance-blocked-tick $prepared)))))
+
+(= (exp07-ordered-replication-run-to-state-tick
+      $arm $cohort
+      (chamber $id
+        (state $tick $seed (molecules $molecules)) $rules $events)
+      $terminal-state-tick)
+   (if (>= $tick $terminal-state-tick)
+       (chamber $id
+         (state $tick $seed (molecules $molecules)) $rules $events)
+       (exp07-ordered-replication-run-to-state-tick
+         $arm $cohort
+         (exp07-ordered-replication-total-tick
+           $arm $cohort
+           (chamber $id
+             (state $tick $seed (molecules $molecules)) $rules $events))
+         $terminal-state-tick)))
+
+(= (exp07-ordered-replication-terminal-chamber $arm $cohort $seed)
+   (exp07-ordered-replication-run-to-state-tick
+     $arm $cohort
+     (exp07-ordered-replication-initial-chamber $cohort $seed) 27))
+
+(= (exp07-ordered-replication-event-count-from-terminal
+      (chamber $id $state $rules $events))
+   (exp07-registered-list-length $events))
+
+(= (exp07-ordered-replication-event-count $arm $cohort $seed)
+   (exp07-ordered-replication-event-count-from-terminal
+     (exp07-ordered-replication-terminal-chamber $arm $cohort $seed)))
+
+(= (exp07-ordered-replication-first-raf-tick-from-terminal
+      (chamber $id $state $rules $events))
+   (exp07-ordered-first-rolling-raf-from $events ()))
+
+(= (exp07-ordered-replication-first-raf-tick $arm $cohort $seed)
+   (exp07-ordered-replication-first-raf-tick-from-terminal
+     (exp07-ordered-replication-terminal-chamber $arm $cohort $seed)))
+
+(= (exp07-ordered-replication-raf-incidence $arm $cohort $seed)
+   (if (< (exp07-ordered-replication-first-raf-tick
+             $arm $cohort $seed) 99) 1 0))
+
+(= (exp07-ordered-replication-replay-ok? $arm $cohort $seed)
+   (== (exp07-ordered-replication-terminal-chamber $arm $cohort $seed)
+       (exp07-ordered-replication-run-to-state-tick
+         $arm $cohort
+         (exp07-ordered-replication-initial-chamber $cohort $seed) 27)))
+
+(= (exp07-ordered-replication-window-raf?
+      (chamber $id $state $rules $events))
+   (exp07-ordered-event-derived-raf?
+     (exp07-rich-last-eight-events $events)))
+
+(= (exp07-ordered-replication-persistence-from
+      $arm $cohort
+      (chamber $id
+        (state $tick $seed (molecules $molecules)) $rules $events)
+      $terminal-state-tick $current-run $longest-run)
+   (if (>= $tick $terminal-state-tick)
+       $longest-run
+       (let $next
+            (exp07-ordered-replication-total-tick
+              $arm $cohort
+              (chamber $id
+                (state $tick $seed (molecules $molecules)) $rules $events))
+         (let $next-run
+              (if (exp07-ordered-replication-window-raf? $next)
+                  (+ $current-run 1) 0)
+           (let $next-longest
+                (if (> $next-run $longest-run) $next-run $longest-run)
+             (exp07-ordered-replication-persistence-from
+               $arm $cohort $next $terminal-state-tick
+               $next-run $next-longest))))))
+
+(= (exp07-ordered-replication-raf-persistence $arm $cohort $seed)
+   (exp07-ordered-replication-persistence-from
+     $arm $cohort
+     (exp07-ordered-replication-initial-chamber $cohort $seed) 27 0 0))
+
+(= (exp07-ordered-replication-rule-diversity-from-terminal
+      (chamber $id $state $rules $events))
+   (+ (if (exp07-ordered-event-rule-fired? ob0 $events) 1 0)
+        (+ (if (exp07-ordered-event-rule-fired? op1 $events) 1 0)
+           (+ (if (exp07-ordered-event-rule-fired? op2 $events) 1 0)
+              (+ (if (exp07-ordered-event-rule-fired? op0 $events) 1 0)
+                 (+ (if (exp07-ordered-event-rule-fired? od0 $events) 1 0)
+                    (+ (if (exp07-ordered-event-rule-fired? od1 $events) 1 0)
+                       (+ (if (exp07-ordered-event-rule-fired? od2 $events) 1 0)
+                          (if (exp07-ordered-event-rule-fired? od3 $events)
+                              1 0)))))))))
+
+(= (exp07-ordered-replication-rule-diversity $arm $cohort $seed)
+   (exp07-ordered-replication-rule-diversity-from-terminal
+     (exp07-ordered-replication-terminal-chamber $arm $cohort $seed)))
+
+; Fold the fixed seed list without moving any chemistry computation to the
+; host harness.  Value lists preserve preregistered per-seed provenance.
+(= (exp07-ordered-replication-sum-raf $arm $cohort $seeds)
+   (if (== $seeds ()) 0
+       (+ (exp07-ordered-replication-raf-incidence
+            $arm $cohort (car-atom $seeds))
+          (exp07-ordered-replication-sum-raf
+            $arm $cohort (cdr-atom $seeds)))))
+
+(= (exp07-ordered-replication-sum-events $arm $cohort $seeds)
+   (if (== $seeds ()) 0
+       (+ (exp07-ordered-replication-event-count
+            $arm $cohort (car-atom $seeds))
+          (exp07-ordered-replication-sum-events
+            $arm $cohort (cdr-atom $seeds)))))
+
+(= (exp07-ordered-replication-sum-replays $arm $cohort $seeds)
+   (if (== $seeds ()) 0
+       (+ (if (exp07-ordered-replication-replay-ok?
+                 $arm $cohort (car-atom $seeds)) 1 0)
+          (exp07-ordered-replication-sum-replays
+            $arm $cohort (cdr-atom $seeds)))))
+
+(= (exp07-ordered-replication-sum-persistence $arm $cohort $seeds)
+   (if (== $seeds ()) 0
+       (+ (exp07-ordered-replication-raf-persistence
+            $arm $cohort (car-atom $seeds))
+          (exp07-ordered-replication-sum-persistence
+            $arm $cohort (cdr-atom $seeds)))))
+
+(= (exp07-ordered-replication-sum-diversity $arm $cohort $seeds)
+   (if (== $seeds ()) 0
+       (+ (exp07-ordered-replication-rule-diversity
+            $arm $cohort (car-atom $seeds))
+          (exp07-ordered-replication-sum-diversity
+            $arm $cohort (cdr-atom $seeds)))))
+
+(= (exp07-ordered-replication-first-hit-values $arm $cohort $seeds)
+   (if (== $seeds ()) ()
+       (cons-atom
+         (exp07-ordered-replication-first-raf-tick
+           $arm $cohort (car-atom $seeds))
+         (exp07-ordered-replication-first-hit-values
+           $arm $cohort (cdr-atom $seeds)))))
+
+(= (exp07-ordered-replication-persistence-values $arm $cohort $seeds)
+   (if (== $seeds ()) ()
+       (cons-atom
+         (exp07-ordered-replication-raf-persistence
+           $arm $cohort (car-atom $seeds))
+         (exp07-ordered-replication-persistence-values
+           $arm $cohort (cdr-atom $seeds)))))
+
+(= (exp07-ordered-replication-diversity-values $arm $cohort $seeds)
+   (if (== $seeds ()) ()
+       (cons-atom
+         (exp07-ordered-replication-rule-diversity
+           $arm $cohort (car-atom $seeds))
+         (exp07-ordered-replication-diversity-values
+           $arm $cohort (cdr-atom $seeds)))))
+
+; Prespecified interventions keep the cohort-A hash, cap, schedule, and
+; horizon.  Targeted selections become the ordinary blocked/no-event tick.
+(= (exp07-ordered-replication-ablation-blocks-candidate?
+      $ablation
+      (candidate $tick (rule $rule-id $a $b $product $catalyst) $priority))
+   (exp07-ordered-ablation-blocks? $ablation $rule-id))
+
+(= (exp07-ordered-replication-ablation-total-tick
+      $ablation $arm $cohort $chamber)
+   (let $prepared (exp07-ordered-replication-prepare-chamber $chamber)
+     (let $selected
+          (exp07-ordered-replication-selected-for-chamber
+            $arm $cohort $prepared)
+       (if (exp07-ordered-replication-ablation-blocks-candidate?
+             $ablation $selected)
+           (exp07-pilot-advance-blocked-tick $prepared)
+           (if (exp07-ordered-candidate-applicable? $selected $prepared)
+               (exp07-ordered-fire-candidate $selected $prepared)
+               (exp07-pilot-advance-blocked-tick $prepared))))))
+
+(= (exp07-ordered-replication-ablation-run-to-state-tick
+      $ablation $arm $cohort
+      (chamber $id
+        (state $tick $seed (molecules $molecules)) $rules $events)
+      $terminal-state-tick)
+   (if (>= $tick $terminal-state-tick)
+       (chamber $id
+         (state $tick $seed (molecules $molecules)) $rules $events)
+       (exp07-ordered-replication-ablation-run-to-state-tick
+         $ablation $arm $cohort
+         (exp07-ordered-replication-ablation-total-tick
+           $ablation $arm $cohort
+           (chamber $id
+             (state $tick $seed (molecules $molecules)) $rules $events))
+         $terminal-state-tick)))
+
+(= (exp07-ordered-replication-ablation-first-raf-from-terminal
+      (chamber $id $state $rules $events))
+   (exp07-ordered-first-rolling-raf-from $events ()))
+
+(= (exp07-ordered-replication-ablation-raf-incidence
+      $ablation $arm $cohort $seed)
+   (if (<
+         (exp07-ordered-replication-ablation-first-raf-from-terminal
+           (exp07-ordered-replication-ablation-run-to-state-tick
+             $ablation $arm $cohort
+             (exp07-ordered-replication-initial-chamber $cohort $seed) 27))
+         99) 1 0))
+
+(= (exp07-ordered-replication-sum-ablation-raf
+      $ablation $arm $cohort $seeds)
+   (if (== $seeds ()) 0
+       (+ (exp07-ordered-replication-ablation-raf-incidence
+            $ablation $arm $cohort (car-atom $seeds))
+          (exp07-ordered-replication-sum-ablation-raf
+            $ablation $arm $cohort (cdr-atom $seeds)))))
+
+(= (exp07-ordered-replication-cohort-a-primary-supported?)
+   (let $seeds (exp07-ordered-replication-cohort-a-seeds)
+     (let $weak
+          (exp07-ordered-replication-sum-raf weak-doob-h cohort-a $seeds)
+       (and
+         (>= (- $weak
+                (exp07-ordered-replication-sum-raf
+                  unguided cohort-a $seeds)) 6)
+         (and
+           (>= (- $weak
+                  (exp07-ordered-replication-sum-raf
+                    shuffled-frontier-guidance cohort-a $seeds)) 6)
+           (and
+             (== (exp07-ordered-replication-sum-replays
+                   unguided cohort-a $seeds) 16)
+             (and
+               (== (exp07-ordered-replication-sum-replays
+                     weak-doob-h cohort-a $seeds) 16)
+               (and
+                 (== (exp07-ordered-replication-sum-replays
+                       shuffled-frontier-guidance cohort-a $seeds) 16)
+                 (and
+                   (<= (exp07-ordered-replication-sum-ablation-raf
+                         bootstrap-ablation weak-doob-h cohort-a $seeds) 2)
+                   (and
+                     (<= (exp07-ordered-replication-sum-ablation-raf
+                           catalyst-ablation weak-doob-h cohort-a $seeds) 2)
+                     (and
+                       (<= (exp07-ordered-replication-sum-ablation-raf
+                             rule-ablation-op1 weak-doob-h cohort-a $seeds) 2)
+                       (and
+                         (<= (exp07-ordered-replication-sum-ablation-raf
+                               rule-ablation-op2 weak-doob-h cohort-a $seeds) 2)
+                         (<= (exp07-ordered-replication-sum-ablation-raf
+                               rule-ablation-op0 weak-doob-h
+                               cohort-a $seeds) 2)))))))))))))
+
+(= (exp07-ordered-replication-cohort-a-report)
+   (let $seeds (exp07-ordered-replication-cohort-a-seeds)
+     (ordered-replication-cohort-a-report
+       arms (unguided weak-doob-h shuffled-frontier-guidance)
+       seeds $seeds ticks (3 26) candidate-cap 8
+       raf-incidence
+         ((unguided (exp07-ordered-replication-sum-raf
+                      unguided cohort-a $seeds))
+          (weak-doob-h (exp07-ordered-replication-sum-raf
+                         weak-doob-h cohort-a $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-sum-raf
+              shuffled-frontier-guidance cohort-a $seeds)))
+       first-hit-ticks
+         ((unguided (exp07-ordered-replication-first-hit-values
+                      unguided cohort-a $seeds))
+          (weak-doob-h (exp07-ordered-replication-first-hit-values
+                         weak-doob-h cohort-a $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-first-hit-values
+              shuffled-frontier-guidance cohort-a $seeds)))
+       longest-consecutive-raf-ticks
+         ((unguided (exp07-ordered-replication-persistence-values
+                      unguided cohort-a $seeds))
+          (weak-doob-h (exp07-ordered-replication-persistence-values
+                         weak-doob-h cohort-a $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-persistence-values
+              shuffled-frontier-guidance cohort-a $seeds)))
+       total-persistence
+         ((unguided (exp07-ordered-replication-sum-persistence
+                      unguided cohort-a $seeds))
+          (weak-doob-h (exp07-ordered-replication-sum-persistence
+                         weak-doob-h cohort-a $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-sum-persistence
+              shuffled-frontier-guidance cohort-a $seeds)))
+       productive-event-totals
+         ((unguided (exp07-ordered-replication-sum-events
+                      unguided cohort-a $seeds))
+          (weak-doob-h (exp07-ordered-replication-sum-events
+                         weak-doob-h cohort-a $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-sum-events
+              shuffled-frontier-guidance cohort-a $seeds)))
+       terminal-rule-diversity
+         ((unguided (exp07-ordered-replication-diversity-values
+                      unguided cohort-a $seeds))
+          (weak-doob-h (exp07-ordered-replication-diversity-values
+                         weak-doob-h cohort-a $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-diversity-values
+              shuffled-frontier-guidance cohort-a $seeds)))
+       total-rule-diversity
+         ((unguided (exp07-ordered-replication-sum-diversity
+                      unguided cohort-a $seeds))
+          (weak-doob-h (exp07-ordered-replication-sum-diversity
+                         weak-doob-h cohort-a $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-sum-diversity
+              shuffled-frontier-guidance cohort-a $seeds)))
+       exact-replays
+         ((unguided (exp07-ordered-replication-sum-replays
+                      unguided cohort-a $seeds))
+          (weak-doob-h (exp07-ordered-replication-sum-replays
+                         weak-doob-h cohort-a $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-sum-replays
+              shuffled-frontier-guidance cohort-a $seeds)))
+       intervention-cost
+         (denominator-per-draw 96 draws-per-trajectory 24
+          trajectories-per-arm 16
+          full-matrix ((unguided 0) (weak-doob-h 3072)
+                       (shuffled-frontier-guidance 3072))
+          matched-guidance-budget true)
+       causal-ablations
+         (guiding-term-removal
+            (weak-policy-replaced-by unguided raf-incidence
+              (exp07-ordered-replication-sum-raf
+                unguided cohort-a $seeds))
+          bootstrap-ablation
+            ((unguided (exp07-ordered-replication-sum-ablation-raf
+                         bootstrap-ablation unguided cohort-a $seeds))
+             (weak-doob-h (exp07-ordered-replication-sum-ablation-raf
+                            bootstrap-ablation weak-doob-h cohort-a $seeds))
+             (shuffled-frontier-guidance
+               (exp07-ordered-replication-sum-ablation-raf
+                 bootstrap-ablation shuffled-frontier-guidance
+                 cohort-a $seeds)))
+          catalyst-ablation
+            ((unguided (exp07-ordered-replication-sum-ablation-raf
+                         catalyst-ablation unguided cohort-a $seeds))
+             (weak-doob-h (exp07-ordered-replication-sum-ablation-raf
+                            catalyst-ablation weak-doob-h cohort-a $seeds))
+             (shuffled-frontier-guidance
+               (exp07-ordered-replication-sum-ablation-raf
+                 catalyst-ablation shuffled-frontier-guidance
+                 cohort-a $seeds)))
+          rule-ablation
+            ((op1 (exp07-ordered-replication-sum-ablation-raf
+                    rule-ablation-op1 weak-doob-h cohort-a $seeds))
+             (op2 (exp07-ordered-replication-sum-ablation-raf
+                    rule-ablation-op2 weak-doob-h cohort-a $seeds))
+             (op0 (exp07-ordered-replication-sum-ablation-raf
+                    rule-ablation-op0 weak-doob-h cohort-a $seeds))))
+       rolling-detector ordered-op1-op2-op0
+       primary-replication
+         (if (exp07-ordered-replication-cohort-a-primary-supported?)
+             supported not-supported)
+       adaptive-extension none
+       cohort-b-evaluated false
+       spontaneous-emergence-claim none)))
+
 ; ----- Frozen ordered-bootstrap trajectory matrix -----
 ;
 ; Consume exactly ticks 3--26 for held-out seeds 19--26.  The chamber is

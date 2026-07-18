@@ -1,7 +1,6 @@
 # exp07 Preregistration: Ordered-Bootstrap Replication and Robustness
 
-**Status:** Design only. No replication chamber, selector draw, trajectory, or
-endpoint has been evaluated.
+**Status:** Cohort A complete; cohort B unevaluated.
 **Predecessor:** `PREREG_ORDERED_BOOTSTRAP.md`, whose corrected frozen result
 was 0/8 unguided, 6/8 weak Doob-h, and 0/8 shuffled-frontier guidance.
 **Claim boundary:** independent replication of bounded guided causal RAF uplift;
@@ -86,3 +85,21 @@ RAF uplift. Passing both cohorts additionally supports robustness to the fixed
 candidate-order and draw-hash perturbation. Neither result establishes
 spontaneous emergence because the chemistry, catalytic frontier, bootstrap,
 and guidance target remain designed.
+
+## Frozen cohort-A result (2026-07-17 22:30 PDT)
+
+Cohort A was executed over exactly seeds 101--116 and ticks 3--26 after all
+fail-closed gates passed. RAF incidence was 1/16 unguided, 4/16 weak Doob-h,
+and 0/16 shuffled-frontier guidance. The weak advantage was therefore only
+three over unguided and four over shuffled, below both preregistered six-seed
+thresholds. The primary replication is not supported and cohort B cannot
+rescue it.
+
+All 48 trajectories replayed. First hits were tick 26 for unguided seed 105
+and ticks 24/22/23/24 for weak seeds 105/108/113/115. Persistence totals were
+1/15/0, productive-event totals 259/263/250, and terminal distinct-rule totals
+112/116/85 of 128. Guidance costs matched at 3,072 shifted mass units per
+guided arm. Bootstrap, three-cycle-catalyst, and each individual cycle-rule
+ablation left weak incidence at 0/16; guiding-term removal was the unchanged
+unguided 1/16. No seed or horizon was extended. Spontaneous-emergence claim
+remains none; cohort B remains unconstructed.
