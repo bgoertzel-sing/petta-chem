@@ -4431,6 +4431,119 @@
    (exp07-dual-run-to-state-tick
      $arm (exp07-dual-initial-chamber $seed) 35))
 
+; ----- Frozen dual-bootstrap mechanism-audit trace gate -----
+;
+; Trace the already completed matrix without changing its chamber path.  Each
+; row is constructed from the prepared pre-fire chamber and the exact selected
+; candidate used by `exp07-dual-total-tick`.  The six product bits follow the
+; frozen pathway identity order; db1 and dp0 deliberately both report CD.
+(= (exp07-dual-present-bit $name $molecules)
+   (if (> (molecule-abundance-7 $name $molecules) 0) 1 0))
+
+(= (exp07-dual-trace-row-from-prepared
+      $arm $seed
+      (chamber $id
+        (state $tick $seed (molecules $molecules)) $rules $events)
+      (candidate $tick (rule $rid $a $b $product $catalyst) $priority))
+   (let $applicable
+        (exp07-dual-candidate-applicable?
+          (candidate $tick (rule $rid $a $b $product $catalyst) $priority)
+          (chamber $id
+            (state $tick $seed (molecules $molecules)) $rules $events))
+     (dual-mechanism-trace-row
+       key ($arm $seed $tick)
+       selected-rule $rid
+       applicable $applicable
+       event-fired $applicable
+       first-absent-pathway
+         (exp07-dual-frontier
+           (chamber $id
+             (state $tick $seed (molecules $molecules)) $rules $events))
+       pathway-product-presence
+         ((db0 (exp07-dual-present-bit AB $molecules))
+          (db1 (exp07-dual-present-bit CD $molecules))
+          (dp1 (exp07-dual-present-bit AC $molecules))
+          (dp2 (exp07-dual-present-bit BD $molecules))
+          (dp3 (exp07-dual-present-bit CE $molecules))
+          (dp0 (exp07-dual-present-bit CD $molecules)))
+       post-reset-pre-fire-food
+         ((A (molecule-abundance-7 A $molecules))
+          (B (molecule-abundance-7 B $molecules))
+          (C (molecule-abundance-7 C $molecules))
+          (D (molecule-abundance-7 D $molecules))
+          (E (molecule-abundance-7 E $molecules))))))
+
+(= (exp07-dual-trace-row $arm $chamber)
+   (let $prepared (exp07-dual-prepare-chamber $chamber)
+     (let $selected (exp07-dual-selected-with-draw
+          $arm $prepared
+          (exp07-dual-draw
+            (state-seed (chamber-state $prepared))
+            (state-tick (chamber-state $prepared))))
+       (exp07-dual-trace-row-from-prepared $arm
+         (state-seed (chamber-state $prepared)) $prepared $selected))))
+
+(= (exp07-dual-trajectory-trace-from $arm $chamber $terminal-state-tick)
+   (if (>= (state-tick (chamber-state $chamber)) $terminal-state-tick) ()
+       (cons-atom (exp07-dual-trace-row $arm $chamber)
+         (exp07-dual-trajectory-trace-from $arm
+           (exp07-dual-total-tick $arm $chamber) $terminal-state-tick))))
+(= (exp07-dual-trajectory-trace $arm $seed)
+   (exp07-dual-trajectory-trace-from
+     $arm (exp07-dual-initial-chamber $seed) 35))
+
+; Sequential validation proves both exact cardinality and uniqueness of
+; (arm, seed, tick) keys: every expected tick 3--34 occurs exactly once.
+(= (exp07-dual-trace-key
+      (dual-mechanism-trace-row
+        key $key selected-rule $rid applicable $applicable
+        event-fired $fired first-absent-pathway $frontier
+        pathway-product-presence $presence
+        post-reset-pre-fire-food $food))
+   $key)
+(= (exp07-dual-trace-keys-sequential? $arm $seed $tick $rows)
+   (if (== $rows ()) (== $tick 35)
+       (and (== (exp07-dual-trace-key (car-atom $rows))
+                 ($arm $seed $tick))
+            (exp07-dual-trace-keys-sequential?
+              $arm $seed (+ $tick 1) (cdr-atom $rows)))))
+(= (exp07-dual-trajectory-trace-valid? $arm $seed)
+   (let $rows (exp07-dual-trajectory-trace $arm $seed)
+     (and (== (exp07-registered-list-length $rows) 32)
+          (exp07-dual-trace-keys-sequential? $arm $seed 3 $rows))))
+(= (exp07-dual-arm-traces-valid? $arm $seeds)
+   (if (== $seeds ()) True
+       (and (exp07-dual-trajectory-trace-valid? $arm (car-atom $seeds))
+            (exp07-dual-arm-traces-valid? $arm (cdr-atom $seeds)))))
+
+(= (exp07-dual-mechanism-trace-integrity-gate)
+   (let $seeds (exp07-dual-seeds)
+     (and (exp07-dual-arm-traces-valid? unguided $seeds)
+      (and (exp07-dual-arm-traces-valid? weak-doob-h $seeds)
+       (and (exp07-dual-arm-traces-valid?
+              shuffled-frontier-guidance $seeds)
+        (and (== (exp07-dual-sum raf unguided $seeds) 13)
+         (and (== (exp07-dual-sum raf weak-doob-h $seeds) 9)
+          (and (== (exp07-dual-sum raf
+                    shuffled-frontier-guidance $seeds) 0)
+           (and (== (exp07-dual-sum events unguided $seeds) 549)
+            (and (== (exp07-dual-sum events weak-doob-h $seeds) 523)
+             (and (== (exp07-dual-sum events
+                       shuffled-frontier-guidance $seeds) 396)
+              (and (== (exp07-dual-sum persistence unguided $seeds) 95)
+               (and (== (exp07-dual-sum persistence weak-doob-h $seeds) 51)
+                (and (== (exp07-dual-sum persistence
+                          shuffled-frontier-guidance $seeds) 0)
+                 (and (== (exp07-dual-sum diversity unguided $seeds) 336)
+                  (and (== (exp07-dual-sum diversity weak-doob-h $seeds) 278)
+                   (and (== (exp07-dual-sum diversity
+                             shuffled-frontier-guidance $seeds) 219)
+                    (and (== (exp07-dual-sum replay unguided $seeds) 32)
+                     (and (== (exp07-dual-sum replay weak-doob-h $seeds) 32)
+                          (== (exp07-dual-sum replay
+                                shuffled-frontier-guidance $seeds)
+                              32))))))))))))))))))))
+
 (= (exp07-dual-last-twelve-events $events)
    (if (> (exp07-registered-list-length $events) 12)
        (exp07-dual-last-twelve-events (cdr-atom $events))

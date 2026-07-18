@@ -2035,6 +2035,10 @@
 !(test (exp07-dual-sum-ablation-raf
          rule-ablation-dp0 weak-doob-h (exp07-dual-seeds)) 0)
 !(test (exp07-dual-result-supported?) False)
+!(test (exp07-registered-list-length
+         (exp07-dual-trajectory-trace unguided seed-201)) 32)
+!(test (exp07-dual-trajectory-trace-valid? unguided seed-201) True)
+!(test (exp07-dual-mechanism-trace-integrity-gate) True)
 
 ; Frozen ordered-bootstrap matrix: all three arms are RAF-null over the exact
 ; held-out seeds and horizon, with deterministic replay and no extension.
