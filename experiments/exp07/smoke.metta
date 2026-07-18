@@ -2039,6 +2039,11 @@
          (exp07-dual-trajectory-trace unguided seed-201)) 32)
 !(test (exp07-dual-trajectory-trace-valid? unguided seed-201) True)
 !(test (exp07-dual-mechanism-trace-integrity-gate) True)
+!(test (exp07-dual-blocked-first-absent-total unguided) 38)
+!(test (exp07-dual-blocked-first-absent-total weak-doob-h) 51)
+!(test (exp07-dual-blocked-first-absent-total
+         shuffled-frontier-guidance) 1)
+!(test (exp07-dual-mechanism-interpretation) applicability-loss)
 
 ; Frozen ordered-bootstrap matrix: all three arms are RAF-null over the exact
 ; held-out seeds and horizon, with deterministic replay and no extension.

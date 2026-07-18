@@ -4544,6 +4544,135 @@
                                 shuffled-frontier-guidance $seeds)
                               32))))))))))))))))))))
 
+; ----- Frozen dual-bootstrap mechanism diagnostics -----
+;
+; These folds consume only the validated trace rows above.  Keeping the
+; classification in PeTTa prevents the reporting harness from silently
+; reclassifying selections or applicability.
+(= (exp07-dual-trace-selected-id
+      (dual-mechanism-trace-row key $key selected-rule $rid
+        applicable $applicable event-fired $fired
+        first-absent-pathway $frontier pathway-product-presence $presence
+        post-reset-pre-fire-food $food)) $rid)
+(= (exp07-dual-trace-applicable
+      (dual-mechanism-trace-row key $key selected-rule $rid
+        applicable $applicable event-fired $fired
+        first-absent-pathway $frontier pathway-product-presence $presence
+        post-reset-pre-fire-food $food)) $applicable)
+(= (exp07-dual-trace-frontier
+      (dual-mechanism-trace-row key $key selected-rule $rid
+        applicable $applicable event-fired $fired
+        first-absent-pathway $frontier pathway-product-presence $presence
+        post-reset-pre-fire-food $food)) $frontier)
+
+(= (exp07-dual-pathway-rule? $rid)
+   (if (== $rid db0) True
+    (if (== $rid db1) True
+     (if (== $rid dp1) True
+      (if (== $rid dp2) True
+       (if (== $rid dp3) True (== $rid dp0)))))))
+
+(= (exp07-dual-count-selected $rid $rows)
+   (if (== $rows ()) 0
+       (+ (if (== (exp07-dual-trace-selected-id (car-atom $rows)) $rid) 1 0)
+          (exp07-dual-count-selected $rid (cdr-atom $rows)))))
+(= (exp07-dual-count-fired $rid $rows)
+   (if (== $rows ()) 0
+       (+ (if (and (== (exp07-dual-trace-selected-id (car-atom $rows)) $rid)
+                    (exp07-dual-trace-applicable (car-atom $rows))) 1 0)
+          (exp07-dual-count-fired $rid (cdr-atom $rows)))))
+(= (exp07-dual-count-blocked-class $pathway? $rows)
+   (if (== $rows ()) 0
+       (+ (if (and (== (exp07-dual-trace-applicable (car-atom $rows)) False)
+                    (== (exp07-dual-pathway-rule?
+                          (exp07-dual-trace-selected-id (car-atom $rows)))
+                        $pathway?)) 1 0)
+          (exp07-dual-count-blocked-class $pathway? (cdr-atom $rows)))))
+(= (exp07-dual-count-frontier-selected $rid $rows)
+   (if (== $rows ()) 0
+       (+ (if (and (== (exp07-dual-trace-frontier (car-atom $rows)) $rid)
+                    (== (exp07-dual-trace-selected-id (car-atom $rows)) $rid))
+              1 0)
+          (exp07-dual-count-frontier-selected $rid (cdr-atom $rows)))))
+(= (exp07-dual-count-frontier-fired $rid $rows)
+   (if (== $rows ()) 0
+       (+ (if (and (== (exp07-dual-trace-frontier (car-atom $rows)) $rid)
+                    (and (== (exp07-dual-trace-selected-id (car-atom $rows)) $rid)
+                         (exp07-dual-trace-applicable (car-atom $rows)))) 1 0)
+          (exp07-dual-count-frontier-fired $rid (cdr-atom $rows)))))
+
+(= (exp07-dual-sum-trace-measure $measure $arm $rid $seeds)
+   (if (== $seeds ()) 0
+       (+ (if (== $measure selected)
+              (exp07-dual-count-selected $rid
+                (exp07-dual-trajectory-trace $arm (car-atom $seeds)))
+            (if (== $measure fired)
+                (exp07-dual-count-fired $rid
+                  (exp07-dual-trajectory-trace $arm (car-atom $seeds)))
+             (if (== $measure frontier-selected)
+                 (exp07-dual-count-frontier-selected $rid
+                   (exp07-dual-trajectory-trace $arm (car-atom $seeds)))
+                 (exp07-dual-count-frontier-fired $rid
+                   (exp07-dual-trajectory-trace $arm (car-atom $seeds))))))
+          (exp07-dual-sum-trace-measure $measure $arm $rid
+            (cdr-atom $seeds)))))
+(= (exp07-dual-sum-blocked-class $pathway? $arm $seeds)
+   (if (== $seeds ()) 0
+       (+ (exp07-dual-count-blocked-class $pathway?
+            (exp07-dual-trajectory-trace $arm (car-atom $seeds)))
+          (exp07-dual-sum-blocked-class $pathway? $arm (cdr-atom $seeds)))))
+
+(= (exp07-dual-rule-count-row $arm $rid)
+   (let $seeds (exp07-dual-seeds)
+     ($rid
+       selected (exp07-dual-sum-trace-measure selected $arm $rid $seeds)
+       fired (exp07-dual-sum-trace-measure fired $arm $rid $seeds)
+       first-absent-selected
+         (exp07-dual-sum-trace-measure frontier-selected $arm $rid $seeds)
+       first-absent-fired
+         (exp07-dual-sum-trace-measure frontier-fired $arm $rid $seeds))))
+(= (exp07-dual-mechanism-count-summary $arm)
+   (dual-mechanism-count-summary $arm
+     rules ((exp07-dual-rule-count-row $arm db0)
+            (exp07-dual-rule-count-row $arm db1)
+            (exp07-dual-rule-count-row $arm dp1)
+            (exp07-dual-rule-count-row $arm dp2)
+            (exp07-dual-rule-count-row $arm dp3)
+            (exp07-dual-rule-count-row $arm dp0)
+            (exp07-dual-rule-count-row $arm dd0)
+            (exp07-dual-rule-count-row $arm dd1)
+            (exp07-dual-rule-count-row $arm dd2)
+            (exp07-dual-rule-count-row $arm dd3)
+            (exp07-dual-rule-count-row $arm dd4)
+            (exp07-dual-rule-count-row $arm dd5))
+     blocked-pathway
+       (exp07-dual-sum-blocked-class True $arm (exp07-dual-seeds))
+     blocked-distractor
+       (exp07-dual-sum-blocked-class False $arm (exp07-dual-seeds))))
+
+(= (exp07-dual-blocked-first-absent-total $arm)
+   (let $seeds (exp07-dual-seeds)
+     (- (+ (exp07-dual-sum-trace-measure frontier-selected $arm db0 $seeds)
+           (+ (exp07-dual-sum-trace-measure frontier-selected $arm db1 $seeds)
+            (+ (exp07-dual-sum-trace-measure frontier-selected $arm dp1 $seeds)
+             (+ (exp07-dual-sum-trace-measure frontier-selected $arm dp2 $seeds)
+              (+ (exp07-dual-sum-trace-measure frontier-selected $arm dp3 $seeds)
+                 (exp07-dual-sum-trace-measure frontier-selected $arm dp0 $seeds))))))
+        (+ (exp07-dual-sum-trace-measure frontier-fired $arm db0 $seeds)
+           (+ (exp07-dual-sum-trace-measure frontier-fired $arm db1 $seeds)
+            (+ (exp07-dual-sum-trace-measure frontier-fired $arm dp1 $seeds)
+             (+ (exp07-dual-sum-trace-measure frontier-fired $arm dp2 $seeds)
+              (+ (exp07-dual-sum-trace-measure frontier-fired $arm dp3 $seeds)
+                 (exp07-dual-sum-trace-measure frontier-fired $arm dp0 $seeds)))))))))
+
+; The first frozen interpretation branch is already decisive once integrity
+; passes: weak has 51 blocked first-absent selections versus unguided's 38.
+(= (exp07-dual-mechanism-interpretation)
+   (if (== (exp07-dual-mechanism-trace-integrity-gate) False) trace-mismatch
+       (if (> (exp07-dual-blocked-first-absent-total weak-doob-h)
+              (exp07-dual-blocked-first-absent-total unguided))
+           applicability-loss unresolved/mixed)))
+
 (= (exp07-dual-last-twelve-events $events)
    (if (> (exp07-registered-list-length $events) 12)
        (exp07-dual-last-twelve-events (cdr-atom $events))
