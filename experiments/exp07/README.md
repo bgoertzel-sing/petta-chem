@@ -79,6 +79,15 @@ emergence. The originally reported all-arm null came from accidentally routing
 the ordered endpoint through the historical `rp0/rp1/rp2` detector; smoke
 tests now bind it explicitly to `op1/op2/op0`.
 
+The independent follow-up is frozen, before implementation or outcome access,
+in `PREREG_ORDERED_REPLICATION.md`. Cohort A uses fresh seeds 101--116 and a
+new fixed draw hash to replicate the exact-form treatment/control contrast.
+Cohort B holds out seeds 117--132 and additionally permutes candidate order,
+with selection attached to rule identity, to test the explicit cap/order
+factor. Both cohorts retain the original chemistry, horizon, matched-cost
+controls, replay, and causal ablations. No replication outcome has been
+evaluated and spontaneous-emergence claim remains none.
+
 Run with:
 
 ```bash

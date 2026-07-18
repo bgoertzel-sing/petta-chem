@@ -2305,6 +2305,48 @@
      terminal-forcing prohibited
      emergence-claim none))
 
+; Freeze an independent replication and a separately held-out order/hash
+; robustness cohort before adding seed support, selectors, or trajectories.
+; The full protocol is experiments/exp07/PREREG_ORDERED_REPLICATION.md.
+(= (exp07-ordered-replication-preregistration)
+   (ordered-replication-preregistration
+     status design-only
+     outcomes-evaluated false
+     predecessor-seeds (seed-19 seed-20 seed-21 seed-22
+                        seed-23 seed-24 seed-25 seed-26)
+     cohort-a
+       (exact-form
+         seeds (seed-101 seed-102 seed-103 seed-104
+                seed-105 seed-106 seed-107 seed-108
+                seed-109 seed-110 seed-111 seed-112
+                seed-113 seed-114 seed-115 seed-116)
+         pool-order (ob0 op1 op2 op0 od0 od1 od2 od3)
+         draw-hash (29 seed 43 tick 7 modulo 96)
+         minimum-weak-advantage-over-each-control 6)
+     cohort-b
+       (order-hash-robustness
+         seeds (seed-117 seed-118 seed-119 seed-120
+                seed-121 seed-122 seed-123 seed-124
+                seed-125 seed-126 seed-127 seed-128
+                seed-129 seed-130 seed-131 seed-132)
+         pool-order (od2 op0 ob0 od1 op2 od3 op1 od0)
+         draw-hash (47 seed 53 tick 11 modulo 96)
+         selection-addressing rule-identity
+         minimum-weak-advantage-over-each-control 4)
+     shared-contract
+       (arms (unguided weak-doob-h shuffled-frontier-guidance)
+        horizon (3 26)
+        candidate-cap 8
+        selector-denominator 96
+        shifted-mass-units-per-guided-draw 8
+        rolling-raf-rules (op1 op2 op0)
+        maximum-positive-after-each-causal-ablation 2
+        replay required
+        adaptive-extension prohibited
+        terminal-forcing prohibited)
+     execution-order (cohort-a-complete-report cohort-b)
+     spontaneous-emergence-claim none))
+
 ; ----- Ordered-bootstrap pre-run gate: shared pool and catalysis -----
 ;
 ; Materialize only the frozen chemistry inputs.  These constructors do not
