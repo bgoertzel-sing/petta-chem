@@ -65,8 +65,12 @@ retains unguided 8/16, above the prespecified maximum of two; order/hash
 robustness is therefore not supported and cannot rescue cohort A.
 
 The ordered-replication program is closed as two negative preregistered gates.
-The design-only successor is frozen in
-`experiments/exp07/PREREG_DUAL_BOOTSTRAP.md`: it adds a second bootstrap and a
-four-rule RAF, generates an order-invariant cap-8 identity set from a
-twelve-rule chamber source, and reserves fresh seeds 201--232. No successor
-implementation or outcome has been evaluated.
+Its frozen dual-bootstrap successor has also completed exactly once over seeds
+201--232 and ticks 3--34. Rolling four-rule RAF incidence was 13/32 unguided,
+9/32 weak Doob-h, and 0/32 shuffled. All 96 trajectories replayed and all
+structural ablations were RAF-null, but weak guidance missed its registered
+incidence advantage and guiding-term removal retained unguided 13/32. The
+dual-bootstrap guided causal uplift result is therefore negative and the
+program is closed without extension. See
+`experiments/exp07/PREREG_DUAL_BOOTSTRAP.md` and
+`experiments/exp07/DUAL_BOOTSTRAP_REPORT.md`; spontaneous-emergence claim none.
