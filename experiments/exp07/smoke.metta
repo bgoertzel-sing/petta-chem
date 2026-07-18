@@ -1782,6 +1782,73 @@
          cohort-b-evaluated false
          spontaneous-emergence-claim none))
 
+; Frozen cohort-B order/hash robustness characterization.  The incidence
+; separation passes, but robustness is not supported because guiding-term
+; removal retains eight RAF-positive unguided trajectories.
+!(test (exp07-ordered-replication-cohort-b-robustness-supported?) False)
+!(test (exp07-ordered-replication-cohort-b-report)
+       (ordered-replication-cohort-b-report
+         arms (unguided weak-doob-h shuffled-frontier-guidance)
+         seeds (seed-117 seed-118 seed-119 seed-120
+                seed-121 seed-122 seed-123 seed-124
+                seed-125 seed-126 seed-127 seed-128
+                seed-129 seed-130 seed-131 seed-132)
+         ticks (3 26) candidate-cap 8
+         raf-incidence
+           ((unguided 8) (weak-doob-h 16)
+            (shuffled-frontier-guidance 0))
+         first-hit-ticks
+           ((unguided
+              (11 99 99 21 99 21 99 99 22 99 22 99 13 23 99 23))
+            (weak-doob-h
+              (11 10 13 10 11 12 11 14 11 12 13 12 13 12 15 14))
+            (shuffled-frontier-guidance
+              (99 99 99 99 99 99 99 99 99 99 99 99 99 99 99 99)))
+         longest-consecutive-raf-ticks
+           ((unguided (8 0 0 4 0 4 0 0 2 0 4 0 4 3 0 4))
+            (weak-doob-h (16 6 5 17 8 15 8 5 7 7 14 7 6 4 7 13))
+            (shuffled-frontier-guidance
+              (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)))
+         total-persistence
+           ((unguided 33) (weak-doob-h 145)
+            (shuffled-frontier-guidance 0))
+         productive-event-totals
+           ((unguided 281) (weak-doob-h 275)
+            (shuffled-frontier-guidance 260))
+         terminal-rule-diversity
+           ((unguided (8 8 6 7 6 8 8 8 8 8 8 8 8 8 5 8))
+            (weak-doob-h (8 8 8 7 8 8 8 8 8 8 8 8 8 8 8 8))
+            (shuffled-frontier-guidance
+              (6 6 6 5 6 6 6 6 5 6 6 6 6 5 5 6)))
+         total-rule-diversity
+           ((unguided 120) (weak-doob-h 127)
+            (shuffled-frontier-guidance 92))
+         exact-replays
+           ((unguided 16) (weak-doob-h 16)
+            (shuffled-frontier-guidance 16))
+         intervention-cost
+           (denominator-per-draw 96 draws-per-trajectory 24
+            trajectories-per-arm 16
+            full-matrix ((unguided 0) (weak-doob-h 3072)
+                         (shuffled-frontier-guidance 3072))
+            matched-guidance-budget true)
+         causal-ablations
+           (guiding-term-removal
+              (weak-policy-replaced-by unguided raf-incidence 8)
+            bootstrap-ablation
+              ((unguided 0) (weak-doob-h 0)
+               (shuffled-frontier-guidance 0))
+            catalyst-ablation
+              ((unguided 0) (weak-doob-h 0)
+               (shuffled-frontier-guidance 0))
+            rule-ablation ((op1 0) (op2 0) (op0 0)))
+         rolling-detector ordered-op1-op2-op0
+         order-hash-robustness not-supported
+         cohort-a-primary-replication not-supported
+         cohort-b-cannot-rescue-cohort-a true
+         adaptive-extension none
+         spontaneous-emergence-claim none))
+
 ; Frozen ordered-bootstrap matrix: all three arms are RAF-null over the exact
 ; held-out seeds and horizon, with deterministic replay and no extension.
 !(test (exp07-ordered-arm-replay-count unguided) 8)

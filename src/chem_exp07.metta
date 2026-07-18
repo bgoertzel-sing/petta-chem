@@ -2789,6 +2789,12 @@
     seed-109 seed-110 seed-111 seed-112
     seed-113 seed-114 seed-115 seed-116))
 
+(= (exp07-ordered-replication-cohort-b-seeds)
+   (seed-117 seed-118 seed-119 seed-120
+    seed-121 seed-122 seed-123 seed-124
+    seed-125 seed-126 seed-127 seed-128
+    seed-129 seed-130 seed-131 seed-132))
+
 (= (exp07-ordered-replication-initial-chamber cohort-a $seed)
    (chamber exp07-ordered-replication
      (state 3 $seed
@@ -2804,6 +2810,22 @@
       (rule od1 B C W1 X)
       (rule od2 C D W2 X)
       (rule od3 A D W3 X)) ()))
+
+(= (exp07-ordered-replication-initial-chamber cohort-b $seed)
+   (chamber exp07-ordered-replication
+     (state 3 $seed
+       (molecules
+         ((mol A 4) (mol B 3) (mol C 4) (mol D 3)
+          (mol AB 0) (mol AC 0) (mol CD 0) (mol X 1)
+          (mol W0 0) (mol W1 0) (mol W2 0) (mol W3 0))))
+     ((rule od2 C D W2 X)
+      (rule op0 A B AB CD)
+      (rule ob0 A B AB X)
+      (rule od1 B C W1 X)
+      (rule op2 C D CD AC)
+      (rule od3 A D W3 X)
+      (rule op1 A C AC AB)
+      (rule od0 A C W0 X)) ()))
 
 ; Explicit cohort-A reductions avoid the same imported-equation boundary as
 ; the predecessor's registered seed draw clauses while preserving the frozen
@@ -2840,6 +2862,42 @@
    (#mod (+ 3342 (* 43 $tick)) 96))
 (= (exp07-ordered-replication-trajectory-draw cohort-a seed-116 $tick)
    (#mod (+ 3371 (* 43 $tick)) 96))
+
+; Cohort B uses the frozen ((47 * seed) + (53 * tick) + 11) mod 96 hash.
+; Explicit reductions keep registered trajectories executable in the local
+; PeTTa compiler, as for cohort A.
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-117 $tick)
+   (#mod (+ 5510 (* 53 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-118 $tick)
+   (#mod (+ 5557 (* 53 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-119 $tick)
+   (#mod (+ 5604 (* 53 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-120 $tick)
+   (#mod (+ 5651 (* 53 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-121 $tick)
+   (#mod (+ 5698 (* 53 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-122 $tick)
+   (#mod (+ 5745 (* 53 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-123 $tick)
+   (#mod (+ 5792 (* 53 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-124 $tick)
+   (#mod (+ 5839 (* 53 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-125 $tick)
+   (#mod (+ 5886 (* 53 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-126 $tick)
+   (#mod (+ 5933 (* 53 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-127 $tick)
+   (#mod (+ 5980 (* 53 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-128 $tick)
+   (#mod (+ 6027 (* 53 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-129 $tick)
+   (#mod (+ 6074 (* 53 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-130 $tick)
+   (#mod (+ 6121 (* 53 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-131 $tick)
+   (#mod (+ 6168 (* 53 $tick)) 96))
+(= (exp07-ordered-replication-trajectory-draw cohort-b seed-132 $tick)
+   (#mod (+ 6215 (* 53 $tick)) 96))
 
 (= (exp07-ordered-replication-selected-for-chamber $arm $cohort
       (chamber $id
@@ -3229,6 +3287,162 @@
              supported not-supported)
        adaptive-extension none
        cohort-b-evaluated false
+       spontaneous-emergence-claim none)))
+
+; Cohort B is a separately interpreted order/hash robustness characterization.
+; It cannot rescue cohort A's failed primary replication.
+(= (exp07-ordered-replication-cohort-b-robustness-supported?)
+   (let $seeds (exp07-ordered-replication-cohort-b-seeds)
+     (let $weak
+          (exp07-ordered-replication-sum-raf weak-doob-h cohort-b $seeds)
+       (and
+         (>= (- $weak
+                (exp07-ordered-replication-sum-raf
+                  unguided cohort-b $seeds)) 4)
+         (and
+           (>= (- $weak
+                  (exp07-ordered-replication-sum-raf
+                    shuffled-frontier-guidance cohort-b $seeds)) 4)
+           (and
+             (== (exp07-ordered-replication-sum-replays
+                   unguided cohort-b $seeds) 16)
+             (and
+               (== (exp07-ordered-replication-sum-replays
+                     weak-doob-h cohort-b $seeds) 16)
+               (and
+                 (== (exp07-ordered-replication-sum-replays
+                       shuffled-frontier-guidance cohort-b $seeds) 16)
+                 (and
+                   (<= (exp07-ordered-replication-sum-ablation-raf
+                         bootstrap-ablation weak-doob-h cohort-b $seeds) 2)
+                   (and
+                     (<= (exp07-ordered-replication-sum-raf
+                           unguided cohort-b $seeds) 2)
+                     (and
+                       (<= (exp07-ordered-replication-sum-ablation-raf
+                             catalyst-ablation weak-doob-h cohort-b $seeds) 2)
+                       (and
+                         (<= (exp07-ordered-replication-sum-ablation-raf
+                               rule-ablation-op1 weak-doob-h cohort-b $seeds) 2)
+                         (and
+                           (<= (exp07-ordered-replication-sum-ablation-raf
+                                 rule-ablation-op2 weak-doob-h cohort-b $seeds) 2)
+                           (<= (exp07-ordered-replication-sum-ablation-raf
+                                 rule-ablation-op0 weak-doob-h
+                                 cohort-b $seeds) 2))))))))))))))
+
+(= (exp07-ordered-replication-cohort-b-report)
+   (let $seeds (exp07-ordered-replication-cohort-b-seeds)
+     (ordered-replication-cohort-b-report
+       arms (unguided weak-doob-h shuffled-frontier-guidance)
+       seeds $seeds ticks (3 26) candidate-cap 8
+       raf-incidence
+         ((unguided (exp07-ordered-replication-sum-raf
+                      unguided cohort-b $seeds))
+          (weak-doob-h (exp07-ordered-replication-sum-raf
+                         weak-doob-h cohort-b $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-sum-raf
+              shuffled-frontier-guidance cohort-b $seeds)))
+       first-hit-ticks
+         ((unguided (exp07-ordered-replication-first-hit-values
+                      unguided cohort-b $seeds))
+          (weak-doob-h (exp07-ordered-replication-first-hit-values
+                         weak-doob-h cohort-b $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-first-hit-values
+              shuffled-frontier-guidance cohort-b $seeds)))
+       longest-consecutive-raf-ticks
+         ((unguided (exp07-ordered-replication-persistence-values
+                      unguided cohort-b $seeds))
+          (weak-doob-h (exp07-ordered-replication-persistence-values
+                         weak-doob-h cohort-b $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-persistence-values
+              shuffled-frontier-guidance cohort-b $seeds)))
+       total-persistence
+         ((unguided (exp07-ordered-replication-sum-persistence
+                      unguided cohort-b $seeds))
+          (weak-doob-h (exp07-ordered-replication-sum-persistence
+                         weak-doob-h cohort-b $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-sum-persistence
+              shuffled-frontier-guidance cohort-b $seeds)))
+       productive-event-totals
+         ((unguided (exp07-ordered-replication-sum-events
+                      unguided cohort-b $seeds))
+          (weak-doob-h (exp07-ordered-replication-sum-events
+                         weak-doob-h cohort-b $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-sum-events
+              shuffled-frontier-guidance cohort-b $seeds)))
+       terminal-rule-diversity
+         ((unguided (exp07-ordered-replication-diversity-values
+                      unguided cohort-b $seeds))
+          (weak-doob-h (exp07-ordered-replication-diversity-values
+                         weak-doob-h cohort-b $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-diversity-values
+              shuffled-frontier-guidance cohort-b $seeds)))
+       total-rule-diversity
+         ((unguided (exp07-ordered-replication-sum-diversity
+                      unguided cohort-b $seeds))
+          (weak-doob-h (exp07-ordered-replication-sum-diversity
+                         weak-doob-h cohort-b $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-sum-diversity
+              shuffled-frontier-guidance cohort-b $seeds)))
+       exact-replays
+         ((unguided (exp07-ordered-replication-sum-replays
+                      unguided cohort-b $seeds))
+          (weak-doob-h (exp07-ordered-replication-sum-replays
+                         weak-doob-h cohort-b $seeds))
+          (shuffled-frontier-guidance
+            (exp07-ordered-replication-sum-replays
+              shuffled-frontier-guidance cohort-b $seeds)))
+       intervention-cost
+         (denominator-per-draw 96 draws-per-trajectory 24
+          trajectories-per-arm 16
+          full-matrix ((unguided 0) (weak-doob-h 3072)
+                       (shuffled-frontier-guidance 3072))
+          matched-guidance-budget true)
+       causal-ablations
+         (guiding-term-removal
+            (weak-policy-replaced-by unguided raf-incidence
+              (exp07-ordered-replication-sum-raf
+                unguided cohort-b $seeds))
+          bootstrap-ablation
+            ((unguided (exp07-ordered-replication-sum-ablation-raf
+                         bootstrap-ablation unguided cohort-b $seeds))
+             (weak-doob-h (exp07-ordered-replication-sum-ablation-raf
+                            bootstrap-ablation weak-doob-h cohort-b $seeds))
+             (shuffled-frontier-guidance
+               (exp07-ordered-replication-sum-ablation-raf
+                 bootstrap-ablation shuffled-frontier-guidance
+                 cohort-b $seeds)))
+          catalyst-ablation
+            ((unguided (exp07-ordered-replication-sum-ablation-raf
+                         catalyst-ablation unguided cohort-b $seeds))
+             (weak-doob-h (exp07-ordered-replication-sum-ablation-raf
+                            catalyst-ablation weak-doob-h cohort-b $seeds))
+             (shuffled-frontier-guidance
+               (exp07-ordered-replication-sum-ablation-raf
+                 catalyst-ablation shuffled-frontier-guidance
+                 cohort-b $seeds)))
+          rule-ablation
+            ((op1 (exp07-ordered-replication-sum-ablation-raf
+                    rule-ablation-op1 weak-doob-h cohort-b $seeds))
+             (op2 (exp07-ordered-replication-sum-ablation-raf
+                    rule-ablation-op2 weak-doob-h cohort-b $seeds))
+             (op0 (exp07-ordered-replication-sum-ablation-raf
+                    rule-ablation-op0 weak-doob-h cohort-b $seeds))))
+       rolling-detector ordered-op1-op2-op0
+       order-hash-robustness
+         (if (exp07-ordered-replication-cohort-b-robustness-supported?)
+             supported not-supported)
+       cohort-a-primary-replication not-supported
+       cohort-b-cannot-rescue-cohort-a true
+       adaptive-extension none
        spontaneous-emergence-claim none)))
 
 ; ----- Frozen ordered-bootstrap trajectory matrix -----

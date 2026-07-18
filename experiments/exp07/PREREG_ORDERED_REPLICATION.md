@@ -1,6 +1,6 @@
 # exp07 Preregistration: Ordered-Bootstrap Replication and Robustness
 
-**Status:** Cohort A complete; cohort B unevaluated.
+**Status:** Complete; cohort A primary and cohort B robustness not supported.
 **Predecessor:** `PREREG_ORDERED_BOOTSTRAP.md`, whose corrected frozen result
 was 0/8 unguided, 6/8 weak Doob-h, and 0/8 shuffled-frontier guidance.
 **Claim boundary:** independent replication of bounded guided causal RAF uplift;
@@ -102,4 +102,21 @@ and ticks 24/22/23/24 for weak seeds 105/108/113/115. Persistence totals were
 guided arm. Bootstrap, three-cycle-catalyst, and each individual cycle-rule
 ablation left weak incidence at 0/16; guiding-term removal was the unchanged
 unguided 1/16. No seed or horizon was extended. Spontaneous-emergence claim
-remains none; cohort B remains unconstructed.
+remains none.
+
+## Frozen cohort-B result (2026-07-18 00:30 PDT)
+
+Cohort B was executed exactly once over seeds 117--132 and ticks 3--26 with
+the frozen permuted pool and draw hash. RAF incidence was 8/16 unguided, 16/16
+weak Doob-h, and 0/16 shuffled-frontier guidance. Weak therefore exceeded each
+control by the required four seeds, but guiding-term removal retained the
+unguided 8/16 incidence, above the prespecified maximum of two. Order/hash
+robustness is consequently not supported; this characterization cannot rescue
+cohort A's failed primary replication.
+
+All 48 trajectories replayed. Persistence totals were 33/145/0, productive
+event totals were 281/275/260, and terminal distinct-rule totals were
+120/127/92 of 128. Guidance costs matched at 3,072 shifted mass units per
+guided arm. Bootstrap, full catalyst, and individual `op1`/`op2`/`op0`
+ablations were all 0/16. No seed or horizon was extended, and the spontaneous-
+emergence claim remains none.

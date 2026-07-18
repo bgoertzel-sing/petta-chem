@@ -57,5 +57,9 @@ The frozen exact-form replication cohort over fresh seeds 101--116 is also
 complete. RAF incidence is 1/16 unguided, 4/16 weak Doob-h, and 0/16 shuffled;
 all 48 trajectories replay and all structural ablations are RAF-null. Weak
 guidance misses the preregistered six-seed advantage over both controls, so
-the primary replication is not supported. The order/hash robustness cohort B
-remains unevaluated and cannot rescue that result.
+the primary replication is not supported. The separately interpreted frozen
+order/hash cohort B over seeds 117--132 yields 8/16 unguided, 16/16 weak, and
+0/16 shuffled, with all 48 trajectories replaying and all structural
+ablations RAF-null. Its incidence separation passes, but guiding-term removal
+retains unguided 8/16, above the prespecified maximum of two; order/hash
+robustness is therefore not supported and cannot rescue cohort A.
