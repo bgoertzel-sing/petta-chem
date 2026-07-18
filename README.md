@@ -63,3 +63,10 @@ order/hash cohort B over seeds 117--132 yields 8/16 unguided, 16/16 weak, and
 ablations RAF-null. Its incidence separation passes, but guiding-term removal
 retains unguided 8/16, above the prespecified maximum of two; order/hash
 robustness is therefore not supported and cannot rescue cohort A.
+
+The ordered-replication program is closed as two negative preregistered gates.
+The design-only successor is frozen in
+`experiments/exp07/PREREG_DUAL_BOOTSTRAP.md`: it adds a second bootstrap and a
+four-rule RAF, generates an order-invariant cap-8 identity set from a
+twelve-rule chamber source, and reserves fresh seeds 201--232. No successor
+implementation or outcome has been evaluated.

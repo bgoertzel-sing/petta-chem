@@ -1500,6 +1500,60 @@
          execution-order (cohort-a-complete-report cohort-b)
          spontaneous-emergence-claim none))
 
+!(test (exp07-ordered-replication-program-closure)
+       (ordered-replication-program-closure
+         cohort-a-primary-replication not-supported
+         cohort-b-order-hash-robustness not-supported
+         cohort-b-cannot-rescue-cohort-a true
+         adaptive-extension none
+         successor-outcomes-evaluated false
+         spontaneous-emergence-claim none))
+
+!(test (exp07-dual-bootstrap-preregistration)
+       (dual-bootstrap-preregistration
+         status design-only
+         outcomes-evaluated false
+         source-rule-count 12
+         candidate-cap 8
+         pathway-rules (db0 db1 dp1 dp2 dp3 dp0)
+         raf-rules (dp1 dp2 dp3 dp0)
+         distractor-rules (dd0 dd1 dd2 dd3 dd4 dd5)
+         bounded-generation
+           (always-include (db0 db1 dp1 dp2 dp3 dp0)
+            rotating-distractor-pairs ((dd0 dd1) (dd2 dd3) (dd4 dd5))
+            matched-distractor first-in-rotating-pair
+            addressing rule-identity
+            source-order-invariant required)
+         initial-catalyst-abundances
+           ((X 1) (AB 0) (CD 0) (AC 0) (BD 0) (CE 0))
+         ordered-frontier (db0 db1 dp1 dp2 dp3 dp0)
+         arms (unguided weak-doob-h shuffled-frontier-guidance)
+         held-out-seeds (seed-201 seed-202 seed-203 seed-204
+                         seed-205 seed-206 seed-207 seed-208
+                         seed-209 seed-210 seed-211 seed-212
+                         seed-213 seed-214 seed-215 seed-216
+                         seed-217 seed-218 seed-219 seed-220
+                         seed-221 seed-222 seed-223 seed-224
+                         seed-225 seed-226 seed-227 seed-228
+                         seed-229 seed-230 seed-231 seed-232)
+         horizon (3 34)
+         food-reset-ticks (11 19 27)
+         draw-hash (71 seed 67 tick 19 modulo 96)
+         selector-masses
+           ((unguided (12 12 12 12 12 12 12 12))
+            (weak-doob-h (frontier 20 matched-distractor 4 others 12))
+            (shuffled-frontier-guidance
+              (frontier 4 matched-distractor 20 others 12)))
+         shifted-mass-units-per-guided-draw 8
+         primary-thresholds
+           (minimum-weak-advantage-over-each-control 10
+            maximum-positive-after-each-causal-ablation 4)
+         direct-bounded-tick required
+         replay required
+         adaptive-extension prohibited
+         terminal-forcing prohibited
+         spontaneous-emergence-claim none))
+
 ; Ordered-bootstrap materialization gate only.  No selection, chamber tick, or
 ; held-out trajectory is evaluated by these assertions.
 !(test (exp07-ordered-rules)

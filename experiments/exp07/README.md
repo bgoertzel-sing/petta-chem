@@ -102,8 +102,16 @@ controls and the primary replication is not supported. All 48 trajectories
 replay; persistence totals are 1/15/0, productive-event totals are
 259/263/250, and distinct-rule totals are 112/116/85 of 128. Every structural
 ablation leaves weak incidence at zero, but this cannot rescue the failed
-primary contrast. Cohort B remains unevaluated and spontaneous-emergence claim
-remains none.
+primary contrast. Cohort B is also complete, with incidence 8/16 unguided,
+16/16 weak, and 0/16 shuffled. Its incidence separation passes, but
+guiding-term removal retains unguided 8/16, so robustness is not supported and
+cohort B cannot rescue cohort A. Spontaneous-emergence claim remains none.
+
+The ordered-replication program is therefore closed as two preregistered
+negative gates. `PREREG_DUAL_BOOTSTRAP.md` prospectively freezes the successor
+before implementation: a six-step dual-bootstrap/four-rule RAF, a twelve-rule
+source reduced to an order-invariant identity-addressed cap of eight, and
+fresh seeds 201--232. No successor trajectory or outcome has been evaluated.
 
 Run with:
 
