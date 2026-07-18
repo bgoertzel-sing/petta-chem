@@ -4564,6 +4564,66 @@
         applicable $applicable event-fired $fired
         first-absent-pathway $frontier pathway-product-presence $presence
         post-reset-pre-fire-food $food)) $frontier)
+(= (exp07-dual-trace-presence
+      (dual-mechanism-trace-row key $key selected-rule $rid
+        applicable $applicable event-fired $fired
+        first-absent-pathway $frontier pathway-product-presence $presence
+        post-reset-pre-fire-food $food)) $presence)
+(= (exp07-dual-trace-tick
+      (dual-mechanism-trace-row key ($arm $seed $tick) selected-rule $rid
+        applicable $applicable event-fired $fired
+        first-absent-pathway $frontier pathway-product-presence $presence
+        post-reset-pre-fire-food $food)) $tick)
+
+; Longest completed pathway prefix in the prepared pre-fire state.  The two
+; CD-producing identities remain distinct ordered steps even though their
+; presence bits intentionally share the same molecule observation.
+(= (exp07-dual-prefix-depth-from-presence
+      ((db0 $db0) (db1 $db1) (dp1 $dp1) (dp2 $dp2) (dp3 $dp3) (dp0 $dp0)))
+   (if (== $db0 0) 0
+    (if (== $db1 0) 1
+     (if (== $dp1 0) 2
+      (if (== $dp2 0) 3
+       (if (== $dp3 0) 4
+        (if (== $dp0 0) 5 6)))))))
+(= (exp07-dual-trace-prefix-depth $row)
+   (exp07-dual-prefix-depth-from-presence
+     (exp07-dual-trace-presence $row)))
+(= (exp07-dual-count-prefix-depth $depth $rows)
+   (if (== $rows ()) 0
+       (+ (if (== (exp07-dual-trace-prefix-depth (car-atom $rows)) $depth)
+              1 0)
+          (exp07-dual-count-prefix-depth $depth (cdr-atom $rows)))))
+(= (exp07-dual-first-prefix-tick $depth $rows)
+   (if (== $rows ()) 99
+       (if (>= (exp07-dual-trace-prefix-depth (car-atom $rows)) $depth)
+           (exp07-dual-trace-tick (car-atom $rows))
+           (exp07-dual-first-prefix-tick $depth (cdr-atom $rows)))))
+(= (exp07-dual-prefix-seed-row $arm $seed)
+   (let $rows (exp07-dual-trajectory-trace $arm $seed)
+     ($seed
+       first-prefix-ticks
+         ((db0 (exp07-dual-first-prefix-tick 1 $rows))
+          (db1 (exp07-dual-first-prefix-tick 2 $rows))
+          (dp1 (exp07-dual-first-prefix-tick 3 $rows))
+          (dp2 (exp07-dual-first-prefix-tick 4 $rows))
+          (dp3 (exp07-dual-first-prefix-tick 5 $rows))
+          (dp0 (exp07-dual-first-prefix-tick 6 $rows)))
+       ticks-at-depth
+         ((0 (exp07-dual-count-prefix-depth 0 $rows))
+          (1 (exp07-dual-count-prefix-depth 1 $rows))
+          (2 (exp07-dual-count-prefix-depth 2 $rows))
+          (3 (exp07-dual-count-prefix-depth 3 $rows))
+          (4 (exp07-dual-count-prefix-depth 4 $rows))
+          (5 (exp07-dual-count-prefix-depth 5 $rows))
+          (6 (exp07-dual-count-prefix-depth 6 $rows))))))
+(= (exp07-dual-prefix-seed-rows $arm $seeds)
+   (if (== $seeds ()) ()
+       (cons-atom (exp07-dual-prefix-seed-row $arm (car-atom $seeds))
+         (exp07-dual-prefix-seed-rows $arm (cdr-atom $seeds)))))
+(= (exp07-dual-prefix-summary $arm)
+   (dual-mechanism-prefix-summary $arm
+     (exp07-dual-prefix-seed-rows $arm (exp07-dual-seeds))))
 
 (= (exp07-dual-pathway-rule? $rid)
    (if (== $rid db0) True

@@ -7,3 +7,6 @@
 !(exp07-dual-blocked-first-absent-total unguided)
 !(exp07-dual-blocked-first-absent-total weak-doob-h)
 !(exp07-dual-mechanism-interpretation)
+!(exp07-dual-prefix-summary unguided)
+!(exp07-dual-prefix-summary weak-doob-h)
+!(exp07-dual-prefix-summary shuffled-frontier-guidance)

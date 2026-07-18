@@ -2044,6 +2044,22 @@
 !(test (exp07-dual-blocked-first-absent-total
          shuffled-frontier-guidance) 1)
 !(test (exp07-dual-mechanism-interpretation) applicability-loss)
+!(test (exp07-dual-first-prefix-tick 1
+         (exp07-dual-trajectory-trace unguided seed-201)) 7)
+!(test (+ (exp07-dual-count-prefix-depth 0
+            (exp07-dual-trajectory-trace unguided seed-201))
+          (+ (exp07-dual-count-prefix-depth 1
+               (exp07-dual-trajectory-trace unguided seed-201))
+           (+ (exp07-dual-count-prefix-depth 2
+                (exp07-dual-trajectory-trace unguided seed-201))
+            (+ (exp07-dual-count-prefix-depth 3
+                 (exp07-dual-trajectory-trace unguided seed-201))
+             (+ (exp07-dual-count-prefix-depth 4
+                  (exp07-dual-trajectory-trace unguided seed-201))
+              (+ (exp07-dual-count-prefix-depth 5
+                   (exp07-dual-trajectory-trace unguided seed-201))
+                 (exp07-dual-count-prefix-depth 6
+                   (exp07-dual-trajectory-trace unguided seed-201)))))))) 32)
 
 ; Frozen ordered-bootstrap matrix: all three arms are RAF-null over the exact
 ; held-out seeds and horizon, with deterministic replay and no extension.
