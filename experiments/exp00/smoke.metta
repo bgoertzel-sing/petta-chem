@@ -884,6 +884,32 @@
            (exp00-initial-chamber seed-7)))
        (candidate-cap 8 1))
 
+; Scalar field accessors let audit consumers compare requested and effective
+; boundaries without reconstructing or destructuring the complete record.
+!(test (generated-selection-fire-record-requested-per-tick
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 9 3)
+           (exp00-initial-chamber seed-7)))
+       9)
+
+!(test (generated-selection-fire-record-requested-per-rule
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 9 3)
+           (exp00-initial-chamber seed-7)))
+       3)
+
+!(test (generated-selection-fire-record-effective-per-tick
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 9 3)
+           (exp00-initial-chamber seed-7)))
+       8)
+
+!(test (generated-selection-fire-record-effective-per-rule
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 9 3)
+           (exp00-initial-chamber seed-7)))
+       1)
+
 ; A positive per-rule request above the generator's one-candidate-per-source
 ; contract is retained for audit while its effective field normalizes to one.
 !(test (generated-selection-fire-record-requested-cap

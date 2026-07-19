@@ -1655,6 +1655,14 @@
       (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
    $requested-cap)
 
+(= (generated-selection-fire-record-requested-per-tick $record)
+   (candidate-cap-per-tick
+     (generated-selection-fire-record-requested-cap $record)))
+
+(= (generated-selection-fire-record-requested-per-rule $record)
+   (candidate-cap-per-rule
+     (generated-selection-fire-record-requested-cap $record)))
+
 (= (generated-selection-fire-record-selection-fire
       (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
    $selection-fire-record)
@@ -1672,6 +1680,14 @@
 (= (generated-selection-fire-record-effective-cap
       (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
    (effective-candidate-cap $requested-cap))
+
+(= (generated-selection-fire-record-effective-per-tick $record)
+   (candidate-cap-per-tick
+     (generated-selection-fire-record-effective-cap $record)))
+
+(= (generated-selection-fire-record-effective-per-rule $record)
+   (candidate-cap-per-rule
+     (generated-selection-fire-record-effective-cap $record)))
 
 (= (generated-selection-fire-record-selected
       (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
