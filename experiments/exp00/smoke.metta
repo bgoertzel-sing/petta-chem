@@ -884,6 +884,25 @@
            (exp00-initial-chamber seed-7)))
        (candidate-cap 8 1))
 
+; A positive per-rule request above the generator's one-candidate-per-source
+; contract is retained for audit while its effective field normalizes to one.
+!(test (generated-selection-fire-record-requested-cap
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 2 3)
+           (exp00-initial-chamber seed-7)))
+       (candidate-cap 2 3))
+
+!(test (generated-selection-fire-record-effective-cap
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 2 3)
+           (exp00-initial-chamber seed-7)))
+       (candidate-cap 2 1))
+
+!(test (chamber-tick-generated
+         (make-candidate-cap 2 3)
+         (exp00-initial-chamber seed-7))
+       (exp00-chamber-after-generated-tick seed-7))
+
 !(test (generated-selection-fire-record-effective-cap
          (generated-selection-fire-record-from-chamber
            (make-candidate-cap 2 0)
