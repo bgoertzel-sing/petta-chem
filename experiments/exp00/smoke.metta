@@ -955,6 +955,24 @@
          (make-candidate-cap 0 3))
        (candidate-cap 0 0))
 
+; A negative per-rule boundary closes both effective fields just like zero,
+; and the complete generated record retains the malformed request for audit.
+!(test (effective-candidate-cap
+         (make-candidate-cap 2 -1))
+       (candidate-cap 0 0))
+
+!(test (generated-selection-fire-record-requested-cap
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 2 -1)
+           (exp00-initial-chamber seed-7)))
+       (candidate-cap 2 -1))
+
+!(test (generated-selection-fire-record-effective-cap
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 2 -1)
+           (exp00-initial-chamber seed-7)))
+       (candidate-cap 0 0))
+
 !(test (bounded-candidate-pool
          (make-candidate-cap -1 1)
          (exp00-initial-chamber seed-7))
