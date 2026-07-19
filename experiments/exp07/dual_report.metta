@@ -10,3 +10,7 @@
 !(exp07-dual-prefix-summary unguided)
 !(exp07-dual-prefix-summary weak-doob-h)
 !(exp07-dual-prefix-summary shuffled-frontier-guidance)
+!(exp07-dual-food-reset-summary unguided)
+!(exp07-dual-food-reset-summary weak-doob-h)
+!(exp07-dual-food-reset-summary shuffled-frontier-guidance)
+!(exp07-dual-paired-prefix-summary)

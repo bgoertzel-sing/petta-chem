@@ -2060,6 +2060,20 @@
                    (exp07-dual-trajectory-trace unguided seed-201))
                  (exp07-dual-count-prefix-depth 6
                    (exp07-dual-trajectory-trace unguided seed-201)))))))) 32)
+!(test (exp07-dual-first-food-exhaustion-tick A
+         (exp07-dual-trajectory-trace unguided seed-201)) 26)
+!(test (+ (exp07-dual-reset-at-depth-count 0
+            (exp07-dual-trajectory-trace unguided seed-201))
+          (+ (exp07-dual-reset-at-depth-count 1
+               (exp07-dual-trajectory-trace unguided seed-201))
+           (+ (exp07-dual-reset-at-depth-count 2
+                (exp07-dual-trajectory-trace unguided seed-201))
+            (+ (exp07-dual-reset-at-depth-count 3
+                 (exp07-dual-trajectory-trace unguided seed-201))
+             (+ (exp07-dual-reset-at-depth-count 4
+                  (exp07-dual-trajectory-trace unguided seed-201))
+                (exp07-dual-reset-at-depth-count 5
+                  (exp07-dual-trajectory-trace unguided seed-201))))))) 3)
 
 ; Frozen ordered-bootstrap matrix: all three arms are RAF-null over the exact
 ; held-out seeds and horizon, with deterministic replay and no extension.

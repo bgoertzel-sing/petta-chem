@@ -4574,6 +4574,17 @@
         applicable $applicable event-fired $fired
         first-absent-pathway $frontier pathway-product-presence $presence
         post-reset-pre-fire-food $food)) $tick)
+(= (exp07-dual-trace-food
+      (dual-mechanism-trace-row key $key selected-rule $rid
+        applicable $applicable event-fired $fired
+        first-absent-pathway $frontier pathway-product-presence $presence
+        post-reset-pre-fire-food $food)) $food)
+(= (exp07-dual-food-abundance $name $food)
+   (if (== $name A) (car-atom (cdr-atom (car-atom $food)))
+    (if (== $name B) (car-atom (cdr-atom (car-atom (cdr-atom $food))))
+     (if (== $name C) (car-atom (cdr-atom (car-atom (cdr-atom (cdr-atom $food)))))
+      (if (== $name D) (car-atom (cdr-atom (car-atom (cdr-atom (cdr-atom (cdr-atom $food))))))
+          (car-atom (cdr-atom (car-atom (cdr-atom (cdr-atom (cdr-atom (cdr-atom $food))))))))))))
 
 ; Longest completed pathway prefix in the prepared pre-fire state.  The two
 ; CD-producing identities remain distinct ordered steps even though their
@@ -4624,6 +4635,72 @@
 (= (exp07-dual-prefix-summary $arm)
    (dual-mechanism-prefix-summary $arm
      (exp07-dual-prefix-seed-rows $arm (exp07-dual-seeds))))
+
+; Food is observed after a scheduled reset and before firing, exactly as
+; frozen.  Sentinel 99 means that the food is never observed exhausted.
+(= (exp07-dual-first-food-exhaustion-tick $name $rows)
+   (if (== $rows ()) 99
+       (if (== (exp07-dual-food-abundance $name
+                  (exp07-dual-trace-food (car-atom $rows))) 0)
+           (exp07-dual-trace-tick (car-atom $rows))
+           (exp07-dual-first-food-exhaustion-tick $name (cdr-atom $rows)))))
+(= (exp07-dual-reset-at-depth-count $depth $rows)
+   (if (== $rows ()) 0
+       (+ (if (and (exp07-dual-replenishment-tick?
+                     (exp07-dual-trace-tick (car-atom $rows)))
+                    (== (exp07-dual-trace-prefix-depth (car-atom $rows)) $depth))
+              1 0)
+          (exp07-dual-reset-at-depth-count $depth (cdr-atom $rows)))))
+(= (exp07-dual-food-reset-seed-row $arm $seed)
+   (let $rows (exp07-dual-trajectory-trace $arm $seed)
+     ($seed first-food-exhaustion-ticks
+       ((A (exp07-dual-first-food-exhaustion-tick A $rows))
+        (B (exp07-dual-first-food-exhaustion-tick B $rows))
+        (C (exp07-dual-first-food-exhaustion-tick C $rows))
+        (D (exp07-dual-first-food-exhaustion-tick D $rows))
+        (E (exp07-dual-first-food-exhaustion-tick E $rows)))
+       resets-at-prefix-depth
+       ((0 (exp07-dual-reset-at-depth-count 0 $rows))
+        (1 (exp07-dual-reset-at-depth-count 1 $rows))
+        (2 (exp07-dual-reset-at-depth-count 2 $rows))
+        (3 (exp07-dual-reset-at-depth-count 3 $rows))
+        (4 (exp07-dual-reset-at-depth-count 4 $rows))
+        (5 (exp07-dual-reset-at-depth-count 5 $rows))))))
+(= (exp07-dual-food-reset-seed-rows $arm $seeds)
+   (if (== $seeds ()) ()
+       (cons-atom (exp07-dual-food-reset-seed-row $arm (car-atom $seeds))
+         (exp07-dual-food-reset-seed-rows $arm (cdr-atom $seeds)))))
+(= (exp07-dual-food-reset-summary $arm)
+   (dual-mechanism-food-reset-summary $arm
+     (exp07-dual-food-reset-seed-rows $arm (exp07-dual-seeds))))
+
+; Paired weak-minus-unguided values retain seed identity.  Tick differences
+; use the frozen 99 sentinel without censoring or subgroup selection.
+(= (exp07-dual-paired-prefix-row $seed)
+   (let $weak (exp07-dual-trajectory-trace weak-doob-h $seed)
+     (let $unguided (exp07-dual-trajectory-trace unguided $seed)
+       ($seed weak-minus-unguided-first-prefix-ticks
+         ((db0 (- (exp07-dual-first-prefix-tick 1 $weak) (exp07-dual-first-prefix-tick 1 $unguided)))
+          (db1 (- (exp07-dual-first-prefix-tick 2 $weak) (exp07-dual-first-prefix-tick 2 $unguided)))
+          (dp1 (- (exp07-dual-first-prefix-tick 3 $weak) (exp07-dual-first-prefix-tick 3 $unguided)))
+          (dp2 (- (exp07-dual-first-prefix-tick 4 $weak) (exp07-dual-first-prefix-tick 4 $unguided)))
+          (dp3 (- (exp07-dual-first-prefix-tick 5 $weak) (exp07-dual-first-prefix-tick 5 $unguided)))
+          (dp0 (- (exp07-dual-first-prefix-tick 6 $weak) (exp07-dual-first-prefix-tick 6 $unguided))))
+         weak-minus-unguided-ticks-at-depth
+         ((0 (- (exp07-dual-count-prefix-depth 0 $weak) (exp07-dual-count-prefix-depth 0 $unguided)))
+          (1 (- (exp07-dual-count-prefix-depth 1 $weak) (exp07-dual-count-prefix-depth 1 $unguided)))
+          (2 (- (exp07-dual-count-prefix-depth 2 $weak) (exp07-dual-count-prefix-depth 2 $unguided)))
+          (3 (- (exp07-dual-count-prefix-depth 3 $weak) (exp07-dual-count-prefix-depth 3 $unguided)))
+          (4 (- (exp07-dual-count-prefix-depth 4 $weak) (exp07-dual-count-prefix-depth 4 $unguided)))
+          (5 (- (exp07-dual-count-prefix-depth 5 $weak) (exp07-dual-count-prefix-depth 5 $unguided)))
+          (6 (- (exp07-dual-count-prefix-depth 6 $weak) (exp07-dual-count-prefix-depth 6 $unguided))))))))
+(= (exp07-dual-paired-prefix-rows $seeds)
+   (if (== $seeds ()) ()
+       (cons-atom (exp07-dual-paired-prefix-row (car-atom $seeds))
+         (exp07-dual-paired-prefix-rows (cdr-atom $seeds)))))
+(= (exp07-dual-paired-prefix-summary)
+   (dual-mechanism-paired-prefix-summary weak-minus-unguided
+     (exp07-dual-paired-prefix-rows (exp07-dual-seeds))))
 
 (= (exp07-dual-pathway-rule? $rid)
    (if (== $rid db0) True
