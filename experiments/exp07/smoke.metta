@@ -2182,3 +2182,9 @@
          adaptive-extension none
          guided-causal-raf-uplift supported
          spontaneous-emergence-claim none))
+; Frozen mechanism-audit aggregation helpers retain the 99 sentinel and use
+; the ordinary mean of the two middle values for the even 32-seed cohort.
+!(test (exp07-dual-median-32
+         (0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+          16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 99))
+       15.5)

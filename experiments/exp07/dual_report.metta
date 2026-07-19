@@ -14,3 +14,7 @@
 !(exp07-dual-food-reset-summary weak-doob-h)
 !(exp07-dual-food-reset-summary shuffled-frontier-guidance)
 !(exp07-dual-paired-prefix-summary)
+!(exp07-dual-tick-median-summary unguided)
+!(exp07-dual-tick-median-summary weak-doob-h)
+!(exp07-dual-tick-median-summary shuffled-frontier-guidance)
+!(exp07-dual-paired-food-reset-summary)
