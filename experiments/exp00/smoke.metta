@@ -869,6 +869,20 @@
        ((candidate 0 (rule r1 B Cat BCat A) 1)
         (candidate 0 (rule r0 A B AB Cat) 1)))
 
+; Report whether the effective cap preserved or truncated generation without
+; host-side list inspection.
+!(test (generated-selection-fire-record-cap-disposition
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       truncated)
+
+!(test (generated-selection-fire-record-cap-disposition
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap-3)
+           (exp00-initial-chamber seed-7)))
+       preserved)
+
 !(test (generated-selection-fire-record-cap
          (generated-selection-fire-record-from-chamber
            (make-candidate-cap 9 1)

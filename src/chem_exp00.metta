@@ -1672,6 +1672,15 @@
    (candidate-selection-bounded-pool
      (selection-fire-record-selection $selection-fire-record)))
 
+; State whether the effective bound preserved the complete generated pool or
+; truncated it. Audit consumers need not count or destructure candidate lists.
+(= (generated-selection-fire-record-cap-disposition $record)
+   (if (== (candidate-pool-candidates
+             (generated-selection-fire-record-pool $record))
+           (generated-selection-fire-record-bounded-pool $record))
+       preserved
+       truncated))
+
 (= (generated-selection-fire-record-cap
       (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
    (candidate-selection-cap
