@@ -1634,30 +1634,34 @@
      (selection-fire-record-from-pool $cap $chamber $candidate-pool)))
 
 (= (generated-selection-fire-record-pool
-      (generated-selection-fire-record $generated-pool $selection-fire-record))
+      (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
    $generated-pool)
 
+(= (generated-selection-fire-record-requested-cap
+      (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
+   $requested-cap)
+
 (= (generated-selection-fire-record-selection-fire
-      (generated-selection-fire-record $generated-pool $selection-fire-record))
+      (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
    $selection-fire-record)
 
 (= (generated-selection-fire-record-bounded-pool
-      (generated-selection-fire-record $generated-pool $selection-fire-record))
+      (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
    (candidate-selection-bounded-pool
      (selection-fire-record-selection $selection-fire-record)))
 
 (= (generated-selection-fire-record-cap
-      (generated-selection-fire-record $generated-pool $selection-fire-record))
+      (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
    (candidate-selection-cap
      (selection-fire-record-selection $selection-fire-record)))
 
 (= (generated-selection-fire-record-selected
-      (generated-selection-fire-record $generated-pool $selection-fire-record))
+      (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
    (candidate-selection-selected
      (selection-fire-record-selection $selection-fire-record)))
 
 (= (generated-selection-fire-record-after-chamber
-      (generated-selection-fire-record $generated-pool $selection-fire-record))
+      (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
    (selection-fire-record-after-chamber $selection-fire-record))
 
 ; Preserve the uncapped generated pool as well as the bounded selection and
@@ -1666,6 +1670,7 @@
 (= (generated-selection-fire-record-from-chamber $cap $chamber)
    (let $generated-pool (generate-candidate-pool $chamber)
      (generated-selection-fire-record
+       $cap
        $generated-pool
        (selection-fire-record-from-pool $cap $chamber $generated-pool))))
 

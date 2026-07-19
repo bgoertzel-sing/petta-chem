@@ -840,6 +840,7 @@
          (exp00-candidate-cap)
          (exp00-initial-chamber seed-7))
        (generated-selection-fire-record
+         (candidate-cap 2 1)
          (candidate-pool
            0
            ((candidate 0 (rule r1 B Cat BCat A) 1)
@@ -873,6 +874,20 @@
            (make-candidate-cap 9 1)
            (exp00-initial-chamber seed-7)))
        8)
+
+; Preserve the complete requested cap beside its effective scalar so callers
+; can distinguish an ordinary cap from a clamp or per-rule closure.
+!(test (generated-selection-fire-record-requested-cap
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 9 1)
+           (exp00-initial-chamber seed-7)))
+       (candidate-cap 9 1))
+
+!(test (generated-selection-fire-record-requested-cap
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 2 0)
+           (exp00-initial-chamber seed-7)))
+       (candidate-cap 2 0))
 
 !(test (generated-selection-fire-record-selected
          (generated-selection-fire-record-from-chamber
@@ -1158,6 +1173,7 @@
                   ()
                   ()))
        (generated-selection-fire-record
+         (candidate-cap 2 1)
          (candidate-pool 0 ())
          (selection-fire-record
            (candidate-selection 2 () no-candidate)
