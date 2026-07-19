@@ -974,6 +974,32 @@
          (make-candidate-cap 0 3))
        (candidate-cap 0 0))
 
+; Complete provenance retains both kinds of closed per-tick request while the
+; effective cap closes both fields and the chamber remains unchanged.
+!(test (generated-selection-fire-record-requested-cap
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap -1 1)
+           (exp00-initial-chamber seed-7)))
+       (candidate-cap -1 1))
+
+!(test (generated-selection-fire-record-effective-cap
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap -1 1)
+           (exp00-initial-chamber seed-7)))
+       (candidate-cap 0 0))
+
+!(test (generated-selection-fire-record-requested-cap
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 0 3)
+           (exp00-initial-chamber seed-7)))
+       (candidate-cap 0 3))
+
+!(test (generated-selection-fire-record-after-chamber
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 0 3)
+           (exp00-initial-chamber seed-7)))
+       (exp00-initial-chamber seed-7))
+
 ; A negative per-rule boundary closes both effective fields just like zero,
 ; and the complete generated record retains the malformed request for audit.
 !(test (effective-candidate-cap
