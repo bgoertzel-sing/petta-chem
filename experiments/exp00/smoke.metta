@@ -875,6 +875,21 @@
            (exp00-initial-chamber seed-7)))
        8)
 
+; The complete supported cap remains queryable beside the requested cap. The
+; generator normalizes every positive per-rule allowance to its one-candidate
+; contract without changing the effective per-tick bound.
+!(test (generated-selection-fire-record-effective-cap
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 9 3)
+           (exp00-initial-chamber seed-7)))
+       (candidate-cap 8 1))
+
+!(test (generated-selection-fire-record-effective-cap
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 2 0)
+           (exp00-initial-chamber seed-7)))
+       (candidate-cap 0 0))
+
 ; Preserve the complete requested cap beside its effective scalar so callers
 ; can distinguish an ordinary cap from a clamp or per-rule closure.
 !(test (generated-selection-fire-record-requested-cap

@@ -455,6 +455,18 @@
            0)
        0))
 
+; Generic generation emits at most one candidate per source-rule occurrence,
+; so every positive per-rule allowance has the same supported effective value.
+(= (effective-candidate-cap-per-rule $cap)
+   (if (> (candidate-cap-per-rule $cap) 0)
+       1
+       0))
+
+(= (effective-candidate-cap $cap)
+   (candidate-cap
+     (effective-candidate-cap-per-tick $cap)
+     (effective-candidate-cap-per-rule $cap)))
+
 (= (make-chamber $id $state $rules $events)
    (chamber $id $state $rules $events))
 
@@ -1654,6 +1666,10 @@
       (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
    (candidate-selection-cap
      (selection-fire-record-selection $selection-fire-record)))
+
+(= (generated-selection-fire-record-effective-cap
+      (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
+   (effective-candidate-cap $requested-cap))
 
 (= (generated-selection-fire-record-selected
       (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
