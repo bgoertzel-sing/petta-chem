@@ -802,6 +802,13 @@
        ((candidate 0 (rule r1 B Cat BCat A) 1)
         (candidate 0 (rule r0 A B AB Cat) 1)))
 
+!(test (candidate-selection-cap
+         (candidate-selection-from-pool
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)
+           (exp00-generated-candidate-pool seed-7)))
+       2)
+
 !(test (selected-candidate-from-pool
          (exp00-candidate-cap)
          (exp00-initial-chamber seed-7)
@@ -860,6 +867,12 @@
            (exp00-initial-chamber seed-7)))
        ((candidate 0 (rule r1 B Cat BCat A) 1)
         (candidate 0 (rule r0 A B AB Cat) 1)))
+
+!(test (generated-selection-fire-record-cap
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 9 1)
+           (exp00-initial-chamber seed-7)))
+       8)
 
 !(test (generated-selection-fire-record-selected
          (generated-selection-fire-record-from-chamber

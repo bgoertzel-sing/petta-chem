@@ -1550,6 +1550,10 @@
 
 ; Preserve the bounded pool and deterministic choice in one inspectable atom.
 ; This is the provenance object consumed directly by generic chamber ticking.
+(= (candidate-selection-cap
+      (candidate-selection $cap $bounded-pool $selected-candidate))
+   $cap)
+
 (= (candidate-selection-bounded-pool
       (candidate-selection $cap $bounded-pool $selected-candidate))
    $bounded-pool)
@@ -1640,6 +1644,11 @@
 (= (generated-selection-fire-record-bounded-pool
       (generated-selection-fire-record $generated-pool $selection-fire-record))
    (candidate-selection-bounded-pool
+     (selection-fire-record-selection $selection-fire-record)))
+
+(= (generated-selection-fire-record-cap
+      (generated-selection-fire-record $generated-pool $selection-fire-record))
+   (candidate-selection-cap
      (selection-fire-record-selection $selection-fire-record)))
 
 (= (generated-selection-fire-record-selected
