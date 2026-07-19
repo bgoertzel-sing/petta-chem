@@ -457,9 +457,11 @@
 
 ; Generic generation emits at most one candidate per source-rule occurrence,
 ; so every positive per-rule allowance has the same supported effective value.
+; A closed per-tick boundary also closes the complete cap rather than retaining
+; a misleading positive per-rule allowance in provenance.
 (= (effective-candidate-cap-per-rule $cap)
-   (if (> (candidate-cap-per-rule $cap) 0)
-       1
+   (if (> (candidate-cap-per-tick $cap) 0)
+       (if (> (candidate-cap-per-rule $cap) 0) 1 0)
        0))
 
 (= (effective-candidate-cap $cap)

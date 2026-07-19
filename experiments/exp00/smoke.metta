@@ -947,6 +947,14 @@
          (make-candidate-cap -1 1))
        0)
 
+!(test (effective-candidate-cap
+         (make-candidate-cap -1 1))
+       (candidate-cap 0 0))
+
+!(test (effective-candidate-cap
+         (make-candidate-cap 0 3))
+       (candidate-cap 0 0))
+
 !(test (bounded-candidate-pool
          (make-candidate-cap -1 1)
          (exp00-initial-chamber seed-7))
