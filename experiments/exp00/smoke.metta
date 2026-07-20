@@ -869,6 +869,32 @@
        ((candidate 0 (rule r1 B Cat BCat A) 1)
         (candidate 0 (rule r0 A B AB Cat) 1)))
 
+; Cardinality accessors expose the generated and actually selectable pool
+; sizes without host-side list inspection.
+!(test (generated-selection-fire-record-generated-count
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       3)
+
+!(test (generated-selection-fire-record-bounded-count
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       2)
+
+!(test (generated-selection-fire-record-bounded-count
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap-3)
+           (exp00-initial-chamber seed-7)))
+       3)
+
+!(test (generated-selection-fire-record-bounded-count
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 0 3)
+           (exp00-initial-chamber seed-7)))
+       0)
+
 ; Report whether the effective cap preserved or truncated generation without
 ; host-side list inspection.
 !(test (generated-selection-fire-record-cap-disposition

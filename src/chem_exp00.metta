@@ -1672,6 +1672,27 @@
    (candidate-selection-bounded-pool
      (selection-fire-record-selection $selection-fire-record)))
 
+; Candidate pools are deliberately bounded at eight in the base kernel, so
+; their cardinalities can remain explicit and PeTTa-native.
+(= (bounded-candidate-list-count ()) 0)
+(= (bounded-candidate-list-count ($c0)) 1)
+(= (bounded-candidate-list-count ($c0 $c1)) 2)
+(= (bounded-candidate-list-count ($c0 $c1 $c2)) 3)
+(= (bounded-candidate-list-count ($c0 $c1 $c2 $c3)) 4)
+(= (bounded-candidate-list-count ($c0 $c1 $c2 $c3 $c4)) 5)
+(= (bounded-candidate-list-count ($c0 $c1 $c2 $c3 $c4 $c5)) 6)
+(= (bounded-candidate-list-count ($c0 $c1 $c2 $c3 $c4 $c5 $c6)) 7)
+(= (bounded-candidate-list-count ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7)) 8)
+
+(= (generated-selection-fire-record-generated-count $record)
+   (bounded-candidate-list-count
+     (candidate-pool-candidates
+       (generated-selection-fire-record-pool $record))))
+
+(= (generated-selection-fire-record-bounded-count $record)
+   (bounded-candidate-list-count
+     (generated-selection-fire-record-bounded-pool $record)))
+
 ; State whether the effective bound preserved the complete generated pool or
 ; truncated it. Audit consumers need not count or destructure candidate lists.
 (= (generated-selection-fire-record-cap-disposition $record)
