@@ -1709,6 +1709,13 @@
 ; truncated fixture or duplicate the kernel constant.
 (= (generated-selection-fire-record-generation-cap $record) 8)
 
+; Report unused generator capacity separately from omitted source rules. A
+; complete narrow source has open slots, while a source at or beyond the
+; first-eight boundary has none.
+(= (generated-selection-fire-record-generation-remaining-count $record)
+   (- (generated-selection-fire-record-generation-cap $record)
+      (generated-selection-fire-record-generated-count $record)))
+
 (= (generated-selection-fire-record-generation-omitted-count $chamber $record)
    (- (chamber-source-rule-count $chamber)
       (generated-selection-fire-record-generated-count $record)))
