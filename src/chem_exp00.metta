@@ -1708,6 +1708,15 @@
    (- (chamber-source-rule-count $chamber)
       (generated-selection-fire-record-generated-count $record)))
 
+; Distinguish the generator's fixed first-eight boundary from the later
+; candidate-selection cap without requiring audit consumers to compare counts.
+(= (generated-selection-fire-record-generation-disposition $chamber $record)
+   (if (== (generated-selection-fire-record-generation-omitted-count
+             $chamber $record)
+           0)
+       complete
+       truncated))
+
 (= (generated-selection-fire-record-generated-count $record)
    (bounded-candidate-list-count
      (candidate-pool-candidates
