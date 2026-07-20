@@ -1684,6 +1684,30 @@
 (= (bounded-candidate-list-count ($c0 $c1 $c2 $c3 $c4 $c5 $c6)) 7)
 (= (bounded-candidate-list-count ($c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7)) 8)
 
+; Chamber sources may be wider than the base generator's eight-candidate
+; boundary. Keep that upstream truncation directly auditable rather than
+; conflating it with the later per-tick selection cap.
+(= (bounded-chamber-rule-count ()) 0)
+(= (bounded-chamber-rule-count ($r0)) 1)
+(= (bounded-chamber-rule-count ($r0 $r1)) 2)
+(= (bounded-chamber-rule-count ($r0 $r1 $r2)) 3)
+(= (bounded-chamber-rule-count ($r0 $r1 $r2 $r3)) 4)
+(= (bounded-chamber-rule-count ($r0 $r1 $r2 $r3 $r4)) 5)
+(= (bounded-chamber-rule-count ($r0 $r1 $r2 $r3 $r4 $r5)) 6)
+(= (bounded-chamber-rule-count ($r0 $r1 $r2 $r3 $r4 $r5 $r6)) 7)
+(= (bounded-chamber-rule-count ($r0 $r1 $r2 $r3 $r4 $r5 $r6 $r7)) 8)
+(= (bounded-chamber-rule-count ($r0 $r1 $r2 $r3 $r4 $r5 $r6 $r7 $r8)) 9)
+(= (bounded-chamber-rule-count ($r0 $r1 $r2 $r3 $r4 $r5 $r6 $r7 $r8 $r9)) 10)
+(= (bounded-chamber-rule-count ($r0 $r1 $r2 $r3 $r4 $r5 $r6 $r7 $r8 $r9 $r10)) 11)
+(= (bounded-chamber-rule-count ($r0 $r1 $r2 $r3 $r4 $r5 $r6 $r7 $r8 $r9 $r10 $r11)) 12)
+
+(= (chamber-source-rule-count (chamber $id $state $rules $events))
+   (bounded-chamber-rule-count $rules))
+
+(= (generated-selection-fire-record-generation-omitted-count $chamber $record)
+   (- (chamber-source-rule-count $chamber)
+      (generated-selection-fire-record-generated-count $record)))
+
 (= (generated-selection-fire-record-generated-count $record)
    (bounded-candidate-list-count
      (candidate-pool-candidates
