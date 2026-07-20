@@ -1014,6 +1014,37 @@
              ())))
        saturated)
 
+; End-to-end attrition combines the generator and selection boundaries. The
+; ordinary source loses one candidate only at cap selection; the twelve-rule
+; source loses four at generation and six more when bounded to two.
+!(test (generated-selection-fire-record-total-omitted-count
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       1)
+
+!(test (generated-selection-fire-record-total-omitted-count
+         (make-chamber
+           exp00-twelve-rules
+           (exp00-initial-state seed-7)
+           ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (rule r11 A B AB Cat))
+           ())
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (make-chamber
+             exp00-twelve-rules
+             (exp00-initial-state seed-7)
+             ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (exp00-rule r1) (exp00-rule r0) (rule r11 A B AB Cat))
+             ())))
+       10)
+
 ; The truncation magnitude is derived from the same complete PeTTa-native
 ; record: cap 2 drops one, cap 3 drops none, and a closed cap drops all three.
 !(test (generated-selection-fire-record-dropped-count

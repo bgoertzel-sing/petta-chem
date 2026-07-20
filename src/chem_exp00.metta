@@ -1750,6 +1750,13 @@
    (- (generated-selection-fire-record-generated-count $record)
       (generated-selection-fire-record-bounded-count $record)))
 
+; Expose complete source-to-selection attrition in one PeTTa-native scalar.
+; This includes candidates omitted at the fixed generator boundary and those
+; subsequently dropped by the effective per-tick selection cap.
+(= (generated-selection-fire-record-total-omitted-count $chamber $record)
+   (- (chamber-source-rule-count $chamber)
+      (generated-selection-fire-record-bounded-count $record)))
+
 ; State whether the effective bound preserved the complete generated pool or
 ; truncated it. Audit consumers need not count or destructure candidate lists.
 (= (generated-selection-fire-record-cap-disposition $record)
