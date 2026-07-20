@@ -1716,6 +1716,14 @@
    (- (generated-selection-fire-record-generation-cap $record)
       (generated-selection-fire-record-generated-count $record)))
 
+; Make capacity exhaustion directly queryable without requiring audit
+; consumers to compare the generated count with the fixed boundary.
+(= (generated-selection-fire-record-generation-capacity-disposition $record)
+   (if (== (generated-selection-fire-record-generation-remaining-count $record)
+           0)
+       saturated
+       open))
+
 (= (generated-selection-fire-record-generation-omitted-count $chamber $record)
    (- (chamber-source-rule-count $chamber)
       (generated-selection-fire-record-generated-count $record)))

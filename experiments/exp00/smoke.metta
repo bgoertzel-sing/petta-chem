@@ -913,6 +913,12 @@
            (exp00-initial-chamber seed-7)))
        5)
 
+!(test (generated-selection-fire-record-generation-capacity-disposition
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       open)
+
 !(test (generated-selection-fire-record-generation-omitted-count
          (exp00-initial-chamber seed-7)
          (generated-selection-fire-record-from-chamber
@@ -994,6 +1000,19 @@
               (exp00-rule r1) (exp00-rule r0) (rule r11 A B AB Cat))
              ())))
        0)
+
+!(test (generated-selection-fire-record-generation-capacity-disposition
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 8 1)
+           (make-chamber
+             exp00-twelve-rules
+             (exp00-initial-state seed-7)
+             ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (exp00-rule r1) (exp00-rule r0) (rule r11 A B AB Cat))
+             ())))
+       saturated)
 
 ; The truncation magnitude is derived from the same complete PeTTa-native
 ; record: cap 2 drops one, cap 3 drops none, and a closed cap drops all three.
