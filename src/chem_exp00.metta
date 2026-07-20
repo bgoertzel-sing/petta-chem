@@ -1704,6 +1704,11 @@
 (= (chamber-source-rule-count (chamber $id $state $rules $events))
    (bounded-chamber-rule-count $rules))
 
+; The base generator materializes at most the first eight source rules. Expose
+; that boundary directly so audit consumers do not have to infer it from a
+; truncated fixture or duplicate the kernel constant.
+(= (generated-selection-fire-record-generation-cap $record) 8)
+
 (= (generated-selection-fire-record-generation-omitted-count $chamber $record)
    (- (chamber-source-rule-count $chamber)
       (generated-selection-fire-record-generated-count $record)))
