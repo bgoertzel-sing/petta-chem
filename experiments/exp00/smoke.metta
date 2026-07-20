@@ -1075,6 +1075,64 @@
              ())))
        truncated)
 
+; Attribute source loss to neither bounded stage, selection only, generation
+; only, or both stages using the same complete provenance record.
+!(test (generated-selection-fire-record-attrition-stage
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap-3)
+           (exp00-initial-chamber seed-7)))
+       none)
+
+!(test (generated-selection-fire-record-attrition-stage
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       selection)
+
+!(test (generated-selection-fire-record-attrition-stage
+         (make-chamber
+           exp00-twelve-rules
+           (exp00-initial-state seed-7)
+           ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (rule r11 A B AB Cat))
+           ())
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 8 1)
+           (make-chamber
+             exp00-twelve-rules
+             (exp00-initial-state seed-7)
+             ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (exp00-rule r1) (exp00-rule r0) (rule r11 A B AB Cat))
+             ())))
+       generation)
+
+!(test (generated-selection-fire-record-attrition-stage
+         (make-chamber
+           exp00-twelve-rules
+           (exp00-initial-state seed-7)
+           ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (rule r11 A B AB Cat))
+           ())
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (make-chamber
+             exp00-twelve-rules
+             (exp00-initial-state seed-7)
+             ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (exp00-rule r1) (exp00-rule r0) (rule r11 A B AB Cat))
+             ())))
+       both)
+
 ; The truncation magnitude is derived from the same complete PeTTa-native
 ; record: cap 2 drops one, cap 3 drops none, and a closed cap drops all three.
 !(test (generated-selection-fire-record-dropped-count

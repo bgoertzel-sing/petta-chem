@@ -1767,6 +1767,20 @@
        preserved
        truncated))
 
+; Attribute end-to-end truncation to the fixed generator boundary, the
+; effective selection cap, both stages, or neither stage. This keeps audit
+; consumers from reconstructing the cause by comparing two omission counts.
+(= (generated-selection-fire-record-attrition-stage $chamber $record)
+   (if (== (generated-selection-fire-record-generation-omitted-count
+             $chamber $record)
+           0)
+       (if (== (generated-selection-fire-record-dropped-count $record) 0)
+           none
+           selection)
+       (if (== (generated-selection-fire-record-dropped-count $record) 0)
+           generation
+           both)))
+
 ; State whether the effective bound preserved the complete generated pool or
 ; truncated it. Audit consumers need not count or destructure candidate lists.
 (= (generated-selection-fire-record-cap-disposition $record)
