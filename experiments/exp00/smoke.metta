@@ -895,6 +895,26 @@
            (exp00-initial-chamber seed-7)))
        0)
 
+; The truncation magnitude is derived from the same complete PeTTa-native
+; record: cap 2 drops one, cap 3 drops none, and a closed cap drops all three.
+!(test (generated-selection-fire-record-dropped-count
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       1)
+
+!(test (generated-selection-fire-record-dropped-count
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap-3)
+           (exp00-initial-chamber seed-7)))
+       0)
+
+!(test (generated-selection-fire-record-dropped-count
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 0 3)
+           (exp00-initial-chamber seed-7)))
+       3)
+
 ; Report whether the effective cap preserved or truncated generation without
 ; host-side list inspection.
 !(test (generated-selection-fire-record-cap-disposition
