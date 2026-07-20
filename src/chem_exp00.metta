@@ -1757,6 +1757,16 @@
    (- (chamber-source-rule-count $chamber)
       (generated-selection-fire-record-bounded-count $record)))
 
+; Classify the complete source-to-selection boundary without requiring audit
+; consumers to inspect either intermediate stage. A source is preserved only
+; when every source rule reaches the bounded pool.
+(= (generated-selection-fire-record-total-disposition $chamber $record)
+   (if (== (generated-selection-fire-record-total-omitted-count
+             $chamber $record)
+           0)
+       preserved
+       truncated))
+
 ; State whether the effective bound preserved the complete generated pool or
 ; truncated it. Audit consumers need not count or destructure candidate lists.
 (= (generated-selection-fire-record-cap-disposition $record)
