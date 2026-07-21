@@ -1863,6 +1863,13 @@
         (and (candidate-attrition-consistent? $attrition)
              (candidate-attrition-stage-consistent? $attrition))))
 
+; Let chamber-tick audit consumers validate the live complete provenance
+; directly. The chamber is required because source width is intentionally not
+; duplicated inside the generated-selection/fire record.
+(= (generated-selection-fire-record-attrition-valid? $chamber $record)
+   (candidate-attrition-valid?
+     (generated-selection-fire-record-attrition-summary $chamber $record)))
+
 ; State whether the effective bound preserved the complete generated pool or
 ; truncated it. Audit consumers need not count or destructure candidate lists.
 (= (generated-selection-fire-record-cap-disposition $record)

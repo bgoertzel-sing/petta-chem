@@ -1375,6 +1375,22 @@
          (candidate-attrition 12 8 2 4 6 10 selection))
        false)
 
+; Complete generation/selection/fire provenance exposes its validity without
+; requiring callers to materialize and then validate the compact summary.
+!(test (generated-selection-fire-record-attrition-valid?
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       true)
+
+!(test (generated-selection-fire-record-attrition-valid?
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       true)
+
 ; Cap zero and empty source chambers now complete the same generic provenance
 ; path without selecting/firing a candidate or changing the chamber.
 !(test (candidate-selection-from-pool
