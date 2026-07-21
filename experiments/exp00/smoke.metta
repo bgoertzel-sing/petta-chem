@@ -1400,6 +1400,51 @@
            (exp00-initial-chamber seed-7)))
        true)
 
+; Equal cardinalities and valid caps are insufficient when persisted
+; provenance substitutes a different bounded pool or deterministic choice.
+!(test (generated-selection-fire-record-selection-valid?
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       true)
+
+!(test (generated-selection-fire-record-selection-valid?
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record
+           (candidate-cap 2 1)
+           (candidate-pool
+             0
+             ((candidate 0 (rule r1 B Cat BCat A) 1)
+              (candidate 0 (rule r0 A B AB Cat) 1)
+              (candidate 0 (rule r2 A Cat ACat B) 1)))
+           (selection-fire-record
+             (candidate-selection
+               2
+               ((candidate 0 (rule r0 A B AB Cat) 1)
+                (candidate 0 (rule r2 A Cat ACat B) 1))
+               (candidate 0 (rule r0 A B AB Cat) 1))
+             (exp00-chamber-after-generated-tick seed-7))))
+       false)
+
+!(test (chamber-tick-from-generated-record
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record
+           (candidate-cap 2 1)
+           (candidate-pool
+             0
+             ((candidate 0 (rule r1 B Cat BCat A) 1)
+              (candidate 0 (rule r0 A B AB Cat) 1)
+              (candidate 0 (rule r2 A Cat ACat B) 1)))
+           (selection-fire-record
+             (candidate-selection
+               2
+               ((candidate 0 (rule r0 A B AB Cat) 1)
+                (candidate 0 (rule r2 A Cat ACat B) 1))
+               (candidate 0 (rule r0 A B AB Cat) 1))
+             (exp00-chamber-after-generated-tick seed-7))))
+       (exp00-initial-chamber seed-7))
+
 !(test (generated-selection-fire-record-valid?
          (exp00-initial-chamber seed-7)
          (generated-selection-fire-record-from-chamber

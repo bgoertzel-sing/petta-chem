@@ -1908,11 +1908,27 @@
              (== (generated-selection-fire-record-cap $record)
                  (generated-selection-fire-record-effective-per-tick $record)))))
 
+; Counts and scalar caps cannot detect a forged record that substitutes a
+; different bounded pool or selected candidate while preserving cardinality.
+; Reconstruct both values from the generated pool, normalized cap, and chamber
+; so complete provenance is tied to the deterministic selector it claims.
+(= (generated-selection-fire-record-selection-valid? $chamber $record)
+   (and (== (generated-selection-fire-record-bounded-pool $record)
+            (cap-candidate-pool
+              (generated-selection-fire-record-effective-per-tick $record)
+              (generated-selection-fire-record-pool $record)))
+        (== (generated-selection-fire-record-selected $record)
+            (selected-candidate-from-bounded-list
+              $chamber
+              (generated-selection-fire-record-bounded-pool $record)))))
+
 ; One gate for consumers of the complete chamber-tick provenance: source and
-; stage attrition must be valid, and both generator/selector caps must hold.
+; stage attrition must be valid, both caps must hold, and the bounded pool and
+; deterministic choice must match the generated source.
 (= (generated-selection-fire-record-valid? $chamber $record)
    (and (generated-selection-fire-record-attrition-valid? $chamber $record)
-        (generated-selection-fire-record-bounds-valid? $record)))
+        (and (generated-selection-fire-record-bounds-valid? $record)
+             (generated-selection-fire-record-selection-valid? $chamber $record))))
 
 (= (generated-selection-fire-record-selected
       (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
