@@ -1794,6 +1794,36 @@
      (generated-selection-fire-record-total-omitted-count $chamber $record)
      (generated-selection-fire-record-attrition-stage $chamber $record)))
 
+; Keep the compact audit atom directly queryable in PeTTa. Persistence and
+; report consumers should not need host-side positional destructuring.
+(= (candidate-attrition-source-count
+      (candidate-attrition $source $generated $bounded $generation-omitted $selection-omitted $total-omitted $stage))
+   $source)
+
+(= (candidate-attrition-generated-count
+      (candidate-attrition $source $generated $bounded $generation-omitted $selection-omitted $total-omitted $stage))
+   $generated)
+
+(= (candidate-attrition-bounded-count
+      (candidate-attrition $source $generated $bounded $generation-omitted $selection-omitted $total-omitted $stage))
+   $bounded)
+
+(= (candidate-attrition-generation-omitted-count
+      (candidate-attrition $source $generated $bounded $generation-omitted $selection-omitted $total-omitted $stage))
+   $generation-omitted)
+
+(= (candidate-attrition-selection-omitted-count
+      (candidate-attrition $source $generated $bounded $generation-omitted $selection-omitted $total-omitted $stage))
+   $selection-omitted)
+
+(= (candidate-attrition-total-omitted-count
+      (candidate-attrition $source $generated $bounded $generation-omitted $selection-omitted $total-omitted $stage))
+   $total-omitted)
+
+(= (candidate-attrition-stage
+      (candidate-attrition $source $generated $bounded $generation-omitted $selection-omitted $total-omitted $stage))
+   $stage)
+
 ; State whether the effective bound preserved the complete generated pool or
 ; truncated it. Audit consumers need not count or destructure candidate lists.
 (= (generated-selection-fire-record-cap-disposition $record)

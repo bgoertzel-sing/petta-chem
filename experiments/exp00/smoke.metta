@@ -1269,6 +1269,40 @@
            (exp00-initial-chamber seed-7)))
        (candidate-attrition 3 3 3 0 0 0 none))
 
+; Every compact attrition field remains directly queryable inside PeTTa, so
+; report and persistence layers do not have to decode positional fields.
+!(test (candidate-attrition-source-count
+         (generated-selection-fire-record-attrition-summary
+           (exp00-initial-chamber seed-7)
+           (generated-selection-fire-record-from-chamber
+             (exp00-candidate-cap)
+             (exp00-initial-chamber seed-7))))
+       3)
+
+!(test (candidate-attrition-generated-count
+         (candidate-attrition 12 8 2 4 6 10 both))
+       8)
+
+!(test (candidate-attrition-bounded-count
+         (candidate-attrition 12 8 2 4 6 10 both))
+       2)
+
+!(test (candidate-attrition-generation-omitted-count
+         (candidate-attrition 12 8 2 4 6 10 both))
+       4)
+
+!(test (candidate-attrition-selection-omitted-count
+         (candidate-attrition 12 8 2 4 6 10 both))
+       6)
+
+!(test (candidate-attrition-total-omitted-count
+         (candidate-attrition 12 8 2 4 6 10 both))
+       10)
+
+!(test (candidate-attrition-stage
+         (candidate-attrition 12 8 2 4 6 10 both))
+       both)
+
 ; Cap zero and empty source chambers now complete the same generic provenance
 ; path without selecting/firing a candidate or changing the chamber.
 !(test (candidate-selection-from-pool
