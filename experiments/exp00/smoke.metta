@@ -1343,6 +1343,24 @@
          (candidate-attrition 12 8 2 4 6 10 selection))
        false)
 
+; The combined persistence gate accepts live provenance and rejects either
+; independently malformed arithmetic or a misleading stage label.
+!(test (candidate-attrition-valid?
+         (generated-selection-fire-record-attrition-summary
+           (exp00-initial-chamber seed-7)
+           (generated-selection-fire-record-from-chamber
+             (exp00-candidate-cap)
+             (exp00-initial-chamber seed-7))))
+       true)
+
+!(test (candidate-attrition-valid?
+         (candidate-attrition 12 8 2 3 6 10 both))
+       false)
+
+!(test (candidate-attrition-valid?
+         (candidate-attrition 12 8 2 4 6 10 selection))
+       false)
+
 ; Cap zero and empty source chambers now complete the same generic provenance
 ; path without selecting/firing a candidate or changing the chamber.
 !(test (candidate-selection-from-pool

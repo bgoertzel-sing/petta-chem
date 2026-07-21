@@ -1844,6 +1844,13 @@
            (if (== $selection-omitted 0) none selection)
            (if (== $selection-omitted 0) generation both))))
 
+; Give persistence/report consumers one complete validity gate. A compact
+; record is valid only when both its conservation arithmetic and its stage
+; attribution agree; neither check needs to be duplicated in host glue.
+(= (candidate-attrition-valid? $attrition)
+   (and (candidate-attrition-consistent? $attrition)
+        (candidate-attrition-stage-consistent? $attrition)))
+
 ; State whether the effective bound preserved the complete generated pool or
 ; truncated it. Audit consumers need not count or destructure candidate lists.
 (= (generated-selection-fire-record-cap-disposition $record)
