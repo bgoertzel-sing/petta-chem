@@ -1439,6 +1439,37 @@
              (exp00-initial-chamber seed-7))))
        false)
 
+; The chamber-tick projection itself now consumes the validity gate. A
+; malformed over-cap record cannot mutate the chamber, while ordinary live
+; generation continues through the same deterministic firing path.
+!(test (chamber-tick-from-generated-record
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record
+           (make-candidate-cap 2 1)
+           (exp00-generated-candidate-pool seed-7)
+           (selection-fire-record
+             (candidate-selection
+               3
+               ((candidate 0 (rule r0 A B AB Cat) 1)
+                (candidate 0 (rule r1 B Cat BCat A) 1)
+                (candidate 0 (rule r2 A Cat ACat B) 1))
+               (candidate 0 (rule r0 A B AB Cat) 1))
+             (exp00-after-generated-chamber seed-7))))
+       (exp00-initial-chamber seed-7))
+
+!(test (chamber-tick-from-generated-record
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       (chamber exp00
+         (state 1 seed-7
+           (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
+         ((rule r1 B Cat BCat A)
+          (rule r0 A B AB Cat)
+          (rule r2 A Cat ACat B))
+         ((event 0 r0 A B AB Cat))))
+
 ; Cap zero and empty source chambers now complete the same generic provenance
 ; path without selecting/firing a candidate or changing the chamber.
 !(test (candidate-selection-from-pool

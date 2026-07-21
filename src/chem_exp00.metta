@@ -1933,9 +1933,19 @@
        $generated-pool
        (selection-fire-record-from-pool $cap $chamber $generated-pool))))
 
+; Chamber ticking consumes only a complete valid provenance record. This
+; keeps generation, bounded deterministic selection, and firing on the same
+; checked path and fails closed if a persisted or externally supplied record
+; violates either candidate boundary.
+(= (chamber-tick-from-generated-record $chamber $record)
+   (if (generated-selection-fire-record-valid? $chamber $record)
+       (generated-selection-fire-record-after-chamber $record)
+       $chamber))
+
 (= (chamber-tick-generated $cap $chamber)
-   (generated-selection-fire-record-after-chamber
-     (generated-selection-fire-record-from-chamber $cap $chamber)))
+   (let $record
+        (generated-selection-fire-record-from-chamber $cap $chamber)
+     (chamber-tick-from-generated-record $chamber $record)))
 
 ; ----- exp00 fixture -----
 
