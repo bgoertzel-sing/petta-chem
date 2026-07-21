@@ -1253,6 +1253,22 @@
            (exp00-initial-chamber seed-7)))
        (candidate 0 (rule r0 A B AB Cat) 1))
 
+; One compact audit atom carries source, generated, bounded, generation-loss,
+; selection-loss, total-loss, and causal-stage fields for the ordinary path.
+!(test (generated-selection-fire-record-attrition-summary
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       (candidate-attrition 3 3 2 0 1 1 selection))
+
+!(test (generated-selection-fire-record-attrition-summary
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap-3)
+           (exp00-initial-chamber seed-7)))
+       (candidate-attrition 3 3 3 0 0 0 none))
+
 ; Cap zero and empty source chambers now complete the same generic provenance
 ; path without selecting/firing a candidate or changing the chamber.
 !(test (candidate-selection-from-pool

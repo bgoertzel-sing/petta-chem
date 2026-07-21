@@ -1781,6 +1781,19 @@
            generation
            both)))
 
+; Package the complete bounded-candidate accounting into one PeTTa-native
+; audit atom. Consumers can persist or compare this record without separately
+; querying counts and reconstructing the stage attribution in host code.
+(= (generated-selection-fire-record-attrition-summary $chamber $record)
+   (candidate-attrition
+     (chamber-source-rule-count $chamber)
+     (generated-selection-fire-record-generated-count $record)
+     (generated-selection-fire-record-bounded-count $record)
+     (generated-selection-fire-record-generation-omitted-count $chamber $record)
+     (generated-selection-fire-record-dropped-count $record)
+     (generated-selection-fire-record-total-omitted-count $chamber $record)
+     (generated-selection-fire-record-attrition-stage $chamber $record)))
+
 ; State whether the effective bound preserved the complete generated pool or
 ; truncated it. Audit consumers need not count or destructure candidate lists.
 (= (generated-selection-fire-record-cap-disposition $record)
