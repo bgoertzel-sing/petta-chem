@@ -1922,13 +1922,25 @@
               $chamber
               (generated-selection-fire-record-bounded-pool $record)))))
 
+; A correct bounded pool and deterministic choice are still insufficient if
+; persisted provenance substitutes an unrelated output chamber. Recompute the
+; firing projection from the input chamber, generated pool envelope, and
+; selected candidate so the recorded transition is tied to the same path.
+(= (generated-selection-fire-record-firing-valid? $chamber $record)
+   (== (generated-selection-fire-record-after-chamber $record)
+       (chamber-tick-with-pool-selection
+         $chamber
+         (generated-selection-fire-record-pool $record)
+         (generated-selection-fire-record-selected $record))))
+
 ; One gate for consumers of the complete chamber-tick provenance: source and
 ; stage attrition must be valid, both caps must hold, and the bounded pool and
-; deterministic choice must match the generated source.
+; deterministic choice and fired chamber must match the generated source.
 (= (generated-selection-fire-record-valid? $chamber $record)
    (and (generated-selection-fire-record-attrition-valid? $chamber $record)
         (and (generated-selection-fire-record-bounds-valid? $record)
-             (generated-selection-fire-record-selection-valid? $chamber $record))))
+             (and (generated-selection-fire-record-selection-valid? $chamber $record)
+                  (generated-selection-fire-record-firing-valid? $chamber $record)))))
 
 (= (generated-selection-fire-record-selected
       (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
