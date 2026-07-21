@@ -1908,6 +1908,13 @@
              (== (generated-selection-fire-record-cap $record)
                  (generated-selection-fire-record-effective-per-tick $record)))))
 
+; Counts and cap boundaries cannot detect a forged generated pool with the
+; right cardinality. Reconstruct generation from the input chamber so the
+; complete record is tied to the chamber's exact stable source-rule prefix.
+(= (generated-selection-fire-record-generation-valid? $chamber $record)
+   (== (generated-selection-fire-record-pool $record)
+       (generate-candidate-pool $chamber)))
+
 ; Counts and scalar caps cannot detect a forged record that substitutes a
 ; different bounded pool or selected candidate while preserving cardinality.
 ; Reconstruct both values from the generated pool, normalized cap, and chamber
@@ -1939,8 +1946,9 @@
 (= (generated-selection-fire-record-valid? $chamber $record)
    (and (generated-selection-fire-record-attrition-valid? $chamber $record)
         (and (generated-selection-fire-record-bounds-valid? $record)
-             (and (generated-selection-fire-record-selection-valid? $chamber $record)
-                  (generated-selection-fire-record-firing-valid? $chamber $record)))))
+             (and (generated-selection-fire-record-generation-valid? $chamber $record)
+                  (and (generated-selection-fire-record-selection-valid? $chamber $record)
+                       (generated-selection-fire-record-firing-valid? $chamber $record))))))
 
 (= (generated-selection-fire-record-selected
       (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
