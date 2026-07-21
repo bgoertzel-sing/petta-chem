@@ -1321,6 +1321,28 @@
          (candidate-attrition 12 8 2 3 6 10 both))
        false)
 
+; Correct arithmetic is not sufficient if the attributed stage is stale or
+; misleading. Validate all four supported labels and reject a mismatched one.
+!(test (candidate-attrition-stage-consistent?
+         (candidate-attrition 3 3 3 0 0 0 none))
+       true)
+
+!(test (candidate-attrition-stage-consistent?
+         (candidate-attrition 3 3 2 0 1 1 selection))
+       true)
+
+!(test (candidate-attrition-stage-consistent?
+         (candidate-attrition 12 8 8 4 0 4 generation))
+       true)
+
+!(test (candidate-attrition-stage-consistent?
+         (candidate-attrition 12 8 2 4 6 10 both))
+       true)
+
+!(test (candidate-attrition-stage-consistent?
+         (candidate-attrition 12 8 2 4 6 10 selection))
+       false)
+
 ; Cap zero and empty source chambers now complete the same generic provenance
 ; path without selecting/firing a candidate or changing the chamber.
 !(test (candidate-selection-from-pool

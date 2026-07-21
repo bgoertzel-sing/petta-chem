@@ -1834,6 +1834,16 @@
         (and (== $generated (+ $bounded $selection-omitted))
              (== $source (+ $bounded $total-omitted)))))
 
+; Validate that the attributed loss stage agrees with the two stage-specific
+; omission counts. This is separate from arithmetic conservation so a
+; persisted record cannot carry correct counts with a misleading label.
+(= (candidate-attrition-stage-consistent?
+      (candidate-attrition $source $generated $bounded $generation-omitted $selection-omitted $total-omitted $stage))
+   (== $stage
+       (if (== $generation-omitted 0)
+           (if (== $selection-omitted 0) none selection)
+           (if (== $selection-omitted 0) generation both))))
+
 ; State whether the effective bound preserved the complete generated pool or
 ; truncated it. Audit consumers need not count or destructure candidate lists.
 (= (generated-selection-fire-record-cap-disposition $record)
