@@ -1343,8 +1343,18 @@
          (candidate-attrition 12 8 2 4 6 10 selection))
        false)
 
-; The combined persistence gate accepts live provenance and rejects either
-; independently malformed arithmetic or a misleading stage label.
+; Count-domain validity is independent of conservation: this impossible
+; record balances arithmetically and has the matching stage label.
+!(test (candidate-attrition-counts-nonnegative?
+         (candidate-attrition 3 3 -1 0 4 4 selection))
+       false)
+
+!(test (candidate-attrition-counts-nonnegative?
+         (candidate-attrition 12 8 2 4 6 10 both))
+       true)
+
+; The combined persistence gate accepts live provenance and rejects
+; impossible counts, malformed arithmetic, or a misleading stage label.
 !(test (candidate-attrition-valid?
          (generated-selection-fire-record-attrition-summary
            (exp00-initial-chamber seed-7)
@@ -1355,6 +1365,10 @@
 
 !(test (candidate-attrition-valid?
          (candidate-attrition 12 8 2 3 6 10 both))
+       false)
+
+!(test (candidate-attrition-valid?
+         (candidate-attrition 3 3 -1 0 4 4 selection))
        false)
 
 !(test (candidate-attrition-valid?

@@ -1844,12 +1844,24 @@
            (if (== $selection-omitted 0) none selection)
            (if (== $selection-omitted 0) generation both))))
 
+; Conservation identities alone can also hold for impossible negative
+; cardinalities. Keep the compact provenance domain check inside PeTTa.
+(= (candidate-attrition-counts-nonnegative?
+      (candidate-attrition $source $generated $bounded $generation-omitted $selection-omitted $total-omitted $stage))
+   (and (>= $source 0)
+        (and (>= $generated 0)
+             (and (>= $bounded 0)
+                  (and (>= $generation-omitted 0)
+                       (and (>= $selection-omitted 0)
+                            (>= $total-omitted 0)))))))
+
 ; Give persistence/report consumers one complete validity gate. A compact
-; record is valid only when both its conservation arithmetic and its stage
-; attribution agree; neither check needs to be duplicated in host glue.
+; record is valid only when its counts are possible, conservation arithmetic
+; holds, and stage attribution agrees; no check is duplicated in host glue.
 (= (candidate-attrition-valid? $attrition)
-   (and (candidate-attrition-consistent? $attrition)
-        (candidate-attrition-stage-consistent? $attrition)))
+   (and (candidate-attrition-counts-nonnegative? $attrition)
+        (and (candidate-attrition-consistent? $attrition)
+             (candidate-attrition-stage-consistent? $attrition))))
 
 ; State whether the effective bound preserved the complete generated pool or
 ; truncated it. Audit consumers need not count or destructure candidate lists.
