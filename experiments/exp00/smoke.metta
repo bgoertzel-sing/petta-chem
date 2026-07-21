@@ -1391,6 +1391,54 @@
            (exp00-initial-chamber seed-7)))
        true)
 
+; The complete live record also validates its fixed generator boundary,
+; normalized selection cap, and embedded scalar cap in one PeTTa-native gate.
+!(test (generated-selection-fire-record-valid?
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record-from-chamber
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       true)
+
+!(test (generated-selection-fire-record-valid?
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       true)
+
+; Conservation alone accepts this synthetic record (3 -> 3 -> 3), but its
+; three-candidate bounded pool violates the requested effective cap of two.
+!(test (generated-selection-fire-record-attrition-valid?
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record
+           (make-candidate-cap 2 1)
+           (exp00-generated-candidate-pool seed-7)
+           (selection-fire-record
+             (candidate-selection
+               3
+               ((candidate 0 (rule r0 A B AB Cat) 1)
+                (candidate 0 (rule r1 B Cat BCat A) 1)
+                (candidate 0 (rule r2 A Cat ACat B) 1))
+               (candidate 0 (rule r0 A B AB Cat) 1))
+             (exp00-initial-chamber seed-7))))
+       true)
+
+!(test (generated-selection-fire-record-valid?
+         (exp00-initial-chamber seed-7)
+         (generated-selection-fire-record
+           (make-candidate-cap 2 1)
+           (exp00-generated-candidate-pool seed-7)
+           (selection-fire-record
+             (candidate-selection
+               3
+               ((candidate 0 (rule r0 A B AB Cat) 1)
+                (candidate 0 (rule r1 B Cat BCat A) 1)
+                (candidate 0 (rule r2 A Cat ACat B) 1))
+               (candidate 0 (rule r0 A B AB Cat) 1))
+             (exp00-initial-chamber seed-7))))
+       false)
+
 ; Cap zero and empty source chambers now complete the same generic provenance
 ; path without selecting/firing a candidate or changing the chamber.
 !(test (candidate-selection-from-pool

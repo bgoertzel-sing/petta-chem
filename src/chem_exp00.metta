@@ -1896,6 +1896,24 @@
    (candidate-cap-per-rule
      (generated-selection-fire-record-effective-cap $record)))
 
+; Validate the two explicit candidate boundaries carried by complete live
+; provenance. Attrition conservation alone cannot detect a persisted record
+; whose bounded pool exceeds the requested/effective per-tick cap, or whose
+; embedded scalar cap disagrees with that normalized request.
+(= (generated-selection-fire-record-bounds-valid? $record)
+   (and (<= (generated-selection-fire-record-generated-count $record)
+            (generated-selection-fire-record-generation-cap $record))
+        (and (<= (generated-selection-fire-record-bounded-count $record)
+                 (generated-selection-fire-record-effective-per-tick $record))
+             (== (generated-selection-fire-record-cap $record)
+                 (generated-selection-fire-record-effective-per-tick $record)))))
+
+; One gate for consumers of the complete chamber-tick provenance: source and
+; stage attrition must be valid, and both generator/selector caps must hold.
+(= (generated-selection-fire-record-valid? $chamber $record)
+   (and (generated-selection-fire-record-attrition-valid? $chamber $record)
+        (generated-selection-fire-record-bounds-valid? $record)))
+
 (= (generated-selection-fire-record-selected
       (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
    (candidate-selection-selected
