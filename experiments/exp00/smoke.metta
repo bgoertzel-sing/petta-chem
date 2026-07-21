@@ -1303,6 +1303,24 @@
          (candidate-attrition 12 8 2 4 6 10 both))
        both)
 
+; Compact attrition provenance validates all three source -> generation ->
+; bounded-pool conservation identities directly in PeTTa.
+!(test (candidate-attrition-consistent?
+         (generated-selection-fire-record-attrition-summary
+           (exp00-initial-chamber seed-7)
+           (generated-selection-fire-record-from-chamber
+             (exp00-candidate-cap)
+             (exp00-initial-chamber seed-7))))
+       true)
+
+!(test (candidate-attrition-consistent?
+         (candidate-attrition 12 8 2 4 6 10 both))
+       true)
+
+!(test (candidate-attrition-consistent?
+         (candidate-attrition 12 8 2 3 6 10 both))
+       false)
+
 ; Cap zero and empty source chambers now complete the same generic provenance
 ; path without selecting/firing a candidate or changing the chamber.
 !(test (candidate-selection-from-pool

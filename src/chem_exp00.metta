@@ -1824,6 +1824,16 @@
       (candidate-attrition $source $generated $bounded $generation-omitted $selection-omitted $total-omitted $stage))
    $stage)
 
+; Validate the three conservation identities carried by the compact audit
+; atom. Persisted provenance can therefore reject internally inconsistent
+; generation/selection accounting without reconstructing the checks in a
+; host harness.
+(= (candidate-attrition-consistent?
+      (candidate-attrition $source $generated $bounded $generation-omitted $selection-omitted $total-omitted $stage))
+   (and (== $source (+ $generated $generation-omitted))
+        (and (== $generated (+ $bounded $selection-omitted))
+             (== $source (+ $bounded $total-omitted)))))
+
 ; State whether the effective bound preserved the complete generated pool or
 ; truncated it. Audit consumers need not count or destructure candidate lists.
 (= (generated-selection-fire-record-cap-disposition $record)
