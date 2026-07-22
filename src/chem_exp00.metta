@@ -1989,15 +1989,30 @@
 ; keeps generation, bounded deterministic selection, and firing on the same
 ; checked path and fails closed if a persisted or externally supplied record
 ; violates either candidate boundary.
-(= (chamber-tick-from-generated-record $chamber $record)
-   (if (== (generated-selection-fire-record-validity $chamber $record) valid)
-       (generated-selection-fire-record-after-chamber $record)
-       $chamber))
+(= (chamber-tick-result-from-generated-record $chamber $record)
+   (let $validity (generated-selection-fire-record-validity $chamber $record)
+     (chamber-tick-result
+       $validity
+       (if (== $validity valid)
+           (generated-selection-fire-record-after-chamber $record)
+           $chamber))))
 
-(= (chamber-tick-generated $cap $chamber)
+(= (chamber-tick-result-chamber
+      (chamber-tick-result $validity $after-chamber))
+   $after-chamber)
+
+(= (chamber-tick-from-generated-record $chamber $record)
+   (chamber-tick-result-chamber
+     (chamber-tick-result-from-generated-record $chamber $record)))
+
+(= (chamber-tick-generated-result $cap $chamber)
    (let $record
         (generated-selection-fire-record-from-chamber $cap $chamber)
-     (chamber-tick-from-generated-record $chamber $record)))
+     (chamber-tick-result-from-generated-record $chamber $record)))
+
+(= (chamber-tick-generated $cap $chamber)
+   (chamber-tick-result-chamber
+     (chamber-tick-generated-result $cap $chamber)))
 
 ; ----- exp00 fixture -----
 
