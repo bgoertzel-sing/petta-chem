@@ -2008,6 +2008,12 @@
 (= (chamber-tick-result-valid? $result)
    (== (chamber-tick-result-validity $result) valid))
 
+; Distinguish productive checked ticks from valid or invalid no-ops without
+; requiring audit/report glue to destructure and compare result chambers.
+(= (chamber-tick-result-changed? $before-chamber $result)
+   (not (== $before-chamber
+            (chamber-tick-result-chamber $result))))
+
 (= (chamber-tick-from-generated-record $chamber $record)
    (chamber-tick-result-chamber
      (chamber-tick-result-from-generated-record $chamber $record)))
