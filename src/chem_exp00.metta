@@ -2057,6 +2057,29 @@
       (chamber-tick-step $outcome $after-chamber))
    $after-chamber)
 
+; Exercise the loop-facing step as an actual state handoff: the second live
+; tick receives exactly the projected chamber returned by the first. This
+; fixed two-tick seam keeps the initial loop contract bounded and inspectable
+; while retaining both outcomes beside the final chamber.
+(= (chamber-tick-generated-steps-2 $cap $chamber)
+   (let $step-0 (chamber-tick-generated-step $cap $chamber)
+     (let $step-1
+          (chamber-tick-generated-step
+            $cap
+            (chamber-tick-step-chamber $step-0))
+       (chamber-tick-steps
+         ((chamber-tick-step-outcome $step-0)
+          (chamber-tick-step-outcome $step-1))
+         (chamber-tick-step-chamber $step-1)))))
+
+(= (chamber-tick-steps-outcomes
+      (chamber-tick-steps $outcomes $after-chamber))
+   $outcomes)
+
+(= (chamber-tick-steps-chamber
+      (chamber-tick-steps $outcomes $after-chamber))
+   $after-chamber)
+
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber
      (chamber-tick-generated-result $cap $chamber)))

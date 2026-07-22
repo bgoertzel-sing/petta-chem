@@ -1748,6 +1748,20 @@
            (exp00-initial-chamber seed-7)))
        (exp00-chamber-after-generated-tick seed-7))
 
+; The loop seam hands the first projected chamber directly into a second live
+; generated tick. A closed cap makes both transitions explicit valid no-ops.
+!(test (chamber-tick-steps-outcomes
+         (chamber-tick-generated-steps-2
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       (no-op no-op))
+
+!(test (chamber-tick-steps-chamber
+         (chamber-tick-generated-steps-2
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       (exp00-initial-chamber seed-7))
+
 ; A checked closed-cap tick is valid but does not change its chamber.
 !(test (chamber-tick-result-valid?
          (chamber-tick-generated-result
