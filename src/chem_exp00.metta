@@ -2005,6 +2005,9 @@
       (chamber-tick-result $validity $after-chamber))
    $validity)
 
+(= (chamber-tick-result-valid? $result)
+   (== (chamber-tick-result-validity $result) valid))
+
 (= (chamber-tick-from-generated-record $chamber $record)
    (chamber-tick-result-chamber
      (chamber-tick-result-from-generated-record $chamber $record)))
