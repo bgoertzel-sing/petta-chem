@@ -1698,6 +1698,12 @@
          valid
          (exp00-chamber-after-generated-tick seed-7)))
 
+!(test (chamber-tick-result-validity
+         (chamber-tick-generated-result
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       valid)
+
 !(test (chamber-tick-result-from-generated-record
          (exp00-initial-chamber seed-7)
          (generated-selection-fire-record
@@ -1714,6 +1720,22 @@
        (chamber-tick-result
          invalid-bounds
          (exp00-initial-chamber seed-7)))
+
+!(test (chamber-tick-result-validity
+         (chamber-tick-result-from-generated-record
+           (exp00-initial-chamber seed-7)
+           (generated-selection-fire-record
+             (make-candidate-cap 2 1)
+             (exp00-generated-candidate-pool seed-7)
+             (selection-fire-record
+               (candidate-selection
+                 3
+                 ((candidate 0 (rule r0 A B AB Cat) 1)
+                  (candidate 0 (rule r1 B Cat BCat A) 1)
+                  (candidate 0 (rule r2 A Cat ACat B) 1))
+                 (candidate 0 (rule r0 A B AB Cat) 1))
+               (exp00-after-generated-chamber seed-7)))))
+       invalid-bounds)
 
 ; Cap zero and empty source chambers now complete the same generic provenance
 ; path without selecting/firing a candidate or changing the chamber.

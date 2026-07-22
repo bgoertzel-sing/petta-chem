@@ -2001,6 +2001,10 @@
       (chamber-tick-result $validity $after-chamber))
    $after-chamber)
 
+(= (chamber-tick-result-validity
+      (chamber-tick-result $validity $after-chamber))
+   $validity)
+
 (= (chamber-tick-from-generated-record $chamber $record)
    (chamber-tick-result-chamber
      (chamber-tick-result-from-generated-record $chamber $record)))
