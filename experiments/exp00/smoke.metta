@@ -1724,6 +1724,11 @@
            (exp00-initial-chamber seed-7)))
        productive)
 
+!(test (chamber-tick-generated-outcome
+         (exp00-candidate-cap)
+         (exp00-initial-chamber seed-7))
+       productive)
+
 ; A checked closed-cap tick is valid but does not change its chamber.
 !(test (chamber-tick-result-valid?
          (chamber-tick-generated-result
@@ -1743,6 +1748,11 @@
          (chamber-tick-generated-result
            (make-candidate-cap 0 1)
            (exp00-initial-chamber seed-7)))
+       no-op)
+
+!(test (chamber-tick-generated-outcome
+         (make-candidate-cap 0 1)
+         (exp00-initial-chamber seed-7))
        no-op)
 
 !(test (chamber-tick-result-from-generated-record

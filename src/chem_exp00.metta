@@ -2033,6 +2033,13 @@
         (generated-selection-fire-record-from-chamber $cap $chamber)
      (chamber-tick-result-from-generated-record $chamber $record)))
 
+; Let tick-loop consumers classify a live generated tick without manually
+; composing the checked-result constructor and outcome accessor.
+(= (chamber-tick-generated-outcome $cap $chamber)
+   (chamber-tick-result-outcome
+     $chamber
+     (chamber-tick-generated-result $cap $chamber)))
+
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber
      (chamber-tick-generated-result $cap $chamber)))
