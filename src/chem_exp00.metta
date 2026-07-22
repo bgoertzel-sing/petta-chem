@@ -2014,6 +2014,16 @@
    (not (== $before-chamber
             (chamber-tick-result-chamber $result))))
 
+; Collapse the two checked-result queries into one loop-facing outcome. Keep
+; the exact invalid boundary when validation fails, while distinguishing a
+; valid productive transition from a valid bounded no-op.
+(= (chamber-tick-result-outcome $before-chamber $result)
+   (if (chamber-tick-result-valid? $result)
+       (if (chamber-tick-result-changed? $before-chamber $result)
+           productive
+           no-op)
+       (chamber-tick-result-validity $result)))
+
 (= (chamber-tick-from-generated-record $chamber $record)
    (chamber-tick-result-chamber
      (chamber-tick-result-from-generated-record $chamber $record)))
