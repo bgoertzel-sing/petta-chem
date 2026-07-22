@@ -2040,6 +2040,23 @@
      $chamber
      (chamber-tick-generated-result $cap $chamber)))
 
+; Return the loop-facing outcome and projected chamber from one evaluated
+; checked result, avoiding duplicate live generation/selection work when a
+; caller needs both values to advance and audit a tick.
+(= (chamber-tick-generated-step $cap $chamber)
+   (let $result (chamber-tick-generated-result $cap $chamber)
+     (chamber-tick-step
+       (chamber-tick-result-outcome $chamber $result)
+       (chamber-tick-result-chamber $result))))
+
+(= (chamber-tick-step-outcome
+      (chamber-tick-step $outcome $after-chamber))
+   $outcome)
+
+(= (chamber-tick-step-chamber
+      (chamber-tick-step $outcome $after-chamber))
+   $after-chamber)
+
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber
      (chamber-tick-generated-result $cap $chamber)))
