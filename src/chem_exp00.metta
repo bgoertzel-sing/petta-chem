@@ -1950,6 +1950,22 @@
                   (and (generated-selection-fire-record-selection-valid? $chamber $record)
                        (generated-selection-fire-record-firing-valid? $chamber $record))))))
 
+; Attribute complete-record rejection to the first failed boundary. This keeps
+; persisted audit/report consumers in PeTTa while retaining one deterministic
+; precedence: accounting, caps, generation, selection, then firing.
+(= (generated-selection-fire-record-validity $chamber $record)
+   (if (generated-selection-fire-record-attrition-valid? $chamber $record)
+       (if (generated-selection-fire-record-bounds-valid? $record)
+           (if (generated-selection-fire-record-generation-valid? $chamber $record)
+               (if (generated-selection-fire-record-selection-valid? $chamber $record)
+                   (if (generated-selection-fire-record-firing-valid? $chamber $record)
+                       valid
+                       invalid-firing)
+                   invalid-selection)
+               invalid-generation)
+           invalid-bounds)
+       invalid-attrition))
+
 (= (generated-selection-fire-record-selected
       (generated-selection-fire-record $requested-cap $generated-pool $selection-fire-record))
    (candidate-selection-selected
@@ -1974,7 +1990,7 @@
 ; checked path and fails closed if a persisted or externally supplied record
 ; violates either candidate boundary.
 (= (chamber-tick-from-generated-record $chamber $record)
-   (if (generated-selection-fire-record-valid? $chamber $record)
+   (if (== (generated-selection-fire-record-validity $chamber $record) valid)
        (generated-selection-fire-record-after-chamber $record)
        $chamber))
 
