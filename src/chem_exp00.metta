@@ -2107,6 +2107,22 @@
           (chamber-tick-step-outcome $step-3))
          (chamber-tick-step-chamber $step-3)))))
 
+; Extend the bounded checked handoff to five live ticks. The fifth tick
+; consumes the exact four-step projected chamber and retains every outcome.
+(= (chamber-tick-generated-steps-5 $cap $chamber)
+   (let $steps-4 (chamber-tick-generated-steps-4 $cap $chamber)
+     (let $step-4
+          (chamber-tick-generated-step
+            $cap
+            (chamber-tick-steps-chamber $steps-4))
+       (chamber-tick-steps
+         ((chamber-tick-steps-outcome-0 $steps-4)
+          (chamber-tick-steps-outcome-1 $steps-4)
+          (chamber-tick-steps-outcome-2 $steps-4)
+          (chamber-tick-steps-outcome-3 $steps-4)
+          (chamber-tick-step-outcome $step-4))
+         (chamber-tick-step-chamber $step-4)))))
+
 (= (chamber-tick-steps-outcomes
       (chamber-tick-steps $outcomes $after-chamber))
    $outcomes)
@@ -2141,6 +2157,30 @@
         $after-chamber))
    $outcome-2)
 
+(= (chamber-tick-steps-outcome-0
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3)
+        $after-chamber))
+   $outcome-0)
+
+(= (chamber-tick-steps-outcome-1
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3)
+        $after-chamber))
+   $outcome-1)
+
+(= (chamber-tick-steps-outcome-2
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3)
+        $after-chamber))
+   $outcome-2)
+
+(= (chamber-tick-steps-outcome-3
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3)
+        $after-chamber))
+   $outcome-3)
+
 ; Make the bounded loop width directly auditable without requiring host-side
 ; list destructuring.
 (= (chamber-tick-steps-count
@@ -2158,6 +2198,12 @@
         ($outcome-0 $outcome-1 $outcome-2 $outcome-3)
         $after-chamber))
    4)
+
+(= (chamber-tick-steps-count
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3 $outcome-4)
+        $after-chamber))
+   5)
 
 ; Summarize the bounded loop's chemistry outcomes inside PeTTa so harnesses
 ; need not parse the outcome list to distinguish progress from valid no-ops.
@@ -2206,6 +2252,22 @@
         $after-chamber))
    (+ (no-op-outcome-count-2 $outcome-0 $outcome-1)
       (no-op-outcome-count-2 $outcome-2 $outcome-3)))
+
+(= (chamber-tick-steps-productive-count
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3 $outcome-4)
+        $after-chamber))
+   (+ (+ (productive-outcome-count-2 $outcome-0 $outcome-1)
+         (productive-outcome-count-2 $outcome-2 $outcome-3))
+      (if (== $outcome-4 productive) 1 0)))
+
+(= (chamber-tick-steps-no-op-count
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3 $outcome-4)
+        $after-chamber))
+   (+ (+ (no-op-outcome-count-2 $outcome-0 $outcome-1)
+         (no-op-outcome-count-2 $outcome-2 $outcome-3))
+      (if (== $outcome-4 no-op) 1 0)))
 
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber
