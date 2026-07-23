@@ -2076,6 +2076,21 @@
           (chamber-tick-step-outcome $step-1))
          (chamber-tick-step-chamber $step-1)))))
 
+; Extend the same live checked handoff by one bounded step. Keeping an exact
+; three-step constructor avoids introducing an unbounded recursive loop while
+; proving regenerated selection can repeatedly consume projected chambers.
+(= (chamber-tick-generated-steps-3 $cap $chamber)
+   (let $steps-2 (chamber-tick-generated-steps-2 $cap $chamber)
+     (let $step-2
+          (chamber-tick-generated-step
+            $cap
+            (chamber-tick-steps-chamber $steps-2))
+       (chamber-tick-steps
+         ((chamber-tick-steps-outcome-0 $steps-2)
+          (chamber-tick-steps-outcome-1 $steps-2)
+          (chamber-tick-step-outcome $step-2))
+         (chamber-tick-step-chamber $step-2)))))
+
 (= (chamber-tick-steps-outcomes
       (chamber-tick-steps $outcomes $after-chamber))
    $outcomes)
@@ -2084,11 +2099,25 @@
       (chamber-tick-steps $outcomes $after-chamber))
    $after-chamber)
 
+(= (chamber-tick-steps-outcome-0
+      (chamber-tick-steps ($outcome-0 $outcome-1) $after-chamber))
+   $outcome-0)
+
+(= (chamber-tick-steps-outcome-1
+      (chamber-tick-steps ($outcome-0 $outcome-1) $after-chamber))
+   $outcome-1)
+
 ; Make the bounded loop width directly auditable without requiring host-side
-; list destructuring. The initial loop seam has one exact two-step shape.
+; list destructuring.
 (= (chamber-tick-steps-count
       (chamber-tick-steps ($outcome-0 $outcome-1) $after-chamber))
    2)
+
+(= (chamber-tick-steps-count
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2)
+        $after-chamber))
+   3)
 
 ; Summarize the bounded loop's chemistry outcomes inside PeTTa so harnesses
 ; need not parse the outcome list to distinguish progress from valid no-ops.
@@ -2109,6 +2138,20 @@
 (= (chamber-tick-steps-no-op-count
       (chamber-tick-steps ($outcome-0 $outcome-1) $after-chamber))
    (no-op-outcome-count-2 $outcome-0 $outcome-1))
+
+(= (chamber-tick-steps-productive-count
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2)
+        $after-chamber))
+   (+ (productive-outcome-count-2 $outcome-0 $outcome-1)
+      (if (== $outcome-2 productive) 1 0)))
+
+(= (chamber-tick-steps-no-op-count
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2)
+        $after-chamber))
+   (+ (no-op-outcome-count-2 $outcome-0 $outcome-1)
+      (if (== $outcome-2 no-op) 1 0)))
 
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber
