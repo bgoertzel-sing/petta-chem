@@ -2072,6 +2072,27 @@
            (exp00-initial-chamber seed-7)))
        7)
 
+; Every supported live outcome is accounted for as productive or no-op. The
+; invariant rejects an otherwise well-shaped bounded history containing an
+; unknown outcome token.
+!(test (chamber-tick-steps-outcome-accounting-valid?
+         (chamber-tick-generated-steps-8
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       True)
+
+!(test (chamber-tick-steps-outcome-accounting-valid?
+         (chamber-tick-generated-steps-8
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       True)
+
+!(test (chamber-tick-steps-outcome-accounting-valid?
+         (chamber-tick-steps
+           (productive no-op unknown)
+           (exp00-initial-chamber seed-7)))
+       False)
+
 ; A checked closed-cap tick is valid but does not change its chamber.
 !(test (chamber-tick-result-valid?
          (chamber-tick-generated-result

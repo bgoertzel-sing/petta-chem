@@ -2515,6 +2515,15 @@
          (no-op-outcome-count-2 $outcome-4 $outcome-5))
       (no-op-outcome-count-2 $outcome-6 $outcome-7)))
 
+; A bounded loop is fully classified only when every retained checked outcome
+; is either productive or a valid no-op. This catches malformed/unknown
+; outcomes without host-side list inspection and works for every supported
+; loop width because the three count accessors share the same exact shapes.
+(= (chamber-tick-steps-outcome-accounting-valid? $steps)
+   (== (+ (chamber-tick-steps-productive-count $steps)
+          (chamber-tick-steps-no-op-count $steps))
+       (chamber-tick-steps-count $steps)))
+
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber
      (chamber-tick-generated-result $cap $chamber)))
