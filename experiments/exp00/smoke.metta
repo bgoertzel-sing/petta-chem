@@ -2111,6 +2111,26 @@
            (exp00-initial-chamber seed-7)))
        1)
 
+; The complete loop-facing disposition distinguishes valid chemistry progress,
+; valid quiescence, and malformed retained outcomes without host-side logic.
+!(test (chamber-tick-steps-disposition
+         (chamber-tick-generated-steps-8
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       quiescent)
+
+!(test (chamber-tick-steps-disposition
+         (chamber-tick-generated-steps-8
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       productive)
+
+!(test (chamber-tick-steps-disposition
+         (chamber-tick-steps
+           (productive no-op unknown)
+           (exp00-initial-chamber seed-7)))
+       invalid-outcomes)
+
 ; A checked closed-cap tick is valid but does not change its chamber.
 !(test (chamber-tick-result-valid?
          (chamber-tick-generated-result

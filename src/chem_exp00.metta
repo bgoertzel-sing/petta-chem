@@ -2527,6 +2527,16 @@
 (= (chamber-tick-steps-outcome-accounting-valid? $steps)
    (== (chamber-tick-steps-unaccounted-count $steps) 0))
 
+; Give bounded-loop consumers one fail-closed disposition. Histories with any
+; unclassified outcome are invalid; otherwise at least one productive tick
+; distinguishes chemistry progress from a completely valid quiescent path.
+(= (chamber-tick-steps-disposition $steps)
+   (if (chamber-tick-steps-outcome-accounting-valid? $steps)
+       (if (> (chamber-tick-steps-productive-count $steps) 0)
+           productive
+           quiescent)
+       invalid-outcomes))
+
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber
      (chamber-tick-generated-result $cap $chamber)))
