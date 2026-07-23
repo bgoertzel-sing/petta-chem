@@ -2091,6 +2091,22 @@
           (chamber-tick-step-outcome $step-2))
          (chamber-tick-step-chamber $step-2)))))
 
+; Extend the bounded checked handoff once more without host-side iteration.
+; The fourth live tick consumes exactly the three-step final chamber and
+; retains the complete outcome sequence beside its projected state.
+(= (chamber-tick-generated-steps-4 $cap $chamber)
+   (let $steps-3 (chamber-tick-generated-steps-3 $cap $chamber)
+     (let $step-3
+          (chamber-tick-generated-step
+            $cap
+            (chamber-tick-steps-chamber $steps-3))
+       (chamber-tick-steps
+         ((chamber-tick-steps-outcome-0 $steps-3)
+          (chamber-tick-steps-outcome-1 $steps-3)
+          (chamber-tick-steps-outcome-2 $steps-3)
+          (chamber-tick-step-outcome $step-3))
+         (chamber-tick-step-chamber $step-3)))))
+
 (= (chamber-tick-steps-outcomes
       (chamber-tick-steps $outcomes $after-chamber))
    $outcomes)
@@ -2107,6 +2123,24 @@
       (chamber-tick-steps ($outcome-0 $outcome-1) $after-chamber))
    $outcome-1)
 
+(= (chamber-tick-steps-outcome-0
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2)
+        $after-chamber))
+   $outcome-0)
+
+(= (chamber-tick-steps-outcome-1
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2)
+        $after-chamber))
+   $outcome-1)
+
+(= (chamber-tick-steps-outcome-2
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2)
+        $after-chamber))
+   $outcome-2)
+
 ; Make the bounded loop width directly auditable without requiring host-side
 ; list destructuring.
 (= (chamber-tick-steps-count
@@ -2118,6 +2152,12 @@
         ($outcome-0 $outcome-1 $outcome-2)
         $after-chamber))
    3)
+
+(= (chamber-tick-steps-count
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3)
+        $after-chamber))
+   4)
 
 ; Summarize the bounded loop's chemistry outcomes inside PeTTa so harnesses
 ; need not parse the outcome list to distinguish progress from valid no-ops.
@@ -2152,6 +2192,20 @@
         $after-chamber))
    (+ (no-op-outcome-count-2 $outcome-0 $outcome-1)
       (if (== $outcome-2 no-op) 1 0)))
+
+(= (chamber-tick-steps-productive-count
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3)
+        $after-chamber))
+   (+ (productive-outcome-count-2 $outcome-0 $outcome-1)
+      (productive-outcome-count-2 $outcome-2 $outcome-3)))
+
+(= (chamber-tick-steps-no-op-count
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3)
+        $after-chamber))
+   (+ (no-op-outcome-count-2 $outcome-0 $outcome-1)
+      (no-op-outcome-count-2 $outcome-2 $outcome-3)))
 
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber
