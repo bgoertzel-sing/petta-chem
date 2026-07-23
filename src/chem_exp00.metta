@@ -2158,6 +2158,26 @@
           (chamber-tick-step-outcome $step-6))
          (chamber-tick-step-chamber $step-6)))))
 
+; Complete the bounded checked handoff at the stable eight-candidate
+; generation boundary. The eighth tick consumes the exact seven-step
+; projected chamber and retains every outcome.
+(= (chamber-tick-generated-steps-8 $cap $chamber)
+   (let $steps-7 (chamber-tick-generated-steps-7 $cap $chamber)
+     (let $step-7
+          (chamber-tick-generated-step
+            $cap
+            (chamber-tick-steps-chamber $steps-7))
+       (chamber-tick-steps
+         ((chamber-tick-steps-outcome-0 $steps-7)
+          (chamber-tick-steps-outcome-1 $steps-7)
+          (chamber-tick-steps-outcome-2 $steps-7)
+          (chamber-tick-steps-outcome-3 $steps-7)
+          (chamber-tick-steps-outcome-4 $steps-7)
+          (chamber-tick-steps-outcome-5 $steps-7)
+          (chamber-tick-steps-outcome-6 $steps-7)
+          (chamber-tick-step-outcome $step-7))
+         (chamber-tick-step-chamber $step-7)))))
+
 (= (chamber-tick-steps-outcomes
       (chamber-tick-steps $outcomes $after-chamber))
    $outcomes)
@@ -2282,6 +2302,55 @@
         $after-chamber))
    $outcome-5)
 
+(= (chamber-tick-steps-outcome-0
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3 $outcome-4 $outcome-5
+         $outcome-6)
+        $after-chamber))
+   $outcome-0)
+
+(= (chamber-tick-steps-outcome-1
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3 $outcome-4 $outcome-5
+         $outcome-6)
+        $after-chamber))
+   $outcome-1)
+
+(= (chamber-tick-steps-outcome-2
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3 $outcome-4 $outcome-5
+         $outcome-6)
+        $after-chamber))
+   $outcome-2)
+
+(= (chamber-tick-steps-outcome-3
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3 $outcome-4 $outcome-5
+         $outcome-6)
+        $after-chamber))
+   $outcome-3)
+
+(= (chamber-tick-steps-outcome-4
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3 $outcome-4 $outcome-5
+         $outcome-6)
+        $after-chamber))
+   $outcome-4)
+
+(= (chamber-tick-steps-outcome-5
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3 $outcome-4 $outcome-5
+         $outcome-6)
+        $after-chamber))
+   $outcome-5)
+
+(= (chamber-tick-steps-outcome-6
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3 $outcome-4 $outcome-5
+         $outcome-6)
+        $after-chamber))
+   $outcome-6)
+
 ; Make the bounded loop width directly auditable without requiring host-side
 ; list destructuring.
 (= (chamber-tick-steps-count
@@ -2318,6 +2387,13 @@
          $outcome-6)
         $after-chamber))
    7)
+
+(= (chamber-tick-steps-count
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3 $outcome-4 $outcome-5
+         $outcome-6 $outcome-7)
+        $after-chamber))
+   8)
 
 ; Summarize the bounded loop's chemistry outcomes inside PeTTa so harnesses
 ; need not parse the outcome list to distinguish progress from valid no-ops.
@@ -2418,6 +2494,26 @@
             (no-op-outcome-count-2 $outcome-2 $outcome-3))
          (no-op-outcome-count-2 $outcome-4 $outcome-5))
       (if (== $outcome-6 no-op) 1 0)))
+
+(= (chamber-tick-steps-productive-count
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3 $outcome-4 $outcome-5
+         $outcome-6 $outcome-7)
+        $after-chamber))
+   (+ (+ (+ (productive-outcome-count-2 $outcome-0 $outcome-1)
+            (productive-outcome-count-2 $outcome-2 $outcome-3))
+         (productive-outcome-count-2 $outcome-4 $outcome-5))
+      (productive-outcome-count-2 $outcome-6 $outcome-7)))
+
+(= (chamber-tick-steps-no-op-count
+      (chamber-tick-steps
+        ($outcome-0 $outcome-1 $outcome-2 $outcome-3 $outcome-4 $outcome-5
+         $outcome-6 $outcome-7)
+        $after-chamber))
+   (+ (+ (+ (no-op-outcome-count-2 $outcome-0 $outcome-1)
+            (no-op-outcome-count-2 $outcome-2 $outcome-3))
+         (no-op-outcome-count-2 $outcome-4 $outcome-5))
+      (no-op-outcome-count-2 $outcome-6 $outcome-7)))
 
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber
