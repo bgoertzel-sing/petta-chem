@@ -2090,6 +2090,26 @@
       (chamber-tick-steps ($outcome-0 $outcome-1) $after-chamber))
    2)
 
+; Summarize the bounded loop's chemistry outcomes inside PeTTa so harnesses
+; need not parse the outcome list to distinguish progress from valid no-ops.
+(= (productive-outcome-count-2 $outcome-0 $outcome-1)
+   (if (== $outcome-0 productive)
+       (if (== $outcome-1 productive) 2 1)
+       (if (== $outcome-1 productive) 1 0)))
+
+(= (no-op-outcome-count-2 $outcome-0 $outcome-1)
+   (if (== $outcome-0 no-op)
+       (if (== $outcome-1 no-op) 2 1)
+       (if (== $outcome-1 no-op) 1 0)))
+
+(= (chamber-tick-steps-productive-count
+      (chamber-tick-steps ($outcome-0 $outcome-1) $after-chamber))
+   (productive-outcome-count-2 $outcome-0 $outcome-1))
+
+(= (chamber-tick-steps-no-op-count
+      (chamber-tick-steps ($outcome-0 $outcome-1) $after-chamber))
+   (no-op-outcome-count-2 $outcome-0 $outcome-1))
+
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber
      (chamber-tick-generated-result $cap $chamber)))

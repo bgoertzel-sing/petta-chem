@@ -1768,6 +1768,18 @@
            (exp00-initial-chamber seed-7)))
        2)
 
+!(test (chamber-tick-steps-productive-count
+         (chamber-tick-generated-steps-2
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       0)
+
+!(test (chamber-tick-steps-no-op-count
+         (chamber-tick-generated-steps-2
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       2)
+
 ; Productive state handoff must also remain total when the next deterministic
 ; selection uses a rule whose fixed molecule layout is absent from the
 ; projected state. The second checked tick is a valid no-op, not an
@@ -1783,6 +1795,18 @@
            (exp00-candidate-cap)
            (exp00-initial-chamber seed-7)))
        (exp00-chamber-after-generated-tick seed-7))
+
+!(test (chamber-tick-steps-productive-count
+         (chamber-tick-generated-steps-2
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       1)
+
+!(test (chamber-tick-steps-no-op-count
+         (chamber-tick-generated-steps-2
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       1)
 
 ; A checked closed-cap tick is valid but does not change its chamber.
 !(test (chamber-tick-result-valid?
