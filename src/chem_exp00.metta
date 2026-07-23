@@ -2080,6 +2080,12 @@
       (chamber-tick-steps $outcomes $after-chamber))
    $after-chamber)
 
+; Make the bounded loop width directly auditable without requiring host-side
+; list destructuring. The initial loop seam has one exact two-step shape.
+(= (chamber-tick-steps-count
+      (chamber-tick-steps ($outcome-0 $outcome-1) $after-chamber))
+   2)
+
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber
      (chamber-tick-generated-result $cap $chamber)))

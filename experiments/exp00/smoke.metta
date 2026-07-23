@@ -1762,6 +1762,12 @@
            (exp00-initial-chamber seed-7)))
        (exp00-initial-chamber seed-7))
 
+!(test (chamber-tick-steps-count
+         (chamber-tick-generated-steps-2
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       2)
+
 ; A checked closed-cap tick is valid but does not change its chamber.
 !(test (chamber-tick-result-valid?
          (chamber-tick-generated-result
