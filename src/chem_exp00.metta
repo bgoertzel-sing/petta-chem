@@ -1090,14 +1090,18 @@
 (= (candidate-applicable?
       (candidate $candidate-tick (rule $id $a $b $product $catalyst) $score)
       (state $state-tick $seed
-             (mol $a $a-count)
-             (mol $b $b-count)
-             (mol $product $product-count)
-             (mol $catalyst $catalyst-count)))
-   (and (== $candidate-tick $state-tick)
-        (and (> $a-count 0)
-             (and (> $b-count 0)
-                  (> $catalyst-count 0)))))
+             (mol $state-a $a-count)
+             (mol $state-b $b-count)
+             (mol $state-product $product-count)
+             (mol $state-catalyst $catalyst-count)))
+   (and (== $a $state-a)
+        (and (== $b $state-b)
+             (and (== $product $state-product)
+                  (and (== $catalyst $state-catalyst)
+                       (and (== $candidate-tick $state-tick)
+                            (and (> $a-count 0)
+                                 (and (> $b-count 0)
+                                      (> $catalyst-count 0)))))))))
 
 (= (candidate-applicable?
       (candidate $candidate-tick (rule $id $a $b $product $catalyst) $score)
