@@ -2281,7 +2281,7 @@
 (= (exp00-sustained-chamber)
    (chamber exp00-sustained
      (state 0 seed-7
-       (mol A 48) (mol B 48) (mol AB 0) (mol Cat 1))
+       (mol A 56) (mol B 56) (mol AB 0) (mol Cat 1))
      ((rule r0 A B AB Cat))
      ()))
 
@@ -2540,6 +2540,65 @@
                (make-candidate-cap 1 1)
                (exp00-sustained-chamber)))))
        48)
+
+; The seven-sweep driver advances a productive six-sweep exhaustion while
+; preserving the established one- and two-sweep early-stop paths.
+!(test (chamber-tick-sweeps-count
+         (chamber-tick-generated-sweeps-7
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       1)
+
+!(test (chamber-tick-sweeps-count
+         (chamber-tick-generated-sweeps-7
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       2)
+
+!(test (chamber-tick-sweeps-action
+         (chamber-tick-generated-sweeps-7
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       stop-bounded)
+
+!(test (chamber-tick-sweeps-count
+         (chamber-tick-generated-sweeps-7
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       7)
+
+!(test (chamber-tick-sweeps-step-count
+         (chamber-tick-generated-sweeps-7
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       56)
+
+!(test (chamber-tick-sweeps-productive-count
+         (chamber-tick-generated-sweeps-7
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       56)
+
+!(test (chamber-tick-sweeps-no-op-count
+         (chamber-tick-generated-sweeps-7
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       0)
+
+!(test (chamber-tick-sweep-action
+         (chamber-tick-sweeps-seventh
+           (chamber-tick-generated-sweeps-7
+             (make-candidate-cap 1 1)
+             (exp00-sustained-chamber))))
+       continue)
+
+!(test (state-tick
+         (chamber-state
+           (chamber-tick-sweeps-chamber
+             (chamber-tick-generated-sweeps-7
+               (make-candidate-cap 1 1)
+               (exp00-sustained-chamber)))))
+       56)
 
 !(test (chamber-tick-sweeps-productive-count
          (chamber-tick-generated-sweeps-5
