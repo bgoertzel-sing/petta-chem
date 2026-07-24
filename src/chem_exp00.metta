@@ -2569,6 +2569,53 @@
        (chamber-tick-steps-next-action $steps)
        $steps)))
 
+; Consume a sweep's control action inside PeTTa. A productive first sweep
+; advances from its exact projected chamber into one more bounded sweep;
+; quiescent or invalid first sweeps stop without regenerating chemistry.
+(= (chamber-tick-sweeps-action
+      (chamber-tick-sweeps $action $sweeps $chamber))
+   $action)
+
+(= (chamber-tick-sweeps-count
+      (chamber-tick-sweeps $action ($sweep-0) $chamber))
+   1)
+
+(= (chamber-tick-sweeps-count
+      (chamber-tick-sweeps $action ($sweep-0 $sweep-1) $chamber))
+   2)
+
+(= (chamber-tick-sweeps-first
+      (chamber-tick-sweeps $action ($sweep-0) $chamber))
+   $sweep-0)
+
+(= (chamber-tick-sweeps-first
+      (chamber-tick-sweeps $action ($sweep-0 $sweep-1) $chamber))
+   $sweep-0)
+
+(= (chamber-tick-sweeps-second
+      (chamber-tick-sweeps $action ($sweep-0 $sweep-1) $chamber))
+   $sweep-1)
+
+(= (chamber-tick-sweeps-chamber
+      (chamber-tick-sweeps $action $sweeps $chamber))
+   $chamber)
+
+(= (chamber-tick-generated-sweeps-2 $cap $chamber)
+   (let $sweep-0 (chamber-tick-generated-sweep $cap $chamber)
+     (if (== (chamber-tick-sweep-action $sweep-0) continue)
+         (let $sweep-1
+              (chamber-tick-generated-sweep
+                $cap
+                (chamber-tick-sweep-chamber $sweep-0))
+           (chamber-tick-sweeps
+             (chamber-tick-sweep-action $sweep-1)
+             ($sweep-0 $sweep-1)
+             (chamber-tick-sweep-chamber $sweep-1)))
+         (chamber-tick-sweeps
+           (chamber-tick-sweep-action $sweep-0)
+           ($sweep-0)
+           (chamber-tick-sweep-chamber $sweep-0)))))
+
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber
      (chamber-tick-generated-result $cap $chamber)))

@@ -2178,6 +2178,40 @@
            (exp00-initial-chamber seed-7)))
        (exp00-chamber-after-generated-tick seed-7))
 
+; Loop control is consumed inside PeTTa: a closed cap stops after one sweep,
+; while the productive fixture advances from the first sweep's exact chamber
+; and then stops when the second complete sweep is quiescent.
+!(test (chamber-tick-sweeps-count
+         (chamber-tick-generated-sweeps-2
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       1)
+
+!(test (chamber-tick-sweeps-action
+         (chamber-tick-generated-sweeps-2
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       stop-quiescent)
+
+!(test (chamber-tick-sweeps-count
+         (chamber-tick-generated-sweeps-2
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       2)
+
+!(test (chamber-tick-sweep-action
+         (chamber-tick-sweeps-second
+           (chamber-tick-generated-sweeps-2
+             (exp00-candidate-cap)
+             (exp00-initial-chamber seed-7))))
+       stop-quiescent)
+
+!(test (chamber-tick-sweeps-chamber
+         (chamber-tick-generated-sweeps-2
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       (exp00-chamber-after-generated-tick seed-7))
+
 ; A checked closed-cap tick is valid but does not change its chamber.
 !(test (chamber-tick-result-valid?
          (chamber-tick-generated-result
