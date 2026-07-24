@@ -2275,6 +2275,54 @@
            (exp00-initial-chamber seed-7)))
        (exp00-chamber-after-generated-tick seed-7))
 
+; The two-sweep driver reports explicit bound exhaustion when chemistry stays
+; productive through all sixteen retained ticks. It must not claim `continue`
+; when no third sweep can be executed by this bounded API.
+(= (exp00-sustained-chamber)
+   (chamber exp00-sustained
+     (state 0 seed-7
+       (mol A 16) (mol B 16) (mol AB 0) (mol Cat 1))
+     ((rule r0 A B AB Cat))
+     ()))
+
+!(test (chamber-tick-sweeps-action
+         (chamber-tick-generated-sweeps-2
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       stop-bounded)
+
+!(test (chamber-tick-sweeps-count
+         (chamber-tick-generated-sweeps-2
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       2)
+
+!(test (chamber-tick-sweeps-step-count
+         (chamber-tick-generated-sweeps-2
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       16)
+
+!(test (chamber-tick-sweeps-productive-count
+         (chamber-tick-generated-sweeps-2
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       16)
+
+!(test (chamber-tick-sweeps-disposition
+         (chamber-tick-generated-sweeps-2
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       productive)
+
+!(test (state-tick
+         (chamber-state
+           (chamber-tick-sweeps-chamber
+             (chamber-tick-generated-sweeps-2
+               (make-candidate-cap 1 1)
+               (exp00-sustained-chamber)))))
+       16)
+
 ; A checked closed-cap tick is valid but does not change its chamber.
 !(test (chamber-tick-result-valid?
          (chamber-tick-generated-result

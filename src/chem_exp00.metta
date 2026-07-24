@@ -2655,6 +2655,14 @@
            quiescent)
        invalid-outcomes))
 
+; A bounded run must expose why it stopped. If the final allowed sweep still
+; requests continuation, report exhaustion of this driver's two-sweep bound
+; rather than returning a misleading live `continue` action.
+(= (chamber-tick-final-bounded-action $action)
+   (if (== $action continue)
+       stop-bounded
+       $action))
+
 (= (chamber-tick-generated-sweeps-2 $cap $chamber)
    (let $sweep-0 (chamber-tick-generated-sweep $cap $chamber)
      (if (== (chamber-tick-sweep-action $sweep-0) continue)
@@ -2663,7 +2671,8 @@
                 $cap
                 (chamber-tick-sweep-chamber $sweep-0))
            (chamber-tick-sweeps
-             (chamber-tick-sweep-action $sweep-1)
+             (chamber-tick-final-bounded-action
+               (chamber-tick-sweep-action $sweep-1))
              ($sweep-0 $sweep-1)
              (chamber-tick-sweep-chamber $sweep-1)))
          (chamber-tick-sweeps
