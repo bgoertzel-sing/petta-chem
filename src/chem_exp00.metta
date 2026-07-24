@@ -2537,6 +2537,16 @@
            quiescent)
        invalid-outcomes))
 
+; Turn the complete bounded-history disposition into an explicit loop-control
+; decision. A productive sweep may continue from its projected chamber, while
+; a full quiescent sweep or malformed retained outcomes stop fail-closed.
+(= (chamber-tick-steps-next-action $steps)
+   (if (== (chamber-tick-steps-disposition $steps) productive)
+       continue
+       (if (== (chamber-tick-steps-disposition $steps) quiescent)
+           stop-quiescent
+           stop-invalid)))
+
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber
      (chamber-tick-generated-result $cap $chamber)))
