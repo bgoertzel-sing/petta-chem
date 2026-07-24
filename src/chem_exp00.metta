@@ -2738,6 +2738,14 @@
         $chamber))
    8)
 
+(= (chamber-tick-sweeps-count
+      (chamber-tick-sweeps
+        $action
+        ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4
+          $sweep-5 $sweep-6 $sweep-7 $sweep-8)
+        $chamber))
+   9)
+
 (= (chamber-tick-sweeps-first
       (chamber-tick-sweeps $action ($sweep-0) $chamber))
    $sweep-0)
@@ -2950,6 +2958,78 @@
         $chamber))
    $sweep-7)
 
+(= (chamber-tick-sweeps-first
+      (chamber-tick-sweeps
+        $action
+        ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4
+          $sweep-5 $sweep-6 $sweep-7 $sweep-8)
+        $chamber))
+   $sweep-0)
+
+(= (chamber-tick-sweeps-second
+      (chamber-tick-sweeps
+        $action
+        ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4
+          $sweep-5 $sweep-6 $sweep-7 $sweep-8)
+        $chamber))
+   $sweep-1)
+
+(= (chamber-tick-sweeps-third
+      (chamber-tick-sweeps
+        $action
+        ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4
+          $sweep-5 $sweep-6 $sweep-7 $sweep-8)
+        $chamber))
+   $sweep-2)
+
+(= (chamber-tick-sweeps-fourth
+      (chamber-tick-sweeps
+        $action
+        ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4
+          $sweep-5 $sweep-6 $sweep-7 $sweep-8)
+        $chamber))
+   $sweep-3)
+
+(= (chamber-tick-sweeps-fifth
+      (chamber-tick-sweeps
+        $action
+        ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4
+          $sweep-5 $sweep-6 $sweep-7 $sweep-8)
+        $chamber))
+   $sweep-4)
+
+(= (chamber-tick-sweeps-sixth
+      (chamber-tick-sweeps
+        $action
+        ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4
+          $sweep-5 $sweep-6 $sweep-7 $sweep-8)
+        $chamber))
+   $sweep-5)
+
+(= (chamber-tick-sweeps-seventh
+      (chamber-tick-sweeps
+        $action
+        ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4
+          $sweep-5 $sweep-6 $sweep-7 $sweep-8)
+        $chamber))
+   $sweep-6)
+
+(= (chamber-tick-sweeps-eighth
+      (chamber-tick-sweeps
+        $action
+        ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4
+          $sweep-5 $sweep-6 $sweep-7 $sweep-8)
+        $chamber))
+   $sweep-7)
+
+(= (chamber-tick-sweeps-ninth
+      (chamber-tick-sweeps
+        $action
+        ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4
+          $sweep-5 $sweep-6 $sweep-7 $sweep-8)
+        $chamber))
+   $sweep-8)
+
 (= (chamber-tick-sweeps-chamber
       (chamber-tick-sweeps $action $sweeps $chamber))
    $chamber)
@@ -3049,6 +3129,21 @@
       (chamber-tick-steps-count
         (chamber-tick-sweep-steps $sweep-7))))
 
+(= (chamber-tick-sweeps-step-count
+      (chamber-tick-sweeps
+        $action
+        ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4
+          $sweep-5 $sweep-6 $sweep-7 $sweep-8)
+        $chamber))
+   (+ (chamber-tick-sweeps-step-count
+        (chamber-tick-sweeps
+          $action
+          ($sweep-0 $sweep-1 $sweep-2 $sweep-3
+            $sweep-4 $sweep-5 $sweep-6 $sweep-7)
+          $chamber))
+      (chamber-tick-steps-count
+        (chamber-tick-sweep-steps $sweep-8))))
+
 (= (chamber-tick-sweeps-productive-count
       (chamber-tick-sweeps $action ($sweep-0) $chamber))
    (chamber-tick-steps-productive-count
@@ -3140,6 +3235,21 @@
       (chamber-tick-steps-productive-count
         (chamber-tick-sweep-steps $sweep-7))))
 
+(= (chamber-tick-sweeps-productive-count
+      (chamber-tick-sweeps
+        $action
+        ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4
+          $sweep-5 $sweep-6 $sweep-7 $sweep-8)
+        $chamber))
+   (+ (chamber-tick-sweeps-productive-count
+        (chamber-tick-sweeps
+          $action
+          ($sweep-0 $sweep-1 $sweep-2 $sweep-3
+            $sweep-4 $sweep-5 $sweep-6 $sweep-7)
+          $chamber))
+      (chamber-tick-steps-productive-count
+        (chamber-tick-sweep-steps $sweep-8))))
+
 (= (chamber-tick-sweeps-no-op-count
       (chamber-tick-sweeps $action ($sweep-0) $chamber))
    (chamber-tick-steps-no-op-count
@@ -3230,6 +3340,21 @@
           $chamber))
       (chamber-tick-steps-no-op-count
         (chamber-tick-sweep-steps $sweep-7))))
+
+(= (chamber-tick-sweeps-no-op-count
+      (chamber-tick-sweeps
+        $action
+        ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4
+          $sweep-5 $sweep-6 $sweep-7 $sweep-8)
+        $chamber))
+   (+ (chamber-tick-sweeps-no-op-count
+        (chamber-tick-sweeps
+          $action
+          ($sweep-0 $sweep-1 $sweep-2 $sweep-3
+            $sweep-4 $sweep-5 $sweep-6 $sweep-7)
+          $chamber))
+      (chamber-tick-steps-no-op-count
+        (chamber-tick-sweep-steps $sweep-8))))
 
 (= (chamber-tick-sweeps-unaccounted-count $sweeps)
    (- (chamber-tick-sweeps-step-count $sweeps)
@@ -3407,6 +3532,34 @@
                              $sweep-4 $sweep-5 $sweep-6 $sweep-7)
                            (chamber-tick-sweep-chamber $sweep-7))))))))))
          $first-seven)))
+
+; The ninth sweep can observe quiescence after a productive eight-sweep
+; exhaustion. This distinguishes resource exhaustion from driver exhaustion
+; without changing candidate generation, selection, or firing.
+(= (chamber-tick-generated-sweeps-9 $cap $chamber)
+   (let $first-eight (chamber-tick-generated-sweeps-8 $cap $chamber)
+     (if (== (chamber-tick-sweeps-action $first-eight) stop-bounded)
+         (let $sweep-8
+              (chamber-tick-generated-sweep
+                $cap
+                (chamber-tick-sweeps-chamber $first-eight))
+           (let $sweep-0 (chamber-tick-sweeps-first $first-eight)
+             (let $sweep-1 (chamber-tick-sweeps-second $first-eight)
+               (let $sweep-2 (chamber-tick-sweeps-third $first-eight)
+                 (let $sweep-3 (chamber-tick-sweeps-fourth $first-eight)
+                   (let $sweep-4 (chamber-tick-sweeps-fifth $first-eight)
+                     (let $sweep-5 (chamber-tick-sweeps-sixth $first-eight)
+                       (let $sweep-6
+                            (chamber-tick-sweeps-seventh $first-eight)
+                         (let $sweep-7
+                              (chamber-tick-sweeps-eighth $first-eight)
+                           (chamber-tick-sweeps
+                             (chamber-tick-final-bounded-action
+                               (chamber-tick-sweep-action $sweep-8))
+                             ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4
+                               $sweep-5 $sweep-6 $sweep-7 $sweep-8)
+                             (chamber-tick-sweep-chamber $sweep-8)))))))))))
+         $first-eight)))
 
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber

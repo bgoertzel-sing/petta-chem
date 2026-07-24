@@ -2659,6 +2659,66 @@
                (exp00-sustained-chamber)))))
        64)
 
+; A ninth allowed sweep observes the exact resource-exhausted chamber left by
+; tick 64. It retains eight checked no-ops, stops quiescent, and leaves the
+; terminal chamber and its 64-event history unchanged.
+!(test (chamber-tick-sweeps-count
+         (chamber-tick-generated-sweeps-9
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       1)
+
+!(test (chamber-tick-sweeps-count
+         (chamber-tick-generated-sweeps-9
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       2)
+
+!(test (chamber-tick-sweeps-action
+         (chamber-tick-generated-sweeps-9
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       stop-quiescent)
+
+!(test (chamber-tick-sweeps-count
+         (chamber-tick-generated-sweeps-9
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       9)
+
+!(test (chamber-tick-sweeps-step-count
+         (chamber-tick-generated-sweeps-9
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       72)
+
+!(test (chamber-tick-sweeps-productive-count
+         (chamber-tick-generated-sweeps-9
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       64)
+
+!(test (chamber-tick-sweeps-no-op-count
+         (chamber-tick-generated-sweeps-9
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       8)
+
+!(test (chamber-tick-sweep-action
+         (chamber-tick-sweeps-ninth
+           (chamber-tick-generated-sweeps-9
+             (make-candidate-cap 1 1)
+             (exp00-sustained-chamber))))
+       stop-quiescent)
+
+!(test (state-tick
+         (chamber-state
+           (chamber-tick-sweeps-chamber
+             (chamber-tick-generated-sweeps-9
+               (make-candidate-cap 1 1)
+               (exp00-sustained-chamber)))))
+       64)
+
 !(test (chamber-tick-sweeps-productive-count
          (chamber-tick-generated-sweeps-5
            (make-candidate-cap 1 1)
