@@ -2281,7 +2281,7 @@
 (= (exp00-sustained-chamber)
    (chamber exp00-sustained
      (state 0 seed-7
-       (mol A 16) (mol B 16) (mol AB 0) (mol Cat 1))
+       (mol A 24) (mol B 24) (mol AB 0) (mol Cat 1))
      ((rule r0 A B AB Cat))
      ()))
 
@@ -2322,6 +2322,66 @@
                (make-candidate-cap 1 1)
                (exp00-sustained-chamber)))))
        16)
+
+; The wider bounded driver performs the third live sweep only while the
+; second remains productive, retains all accounting, and exposes exhaustion
+; at its own 24-tick boundary.
+!(test (chamber-tick-sweeps-count
+         (chamber-tick-generated-sweeps-3
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       1)
+
+!(test (chamber-tick-sweeps-count
+         (chamber-tick-generated-sweeps-3
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       2)
+
+!(test (chamber-tick-sweeps-action
+         (chamber-tick-generated-sweeps-3
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       stop-bounded)
+
+!(test (chamber-tick-sweeps-count
+         (chamber-tick-generated-sweeps-3
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       3)
+
+!(test (chamber-tick-sweeps-step-count
+         (chamber-tick-generated-sweeps-3
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       24)
+
+!(test (chamber-tick-sweeps-productive-count
+         (chamber-tick-generated-sweeps-3
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       24)
+
+!(test (chamber-tick-sweeps-no-op-count
+         (chamber-tick-generated-sweeps-3
+           (make-candidate-cap 1 1)
+           (exp00-sustained-chamber)))
+       0)
+
+!(test (chamber-tick-sweep-action
+         (chamber-tick-sweeps-third
+           (chamber-tick-generated-sweeps-3
+             (make-candidate-cap 1 1)
+             (exp00-sustained-chamber))))
+       continue)
+
+!(test (state-tick
+         (chamber-state
+           (chamber-tick-sweeps-chamber
+             (chamber-tick-generated-sweeps-3
+               (make-candidate-cap 1 1)
+               (exp00-sustained-chamber)))))
+       24)
 
 ; A checked closed-cap tick is valid but does not change its chamber.
 !(test (chamber-tick-result-valid?

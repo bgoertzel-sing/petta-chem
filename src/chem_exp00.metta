@@ -2584,6 +2584,10 @@
       (chamber-tick-sweeps $action ($sweep-0 $sweep-1) $chamber))
    2)
 
+(= (chamber-tick-sweeps-count
+      (chamber-tick-sweeps $action ($sweep-0 $sweep-1 $sweep-2) $chamber))
+   3)
+
 (= (chamber-tick-sweeps-first
       (chamber-tick-sweeps $action ($sweep-0) $chamber))
    $sweep-0)
@@ -2595,6 +2599,14 @@
 (= (chamber-tick-sweeps-second
       (chamber-tick-sweeps $action ($sweep-0 $sweep-1) $chamber))
    $sweep-1)
+
+(= (chamber-tick-sweeps-second
+      (chamber-tick-sweeps $action ($sweep-0 $sweep-1 $sweep-2) $chamber))
+   $sweep-1)
+
+(= (chamber-tick-sweeps-third
+      (chamber-tick-sweeps $action ($sweep-0 $sweep-1 $sweep-2) $chamber))
+   $sweep-2)
 
 (= (chamber-tick-sweeps-chamber
       (chamber-tick-sweeps $action $sweeps $chamber))
@@ -2616,6 +2628,15 @@
       (chamber-tick-steps-count
         (chamber-tick-sweep-steps $sweep-1))))
 
+(= (chamber-tick-sweeps-step-count
+      (chamber-tick-sweeps $action ($sweep-0 $sweep-1 $sweep-2) $chamber))
+   (+ (+ (chamber-tick-steps-count
+           (chamber-tick-sweep-steps $sweep-0))
+         (chamber-tick-steps-count
+           (chamber-tick-sweep-steps $sweep-1)))
+      (chamber-tick-steps-count
+        (chamber-tick-sweep-steps $sweep-2))))
+
 (= (chamber-tick-sweeps-productive-count
       (chamber-tick-sweeps $action ($sweep-0) $chamber))
    (chamber-tick-steps-productive-count
@@ -2628,6 +2649,15 @@
       (chamber-tick-steps-productive-count
         (chamber-tick-sweep-steps $sweep-1))))
 
+(= (chamber-tick-sweeps-productive-count
+      (chamber-tick-sweeps $action ($sweep-0 $sweep-1 $sweep-2) $chamber))
+   (+ (+ (chamber-tick-steps-productive-count
+           (chamber-tick-sweep-steps $sweep-0))
+         (chamber-tick-steps-productive-count
+           (chamber-tick-sweep-steps $sweep-1)))
+      (chamber-tick-steps-productive-count
+        (chamber-tick-sweep-steps $sweep-2))))
+
 (= (chamber-tick-sweeps-no-op-count
       (chamber-tick-sweeps $action ($sweep-0) $chamber))
    (chamber-tick-steps-no-op-count
@@ -2639,6 +2669,15 @@
         (chamber-tick-sweep-steps $sweep-0))
       (chamber-tick-steps-no-op-count
         (chamber-tick-sweep-steps $sweep-1))))
+
+(= (chamber-tick-sweeps-no-op-count
+      (chamber-tick-sweeps $action ($sweep-0 $sweep-1 $sweep-2) $chamber))
+   (+ (+ (chamber-tick-steps-no-op-count
+           (chamber-tick-sweep-steps $sweep-0))
+         (chamber-tick-steps-no-op-count
+           (chamber-tick-sweep-steps $sweep-1)))
+      (chamber-tick-steps-no-op-count
+        (chamber-tick-sweep-steps $sweep-2))))
 
 (= (chamber-tick-sweeps-unaccounted-count $sweeps)
    (- (chamber-tick-sweeps-step-count $sweeps)
@@ -2675,6 +2714,35 @@
                (chamber-tick-sweep-action $sweep-1))
              ($sweep-0 $sweep-1)
              (chamber-tick-sweep-chamber $sweep-1)))
+         (chamber-tick-sweeps
+           (chamber-tick-sweep-action $sweep-0)
+           ($sweep-0)
+           (chamber-tick-sweep-chamber $sweep-0)))))
+
+; The three-sweep driver preserves the same early-stop behavior, but permits
+; one more live sweep before converting a terminal continuation request into
+; explicit bound exhaustion.
+(= (chamber-tick-generated-sweeps-3 $cap $chamber)
+   (let $sweep-0 (chamber-tick-generated-sweep $cap $chamber)
+     (if (== (chamber-tick-sweep-action $sweep-0) continue)
+         (let $sweep-1
+              (chamber-tick-generated-sweep
+                $cap
+                (chamber-tick-sweep-chamber $sweep-0))
+           (if (== (chamber-tick-sweep-action $sweep-1) continue)
+               (let $sweep-2
+                    (chamber-tick-generated-sweep
+                      $cap
+                      (chamber-tick-sweep-chamber $sweep-1))
+                 (chamber-tick-sweeps
+                   (chamber-tick-final-bounded-action
+                     (chamber-tick-sweep-action $sweep-2))
+                   ($sweep-0 $sweep-1 $sweep-2)
+                   (chamber-tick-sweep-chamber $sweep-2)))
+               (chamber-tick-sweeps
+                 (chamber-tick-sweep-action $sweep-1)
+                 ($sweep-0 $sweep-1)
+                 (chamber-tick-sweep-chamber $sweep-1))))
          (chamber-tick-sweeps
            (chamber-tick-sweep-action $sweep-0)
            ($sweep-0)
