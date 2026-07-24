@@ -2547,6 +2547,28 @@
            stop-quiescent
            stop-invalid)))
 
+; Package one complete live bounded sweep with the control decision derived
+; from that exact history. Loop drivers can therefore advance from the
+; projected chamber without separately regenerating ticks or reclassifying
+; outcomes in host glue.
+(= (chamber-tick-sweep-action
+      (chamber-tick-sweep $action $steps))
+   $action)
+
+(= (chamber-tick-sweep-steps
+      (chamber-tick-sweep $action $steps))
+   $steps)
+
+(= (chamber-tick-sweep-chamber $sweep)
+   (chamber-tick-steps-chamber
+     (chamber-tick-sweep-steps $sweep)))
+
+(= (chamber-tick-generated-sweep $cap $chamber)
+   (let $steps (chamber-tick-generated-steps-8 $cap $chamber)
+     (chamber-tick-sweep
+       (chamber-tick-steps-next-action $steps)
+       $steps)))
+
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber
      (chamber-tick-generated-result $cap $chamber)))
