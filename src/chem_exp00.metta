@@ -1399,6 +1399,30 @@
 (= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38) $event)
    ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event))
 
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39 $event-40) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39 $event-40 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39 $event-40 $event-41) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39 $event-40 $event-41 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39 $event-40 $event-41 $event-42) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39 $event-40 $event-41 $event-42 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39 $event-40 $event-41 $event-42 $event-43) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39 $event-40 $event-41 $event-42 $event-43 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39 $event-40 $event-41 $event-42 $event-43 $event-44) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39 $event-40 $event-41 $event-42 $event-43 $event-44 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39 $event-40 $event-41 $event-42 $event-43 $event-44 $event-45) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39 $event-40 $event-41 $event-42 $event-43 $event-44 $event-45 $event))
+
+(= (append-chamber-event ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39 $event-40 $event-41 $event-42 $event-43 $event-44 $event-45 $event-46) $event)
+   ($event-0 $event-1 $event-2 $event-3 $event-4 $event-5 $event-6 $event-7 $event-8 $event-9 $event-10 $event-11 $event-12 $event-13 $event-14 $event-15 $event-16 $event-17 $event-18 $event-19 $event-20 $event-21 $event-22 $event-23 $event-24 $event-25 $event-26 $event-27 $event-28 $event-29 $event-30 $event-31 $event-32 $event-33 $event-34 $event-35 $event-36 $event-37 $event-38 $event-39 $event-40 $event-41 $event-42 $event-43 $event-44 $event-45 $event-46 $event))
+
 (= (chamber-tick-with-fire-result
       (chamber $id $state $rules $events)
       (trace $after-state $event))
@@ -2646,6 +2670,11 @@
         $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4) $chamber))
    5)
 
+(= (chamber-tick-sweeps-count
+      (chamber-tick-sweeps
+        $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4 $sweep-5) $chamber))
+   6)
+
 (= (chamber-tick-sweeps-first
       (chamber-tick-sweeps $action ($sweep-0) $chamber))
    $sweep-0)
@@ -2668,6 +2697,11 @@
         $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4) $chamber))
    $sweep-0)
 
+(= (chamber-tick-sweeps-first
+      (chamber-tick-sweeps
+        $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4 $sweep-5) $chamber))
+   $sweep-0)
+
 (= (chamber-tick-sweeps-second
       (chamber-tick-sweeps $action ($sweep-0 $sweep-1) $chamber))
    $sweep-1)
@@ -2686,6 +2720,11 @@
         $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4) $chamber))
    $sweep-1)
 
+(= (chamber-tick-sweeps-second
+      (chamber-tick-sweeps
+        $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4 $sweep-5) $chamber))
+   $sweep-1)
+
 (= (chamber-tick-sweeps-third
       (chamber-tick-sweeps $action ($sweep-0 $sweep-1 $sweep-2) $chamber))
    $sweep-2)
@@ -2700,6 +2739,11 @@
         $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4) $chamber))
    $sweep-2)
 
+(= (chamber-tick-sweeps-third
+      (chamber-tick-sweeps
+        $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4 $sweep-5) $chamber))
+   $sweep-2)
+
 (= (chamber-tick-sweeps-fourth
       (chamber-tick-sweeps
         $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3) $chamber))
@@ -2710,10 +2754,25 @@
         $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4) $chamber))
    $sweep-3)
 
+(= (chamber-tick-sweeps-fourth
+      (chamber-tick-sweeps
+        $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4 $sweep-5) $chamber))
+   $sweep-3)
+
 (= (chamber-tick-sweeps-fifth
       (chamber-tick-sweeps
         $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4) $chamber))
    $sweep-4)
+
+(= (chamber-tick-sweeps-fifth
+      (chamber-tick-sweeps
+        $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4 $sweep-5) $chamber))
+   $sweep-4)
+
+(= (chamber-tick-sweeps-sixth
+      (chamber-tick-sweeps
+        $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4 $sweep-5) $chamber))
+   $sweep-5)
 
 (= (chamber-tick-sweeps-chamber
       (chamber-tick-sweeps $action $sweeps $chamber))
@@ -2770,6 +2829,22 @@
       (chamber-tick-steps-count
         (chamber-tick-sweep-steps $sweep-4))))
 
+(= (chamber-tick-sweeps-step-count
+      (chamber-tick-sweeps
+        $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4 $sweep-5) $chamber))
+   (+ (+ (+ (+ (+ (chamber-tick-steps-count
+                    (chamber-tick-sweep-steps $sweep-0))
+                  (chamber-tick-steps-count
+                    (chamber-tick-sweep-steps $sweep-1)))
+               (chamber-tick-steps-count
+                 (chamber-tick-sweep-steps $sweep-2)))
+            (chamber-tick-steps-count
+              (chamber-tick-sweep-steps $sweep-3)))
+         (chamber-tick-steps-count
+           (chamber-tick-sweep-steps $sweep-4)))
+      (chamber-tick-steps-count
+        (chamber-tick-sweep-steps $sweep-5))))
+
 (= (chamber-tick-sweeps-productive-count
       (chamber-tick-sweeps $action ($sweep-0) $chamber))
    (chamber-tick-steps-productive-count
@@ -2817,6 +2892,22 @@
       (chamber-tick-steps-productive-count
         (chamber-tick-sweep-steps $sweep-4))))
 
+(= (chamber-tick-sweeps-productive-count
+      (chamber-tick-sweeps
+        $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4 $sweep-5) $chamber))
+   (+ (+ (+ (+ (+ (chamber-tick-steps-productive-count
+                    (chamber-tick-sweep-steps $sweep-0))
+                  (chamber-tick-steps-productive-count
+                    (chamber-tick-sweep-steps $sweep-1)))
+               (chamber-tick-steps-productive-count
+                 (chamber-tick-sweep-steps $sweep-2)))
+            (chamber-tick-steps-productive-count
+              (chamber-tick-sweep-steps $sweep-3)))
+         (chamber-tick-steps-productive-count
+           (chamber-tick-sweep-steps $sweep-4)))
+      (chamber-tick-steps-productive-count
+        (chamber-tick-sweep-steps $sweep-5))))
+
 (= (chamber-tick-sweeps-no-op-count
       (chamber-tick-sweeps $action ($sweep-0) $chamber))
    (chamber-tick-steps-no-op-count
@@ -2863,6 +2954,22 @@
            (chamber-tick-sweep-steps $sweep-3)))
       (chamber-tick-steps-no-op-count
         (chamber-tick-sweep-steps $sweep-4))))
+
+(= (chamber-tick-sweeps-no-op-count
+      (chamber-tick-sweeps
+        $action ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4 $sweep-5) $chamber))
+   (+ (+ (+ (+ (+ (chamber-tick-steps-no-op-count
+                    (chamber-tick-sweep-steps $sweep-0))
+                  (chamber-tick-steps-no-op-count
+                    (chamber-tick-sweep-steps $sweep-1)))
+               (chamber-tick-steps-no-op-count
+                 (chamber-tick-sweep-steps $sweep-2)))
+            (chamber-tick-steps-no-op-count
+              (chamber-tick-sweep-steps $sweep-3)))
+         (chamber-tick-steps-no-op-count
+           (chamber-tick-sweep-steps $sweep-4)))
+      (chamber-tick-steps-no-op-count
+        (chamber-tick-sweep-steps $sweep-5))))
 
 (= (chamber-tick-sweeps-unaccounted-count $sweeps)
    (- (chamber-tick-sweeps-step-count $sweeps)
@@ -2971,6 +3078,27 @@
                      ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4)
                      (chamber-tick-sweep-chamber $sweep-4)))))))
          $first-four)))
+
+; The six-sweep driver advances only a productive five-sweep exhaustion,
+; preserving earlier quiescent/invalid stops and exposing a 48-tick bound.
+(= (chamber-tick-generated-sweeps-6 $cap $chamber)
+   (let $first-five (chamber-tick-generated-sweeps-5 $cap $chamber)
+     (if (== (chamber-tick-sweeps-action $first-five) stop-bounded)
+         (let $sweep-5
+              (chamber-tick-generated-sweep
+                $cap
+                (chamber-tick-sweeps-chamber $first-five))
+           (let $sweep-0 (chamber-tick-sweeps-first $first-five)
+             (let $sweep-1 (chamber-tick-sweeps-second $first-five)
+               (let $sweep-2 (chamber-tick-sweeps-third $first-five)
+                 (let $sweep-3 (chamber-tick-sweeps-fourth $first-five)
+                   (let $sweep-4 (chamber-tick-sweeps-fifth $first-five)
+                     (chamber-tick-sweeps
+                       (chamber-tick-final-bounded-action
+                         (chamber-tick-sweep-action $sweep-5))
+                       ($sweep-0 $sweep-1 $sweep-2 $sweep-3 $sweep-4 $sweep-5)
+                       (chamber-tick-sweep-chamber $sweep-5))))))))
+         $first-five)))
 
 (= (chamber-tick-generated $cap $chamber)
    (chamber-tick-result-chamber
