@@ -2600,6 +2600,61 @@
       (chamber-tick-sweeps $action $sweeps $chamber))
    $chamber)
 
+; Aggregate retained tick outcomes across the complete bounded run. The final
+; loop action may be stop-quiescent even when an earlier sweep changed the
+; chemistry, so consumers need run-wide accounting rather than inspecting
+; only the terminal sweep.
+(= (chamber-tick-sweeps-step-count
+      (chamber-tick-sweeps $action ($sweep-0) $chamber))
+   (chamber-tick-steps-count
+     (chamber-tick-sweep-steps $sweep-0)))
+
+(= (chamber-tick-sweeps-step-count
+      (chamber-tick-sweeps $action ($sweep-0 $sweep-1) $chamber))
+   (+ (chamber-tick-steps-count
+        (chamber-tick-sweep-steps $sweep-0))
+      (chamber-tick-steps-count
+        (chamber-tick-sweep-steps $sweep-1))))
+
+(= (chamber-tick-sweeps-productive-count
+      (chamber-tick-sweeps $action ($sweep-0) $chamber))
+   (chamber-tick-steps-productive-count
+     (chamber-tick-sweep-steps $sweep-0)))
+
+(= (chamber-tick-sweeps-productive-count
+      (chamber-tick-sweeps $action ($sweep-0 $sweep-1) $chamber))
+   (+ (chamber-tick-steps-productive-count
+        (chamber-tick-sweep-steps $sweep-0))
+      (chamber-tick-steps-productive-count
+        (chamber-tick-sweep-steps $sweep-1))))
+
+(= (chamber-tick-sweeps-no-op-count
+      (chamber-tick-sweeps $action ($sweep-0) $chamber))
+   (chamber-tick-steps-no-op-count
+     (chamber-tick-sweep-steps $sweep-0)))
+
+(= (chamber-tick-sweeps-no-op-count
+      (chamber-tick-sweeps $action ($sweep-0 $sweep-1) $chamber))
+   (+ (chamber-tick-steps-no-op-count
+        (chamber-tick-sweep-steps $sweep-0))
+      (chamber-tick-steps-no-op-count
+        (chamber-tick-sweep-steps $sweep-1))))
+
+(= (chamber-tick-sweeps-unaccounted-count $sweeps)
+   (- (chamber-tick-sweeps-step-count $sweeps)
+      (+ (chamber-tick-sweeps-productive-count $sweeps)
+         (chamber-tick-sweeps-no-op-count $sweeps))))
+
+(= (chamber-tick-sweeps-outcome-accounting-valid? $sweeps)
+   (== (chamber-tick-sweeps-unaccounted-count $sweeps) 0))
+
+(= (chamber-tick-sweeps-disposition $sweeps)
+   (if (chamber-tick-sweeps-outcome-accounting-valid? $sweeps)
+       (if (> (chamber-tick-sweeps-productive-count $sweeps) 0)
+           productive
+           quiescent)
+       invalid-outcomes))
+
 (= (chamber-tick-generated-sweeps-2 $cap $chamber)
    (let $sweep-0 (chamber-tick-generated-sweep $cap $chamber)
      (if (== (chamber-tick-sweep-action $sweep-0) continue)

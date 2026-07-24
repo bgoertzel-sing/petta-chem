@@ -2193,11 +2193,74 @@
            (exp00-initial-chamber seed-7)))
        stop-quiescent)
 
+!(test (chamber-tick-sweeps-step-count
+         (chamber-tick-generated-sweeps-2
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       8)
+
+!(test (chamber-tick-sweeps-productive-count
+         (chamber-tick-generated-sweeps-2
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       0)
+
+!(test (chamber-tick-sweeps-no-op-count
+         (chamber-tick-generated-sweeps-2
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       8)
+
+!(test (chamber-tick-sweeps-disposition
+         (chamber-tick-generated-sweeps-2
+           (make-candidate-cap 0 1)
+           (exp00-initial-chamber seed-7)))
+       quiescent)
+
 !(test (chamber-tick-sweeps-count
          (chamber-tick-generated-sweeps-2
            (exp00-candidate-cap)
            (exp00-initial-chamber seed-7)))
        2)
+
+!(test (chamber-tick-sweeps-step-count
+         (chamber-tick-generated-sweeps-2
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       16)
+
+!(test (chamber-tick-sweeps-productive-count
+         (chamber-tick-generated-sweeps-2
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       1)
+
+!(test (chamber-tick-sweeps-no-op-count
+         (chamber-tick-generated-sweeps-2
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       15)
+
+!(test (chamber-tick-sweeps-unaccounted-count
+         (chamber-tick-generated-sweeps-2
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       0)
+
+!(test (chamber-tick-sweeps-outcome-accounting-valid?
+         (chamber-tick-generated-sweeps-2
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       True)
+
+; The terminal sweep is quiescent, but the retained run-wide disposition
+; preserves the productive first sweep instead of collapsing to the stop
+; action alone.
+!(test (chamber-tick-sweeps-disposition
+         (chamber-tick-generated-sweeps-2
+           (exp00-candidate-cap)
+           (exp00-initial-chamber seed-7)))
+       productive)
 
 !(test (chamber-tick-sweep-action
          (chamber-tick-sweeps-second
