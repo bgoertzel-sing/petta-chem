@@ -3240,6 +3240,97 @@
           (rule r12 A B AB Cat))
          ((event 0 r0 A B AB Cat))))
 
+; Fourteen retained source rules keep the stable eight-candidate generation
+; prefix. The audit seam reports six generation omissions, then the ordinary
+; cap-2 deterministic selector still reaches and fires productive r0.
+!(test (generate-candidate-pool
+         (make-chamber
+           exp00-fourteen-rules
+           (exp00-initial-state seed-7)
+           ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (rule r12 A B AB Cat) (rule r13 A B AB Cat))
+           ()))
+       (candidate-pool
+         0
+         ((candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1)
+          (candidate 0 (rule r2 A Cat ACat B) 1)
+          (candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1)
+          (candidate 0 (rule r2 A Cat ACat B) 1)
+          (candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1))))
+
+!(test (chamber-source-rule-count
+         (make-chamber
+           exp00-fourteen-rules
+           (exp00-initial-state seed-7)
+           ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (rule r12 A B AB Cat) (rule r13 A B AB Cat))
+           ()))
+       14)
+
+!(test (generated-selection-fire-record-generation-omitted-count
+         (make-chamber
+           exp00-fourteen-rules
+           (exp00-initial-state seed-7)
+           ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (rule r12 A B AB Cat) (rule r13 A B AB Cat))
+           ())
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 2 1)
+           (make-chamber
+             exp00-fourteen-rules
+             (exp00-initial-state seed-7)
+             ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+              (rule r12 A B AB Cat) (rule r13 A B AB Cat))
+             ())))
+       6)
+
+!(test (rule-rewrite-in-chamber-rules?
+         (rule r13 A B AB Cat)
+         ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+          (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+          (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+          (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+          (rule r12 A B AB Cat) (rule r13 A B AB Cat)))
+       True)
+
+!(test (chamber-tick-generated
+         (make-candidate-cap 2 1)
+         (make-chamber
+           exp00-fourteen-rules
+           (exp00-initial-state seed-7)
+           ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+            (rule r12 A B AB Cat) (rule r13 A B AB Cat))
+           ()))
+       (chamber
+         exp00-fourteen-rules
+         (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
+         ((rule r1 B Cat BCat A) (rule r0 A B AB Cat)
+          (rule r2 A Cat ACat B) (rule r1 B Cat BCat A)
+          (rule r0 A B AB Cat) (rule r2 A Cat ACat B)
+          (rule r1 B Cat BCat A) (rule r0 A B AB Cat)
+          (rule r2 A Cat ACat B) (rule r1 B Cat BCat A)
+          (rule r0 A B AB Cat) (rule r2 A Cat ACat B)
+          (rule r12 A B AB Cat) (rule r13 A B AB Cat))
+         ((event 0 r0 A B AB Cat))))
+
 !(test (generated-selection-fire-record-from-chamber
          (make-candidate-cap 2 1)
          (chamber exp00
