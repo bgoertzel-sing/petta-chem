@@ -1023,6 +1023,19 @@
       (make-candidate-for-rule $tick $rule-7))))
 
 (= (generate-candidate-pool
+      (chamber $id (state $tick $seed $m0 $m1 $m2 $m3) ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7 $rule-8 $rule-9 $rule-10 $rule-11 $rule-12 $rule-13 $rule-14 $rule-15 $rule-16 $rule-17 $rule-18 $rule-19) $events))
+   (candidate-pool
+     $tick
+     ((make-candidate-for-rule $tick $rule-0)
+      (make-candidate-for-rule $tick $rule-1)
+      (make-candidate-for-rule $tick $rule-2)
+      (make-candidate-for-rule $tick $rule-3)
+      (make-candidate-for-rule $tick $rule-4)
+      (make-candidate-for-rule $tick $rule-5)
+      (make-candidate-for-rule $tick $rule-6)
+      (make-candidate-for-rule $tick $rule-7))))
+
+(= (generate-candidate-pool
       (chamber $id (state $tick $seed $m0 $m1 $m2 $m3 $m4 $m5 $m6 $m7 $m8 $m9) ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7) $events))
    (candidate-pool
      $tick
@@ -1403,6 +1416,15 @@
           $rule-6 $rule-7 $rule-8 $rule-9 $rule-10 $rule-11 $rule-12 $rule-13
           $rule-14 $rule-15 $rule-16 $rule-17))
        (same-rule-rewrite? $candidate-rule $rule-18)))
+
+(= (rule-rewrite-in-chamber-rules? $candidate-rule
+      ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5 $rule-6 $rule-7 $rule-8 $rule-9 $rule-10 $rule-11 $rule-12 $rule-13 $rule-14 $rule-15 $rule-16 $rule-17 $rule-18 $rule-19))
+   (or (rule-rewrite-in-chamber-rules?
+         $candidate-rule
+         ($rule-0 $rule-1 $rule-2 $rule-3 $rule-4 $rule-5
+          $rule-6 $rule-7 $rule-8 $rule-9 $rule-10 $rule-11 $rule-12 $rule-13
+          $rule-14 $rule-15 $rule-16 $rule-17 $rule-18))
+       (same-rule-rewrite? $candidate-rule $rule-19)))
 
 (= (candidate-applicable-in-chamber?
       (candidate $tick $candidate-rule $score)
@@ -1982,6 +2004,7 @@
 (= (bounded-chamber-rule-count ($r0 $r1 $r2 $r3 $r4 $r5 $r6 $r7 $r8 $r9 $r10 $r11 $r12 $r13 $r14 $r15 $r16)) 17)
 (= (bounded-chamber-rule-count ($r0 $r1 $r2 $r3 $r4 $r5 $r6 $r7 $r8 $r9 $r10 $r11 $r12 $r13 $r14 $r15 $r16 $r17)) 18)
 (= (bounded-chamber-rule-count ($r0 $r1 $r2 $r3 $r4 $r5 $r6 $r7 $r8 $r9 $r10 $r11 $r12 $r13 $r14 $r15 $r16 $r17 $r18)) 19)
+(= (bounded-chamber-rule-count ($r0 $r1 $r2 $r3 $r4 $r5 $r6 $r7 $r8 $r9 $r10 $r11 $r12 $r13 $r14 $r15 $r16 $r17 $r18 $r19)) 20)
 
 (= (chamber-source-rule-count (chamber $id $state $rules $events))
    (bounded-chamber-rule-count $rules))
