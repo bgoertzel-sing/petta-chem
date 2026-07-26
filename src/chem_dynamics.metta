@@ -889,8 +889,6 @@
 (= (exp03-exp02-initial-state seed-11)
    (state 0 seed-11 (mol Q0 2) (mol Q1 2) (mol Q01 0) (mol Q10 1)))
 
-(= (seed-number seed-11) 11)
-
 (= (exp03-exp02-rules seed-11 random)
    ((exp02-random-polymer-rule seed-11 rr1)
     (exp02-random-polymer-rule seed-11 rr0)))
@@ -1193,8 +1191,6 @@
 ; two candidates, ordered rr1/rr0 so the deterministic seed/tick selector can
 ; replay the productive rr0 path for random-polymer while the control families
 ; remain no-op under the same state/cap.
-
-(= (seed-number seed-13) 13)
 
 (= (chamber-tick-with-candidate-accum
       (chamber $id
@@ -1661,8 +1657,6 @@
 ; rules visible while the same cap/order exposes a bounded rr1/rr0 dynamic
 ; window: random-polymer fires rr0 twice over three ticks, while shuffled and
 ; no-catalysis controls remain no-op.
-
-(= (seed-number seed-17) 17)
 
 (= (chamber-tick-with-candidate-accum
       (chamber $id
