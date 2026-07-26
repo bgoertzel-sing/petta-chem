@@ -4277,6 +4277,86 @@
           (rule r24 A B AB Cat) (rule r25 A B AB Cat))
          ((event 0 r0 A B AB Cat))))
 
+; Twenty-seven retained source rules keep the stable eight-candidate
+; generation prefix. Provenance covers the final rule, generation omits
+; nineteen source rules, and direct cap-2 ticking remains productive.
+(= (exp00-twenty-seven-rule-chamber)
+   (make-chamber
+     exp00-twenty-seven-rules
+     (exp00-initial-state seed-7)
+     ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+      (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+      (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+      (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+      (rule r12 A B AB Cat) (rule r13 A B AB Cat)
+      (rule r14 A B AB Cat) (rule r15 A B AB Cat)
+      (rule r16 A B AB Cat) (rule r17 A B AB Cat)
+      (rule r18 A B AB Cat) (rule r19 A B AB Cat)
+      (rule r20 A B AB Cat) (rule r21 A B AB Cat)
+      (rule r22 A B AB Cat) (rule r23 A B AB Cat)
+      (rule r24 A B AB Cat) (rule r25 A B AB Cat)
+      (rule r26 A B AB Cat))
+     ()))
+
+!(test (generate-candidate-pool (exp00-twenty-seven-rule-chamber))
+       (candidate-pool
+         0
+         ((candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1)
+          (candidate 0 (rule r2 A Cat ACat B) 1)
+          (candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1)
+          (candidate 0 (rule r2 A Cat ACat B) 1)
+          (candidate 0 (rule r1 B Cat BCat A) 1)
+          (candidate 0 (rule r0 A B AB Cat) 1))))
+
+!(test (chamber-source-rule-count (exp00-twenty-seven-rule-chamber)) 27)
+
+!(test (generated-selection-fire-record-generation-omitted-count
+         (exp00-twenty-seven-rule-chamber)
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 2 1)
+           (exp00-twenty-seven-rule-chamber)))
+       19)
+
+!(test (rule-rewrite-in-chamber-rules?
+         (rule r26 A B AB Cat)
+         ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+          (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+          (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+          (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+          (rule r12 A B AB Cat) (rule r13 A B AB Cat)
+          (rule r14 A B AB Cat) (rule r15 A B AB Cat)
+          (rule r16 A B AB Cat) (rule r17 A B AB Cat)
+          (rule r18 A B AB Cat) (rule r19 A B AB Cat)
+          (rule r20 A B AB Cat) (rule r21 A B AB Cat)
+          (rule r22 A B AB Cat) (rule r23 A B AB Cat)
+          (rule r24 A B AB Cat) (rule r25 A B AB Cat)
+          (rule r26 A B AB Cat)))
+       True)
+
+!(test (chamber-tick-generated
+         (make-candidate-cap 2 1)
+         (exp00-twenty-seven-rule-chamber))
+       (chamber
+         exp00-twenty-seven-rules
+         (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1))
+         ((rule r1 B Cat BCat A) (rule r0 A B AB Cat)
+          (rule r2 A Cat ACat B) (rule r1 B Cat BCat A)
+          (rule r0 A B AB Cat) (rule r2 A Cat ACat B)
+          (rule r1 B Cat BCat A) (rule r0 A B AB Cat)
+          (rule r2 A Cat ACat B) (rule r1 B Cat BCat A)
+          (rule r0 A B AB Cat) (rule r2 A Cat ACat B)
+          (rule r12 A B AB Cat) (rule r13 A B AB Cat)
+          (rule r14 A B AB Cat) (rule r15 A B AB Cat)
+          (rule r16 A B AB Cat) (rule r17 A B AB Cat)
+          (rule r18 A B AB Cat) (rule r19 A B AB Cat)
+          (rule r20 A B AB Cat) (rule r21 A B AB Cat)
+          (rule r22 A B AB Cat) (rule r23 A B AB Cat)
+          (rule r24 A B AB Cat) (rule r25 A B AB Cat)
+          (rule r26 A B AB Cat))
+         ((event 0 r0 A B AB Cat))))
+
 !(test (generated-selection-fire-record-from-chamber
          (make-candidate-cap 2 1)
          (chamber exp00
