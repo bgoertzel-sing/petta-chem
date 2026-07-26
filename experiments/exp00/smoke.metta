@@ -4520,6 +4520,62 @@
           (rule r28 A B AB Cat))
          ((event 0 r0 A B AB Cat))))
 
+; Thirty retained source rules keep the stable eight-candidate generation
+; prefix. Provenance covers the final rule and records 22 omitted rules.
+(= (exp00-thirty-rule-chamber)
+   (make-chamber
+     exp00-thirty-rules
+     (exp00-initial-state seed-7)
+     ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+      (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+      (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+      (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+      (rule r12 A B AB Cat) (rule r13 A B AB Cat)
+      (rule r14 A B AB Cat) (rule r15 A B AB Cat)
+      (rule r16 A B AB Cat) (rule r17 A B AB Cat)
+      (rule r18 A B AB Cat) (rule r19 A B AB Cat)
+      (rule r20 A B AB Cat) (rule r21 A B AB Cat)
+      (rule r22 A B AB Cat) (rule r23 A B AB Cat)
+      (rule r24 A B AB Cat) (rule r25 A B AB Cat)
+      (rule r26 A B AB Cat) (rule r27 A B AB Cat)
+      (rule r28 A B AB Cat) (rule r29 A B AB Cat))
+     ()))
+
+!(test (generate-candidate-pool (exp00-thirty-rule-chamber))
+       (generate-candidate-pool (exp00-twenty-nine-rule-chamber)))
+
+!(test (chamber-source-rule-count (exp00-thirty-rule-chamber)) 30)
+
+!(test (generated-selection-fire-record-generation-omitted-count
+         (exp00-thirty-rule-chamber)
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 2 1)
+           (exp00-thirty-rule-chamber)))
+       22)
+
+!(test (rule-rewrite-in-chamber-rules?
+         (rule r29 A B AB Cat)
+         ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+          (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+          (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+          (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+          (rule r12 A B AB Cat) (rule r13 A B AB Cat)
+          (rule r14 A B AB Cat) (rule r15 A B AB Cat)
+          (rule r16 A B AB Cat) (rule r17 A B AB Cat)
+          (rule r18 A B AB Cat) (rule r19 A B AB Cat)
+          (rule r20 A B AB Cat) (rule r21 A B AB Cat)
+          (rule r22 A B AB Cat) (rule r23 A B AB Cat)
+          (rule r24 A B AB Cat) (rule r25 A B AB Cat)
+          (rule r26 A B AB Cat) (rule r27 A B AB Cat)
+          (rule r28 A B AB Cat) (rule r29 A B AB Cat)))
+       True)
+
+!(test (chamber-state
+         (chamber-tick-generated
+           (make-candidate-cap 2 1)
+           (exp00-thirty-rule-chamber)))
+       (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1)))
+
 !(test (generated-selection-fire-record-from-chamber
          (make-candidate-cap 2 1)
          (chamber exp00
