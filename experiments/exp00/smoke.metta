@@ -4852,6 +4852,54 @@
            (exp00-thirty-six-rule-chamber)))
        (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1)))
 
+; Thirty-seven retained source rules keep the stable eight-candidate generation
+; prefix. Provenance covers the final rule and records 29 omitted rules.
+(= (exp00-thirty-seven-rule-chamber)
+   (make-chamber
+     exp00-thirty-seven-rules
+     (exp00-initial-state seed-7)
+     ((exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+      (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+      (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+      (exp00-rule r1) (exp00-rule r0) (exp00-rule r2)
+      (rule r12 A B AB Cat) (rule r13 A B AB Cat)
+      (rule r14 A B AB Cat) (rule r15 A B AB Cat)
+      (rule r16 A B AB Cat) (rule r17 A B AB Cat)
+      (rule r18 A B AB Cat) (rule r19 A B AB Cat)
+      (rule r20 A B AB Cat) (rule r21 A B AB Cat)
+      (rule r22 A B AB Cat) (rule r23 A B AB Cat)
+      (rule r24 A B AB Cat) (rule r25 A B AB Cat)
+      (rule r26 A B AB Cat) (rule r27 A B AB Cat)
+      (rule r28 A B AB Cat) (rule r29 A B AB Cat)
+      (rule r30 A B AB Cat) (rule r31 A B AB Cat)
+      (rule r32 A B AB Cat) (rule r33 A B AB Cat)
+      (rule r34 A B AB Cat) (rule r35 A B AB Cat)
+      (rule r36 A B AB Cat))
+     ()))
+
+!(test (generate-candidate-pool (exp00-thirty-seven-rule-chamber))
+       (generate-candidate-pool (exp00-thirty-six-rule-chamber)))
+
+!(test (chamber-source-rule-count (exp00-thirty-seven-rule-chamber)) 37)
+
+!(test (generated-selection-fire-record-generation-omitted-count
+         (exp00-thirty-seven-rule-chamber)
+         (generated-selection-fire-record-from-chamber
+           (make-candidate-cap 2 1)
+           (exp00-thirty-seven-rule-chamber)))
+       29)
+
+!(test (rule-rewrite-in-chamber-rules?
+         (rule r36 A B AB Cat)
+         (chamber-rules (exp00-thirty-seven-rule-chamber)))
+       True)
+
+!(test (chamber-state
+         (chamber-tick-generated
+           (make-candidate-cap 2 1)
+           (exp00-thirty-seven-rule-chamber)))
+       (state 1 seed-7 (mol A 0) (mol B 0) (mol AB 1) (mol Cat 1)))
+
 !(test (generated-selection-fire-record-from-chamber
          (make-candidate-cap 2 1)
          (chamber exp00
