@@ -14,6 +14,12 @@ Version 0.1 targets the locally validated PeTTa runtime:
 
 See `docs/runtime.md` for rationale and reproduction details.
 
+The next scientific line is frozen in
+`docs/neutral_crs_oracle_protocol.md`: a pathway-independent binary-polymer
+random catalytic reaction system, gated by exact PeTTa agreement with an
+independent exhaustive small-system RAF oracle before any calibration outcome
+is inspected.
+
 ## Smoke tests
 
 From this repository:
