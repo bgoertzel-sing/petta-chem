@@ -1,0 +1,57 @@
+!(import! &self ../../src/chem_neutral_ssa.metta)
+
+!(test (neutral-ssa-count "0" (("0" 20) ("1" 20))) 20)
+!(test (neutral-ssa-count "01" (("0" 20) ("1" 20))) 0)
+!(test
+  (neutral-ssa-catalyst-count
+    r (("0" 20) ("1" 7) ("01" 3))
+    (("0" r) ("01" r) ("1" other)))
+  23)
+!(test
+  (neutral-ssa-g-numerator
+    r 100 (("0" 20) ("01" 3)) (("0" r) ("01" r)))
+  2300100)
+!(test
+  (neutral-ssa-ligation-h-numerator
+    "0" "1" (("0" 20) ("1" 20)))
+  400)
+!(test
+  (neutral-ssa-ligation-h-numerator
+    "0" "0" (("0" 20)))
+  190)
+!(test
+  (neutral-ssa-ligation-propensity-numerator
+    r "0" "1" 100 (("0" 20) ("1" 20)) ())
+  40000)
+!(test
+  (neutral-ssa-ligation-propensity-numerator
+    r "0" "1" 100 (("0" 20) ("1" 20)) (("0" r)))
+  800040000)
+!(test
+  (neutral-ssa-cleavage-propensity-numerator
+    r "01" 100 (("01" 4)) ())
+  400)
+!(test
+  (neutral-ssa-ligation-enabled? "0" "0" (("0" 1))) False)
+!(test
+  (neutral-ssa-ligation-enabled? "0" "0" (("0" 2))) True)
+!(test
+  (neutral-ssa-ligation-enabled? "0" "1" (("0" 1) ("1" 0))) False)
+!(test
+  (neutral-ssa-tiny-step 0 (("0" 1) ("1" 1) ("01" 0)))
+  (("0" 0) ("1" 0) ("01" 1)))
+!(test
+  (neutral-ssa-tiny-run (("0" 1) ("1" 1) ("01" 0)))
+  (("0" 1) ("1" 1) ("01" 0)))
+!(test
+  (neutral-ssa-tiny-run (("0" 1) ("1" 1) ("01" 0)))
+  (neutral-ssa-tiny-run (("0" 1) ("1" 1) ("01" 0))))
+!(test
+  (neutral-ssa-tiny-control-record)
+  (neutral-ssa-control
+    model neutral-crs-v1
+    initial (("0" 1) ("1" 1) ("01" 0))
+    event-stream (ligation cleavage)
+    final (("0" 1) ("1" 1) ("01" 0))
+    replay exact
+    calibration-endpoints uninspected))
