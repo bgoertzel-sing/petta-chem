@@ -59,6 +59,58 @@
        (and (> (neutral-ssa-count $left $counts) 0)
             (> (neutral-ssa-count $right $counts) 0))))
 
+; Canonical count updates and event application. The event vocabulary is
+; deliberately chemistry-shaped rather than pathway-shaped. Callers must
+; enumerate events in canonical CRS order and use enabled? before apply.
+(= (neutral-ssa-adjust-count $molecule $delta $counts)
+   (if (== $counts ())
+       ()
+       (let $entry (car-atom $counts)
+         (if (== $molecule (car-atom $entry))
+             (cons-atom
+               ((car-atom $entry)
+                (+ (car-atom (cdr-atom $entry)) $delta))
+               (neutral-ssa-adjust-count
+                 $molecule 0 (cdr-atom $counts)))
+             (cons-atom
+               $entry
+               (neutral-ssa-adjust-count
+                 $molecule $delta (cdr-atom $counts)))))))
+
+(= (neutral-ssa-apply-event (influx $molecule) $counts)
+   (neutral-ssa-adjust-count $molecule 1 $counts))
+(= (neutral-ssa-apply-event (dilution $molecule) $counts)
+   (neutral-ssa-adjust-count $molecule -1 $counts))
+(= (neutral-ssa-apply-event
+      (ligation $rule-id $left $right $product) $counts)
+   (neutral-ssa-adjust-count
+     $product 1
+     (neutral-ssa-adjust-count
+       $right -1 (neutral-ssa-adjust-count $left -1 $counts))))
+(= (neutral-ssa-apply-event
+      (cleavage $rule-id $polymer $left $right) $counts)
+   (neutral-ssa-adjust-count
+     $right 1
+     (neutral-ssa-adjust-count
+       $left 1 (neutral-ssa-adjust-count $polymer -1 $counts))))
+
+(= (neutral-ssa-event-enabled? (influx $molecule) $counts) True)
+(= (neutral-ssa-event-enabled? (dilution $molecule) $counts)
+   (> (neutral-ssa-count $molecule $counts) 0))
+(= (neutral-ssa-event-enabled?
+      (ligation $rule-id $left $right $product) $counts)
+   (neutral-ssa-ligation-enabled? $left $right $counts))
+(= (neutral-ssa-event-enabled?
+      (cleavage $rule-id $polymer $left $right) $counts)
+   (> (neutral-ssa-count $polymer $counts) 0))
+
+(= (neutral-ssa-apply-trace $events $counts)
+   (if (== $events ())
+       $counts
+       (neutral-ssa-apply-trace
+         (cdr-atom $events)
+         (neutral-ssa-apply-event (car-atom $events) $counts))))
+
 ; Replayable direct-SSA draw boundary. Events arrive in canonical order as
 ; ((EVENT-ID INTEGER-WEIGHT)...). The categorical draw is exact; waiting time
 ; remains a symbolic inverse-CDF value so no host float enters replay.
