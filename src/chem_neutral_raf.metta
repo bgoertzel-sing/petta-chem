@@ -121,6 +121,67 @@
          (neutral-raf-all-reactions-valid?
            $reactions $available $catalysis))))
 
+; Exhaustive subset enumeration for the tiny-system oracle gate.  This is
+; intentionally exponential and belongs only on the frozen <=12-reaction
+; validation boundary, never on sampled calibration systems.
+
+(= (neutral-raf-append $left $right)
+   (if (== $left ())
+       $right
+       (cons-atom
+         (car-atom $left)
+         (neutral-raf-append (cdr-atom $left) $right))))
+
+(= (neutral-raf-prepend-to-each $item $subsets)
+   (if (== $subsets ())
+       ()
+       (cons-atom
+         (cons-atom $item (car-atom $subsets))
+         (neutral-raf-prepend-to-each $item (cdr-atom $subsets)))))
+
+(= (neutral-raf-subsets $items)
+   (if (== $items ())
+       (())
+       (let $tail-subsets (neutral-raf-subsets (cdr-atom $items))
+         (neutral-raf-append
+           $tail-subsets
+           (neutral-raf-prepend-to-each
+             (car-atom $items) $tail-subsets)))))
+
+(= (neutral-raf-filter-subsets $food $subsets $catalysis)
+   (if (== $subsets ())
+       ()
+       (let $subset (car-atom $subsets)
+         (if (neutral-raf-is-raf? $food $subset $catalysis)
+             (cons-atom
+               $subset
+               (neutral-raf-filter-subsets
+                 $food (cdr-atom $subsets) $catalysis))
+             (neutral-raf-filter-subsets
+               $food (cdr-atom $subsets) $catalysis)))))
+
+(= (neutral-raf-exhaustive-subsets $food $reactions $catalysis)
+   (neutral-raf-filter-subsets
+     $food (neutral-raf-subsets $reactions) $catalysis))
+
+(= (neutral-raf-reaction-ids $reactions)
+   (if (== $reactions ())
+       ()
+       (cons-atom
+         (raf-reaction-id (car-atom $reactions))
+         (neutral-raf-reaction-ids (cdr-atom $reactions)))))
+
+(= (neutral-raf-subset-ids $subsets)
+   (if (== $subsets ())
+       ()
+       (cons-atom
+         (neutral-raf-reaction-ids (car-atom $subsets))
+         (neutral-raf-subset-ids (cdr-atom $subsets)))))
+
+(= (neutral-raf-exhaustive-subset-ids $food $reactions $catalysis)
+   (neutral-raf-subset-ids
+     (neutral-raf-exhaustive-subsets $food $reactions $catalysis)))
+
 ; Frozen hand-fixture facts.  Lists preserve stoichiometric duplicates and
 ; canonical lexical order.  These atoms are the PeTTa side of the interface;
 ; expected RAF classifications remain independently computed by the oracle.
@@ -195,4 +256,4 @@
    (neutral-raf-interface neutral-crs-v1 hand-fixtures 7
                           sampled-calibration embargoed
                           subset-predicate implemented
-                          exhaustive-enumeration pending))
+                          exhaustive-enumeration implemented))
