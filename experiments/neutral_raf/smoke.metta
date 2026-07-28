@@ -193,6 +193,27 @@
     ((raf-catalysis unreachable-cycle x r2)
      (raf-catalysis unreachable-cycle y r1)))
   ())
+!(test (neutral-raf-list-length (neutral-raf-l3-molecules)) 14)
+!(test (neutral-raf-l3-food) ("0" "00" "01" "1" "10" "11"))
+!(test (neutral-raf-l3-reaction-count) 40)
+!(test
+  (neutral-raf-l3-reaction-ids)
+  ("cleave:00:1"
+   "cleave:000:1" "cleave:000:2"
+   "cleave:001:1" "cleave:001:2"
+   "cleave:01:1"
+   "cleave:010:1" "cleave:010:2"
+   "cleave:011:1" "cleave:011:2"
+   "cleave:10:1"
+   "cleave:100:1" "cleave:100:2"
+   "cleave:101:1" "cleave:101:2"
+   "cleave:11:1"
+   "cleave:110:1" "cleave:110:2"
+   "cleave:111:1" "cleave:111:2"
+   "lig:0:0" "lig:0:00" "lig:0:01" "lig:0:1" "lig:0:10" "lig:0:11"
+   "lig:00:0" "lig:00:1" "lig:01:0" "lig:01:1"
+   "lig:1:0" "lig:1:00" "lig:1:01" "lig:1:1" "lig:1:10" "lig:1:11"
+   "lig:10:0" "lig:10:1" "lig:11:0" "lig:11:1"))
 !(test (neutral-raf-hand-fixture-serialization-status)
        (neutral-raf-interface neutral-crs-v1 hand-fixtures 7
                               sampled-calibration embargoed

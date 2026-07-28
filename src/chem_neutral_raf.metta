@@ -254,6 +254,68 @@
      (neutral-raf-subset-ids
        (neutral-raf-filter-irreducible $raf-subsets $raf-subsets))))
 
+; Canonical full R_3 universe for the generated tiny-system gate.  The order
+; is frozen by (kind, reactants, products): cleavages first, then ordered
+; ligations.  Sampling must select eight entries from this PeTTa-owned list;
+; the host oracle must never reconstruct it.
+
+(= (neutral-raf-l3-molecules)
+   ("0" "00" "000" "001" "01" "010" "011"
+    "1" "10" "100" "101" "11" "110" "111"))
+
+(= (neutral-raf-l3-food)
+   ("0" "00" "01" "1" "10" "11"))
+
+(= (neutral-raf-l3-reactions $system-id)
+   ((raf-reaction $system-id "cleave:00:1" reactants ("00") products ("0" "0"))
+    (raf-reaction $system-id "cleave:000:1" reactants ("000") products ("0" "00"))
+    (raf-reaction $system-id "cleave:000:2" reactants ("000") products ("00" "0"))
+    (raf-reaction $system-id "cleave:001:1" reactants ("001") products ("0" "01"))
+    (raf-reaction $system-id "cleave:001:2" reactants ("001") products ("00" "1"))
+    (raf-reaction $system-id "cleave:01:1" reactants ("01") products ("0" "1"))
+    (raf-reaction $system-id "cleave:010:1" reactants ("010") products ("0" "10"))
+    (raf-reaction $system-id "cleave:010:2" reactants ("010") products ("01" "0"))
+    (raf-reaction $system-id "cleave:011:1" reactants ("011") products ("0" "11"))
+    (raf-reaction $system-id "cleave:011:2" reactants ("011") products ("01" "1"))
+    (raf-reaction $system-id "cleave:10:1" reactants ("10") products ("1" "0"))
+    (raf-reaction $system-id "cleave:100:1" reactants ("100") products ("1" "00"))
+    (raf-reaction $system-id "cleave:100:2" reactants ("100") products ("10" "0"))
+    (raf-reaction $system-id "cleave:101:1" reactants ("101") products ("1" "01"))
+    (raf-reaction $system-id "cleave:101:2" reactants ("101") products ("10" "1"))
+    (raf-reaction $system-id "cleave:11:1" reactants ("11") products ("1" "1"))
+    (raf-reaction $system-id "cleave:110:1" reactants ("110") products ("1" "10"))
+    (raf-reaction $system-id "cleave:110:2" reactants ("110") products ("11" "0"))
+    (raf-reaction $system-id "cleave:111:1" reactants ("111") products ("1" "11"))
+    (raf-reaction $system-id "cleave:111:2" reactants ("111") products ("11" "1"))
+    (raf-reaction $system-id "lig:0:0" reactants ("0" "0") products ("00"))
+    (raf-reaction $system-id "lig:0:00" reactants ("0" "00") products ("000"))
+    (raf-reaction $system-id "lig:0:01" reactants ("0" "01") products ("001"))
+    (raf-reaction $system-id "lig:0:1" reactants ("0" "1") products ("01"))
+    (raf-reaction $system-id "lig:0:10" reactants ("0" "10") products ("010"))
+    (raf-reaction $system-id "lig:0:11" reactants ("0" "11") products ("011"))
+    (raf-reaction $system-id "lig:00:0" reactants ("00" "0") products ("000"))
+    (raf-reaction $system-id "lig:00:1" reactants ("00" "1") products ("001"))
+    (raf-reaction $system-id "lig:01:0" reactants ("01" "0") products ("010"))
+    (raf-reaction $system-id "lig:01:1" reactants ("01" "1") products ("011"))
+    (raf-reaction $system-id "lig:1:0" reactants ("1" "0") products ("10"))
+    (raf-reaction $system-id "lig:1:00" reactants ("1" "00") products ("100"))
+    (raf-reaction $system-id "lig:1:01" reactants ("1" "01") products ("101"))
+    (raf-reaction $system-id "lig:1:1" reactants ("1" "1") products ("11"))
+    (raf-reaction $system-id "lig:1:10" reactants ("1" "10") products ("110"))
+    (raf-reaction $system-id "lig:1:11" reactants ("1" "11") products ("111"))
+    (raf-reaction $system-id "lig:10:0" reactants ("10" "0") products ("100"))
+    (raf-reaction $system-id "lig:10:1" reactants ("10" "1") products ("101"))
+    (raf-reaction $system-id "lig:11:0" reactants ("11" "0") products ("110"))
+    (raf-reaction $system-id "lig:11:1" reactants ("11" "1") products ("111"))))
+
+(= (neutral-raf-l3-reaction-count)
+   (neutral-raf-list-length
+     (neutral-raf-l3-reactions generated-l3-catalog)))
+
+(= (neutral-raf-l3-reaction-ids)
+   (neutral-raf-reaction-ids
+     (neutral-raf-l3-reactions generated-l3-catalog)))
+
 ; Frozen hand-fixture facts.  Lists preserve stoichiometric duplicates and
 ; canonical lexical order.  These atoms are the PeTTa side of the interface;
 ; expected RAF classifications remain independently computed by the oracle.
