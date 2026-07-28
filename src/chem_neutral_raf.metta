@@ -31,6 +31,96 @@
       (raf-catalysis $system-id $catalyst $rule-id))
    $rule-id)
 
+; Independent PeTTa structural predicate.  It consumes only the canonical
+; logical fields above.  Closure is iterated once per candidate reaction,
+; which is sufficient because each productive pass adds at least one molecule
+; and no reaction can first become enabled after more than |R'| passes.
+
+(= (neutral-raf-member? $wanted $items)
+   (if (== $items ())
+       False
+       (if (== $wanted (car-atom $items))
+           True
+           (neutral-raf-member? $wanted (cdr-atom $items)))))
+
+(= (neutral-raf-all-members? $wanted $available)
+   (if (== $wanted ())
+       True
+       (and (neutral-raf-member? (car-atom $wanted) $available)
+            (neutral-raf-all-members? (cdr-atom $wanted) $available))))
+
+(= (neutral-raf-add-unique $molecule $available)
+   (if (neutral-raf-member? $molecule $available)
+       $available
+       (cons-atom $molecule $available)))
+
+(= (neutral-raf-add-products $products $available)
+   (if (== $products ())
+       $available
+       (neutral-raf-add-products
+         (cdr-atom $products)
+         (neutral-raf-add-unique (car-atom $products) $available))))
+
+(= (neutral-raf-closure-pass $reactions $available)
+   (if (== $reactions ())
+       $available
+       (let $reaction (car-atom $reactions)
+         (let $next
+           (if (neutral-raf-all-members?
+                 (raf-reaction-reactants $reaction) $available)
+               (neutral-raf-add-products
+                 (raf-reaction-products $reaction) $available)
+               $available)
+           (neutral-raf-closure-pass (cdr-atom $reactions) $next)))))
+
+(= (neutral-raf-list-length $items)
+   (if (== $items ())
+       0
+       (+ 1 (neutral-raf-list-length (cdr-atom $items)))))
+
+(= (neutral-raf-closure-iterations $remaining $reactions $available)
+   (if (== $remaining 0)
+       $available
+       (neutral-raf-closure-iterations
+         (- $remaining 1)
+         $reactions
+         (neutral-raf-closure-pass $reactions $available))))
+
+(= (neutral-raf-closure $food $reactions)
+   (neutral-raf-closure-iterations
+     (neutral-raf-list-length $reactions) $reactions $food))
+
+(= (neutral-raf-has-catalyst? $rule-id $available $catalysis)
+   (if (== $catalysis ())
+       False
+       (let $edge (car-atom $catalysis)
+         (if (and (== (raf-catalysis-rule-id $edge) $rule-id)
+                  (neutral-raf-member?
+                    (raf-catalysis-catalyst $edge) $available))
+             True
+             (neutral-raf-has-catalyst?
+               $rule-id $available (cdr-atom $catalysis))))))
+
+(= (neutral-raf-all-reactions-valid? $reactions $available $catalysis)
+   (if (== $reactions ())
+       True
+       (let $reaction (car-atom $reactions)
+         (and
+           (neutral-raf-all-members?
+             (raf-reaction-reactants $reaction) $available)
+           (and
+             (neutral-raf-has-catalyst?
+               (raf-reaction-id $reaction) $available $catalysis)
+             (neutral-raf-all-reactions-valid?
+               (cdr-atom $reactions) $available $catalysis))))))
+
+(= (neutral-raf-is-raf? $food $reactions $catalysis)
+   (if (== $reactions ())
+       False
+       (let $available (neutral-raf-closure $food $reactions)
+         (neutral-raf-all-reactions-valid?
+           $reactions $available $catalysis))))
+
 ; Frozen hand-fixture facts.  Lists preserve stoichiometric duplicates and
 ; canonical lexical order.  These atoms are the PeTTa side of the interface;
 ; expected RAF classifications remain independently computed by the oracle.
@@ -104,4 +194,5 @@
 (= (neutral-raf-hand-fixture-serialization-status)
    (neutral-raf-interface neutral-crs-v1 hand-fixtures 7
                           sampled-calibration embargoed
-                          exhaustive-comparison pending))
+                          subset-predicate implemented
+                          exhaustive-enumeration pending))
