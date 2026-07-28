@@ -316,6 +316,104 @@
    (neutral-raf-reaction-ids
      (neutral-raf-l3-reactions generated-l3-catalog)))
 
+; Replayable PeTTa-owned generated-system sampler.  Reaction sampling is
+; without replacement.  The selected reactions are projected back through
+; the canonical R_3 order so serialization never depends on draw order.
+; Catalysis uses an independent keyed draw for every molecule/reaction pair:
+; draw < f out of 40 implements Bernoulli p=f/|R_3| for the frozen
+; f in {0,1,2,4}.  These arithmetic hashes are protocol RNGs, not scientific
+; endpoints or cryptographic hashes.
+
+(= (neutral-raf-nth $index $items)
+   (if (== $index 0)
+       (car-atom $items)
+       (neutral-raf-nth (- $index 1) (cdr-atom $items))))
+
+(= (neutral-raf-remove-at $index $items)
+   (if (== $index 0)
+       (cdr-atom $items)
+       (cons-atom
+         (car-atom $items)
+         (neutral-raf-remove-at (- $index 1) (cdr-atom $items)))))
+
+(= (neutral-raf-reaction-rng-next $rng-state)
+   (#mod (+ (* 1103515245 $rng-state) 12345) 2147483648))
+
+(= (neutral-raf-draw-reactions $count $rng-state $remaining)
+   (if (== $count 0)
+       ()
+       (let $next-state (neutral-raf-reaction-rng-next $rng-state)
+         (let $chosen-index
+           (#mod $next-state (neutral-raf-list-length $remaining))
+           (let $chosen (neutral-raf-nth $chosen-index $remaining)
+             (cons-atom
+               $chosen
+               (neutral-raf-draw-reactions
+                 (- $count 1)
+                 $next-state
+                 (neutral-raf-remove-at $chosen-index $remaining))))))))
+
+(= (neutral-raf-filter-selected-reactions $canonical $selected)
+   (if (== $canonical ())
+       ()
+       (let $reaction (car-atom $canonical)
+         (if (neutral-raf-reaction-member? $reaction $selected)
+             (cons-atom
+               $reaction
+               (neutral-raf-filter-selected-reactions
+                 (cdr-atom $canonical) $selected))
+             (neutral-raf-filter-selected-reactions
+               (cdr-atom $canonical) $selected)))))
+
+(= (neutral-raf-l3-sampled-reactions $system-id $graph-seed)
+   (let $canonical (neutral-raf-l3-reactions $system-id)
+     (neutral-raf-filter-selected-reactions
+       $canonical
+       (neutral-raf-draw-reactions 8 $graph-seed $canonical))))
+
+(= (neutral-raf-catalysis-draw
+      $graph-seed $molecule-index $reaction-index)
+   (#mod (+ (* 1664525 $graph-seed)
+            (+ (* 1013904223 $molecule-index)
+               (* 69069 $reaction-index)))
+         40))
+
+(= (neutral-raf-catalysis-for-reactions
+      $system-id $graph-seed $f $molecule $molecule-index
+      $reaction-index $reactions)
+   (if (== $reactions ())
+       ()
+       (let $reaction (car-atom $reactions)
+         (if (< (neutral-raf-catalysis-draw
+                  $graph-seed $molecule-index $reaction-index) $f)
+             (cons-atom
+               (raf-catalysis
+                 $system-id $molecule (raf-reaction-id $reaction))
+               (neutral-raf-catalysis-for-reactions
+                 $system-id $graph-seed $f $molecule $molecule-index
+                 (+ $reaction-index 1) (cdr-atom $reactions)))
+             (neutral-raf-catalysis-for-reactions
+               $system-id $graph-seed $f $molecule $molecule-index
+               (+ $reaction-index 1) (cdr-atom $reactions))))))
+
+(= (neutral-raf-l3-sampled-catalysis-from
+      $system-id $graph-seed $f $molecule-index $molecules $reactions)
+   (if (== $molecules ())
+       ()
+       (neutral-raf-append
+         (neutral-raf-catalysis-for-reactions
+           $system-id $graph-seed $f (car-atom $molecules)
+           $molecule-index 0 $reactions)
+         (neutral-raf-l3-sampled-catalysis-from
+           $system-id $graph-seed $f (+ $molecule-index 1)
+           (cdr-atom $molecules) $reactions))))
+
+(= (neutral-raf-l3-sampled-catalysis $system-id $graph-seed $f)
+   (neutral-raf-l3-sampled-catalysis-from
+     $system-id $graph-seed $f 0
+     (neutral-raf-l3-molecules)
+     (neutral-raf-l3-sampled-reactions $system-id $graph-seed)))
+
 ; Frozen hand-fixture facts.  Lists preserve stoichiometric duplicates and
 ; canonical lexical order.  These atoms are the PeTTa side of the interface;
 ; expected RAF classifications remain independently computed by the oracle.

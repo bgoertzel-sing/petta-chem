@@ -214,6 +214,30 @@
    "lig:00:0" "lig:00:1" "lig:01:0" "lig:01:1"
    "lig:1:0" "lig:1:00" "lig:1:01" "lig:1:1" "lig:1:10" "lig:1:11"
    "lig:10:0" "lig:10:1" "lig:11:0" "lig:11:1"))
+!(test
+  (neutral-raf-list-length
+    (neutral-raf-l3-sampled-reactions generated-l3-seed-1 1))
+  8)
+!(test
+  (neutral-raf-reaction-ids
+    (neutral-raf-l3-sampled-reactions generated-l3-seed-1 1))
+  ("cleave:000:2" "cleave:01:1" "cleave:111:1" "lig:0:0"
+   "lig:0:01" "lig:0:11" "lig:1:0" "lig:10:1"))
+!(test
+  (neutral-raf-reaction-ids
+    (neutral-raf-l3-sampled-reactions generated-l3-seed-1 1))
+  (neutral-raf-reaction-ids
+    (neutral-raf-l3-sampled-reactions generated-l3-seed-1 1)))
+!(test
+  (neutral-raf-l3-sampled-catalysis generated-l3-seed-1 1 0)
+  ())
+!(test
+  (neutral-raf-list-length
+    (neutral-raf-l3-sampled-catalysis generated-l3-seed-1 1 40))
+  112)
+!(test
+  (neutral-raf-l3-sampled-catalysis generated-l3-seed-2 2 2)
+  (neutral-raf-l3-sampled-catalysis generated-l3-seed-2 2 2))
 !(test (neutral-raf-hand-fixture-serialization-status)
        (neutral-raf-interface neutral-crs-v1 hand-fixtures 7
                               sampled-calibration embargoed
