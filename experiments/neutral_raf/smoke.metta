@@ -133,8 +133,69 @@
     ((raf-catalysis unreachable-cycle x r2)
      (raf-catalysis unreachable-cycle y r1)))
   ())
+!(test
+  (neutral-raf-maximal-ids
+    ("0" "1")
+    ((raf-reaction food-chain r1 reactants ("0" "1") products ("01"))
+     (raf-reaction food-chain r2 reactants ("01" "1") products ("011")))
+    ((raf-catalysis food-chain "0" r1)
+     (raf-catalysis food-chain "011" r2)))
+  (r1 r2))
+!(test
+  (neutral-raf-irreducible-subset-ids
+    ("0" "1")
+    ((raf-reaction food-chain r1 reactants ("0" "1") products ("01"))
+     (raf-reaction food-chain r2 reactants ("01" "1") products ("011")))
+    ((raf-catalysis food-chain "0" r1)
+     (raf-catalysis food-chain "011" r2)))
+  ((r1)))
+!(test
+  (neutral-raf-maximal-ids
+    ("0" "01" "1")
+    ((raf-reaction multiple-products cleave
+       reactants ("01") products ("0" "1"))
+     (raf-reaction multiple-products left
+       reactants ("0" "0") products ("00"))
+     (raf-reaction multiple-products right
+       reactants ("1" "1") products ("11")))
+    ((raf-catalysis multiple-products "0" cleave)
+     (raf-catalysis multiple-products "0" left)
+     (raf-catalysis multiple-products "1" cleave)
+     (raf-catalysis multiple-products "1" right)))
+  (cleave left right))
+!(test
+  (neutral-raf-irreducible-subset-ids
+    ("0" "01" "1")
+    ((raf-reaction multiple-products cleave
+       reactants ("01") products ("0" "1"))
+     (raf-reaction multiple-products left
+       reactants ("0" "0") products ("00"))
+     (raf-reaction multiple-products right
+       reactants ("1" "1") products ("11")))
+    ((raf-catalysis multiple-products "0" cleave)
+     (raf-catalysis multiple-products "0" left)
+     (raf-catalysis multiple-products "1" cleave)
+     (raf-catalysis multiple-products "1" right)))
+  ((right) (left) (cleave)))
+!(test
+  (neutral-raf-maximal-ids
+    ("0" "1")
+    ((raf-reaction unreachable-cycle r1 reactants (x) products (y))
+     (raf-reaction unreachable-cycle r2 reactants (y) products (x)))
+    ((raf-catalysis unreachable-cycle x r2)
+     (raf-catalysis unreachable-cycle y r1)))
+  ())
+!(test
+  (neutral-raf-irreducible-subset-ids
+    ("0" "1")
+    ((raf-reaction unreachable-cycle r1 reactants (x) products (y))
+     (raf-reaction unreachable-cycle r2 reactants (y) products (x)))
+    ((raf-catalysis unreachable-cycle x r2)
+     (raf-catalysis unreachable-cycle y r1)))
+  ())
 !(test (neutral-raf-hand-fixture-serialization-status)
        (neutral-raf-interface neutral-crs-v1 hand-fixtures 7
                               sampled-calibration embargoed
                               subset-predicate implemented
-                              exhaustive-enumeration implemented))
+                              exhaustive-enumeration implemented
+                              maximal-and-irrraf implemented))

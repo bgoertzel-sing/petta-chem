@@ -182,6 +182,78 @@
    (neutral-raf-subset-ids
      (neutral-raf-exhaustive-subsets $food $reactions $catalysis)))
 
+(= (neutral-raf-reaction-member? $wanted $reactions)
+   (if (== $reactions ())
+       False
+       (if (== (raf-reaction-id $wanted)
+               (raf-reaction-id (car-atom $reactions)))
+           True
+           (neutral-raf-reaction-member? $wanted (cdr-atom $reactions)))))
+
+(= (neutral-raf-reaction-in-any-subset? $wanted $subsets)
+   (if (== $subsets ())
+       False
+       (if (neutral-raf-reaction-member? $wanted (car-atom $subsets))
+           True
+           (neutral-raf-reaction-in-any-subset?
+             $wanted (cdr-atom $subsets)))))
+
+(= (neutral-raf-maximal-from-subsets $reactions $subsets)
+   (if (== $reactions ())
+       ()
+       (let $reaction (car-atom $reactions)
+         (if (neutral-raf-reaction-in-any-subset? $reaction $subsets)
+             (cons-atom
+               $reaction
+               (neutral-raf-maximal-from-subsets
+                 (cdr-atom $reactions) $subsets))
+             (neutral-raf-maximal-from-subsets
+               (cdr-atom $reactions) $subsets)))))
+
+(= (neutral-raf-maximal-ids $food $reactions $catalysis)
+   (neutral-raf-reaction-ids
+     (neutral-raf-maximal-from-subsets
+       $reactions
+       (neutral-raf-exhaustive-subsets $food $reactions $catalysis))))
+
+(= (neutral-raf-reaction-subset? $left $right)
+   (if (== $left ())
+       True
+       (and (neutral-raf-reaction-member? (car-atom $left) $right)
+            (neutral-raf-reaction-subset? (cdr-atom $left) $right))))
+
+(= (neutral-raf-proper-reaction-subset? $left $right)
+   (and (neutral-raf-reaction-subset? $left $right)
+        (< (neutral-raf-list-length $left)
+           (neutral-raf-list-length $right))))
+
+(= (neutral-raf-has-proper-raf-subset? $wanted $raf-subsets)
+   (if (== $raf-subsets ())
+       False
+       (if (neutral-raf-proper-reaction-subset?
+             (car-atom $raf-subsets) $wanted)
+           True
+           (neutral-raf-has-proper-raf-subset?
+             $wanted (cdr-atom $raf-subsets)))))
+
+(= (neutral-raf-filter-irreducible $remaining $all-raf-subsets)
+   (if (== $remaining ())
+       ()
+       (let $subset (car-atom $remaining)
+         (if (neutral-raf-has-proper-raf-subset? $subset $all-raf-subsets)
+             (neutral-raf-filter-irreducible
+               (cdr-atom $remaining) $all-raf-subsets)
+             (cons-atom
+               $subset
+               (neutral-raf-filter-irreducible
+                 (cdr-atom $remaining) $all-raf-subsets))))))
+
+(= (neutral-raf-irreducible-subset-ids $food $reactions $catalysis)
+   (let $raf-subsets
+     (neutral-raf-exhaustive-subsets $food $reactions $catalysis)
+     (neutral-raf-subset-ids
+       (neutral-raf-filter-irreducible $raf-subsets $raf-subsets))))
+
 ; Frozen hand-fixture facts.  Lists preserve stoichiometric duplicates and
 ; canonical lexical order.  These atoms are the PeTTa side of the interface;
 ; expected RAF classifications remain independently computed by the oracle.
@@ -256,4 +328,5 @@
    (neutral-raf-interface neutral-crs-v1 hand-fixtures 7
                           sampled-calibration embargoed
                           subset-predicate implemented
-                          exhaustive-enumeration implemented))
+                          exhaustive-enumeration implemented
+                          maximal-and-irrraf implemented))
