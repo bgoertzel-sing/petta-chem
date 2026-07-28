@@ -132,6 +132,63 @@
   (neutral-ssa-waiting-uniform-numerator 2001 0)
   438717)
 !(test
+  (neutral-ssa-step
+    1 0
+    () ()
+    ((ligation lig-01 "0" "1" "01"))
+    100 () (("0" 1) ("1" 1) ("01" 0)))
+  (ssa-step
+    draw
+      (ssa-draw
+        event (ligation lig-01 "0" "1" "01")
+        waiting-time (negative-log-ratio 40717 1000000 total-propensity 100))
+    counts (("0" 0) ("1" 0) ("01" 1))))
+!(test
+  (neutral-ssa-run
+    1 2
+    () ()
+    ((ligation lig-01 "0" "1" "01")
+     (cleavage cleave-01 "01" "0" "1"))
+    100 () (("0" 1) ("1" 1) ("01" 0)))
+  (ssa-run
+    seed 1
+    events
+      ((ssa-draw
+         event (ligation lig-01 "0" "1" "01")
+         waiting-time (negative-log-ratio 40717 1000000 total-propensity 100))
+       (ssa-draw
+         event (cleavage cleave-01 "01" "0" "1")
+         waiting-time (negative-log-ratio 106254 1000000 total-propensity 10000)))
+    final-counts (("0" 1) ("1" 1) ("01" 0))
+    stop event-bound))
+!(test
+  (neutral-ssa-run
+    1 2
+    () ()
+    ((ligation lig-01 "0" "1" "01")
+     (cleavage cleave-01 "01" "0" "1"))
+    100 () (("0" 1) ("1" 1) ("01" 0)))
+  (neutral-ssa-run
+    1 2
+    () ()
+    ((ligation lig-01 "0" "1" "01")
+     (cleavage cleave-01 "01" "0" "1"))
+    100 () (("0" 1) ("1" 1) ("01" 0))))
+!(test
+  (neutral-ssa-run
+    1 3 () ("0") () 100 () (("0" 0)))
+  (ssa-run
+    seed 1 events () final-counts (("0" 0)) stop no-enabled-event))
+!(test
+  (neutral-ssa-counts-nonnegative?
+    (neutral-ssa-step-counts
+      (neutral-ssa-step
+        1 0
+        () ()
+        ((ligation lig-01 "0" "1" "01"))
+        100 () (("0" 1) ("1" 1) ("01" 0)))))
+  True)
+!(test
   (neutral-ssa-tiny-step 0 (("0" 1) ("1" 1) ("01" 0)))
   (("0" 0) ("1" 0) ("01" 1)))
 !(test

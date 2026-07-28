@@ -229,6 +229,81 @@
                1000000
                total-propensity $total)))))
 
+; One bounded SSA transition re-enumerates propensities from the current
+; resource state, draws from the keyed stream, and applies only that selected
+; enabled event.  The complete draw is retained for exact replay/audit.
+(= (neutral-ssa-draw-event
+      (ssa-draw event $event waiting-time $waiting-time))
+   $event)
+
+(= (neutral-ssa-step
+      $seed $event-index $food $molecules $reactions $volume $catalysis $counts)
+   (let $weighted-events
+     (neutral-ssa-enumerate-events
+       $food $molecules $reactions $volume $counts $catalysis)
+     (let $draw
+       (neutral-ssa-seeded-draw $seed $event-index $weighted-events)
+       (if (== $draw no-enabled-event)
+           (ssa-step no-enabled-event counts $counts)
+           (let $event (neutral-ssa-draw-event $draw)
+             (ssa-step
+               draw $draw
+               counts (neutral-ssa-apply-event $event $counts)))))))
+
+(= (neutral-ssa-step-counts
+      (ssa-step no-enabled-event counts $counts))
+   $counts)
+(= (neutral-ssa-step-counts
+      (ssa-step draw $draw counts $counts))
+   $counts)
+
+(= (neutral-ssa-step-record
+      (ssa-step no-enabled-event counts $counts))
+   no-enabled-event)
+(= (neutral-ssa-step-record
+      (ssa-step draw $draw counts $counts))
+   $draw)
+
+(= (neutral-ssa-run-loop
+      $seed $event-index $remaining
+      $food $molecules $reactions $volume $catalysis $counts $records)
+   (if (== $remaining 0)
+       (ssa-run
+         seed $seed
+         events $records
+         final-counts $counts
+         stop event-bound)
+       (let $step
+         (neutral-ssa-step
+           $seed $event-index
+           $food $molecules $reactions $volume $catalysis $counts)
+         (let $record (neutral-ssa-step-record $step)
+           (if (== $record no-enabled-event)
+               (ssa-run
+                 seed $seed
+                 events $records
+                 final-counts $counts
+                 stop no-enabled-event)
+               (neutral-ssa-run-loop
+                 $seed (+ $event-index 1) (- $remaining 1)
+                 $food $molecules $reactions $volume $catalysis
+                 (neutral-ssa-step-counts $step)
+                 (neutral-ssa-list-append $records ($record))))))))
+
+(= (neutral-ssa-run
+      $seed $event-count
+      $food $molecules $reactions $volume $catalysis $initial-counts)
+   (neutral-ssa-run-loop
+     $seed 0 $event-count
+     $food $molecules $reactions $volume $catalysis $initial-counts ()))
+
+(= (neutral-ssa-counts-nonnegative? $counts)
+   (if (== $counts ())
+       True
+       (and
+         (>= (car-atom (cdr-atom (car-atom $counts))) 0)
+         (neutral-ssa-counts-nonnegative? (cdr-atom $counts)))))
+
 (= (neutral-ssa-tiny-step $event-index (($a $na) ($b $nb) ($ab $nab)))
    (if (== (neutral-ssa-tiny-choice $event-index) ligation)
        (($a (- $na 1)) ($b (- $nb 1)) ($ab (+ $nab 1)))
