@@ -37,6 +37,25 @@
   (neutral-ssa-ligation-enabled? "0" "0" (("0" 2))) True)
 !(test
   (neutral-ssa-ligation-enabled? "0" "1" (("0" 1) ("1" 0))) False)
+!(test (neutral-ssa-weight-total ((influx-0 20) (lig-01 5) (cleave-01 3))) 28)
+!(test
+  (neutral-ssa-select-threshold 0 ((influx-0 20) (lig-01 5) (cleave-01 3)))
+  influx-0)
+!(test
+  (neutral-ssa-select-threshold 20 ((influx-0 20) (lig-01 5) (cleave-01 3)))
+  lig-01)
+!(test
+  (neutral-ssa-select-threshold 27 ((influx-0 20) (lig-01 5) (cleave-01 3)))
+  cleave-01)
+!(test (neutral-ssa-seeded-draw 2001 0 ()) no-enabled-event)
+!(test
+  (neutral-ssa-seeded-draw
+    2001 0 ((influx-0 20) (lig-01 5) (cleave-01 3)))
+  (neutral-ssa-seeded-draw
+    2001 0 ((influx-0 20) (lig-01 5) (cleave-01 3))))
+!(test
+  (neutral-ssa-waiting-uniform-numerator 2001 0)
+  438717)
 !(test
   (neutral-ssa-tiny-step 0 (("0" 1) ("1" 1) ("01" 0)))
   (("0" 0) ("1" 0) ("01" 1)))

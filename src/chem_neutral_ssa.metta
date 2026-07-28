@@ -59,6 +59,47 @@
        (and (> (neutral-ssa-count $left $counts) 0)
             (> (neutral-ssa-count $right $counts) 0))))
 
+; Replayable direct-SSA draw boundary. Events arrive in canonical order as
+; ((EVENT-ID INTEGER-WEIGHT)...). The categorical draw is exact; waiting time
+; remains a symbolic inverse-CDF value so no host float enters replay.
+(= (neutral-ssa-weight-total $weighted-events)
+   (if (== $weighted-events ())
+       0
+       (+ (car-atom (cdr-atom (car-atom $weighted-events)))
+          (neutral-ssa-weight-total (cdr-atom $weighted-events)))))
+
+(= (neutral-ssa-select-threshold $threshold $weighted-events)
+   (let $entry (car-atom $weighted-events)
+     (let $weight (car-atom (cdr-atom $entry))
+       (if (< $threshold $weight)
+           (car-atom $entry)
+           (neutral-ssa-select-threshold
+             (- $threshold $weight) (cdr-atom $weighted-events))))))
+
+; Separate keyed draws prevent event and waiting-time streams from coupling.
+; Waiting-time uniform numerators are in [1, 1000000].
+(= (neutral-ssa-event-draw $seed $event-index $total)
+   (#mod (+ (* $seed 48271) (* $event-index 69621)) $total))
+
+(= (neutral-ssa-waiting-uniform-numerator $seed $event-index)
+   (+ 1
+      (#mod (+ (+ (* $seed 40699) (* $event-index 65537)) 17) 1000000)))
+
+(= (neutral-ssa-seeded-draw $seed $event-index $weighted-events)
+   (let $total (neutral-ssa-weight-total $weighted-events)
+     (if (== $total 0)
+         no-enabled-event
+         (ssa-draw
+           event
+             (neutral-ssa-select-threshold
+               (neutral-ssa-event-draw $seed $event-index $total)
+               $weighted-events)
+           waiting-time
+             (negative-log-ratio
+               (neutral-ssa-waiting-uniform-numerator $seed $event-index)
+               1000000
+               total-propensity $total)))))
+
 (= (neutral-ssa-tiny-step $event-index (($a $na) ($b $nb) ($ab $nab)))
    (if (== (neutral-ssa-tiny-choice $event-index) ligation)
        (($a (- $na 1)) ($b (- $nb 1)) ($ab (+ $nab 1)))
