@@ -104,6 +104,83 @@
       (cleavage $rule-id $polymer $left $right) $counts)
    (> (neutral-ssa-count $polymer $counts) 0))
 
+(= (neutral-ssa-list-append $left $right)
+   (if (== $left ())
+       $right
+       (cons-atom
+         (car-atom $left)
+         (neutral-ssa-list-append (cdr-atom $left) $right))))
+
+; All weights below share the exact denominator 10000*V^2.  The caller
+; supplies food, molecules, and reactions in their frozen canonical order, so
+; the resulting influx/dilution/reaction list is a stable sampling boundary.
+(= (neutral-ssa-influx-weight $volume)
+   (* 2000 (* $volume $volume)))
+(= (neutral-ssa-dilution-weight $molecule $volume $counts)
+   (* 100
+      (* (neutral-ssa-count $molecule $counts)
+         (* $volume $volume))))
+
+(= (neutral-ssa-enumerate-influx $food $volume)
+   (if (== $food ())
+       ()
+       (cons-atom
+         ((influx (car-atom $food))
+          (neutral-ssa-influx-weight $volume))
+         (neutral-ssa-enumerate-influx (cdr-atom $food) $volume))))
+
+(= (neutral-ssa-enumerate-dilution $molecules $volume $counts)
+   (if (== $molecules ())
+       ()
+       (let $molecule (car-atom $molecules)
+         (let $weight
+           (neutral-ssa-dilution-weight $molecule $volume $counts)
+           (if (== $weight 0)
+               (neutral-ssa-enumerate-dilution
+                 (cdr-atom $molecules) $volume $counts)
+               (cons-atom
+                 ((dilution $molecule) $weight)
+                 (neutral-ssa-enumerate-dilution
+                   (cdr-atom $molecules) $volume $counts)))))))
+
+(= (neutral-ssa-reaction-weight
+      (ligation $rule-id $left $right $product)
+      $volume $counts $catalysis)
+   (neutral-ssa-ligation-propensity-numerator
+     $rule-id $left $right $volume $counts $catalysis))
+(= (neutral-ssa-reaction-weight
+      (cleavage $rule-id $polymer $left $right)
+      $volume $counts $catalysis)
+   (* $volume
+      (neutral-ssa-cleavage-propensity-numerator
+        $rule-id $polymer $volume $counts $catalysis)))
+
+(= (neutral-ssa-enumerate-reactions
+      $reactions $volume $counts $catalysis)
+   (if (== $reactions ())
+       ()
+       (let $reaction (car-atom $reactions)
+         (let $weight
+           (neutral-ssa-reaction-weight
+             $reaction $volume $counts $catalysis)
+           (if (== $weight 0)
+               (neutral-ssa-enumerate-reactions
+                 (cdr-atom $reactions) $volume $counts $catalysis)
+               (cons-atom
+                 ($reaction $weight)
+                 (neutral-ssa-enumerate-reactions
+                   (cdr-atom $reactions)
+                   $volume $counts $catalysis)))))))
+
+(= (neutral-ssa-enumerate-events
+      $food $molecules $reactions $volume $counts $catalysis)
+   (neutral-ssa-list-append
+     (neutral-ssa-enumerate-influx $food $volume)
+     (neutral-ssa-list-append
+       (neutral-ssa-enumerate-dilution $molecules $volume $counts)
+       (neutral-ssa-enumerate-reactions
+         $reactions $volume $counts $catalysis))))
+
 (= (neutral-ssa-apply-trace $events $counts)
    (if (== $events ())
        $counts

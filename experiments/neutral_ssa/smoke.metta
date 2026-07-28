@@ -77,6 +77,41 @@
      (cleavage cleave-01 "01" "0" "1")
      (dilution "0"))
     (("0" 2) ("1" 2) ("01" 0))))
+!(test (neutral-ssa-influx-weight 100) 20000000)
+!(test
+  (neutral-ssa-dilution-weight "0" 100 (("0" 2) ("1" 0) ("01" 1)))
+  2000000)
+!(test
+  (neutral-ssa-enumerate-events
+    ("0" "1")
+    ("0" "1" "01")
+    ((cleavage cleave-01 "01" "0" "1")
+     (ligation lig-01 "0" "1" "01"))
+    100
+    (("0" 2) ("1" 1) ("01" 0))
+    ())
+  (((influx "0") 20000000)
+   ((influx "1") 20000000)
+   ((dilution "0") 2000000)
+   ((dilution "1") 1000000)
+   ((ligation lig-01 "0" "1" "01") 200)))
+!(test
+  (neutral-ssa-enumerate-events
+    ("0")
+    ("0" "1" "01")
+    ((cleavage cleave-01 "01" "0" "1")
+     (ligation lig-01 "0" "1" "01"))
+    100
+    (("0" 1) ("1" 0) ("01" 2))
+    (("01" cleave-01)))
+  (((influx "0") 20000000)
+   ((dilution "0") 1000000)
+   ((dilution "01") 2000000)
+   ((cleavage cleave-01 "01" "0" "1") 40020000)))
+!(test
+  (neutral-ssa-enumerate-events
+    () ("0") () 100 (("0" 0)) ())
+  ())
 !(test (neutral-ssa-weight-total ((influx-0 20) (lig-01 5) (cleave-01 3))) 28)
 !(test
   (neutral-ssa-select-threshold 0 ((influx-0 20) (lig-01 5) (cleave-01 3)))
