@@ -1,0 +1,28 @@
+{
+  "catalysis_f": [
+    0,
+    1,
+    2,
+    4
+  ],
+  "comparison_count": 400,
+  "comparisons_sha256": "c9b0ee622c894f066800c826c1aec58c63c6caee3c60435987347e308d3a81ae",
+  "detector_source_sha256": "7d393d46557905fa486024ac8a5bf26fd3e70df28d6df358f25259a6324eedb3",
+  "exact_fields": [
+    "all_subsets",
+    "maximal_raf",
+    "all_irreducible_rafs"
+  ],
+  "gate": "generated-l3-exhaustive-raf-oracle",
+  "outcome_embargo": "structural incidence and calibration endpoints not reported",
+  "petta_runtime_commit": "4ce1d0ea58855abb772b911278312c8846e5cc08",
+  "protocol": "neutral-crs-v1",
+  "reactions_per_system": 8,
+  "seed_range": [
+    1,
+    100
+  ],
+  "source_commit_before_gate_artifact": "4235d6e0eefb08e02cfd70e71309e2781f07bfcd",
+  "status": "pass",
+  "subset_classifications_per_system": 255
+}

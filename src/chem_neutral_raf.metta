@@ -414,6 +414,27 @@
      (neutral-raf-l3-molecules)
      (neutral-raf-l3-sampled-reactions $system-id $graph-seed)))
 
+; Single logical export consumed by the independent comparison harness.  All
+; chemistry, sampling, and RAF classification remain on the PeTTa side; the
+; host only parses this record and compares it with exhaustive oracle truth.
+(= (neutral-raf-l3-generated-record $graph-seed $f)
+   (let $system-id (generated-l3 $graph-seed $f)
+     (let $reactions
+       (neutral-raf-l3-sampled-reactions $system-id $graph-seed)
+       (let $catalysis
+         (neutral-raf-l3-sampled-catalysis $system-id $graph-seed $f)
+         (generated-raf-record
+           $graph-seed $f
+           (neutral-raf-l3-food)
+           $reactions
+           $catalysis
+           (neutral-raf-exhaustive-subset-ids
+             (neutral-raf-l3-food) $reactions $catalysis)
+           (neutral-raf-maximal-ids
+             (neutral-raf-l3-food) $reactions $catalysis)
+           (neutral-raf-irreducible-subset-ids
+             (neutral-raf-l3-food) $reactions $catalysis))))))
+
 ; Frozen hand-fixture facts.  Lists preserve stoichiometric duplicates and
 ; canonical lexical order.  These atoms are the PeTTa side of the interface;
 ; expected RAF classifications remain independently computed by the oracle.
