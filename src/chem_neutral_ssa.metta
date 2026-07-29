@@ -11,6 +11,28 @@
              (car-atom (cdr-atom $entry))
              (neutral-ssa-count $molecule (cdr-atom $counts))))))
 
+(= (neutral-ssa-member? $item $items)
+   (if (== $items ())
+       False
+       (if (== $item (car-atom $items))
+           True
+           (neutral-ssa-member? $item (cdr-atom $items)))))
+
+; Population-scaling controls start every food species at V/5 molecules and
+; every nonfood species at zero, matching 20 food molecules at V=100.
+; Molecules and food arrive in their frozen canonical order.
+(= (neutral-ssa-initial-counts $molecules $food $volume)
+   (if (== $molecules ())
+       ()
+       (let $molecule (car-atom $molecules)
+         (cons-atom
+           ($molecule
+            (if (neutral-ssa-member? $molecule $food)
+                (/ $volume 5)
+                0))
+           (neutral-ssa-initial-counts
+             (cdr-atom $molecules) $food $volume)))))
+
 (= (neutral-ssa-catalyst-count $rule-id $counts $catalysis)
    (if (== $catalysis ())
        0
