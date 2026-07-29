@@ -18,6 +18,72 @@
            True
            (neutral-ssa-member? $item (cdr-atom $items)))))
 
+; Pathway-independent calibration-graph catalysis.  f-twice represents 2f,
+; so draw < f-twice out of 2*|R_L| implements Bernoulli
+; p = min(1, f/|R_L|) without floating point.  Molecule and reaction indexes
+; come only from their frozen canonical lists.  The output edge shape is the
+; one consumed directly by neutral-ssa-catalyst-count.
+(= (neutral-ssa-list-length $items)
+   (if (== $items ())
+       0
+       (+ 1 (neutral-ssa-list-length (cdr-atom $items)))))
+
+(= (neutral-ssa-reaction-id
+      (ligation $rule-id $left $right $product))
+   $rule-id)
+(= (neutral-ssa-reaction-id
+      (cleavage $rule-id $polymer $left $right))
+   $rule-id)
+
+(= (neutral-ssa-catalysis-draw
+      $graph-seed $molecule-index $reaction-index $denominator)
+   (#mod
+     (+ (* 1664525 $graph-seed)
+        (+ (* 1013904223 $molecule-index)
+           (* 69069 $reaction-index)))
+     $denominator))
+
+(= (neutral-ssa-sample-catalysis-reactions
+      $graph-seed $f-twice $denominator $molecule $molecule-index
+      $reaction-index $reactions)
+   (if (== $reactions ())
+       ()
+       (let $reaction (car-atom $reactions)
+         (if (< (neutral-ssa-catalysis-draw
+                  $graph-seed $molecule-index $reaction-index $denominator)
+                $f-twice)
+             (cons-atom
+               ($molecule (neutral-ssa-reaction-id $reaction))
+               (neutral-ssa-sample-catalysis-reactions
+                 $graph-seed $f-twice $denominator $molecule $molecule-index
+                 (+ $reaction-index 1) (cdr-atom $reactions)))
+             (neutral-ssa-sample-catalysis-reactions
+               $graph-seed $f-twice $denominator $molecule $molecule-index
+               (+ $reaction-index 1) (cdr-atom $reactions))))))
+
+(= (neutral-ssa-sample-catalysis-molecules
+      $graph-seed $f-twice $denominator $molecule-index
+      $molecules $reactions)
+   (if (== $molecules ())
+       ()
+       (neutral-ssa-list-append
+         (neutral-ssa-sample-catalysis-reactions
+           $graph-seed $f-twice $denominator
+           (car-atom $molecules) $molecule-index 0 $reactions)
+         (neutral-ssa-sample-catalysis-molecules
+           $graph-seed $f-twice $denominator (+ $molecule-index 1)
+           (cdr-atom $molecules) $reactions))))
+
+(= (neutral-ssa-sample-catalysis
+      $graph-seed $f-twice $molecules $reactions)
+   (if (== $reactions ())
+       ()
+       (let $denominator (* 2 (neutral-ssa-list-length $reactions))
+         (neutral-ssa-sample-catalysis-molecules
+           $graph-seed
+           (if (> $f-twice $denominator) $denominator $f-twice)
+           $denominator 0 $molecules $reactions))))
+
 ; Population-scaling controls start every food species at V/5 molecules and
 ; every nonfood species at zero, matching 20 food molecules at V=100.
 ; Molecules and food arrive in their frozen canonical order.

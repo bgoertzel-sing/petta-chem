@@ -4,6 +4,49 @@
 !(test (neutral-ssa-count "01" (("0" 20) ("1" 20))) 0)
 !(test (neutral-ssa-member? "01" ("0" "1" "01")) True)
 !(test (neutral-ssa-member? "10" ("0" "1" "01")) False)
+!(test (neutral-ssa-list-length (r0 r1 r2)) 3)
+!(test
+  (neutral-ssa-reaction-id (ligation lig-01 "0" "1" "01"))
+  lig-01)
+!(test
+  (neutral-ssa-reaction-id (cleavage cleave-01 "01" "0" "1"))
+  cleave-01)
+!(test
+  (neutral-ssa-sample-catalysis
+    1001 0
+    ("0" "1")
+    ((ligation lig-01 "0" "1" "01")
+     (cleavage cleave-01 "01" "0" "1")))
+  ())
+!(test
+  (neutral-ssa-sample-catalysis
+    1001 4
+    ("0" "1")
+    ((ligation lig-01 "0" "1" "01")
+     (cleavage cleave-01 "01" "0" "1")))
+  (("0" lig-01) ("0" cleave-01)
+   ("1" lig-01) ("1" cleave-01)))
+!(test
+  (neutral-ssa-sample-catalysis
+    1001 2
+    ("0" "1")
+    ((ligation lig-01 "0" "1" "01")
+     (cleavage cleave-01 "01" "0" "1")))
+  (("0" lig-01) ("1" lig-01) ("1" cleave-01)))
+!(test
+  (neutral-ssa-sample-catalysis
+    1001 2
+    ("0" "1")
+    ((ligation lig-01 "0" "1" "01")
+     (cleavage cleave-01 "01" "0" "1")))
+  (neutral-ssa-sample-catalysis
+    1001 2
+    ("0" "1")
+    ((ligation lig-01 "0" "1" "01")
+     (cleavage cleave-01 "01" "0" "1"))))
+!(test
+  (neutral-ssa-sample-catalysis 1001 2 ("0") ())
+  ())
 !(test
   (neutral-ssa-initial-counts
     ("0" "1" "00" "01" "10" "11" "000")
