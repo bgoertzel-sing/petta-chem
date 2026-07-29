@@ -427,6 +427,37 @@
    (neutral-ssa-timed-states
      $initial-counts (neutral-ssa-run-events $run)))
 
+; Preserve both sides of every realized resource transition.  Post-event-only
+; rows are insufficient for endpoint evaluation when an enabled reaction
+; consumes the last copy of a required reactant.  This generic projection
+; records no RAF membership or endpoint truth.
+(= (neutral-ssa-timed-transitions-loop $event-index $time $counts $draws)
+   (if (== $draws ())
+       ()
+       (let $draw (car-atom $draws)
+         (let $event (neutral-ssa-draw-event $draw)
+           (let $next-time
+             (+ $time (neutral-ssa-draw-waiting-time $draw))
+             (let $next-counts
+               (neutral-ssa-apply-event $event $counts)
+               (cons-atom
+                 (ssa-timed-transition
+                   index $event-index
+                   time $next-time
+                   event $event
+                   before-counts $counts
+                   after-counts $next-counts)
+                 (neutral-ssa-timed-transitions-loop
+                   (+ $event-index 1) $next-time $next-counts
+                   (cdr-atom $draws)))))))))
+
+(= (neutral-ssa-timed-transitions $initial-counts $draws)
+   (neutral-ssa-timed-transitions-loop 0 0.0 $initial-counts $draws))
+
+(= (neutral-ssa-run-timed-transitions $initial-counts $run)
+   (neutral-ssa-timed-transitions
+     $initial-counts (neutral-ssa-run-events $run)))
+
 ; Assign timed trajectory rows to half-open persistence bins.  The frozen
 ; calibration uses burn-in 100, width 10, and 40 bins, but these arguments
 ; remain explicit so hand controls can test boundary behavior without running

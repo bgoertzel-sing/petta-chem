@@ -323,6 +323,49 @@
          (cleavage cleave-01 "01" "0" "1"))
         100 () (("0" 1) ("1" 1) ("01" 0))))))
 !(test
+  (neutral-ssa-timed-transitions
+    (("0" 1) ("1" 1) ("01" 0))
+    ((ssa-draw
+       event (ligation lig-01 "0" "1" "01")
+       waiting-uniform (500000 1000000)
+       total-weight 1
+       propensity-denominator 10000
+       waiting-time 1.25)
+     (ssa-draw
+       event (cleavage cleave-01 "01" "0" "1")
+       waiting-uniform (250000 1000000)
+       total-weight 1
+       propensity-denominator 10000
+       waiting-time 2.5)))
+  ((ssa-timed-transition
+     index 0 time 1.25
+     event (ligation lig-01 "0" "1" "01")
+     before-counts (("0" 1) ("1" 1) ("01" 0))
+     after-counts (("0" 0) ("1" 0) ("01" 1)))
+   (ssa-timed-transition
+     index 1 time 3.75
+     event (cleavage cleave-01 "01" "0" "1")
+     before-counts (("0" 0) ("1" 0) ("01" 1))
+     after-counts (("0" 1) ("1" 1) ("01" 0)))))
+!(test
+  (neutral-ssa-run-timed-transitions
+    (("0" 1) ("1" 1) ("01" 0))
+    (neutral-ssa-run
+      1 2
+      () ()
+      ((ligation lig-01 "0" "1" "01")
+       (cleavage cleave-01 "01" "0" "1"))
+      100 () (("0" 1) ("1" 1) ("01" 0))))
+  (neutral-ssa-timed-transitions
+    (("0" 1) ("1" 1) ("01" 0))
+    (neutral-ssa-run-events
+      (neutral-ssa-run
+        1 2
+        () ()
+        ((ligation lig-01 "0" "1" "01")
+         (cleavage cleave-01 "01" "0" "1"))
+        100 () (("0" 1) ("1" 1) ("01" 0))))))
+!(test
   (neutral-ssa-time-bin-index 99.999 100 10 40)
   outside-persistence-window)
 !(test (neutral-ssa-time-bin-index 100.0 100 10 40) 0)
