@@ -1,0 +1,73 @@
+{
+  "schema": "neutral-calibration-ledger-v1",
+  "status": "frozen-unrun",
+  "model": "neutral-crs-v1",
+  "protocol": "docs/neutral_crs_oracle_protocol.md",
+  "outcome_policy": "No endpoint may be inspected until the complete declared cohort has run; no adaptive extension or graph resampling is permitted.",
+  "streams": {
+    "graph_seeds": {"first": 1001, "last": 1032},
+    "dynamics_seeds": [2001, 2002, 2003, 2004],
+    "separation": "graph and dynamics streams are independent"
+  },
+  "fixed_model": {
+    "alphabet": ["0", "1"],
+    "food_max_length": 2,
+    "food": ["0", "1", "00", "01", "10", "11"],
+    "initial_food_count_at_volume_100": 20,
+    "delta": "1/100",
+    "ligation_rate": 1,
+    "cleavage_rate": 1,
+    "basal_multiplier": "1/10000",
+    "catalytic_multiplier": 10,
+    "stop_time": 500,
+    "stop_event_count": 1000000,
+    "burn_in_time": 100,
+    "persistence_bins": {"count": 40, "width": 10, "first": 100, "last_exclusive": 500},
+    "persistent_bin_threshold": 32,
+    "catalysis_probability": "min(1, f / |R_L|)"
+  },
+  "cohorts": [
+    {
+      "id": "primary-transition",
+      "polymer_max_lengths": [5],
+      "f_twice": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+      "volumes": [100],
+      "run_count": 2176
+    },
+    {
+      "id": "finite-size-control",
+      "polymer_max_lengths": [4, 6],
+      "f_twice": [0, 2, 4, 6, 8, 10, 12, 14, 16],
+      "volumes": [100],
+      "run_count": 2304,
+      "note": "L=5 integer-f points are already contained in primary-transition."
+    },
+    {
+      "id": "population-scaling-control",
+      "polymer_max_lengths": [5],
+      "f_twice": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+      "volumes": [50, 200],
+      "run_count": 4352,
+      "note": "V=100 points are already contained in primary-transition; initial food counts and influx scale linearly with V."
+    }
+  ],
+  "total_unique_runs": 8832,
+  "endpoints": [
+    "structural-raf-existence",
+    "dynamic-reachability",
+    "active-persistent-raf",
+    "causal-productive-effect"
+  ],
+  "reporting": {
+    "unit": "graph seed",
+    "interval": "95% cluster bootstrap over graph seeds",
+    "dynamics_replicates": "nested observations, not independent graphs",
+    "labels_must_remain_separate": true
+  },
+  "provenance": {
+    "oracle_gate_manifest": "artifacts/neutral_raf_generated_gate_manifest.json",
+    "oracle_gate_commit": "707dbcc",
+    "ssa_baseline_commit": "83baf93",
+    "calibration_endpoints_inspected": false
+  }
+}
