@@ -427,6 +427,51 @@
    (neutral-ssa-timed-states
      $initial-counts (neutral-ssa-run-events $run)))
 
+; Assign timed trajectory rows to half-open persistence bins.  The frozen
+; calibration uses burn-in 100, width 10, and 40 bins, but these arguments
+; remain explicit so hand controls can test boundary behavior without running
+; calibration chemistry.  Rows before burn-in and at/after the final boundary
+; are excluded.
+(= (neutral-ssa-time-bin-index-loop
+      $time $bin-start $bin-width $bin-index $remaining)
+   (if (== $remaining 0)
+       outside-persistence-window
+       (if (< $time (+ $bin-start $bin-width))
+           $bin-index
+           (neutral-ssa-time-bin-index-loop
+             $time (+ $bin-start $bin-width) $bin-width
+             (+ $bin-index 1) (- $remaining 1)))))
+
+(= (neutral-ssa-time-bin-index $time $burn-in $bin-width $bin-count)
+   (if (< $time $burn-in)
+       outside-persistence-window
+       (neutral-ssa-time-bin-index-loop
+         $time $burn-in $bin-width 0 $bin-count)))
+
+(= (neutral-ssa-timed-state-time
+      (ssa-timed-state
+        index $index time $time event $event counts $counts))
+   $time)
+
+(= (neutral-ssa-bin-timed-states
+      $timed-states $burn-in $bin-width $bin-count)
+   (if (== $timed-states ())
+       ()
+       (let $timed-state (car-atom $timed-states)
+         (let $bin
+           (neutral-ssa-time-bin-index
+             (neutral-ssa-timed-state-time $timed-state)
+             $burn-in $bin-width $bin-count)
+           (if (== $bin outside-persistence-window)
+               (neutral-ssa-bin-timed-states
+                 (cdr-atom $timed-states)
+                 $burn-in $bin-width $bin-count)
+               (cons-atom
+                 (ssa-binned-state bin $bin state $timed-state)
+                 (neutral-ssa-bin-timed-states
+                   (cdr-atom $timed-states)
+                   $burn-in $bin-width $bin-count)))))))
+
 (= (neutral-ssa-step
       $seed $event-index $food $molecules $reactions $volume $catalysis $counts)
    (let $weighted-events

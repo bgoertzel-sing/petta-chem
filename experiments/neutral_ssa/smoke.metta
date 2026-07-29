@@ -323,6 +323,36 @@
          (cleavage cleave-01 "01" "0" "1"))
         100 () (("0" 1) ("1" 1) ("01" 0))))))
 !(test
+  (neutral-ssa-time-bin-index 99.999 100 10 40)
+  outside-persistence-window)
+!(test (neutral-ssa-time-bin-index 100.0 100 10 40) 0)
+!(test (neutral-ssa-time-bin-index 109.999 100 10 40) 0)
+!(test (neutral-ssa-time-bin-index 110.0 100 10 40) 1)
+!(test (neutral-ssa-time-bin-index 499.999 100 10 40) 39)
+!(test
+  (neutral-ssa-time-bin-index 500.0 100 10 40)
+  outside-persistence-window)
+!(test
+  (neutral-ssa-bin-timed-states
+    ((ssa-timed-state index 0 time 99.0 event before counts (("0" 1)))
+     (ssa-timed-state index 1 time 100.0 event start counts (("0" 2)))
+     (ssa-timed-state index 2 time 109.0 event same-bin counts (("0" 3)))
+     (ssa-timed-state index 3 time 110.0 event next-bin counts (("0" 4)))
+     (ssa-timed-state index 4 time 500.0 event after counts (("0" 5))))
+    100 10 40)
+  ((ssa-binned-state
+     bin 0
+     state
+       (ssa-timed-state index 1 time 100.0 event start counts (("0" 2))))
+   (ssa-binned-state
+     bin 0
+     state
+       (ssa-timed-state index 2 time 109.0 event same-bin counts (("0" 3))))
+   (ssa-binned-state
+     bin 1
+     state
+       (ssa-timed-state index 3 time 110.0 event next-bin counts (("0" 4))))))
+!(test
   (neutral-ssa-run-until
     1 2 0.0
     () ()
