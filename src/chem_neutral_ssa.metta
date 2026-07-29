@@ -214,26 +214,49 @@
    (+ 1
       (#mod (+ (+ (* $seed 40699) (* $event-index 65537)) 17) 1000000)))
 
-(= (neutral-ssa-seeded-draw $seed $event-index $weighted-events)
+; Every enumerated event weight uses the common denominator 10000*V^2.
+; Realizing tau here keeps Gillespie time, the T=500 stop, and persistence
+; bins inside the PeTTa chemistry boundary.  log-math is the PeTTa/SWI
+; deterministic floating-point primitive; counts and event selection remain
+; exact integers.
+(= (neutral-ssa-waiting-time $uniform-numerator $total-weight $volume)
+   (/ (* (- 0
+            (log-math
+              2.718281828459045
+              (/ $uniform-numerator 1000000)))
+         (* 10000 (* $volume $volume)))
+      $total-weight))
+
+(= (neutral-ssa-seeded-draw
+      $seed $event-index $volume $weighted-events)
    (let $total (neutral-ssa-weight-total $weighted-events)
      (if (== $total 0)
          no-enabled-event
-         (ssa-draw
-           event
-             (neutral-ssa-select-threshold
-               (neutral-ssa-event-draw $seed $event-index $total)
-               $weighted-events)
-           waiting-time
-             (negative-log-ratio
-               (neutral-ssa-waiting-uniform-numerator $seed $event-index)
-               1000000
-               total-propensity $total)))))
+         (let $uniform-numerator
+           (neutral-ssa-waiting-uniform-numerator $seed $event-index)
+           (ssa-draw
+             event
+               (neutral-ssa-select-threshold
+                 (neutral-ssa-event-draw $seed $event-index $total)
+                 $weighted-events)
+             waiting-uniform ($uniform-numerator 1000000)
+             total-weight $total
+             propensity-denominator
+               (* 10000 (* $volume $volume))
+             waiting-time
+               (neutral-ssa-waiting-time
+                 $uniform-numerator $total $volume))))))
 
 ; One bounded SSA transition re-enumerates propensities from the current
 ; resource state, draws from the keyed stream, and applies only that selected
 ; enabled event.  The complete draw is retained for exact replay/audit.
 (= (neutral-ssa-draw-event
-      (ssa-draw event $event waiting-time $waiting-time))
+      (ssa-draw
+        event $event
+        waiting-uniform $waiting-uniform
+        total-weight $total-weight
+        propensity-denominator $propensity-denominator
+        waiting-time $waiting-time))
    $event)
 
 (= (neutral-ssa-step
@@ -242,7 +265,8 @@
      (neutral-ssa-enumerate-events
        $food $molecules $reactions $volume $counts $catalysis)
      (let $draw
-       (neutral-ssa-seeded-draw $seed $event-index $weighted-events)
+       (neutral-ssa-seeded-draw
+         $seed $event-index $volume $weighted-events)
        (if (== $draw no-enabled-event)
            (ssa-step no-enabled-event counts $counts)
            (let $event (neutral-ssa-draw-event $draw)

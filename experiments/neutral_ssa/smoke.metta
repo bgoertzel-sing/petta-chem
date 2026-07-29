@@ -122,15 +122,19 @@
 !(test
   (neutral-ssa-select-threshold 27 ((influx-0 20) (lig-01 5) (cleave-01 3)))
   cleave-01)
-!(test (neutral-ssa-seeded-draw 2001 0 ()) no-enabled-event)
+!(test (neutral-ssa-seeded-draw 2001 0 100 ()) no-enabled-event)
 !(test
   (neutral-ssa-seeded-draw
-    2001 0 ((influx-0 20) (lig-01 5) (cleave-01 3)))
+    2001 0 100 ((influx-0 20) (lig-01 5) (cleave-01 3)))
   (neutral-ssa-seeded-draw
-    2001 0 ((influx-0 20) (lig-01 5) (cleave-01 3))))
+    2001 0 100 ((influx-0 20) (lig-01 5) (cleave-01 3))))
 !(test
   (neutral-ssa-waiting-uniform-numerator 2001 0)
   438717)
+!(test (neutral-ssa-waiting-time 1000000 1 100) 0.0)
+!(test
+  (> (neutral-ssa-waiting-time 500000 10000 1) 0)
+  True)
 !(test
   (neutral-ssa-step
     1 0
@@ -141,7 +145,11 @@
     draw
       (ssa-draw
         event (ligation lig-01 "0" "1" "01")
-        waiting-time (negative-log-ratio 40717 1000000 total-propensity 100))
+        waiting-uniform (40717 1000000)
+        total-weight 100
+        propensity-denominator 100000000
+        waiting-time
+          (neutral-ssa-waiting-time 40717 100 100))
     counts (("0" 0) ("1" 0) ("01" 1))))
 !(test
   (neutral-ssa-run
@@ -155,10 +163,18 @@
     events
       ((ssa-draw
          event (ligation lig-01 "0" "1" "01")
-         waiting-time (negative-log-ratio 40717 1000000 total-propensity 100))
+         waiting-uniform (40717 1000000)
+         total-weight 100
+         propensity-denominator 100000000
+         waiting-time
+           (neutral-ssa-waiting-time 40717 100 100))
        (ssa-draw
          event (cleavage cleave-01 "01" "0" "1")
-         waiting-time (negative-log-ratio 106254 1000000 total-propensity 10000)))
+         waiting-uniform (106254 1000000)
+         total-weight 10000
+         propensity-denominator 100000000
+         waiting-time
+           (neutral-ssa-waiting-time 106254 10000 100)))
     final-counts (("0" 1) ("1" 1) ("01" 0))
     stop event-bound))
 !(test
