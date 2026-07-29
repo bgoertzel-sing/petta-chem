@@ -398,6 +398,35 @@
 (= (neutral-ssa-run-timed-events $run)
    (neutral-ssa-timed-events (neutral-ssa-run-events $run)))
 
+; Pair every realized event time with its PeTTa-computed post-event resource
+; state.  Endpoint code can consume this trajectory directly; host glue must
+; not replay chemistry or infer abundance histories from serialized events.
+(= (neutral-ssa-timed-states-loop $event-index $time $counts $draws)
+   (if (== $draws ())
+       ()
+       (let $draw (car-atom $draws)
+         (let $event (neutral-ssa-draw-event $draw)
+           (let $next-time
+             (+ $time (neutral-ssa-draw-waiting-time $draw))
+             (let $next-counts
+               (neutral-ssa-apply-event $event $counts)
+               (cons-atom
+                 (ssa-timed-state
+                   index $event-index
+                   time $next-time
+                   event $event
+                   counts $next-counts)
+                 (neutral-ssa-timed-states-loop
+                   (+ $event-index 1) $next-time $next-counts
+                   (cdr-atom $draws)))))))))
+
+(= (neutral-ssa-timed-states $initial-counts $draws)
+   (neutral-ssa-timed-states-loop 0 0.0 $initial-counts $draws))
+
+(= (neutral-ssa-run-timed-states $initial-counts $run)
+   (neutral-ssa-timed-states
+     $initial-counts (neutral-ssa-run-events $run)))
+
 (= (neutral-ssa-step
       $seed $event-index $food $molecules $reactions $volume $catalysis $counts)
    (let $weighted-events
