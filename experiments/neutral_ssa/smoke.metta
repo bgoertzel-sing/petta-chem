@@ -178,6 +178,51 @@
     final-counts (("0" 1) ("1" 1) ("01" 0))
     stop event-bound))
 !(test
+  (neutral-ssa-draw-waiting-time
+    (neutral-ssa-seeded-draw 1 0 100 ((only-event 100))))
+  (neutral-ssa-waiting-time 40717 100 100))
+!(test
+  (neutral-ssa-run-until
+    1 2 0.0
+    () ()
+    ((ligation lig-01 "0" "1" "01"))
+    100 () (("0" 1) ("1" 1) ("01" 0)))
+  (ssa-run
+    seed 1 events ()
+    final-counts (("0" 1) ("1" 1) ("01" 0))
+    final-time 0.0
+    stop time-bound))
+!(test
+  (neutral-ssa-run-until
+    1 2 1.0
+    () ()
+    ((ligation lig-01 "0" "1" "01"))
+    100 () (("0" 1) ("1" 1) ("01" 0)))
+  (ssa-run
+    seed 1 events ()
+    final-counts (("0" 1) ("1" 1) ("01" 0))
+    final-time 1.0
+    stop time-bound))
+!(test
+  (neutral-ssa-run-until
+    1 1 4000000.0
+    () ()
+    ((ligation lig-01 "0" "1" "01"))
+    100 () (("0" 1) ("1" 1) ("01" 0)))
+  (ssa-run
+    seed 1
+    events
+      ((ssa-draw
+         event (ligation lig-01 "0" "1" "01")
+         waiting-uniform (40717 1000000)
+         total-weight 100
+         propensity-denominator 100000000
+         waiting-time
+           (neutral-ssa-waiting-time 40717 100 100)))
+    final-counts (("0" 0) ("1" 0) ("01" 1))
+    final-time (neutral-ssa-waiting-time 40717 100 100)
+    stop event-bound))
+!(test
   (neutral-ssa-run
     1 2
     () ()

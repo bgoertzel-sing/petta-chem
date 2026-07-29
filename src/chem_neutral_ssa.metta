@@ -259,6 +259,15 @@
         waiting-time $waiting-time))
    $event)
 
+(= (neutral-ssa-draw-waiting-time
+      (ssa-draw
+        event $event
+        waiting-uniform $waiting-uniform
+        total-weight $total-weight
+        propensity-denominator $propensity-denominator
+        waiting-time $waiting-time))
+   $waiting-time)
+
 (= (neutral-ssa-step
       $seed $event-index $food $molecules $reactions $volume $catalysis $counts)
    (let $weighted-events
@@ -319,6 +328,63 @@
       $food $molecules $reactions $volume $catalysis $initial-counts)
    (neutral-ssa-run-loop
      $seed 0 $event-count
+     $food $molecules $reactions $volume $catalysis $initial-counts ()))
+
+; Calibration runner with both frozen stopping conditions.  A sampled event
+; whose waiting time would cross the time horizon is not applied; the process
+; is observed at the exact horizon with its pre-event state.  Records contain
+; only realized events, while final-time makes the censoring boundary explicit.
+(= (neutral-ssa-run-until-loop
+      $seed $event-index $remaining $time $time-limit
+      $food $molecules $reactions $volume $catalysis $counts $records)
+   (if (>= $time $time-limit)
+       (ssa-run
+         seed $seed
+         events $records
+         final-counts $counts
+         final-time $time-limit
+         stop time-bound)
+       (if (== $remaining 0)
+           (ssa-run
+             seed $seed
+             events $records
+             final-counts $counts
+             final-time $time
+             stop event-bound)
+           (let $step
+             (neutral-ssa-step
+               $seed $event-index
+               $food $molecules $reactions $volume $catalysis $counts)
+             (let $record (neutral-ssa-step-record $step)
+               (if (== $record no-enabled-event)
+                   (ssa-run
+                     seed $seed
+                     events $records
+                     final-counts $counts
+                     final-time $time
+                     stop no-enabled-event)
+                   (let $next-time
+                     (+ $time (neutral-ssa-draw-waiting-time $record))
+                     (if (> $next-time $time-limit)
+                         (ssa-run
+                           seed $seed
+                           events $records
+                           final-counts $counts
+                           final-time $time-limit
+                           stop time-bound)
+                         (neutral-ssa-run-until-loop
+                           $seed (+ $event-index 1) (- $remaining 1)
+                           $next-time $time-limit
+                           $food $molecules $reactions $volume $catalysis
+                           (neutral-ssa-step-counts $step)
+                           (neutral-ssa-list-append
+                             $records ($record)))))))))))
+
+(= (neutral-ssa-run-until
+      $seed $event-count $time-limit
+      $food $molecules $reactions $volume $catalysis $initial-counts)
+   (neutral-ssa-run-until-loop
+     $seed 0 $event-count 0.0 $time-limit
      $food $molecules $reactions $volume $catalysis $initial-counts ()))
 
 (= (neutral-ssa-counts-nonnegative? $counts)
