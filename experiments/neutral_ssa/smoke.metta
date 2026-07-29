@@ -250,6 +250,38 @@
     (neutral-ssa-seeded-draw 1 0 100 ((only-event 100))))
   (neutral-ssa-waiting-time 40717 100 100))
 !(test
+  (neutral-ssa-timed-events
+    ((ssa-draw
+       event first
+       waiting-uniform (500000 1000000)
+       total-weight 1
+       propensity-denominator 10000
+       waiting-time 1.25)
+     (ssa-draw
+       event second
+       waiting-uniform (250000 1000000)
+       total-weight 1
+       propensity-denominator 10000
+       waiting-time 2.5)))
+  ((ssa-timed-event index 0 time 1.25 event first)
+   (ssa-timed-event index 1 time 3.75 event second)))
+!(test
+  (neutral-ssa-run-timed-events
+    (neutral-ssa-run
+      1 2
+      () ()
+      ((ligation lig-01 "0" "1" "01")
+       (cleavage cleave-01 "01" "0" "1"))
+      100 () (("0" 1) ("1" 1) ("01" 0))))
+  (neutral-ssa-timed-events
+    (neutral-ssa-run-events
+      (neutral-ssa-run
+        1 2
+        () ()
+        ((ligation lig-01 "0" "1" "01")
+         (cleavage cleave-01 "01" "0" "1"))
+        100 () (("0" 1) ("1" 1) ("01" 0))))))
+!(test
   (neutral-ssa-run-until
     1 2 0.0
     () ()

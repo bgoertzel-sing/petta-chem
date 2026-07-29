@@ -359,6 +359,45 @@
         waiting-time $waiting-time))
    $waiting-time)
 
+; Project realized draws to cumulative simulated event times inside PeTTa.
+; This is the frozen boundary needed by burn-in and persistence-bin endpoints:
+; host artifact glue must not reconstruct the stochastic trajectory clock.
+(= (neutral-ssa-timed-events-loop $event-index $time $draws)
+   (if (== $draws ())
+       ()
+       (let $draw (car-atom $draws)
+         (let $next-time
+           (+ $time (neutral-ssa-draw-waiting-time $draw))
+           (cons-atom
+             (ssa-timed-event
+               index $event-index
+               time $next-time
+               event (neutral-ssa-draw-event $draw))
+             (neutral-ssa-timed-events-loop
+               (+ $event-index 1) $next-time (cdr-atom $draws)))))))
+
+(= (neutral-ssa-timed-events $draws)
+   (neutral-ssa-timed-events-loop 0 0.0 $draws))
+
+(= (neutral-ssa-run-events
+      (ssa-run
+        seed $seed
+        events $events
+        final-counts $counts
+        stop $stop))
+   $events)
+(= (neutral-ssa-run-events
+      (ssa-run
+        seed $seed
+        events $events
+        final-counts $counts
+        final-time $time
+        stop $stop))
+   $events)
+
+(= (neutral-ssa-run-timed-events $run)
+   (neutral-ssa-timed-events (neutral-ssa-run-events $run)))
+
 (= (neutral-ssa-step
       $seed $event-index $food $molecules $reactions $volume $catalysis $counts)
    (let $weighted-events
