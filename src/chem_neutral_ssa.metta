@@ -111,11 +111,14 @@
          (car-atom $left)
          (neutral-ssa-list-append (cdr-atom $left) $right))))
 
-; All weights below share the exact denominator 10000*V^2.  The caller
-; supplies food, molecules, and reactions in their frozen canonical order, so
-; the resulting influx/dilution/reaction list is a stable sampling boundary.
+; All weights below share the exact denominator 10000*V^2.  Food influx is
+; delta*(V/5) = V/500 because the frozen initial food count 20 at V=100 scales
+; linearly with volume.  Its exact common-denominator weight is therefore
+; 20*V^3.  The caller supplies food, molecules, and reactions in their frozen
+; canonical order, so the resulting influx/dilution/reaction list is a stable
+; sampling boundary.
 (= (neutral-ssa-influx-weight $volume)
-   (* 2000 (* $volume $volume)))
+   (* 20 (* $volume (* $volume $volume))))
 (= (neutral-ssa-dilution-weight $molecule $volume $counts)
    (* 100
       (* (neutral-ssa-count $molecule $counts)

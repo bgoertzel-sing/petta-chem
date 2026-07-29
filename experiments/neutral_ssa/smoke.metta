@@ -78,6 +78,8 @@
      (dilution "0"))
     (("0" 2) ("1" 2) ("01" 0))))
 !(test (neutral-ssa-influx-weight 100) 20000000)
+!(test (neutral-ssa-influx-weight 50) 2500000)
+!(test (neutral-ssa-influx-weight 200) 160000000)
 !(test
   (neutral-ssa-dilution-weight "0" 100 (("0" 2) ("1" 0) ("01" 1)))
   2000000)
