@@ -478,6 +478,32 @@
      $seed 0 $event-count 0.0 $time-limit
      $food $molecules $reactions $volume $catalysis $initial-counts ()))
 
+; End-to-end neutral-system execution boundary. Canonical molecule and
+; reaction lists are explicit inputs: PeTTa samples the pathway-independent
+; catalysis graph, constructs the population-scaled initial state, and passes
+; both directly into the time/event-bounded SSA. Graph and dynamics seeds
+; remain separate so nested dynamics replicates cannot overwrite the graph
+; stream.
+(= (neutral-ssa-run-system
+      $graph-seed $dynamics-seed $f-twice
+      $event-count $time-limit
+      $food $molecules $reactions $volume)
+   (let $catalysis
+     (neutral-ssa-sample-catalysis
+       $graph-seed $f-twice $molecules $reactions)
+     (neutral-system-run
+       model neutral-crs-v1
+       graph-seed $graph-seed
+       dynamics-seed $dynamics-seed
+       f-twice $f-twice
+       volume $volume
+       catalysis $catalysis
+       result
+         (neutral-ssa-run-until
+           $dynamics-seed $event-count $time-limit
+           $food $molecules $reactions $volume $catalysis
+           (neutral-ssa-initial-counts $molecules $food $volume)))))
+
 (= (neutral-ssa-counts-nonnegative? $counts)
    (if (== $counts ())
        True
