@@ -121,6 +121,50 @@
          (neutral-raf-all-reactions-valid?
            $reactions $available $catalysis))))
 
+; Polynomial maximal-RAF projection for full neutral systems.  Starting from
+; all reactions, each pass removes reactions whose reactants or every
+; catalyst lie outside the current food closure.  At least one reaction is
+; removed on every changing pass, so |R| passes reach the unique fixed point.
+; This is the calibration-side detector; exhaustive powersets remain confined
+; to the tiny oracle gate below.
+
+(= (neutral-raf-filter-valid-reactions $reactions $available $catalysis)
+   (if (== $reactions ())
+       ()
+       (let $reaction (car-atom $reactions)
+         (if (and
+               (neutral-raf-all-members?
+                 (raf-reaction-reactants $reaction) $available)
+               (neutral-raf-has-catalyst?
+                 (raf-reaction-id $reaction) $available $catalysis))
+             (cons-atom
+               $reaction
+               (neutral-raf-filter-valid-reactions
+                 (cdr-atom $reactions) $available $catalysis))
+             (neutral-raf-filter-valid-reactions
+               (cdr-atom $reactions) $available $catalysis)))))
+
+(= (neutral-raf-maximal-prune-iterations
+      $remaining $food $reactions $catalysis)
+   (if (== $remaining 0)
+       $reactions
+       (let $retained
+         (neutral-raf-filter-valid-reactions
+           $reactions
+           (neutral-raf-closure $food $reactions)
+           $catalysis)
+         (neutral-raf-maximal-prune-iterations
+           (- $remaining 1) $food $retained $catalysis))))
+
+(= (neutral-raf-maximal-reactions $food $reactions $catalysis)
+   (neutral-raf-maximal-prune-iterations
+     (neutral-raf-list-length $reactions)
+     $food $reactions $catalysis))
+
+(= (neutral-raf-maximal-pruned-ids $food $reactions $catalysis)
+   (neutral-raf-reaction-ids
+     (neutral-raf-maximal-reactions $food $reactions $catalysis)))
+
 ; Exhaustive subset enumeration for the tiny-system oracle gate.  This is
 ; intentionally exponential and belongs only on the frozen <=12-reaction
 ; validation boundary, never on sampled calibration systems.

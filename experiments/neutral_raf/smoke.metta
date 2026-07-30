@@ -193,6 +193,47 @@
     ((raf-catalysis unreachable-cycle x r2)
      (raf-catalysis unreachable-cycle y r1)))
   ())
+; The full-system polynomial pruning path must agree with exhaustive tiny
+; truth, including multi-pass deletion after food closure contracts.
+!(test
+  (neutral-raf-maximal-pruned-ids
+    ("0" "1")
+    ((raf-reaction food-chain r1 reactants ("0" "1") products ("01"))
+     (raf-reaction food-chain r2 reactants ("01" "1") products ("011")))
+    ((raf-catalysis food-chain "0" r1)
+     (raf-catalysis food-chain "011" r2)))
+  (r1 r2))
+!(test
+  (neutral-raf-maximal-pruned-ids
+    ("0" "01" "1")
+    ((raf-reaction multiple-products cleave
+       reactants ("01") products ("0" "1"))
+     (raf-reaction multiple-products left
+       reactants ("0" "0") products ("00"))
+     (raf-reaction multiple-products right
+       reactants ("1" "1") products ("11")))
+    ((raf-catalysis multiple-products "0" cleave)
+     (raf-catalysis multiple-products "0" left)
+     (raf-catalysis multiple-products "1" cleave)
+     (raf-catalysis multiple-products "1" right)))
+  (cleave left right))
+!(test
+  (neutral-raf-maximal-pruned-ids
+    ("0" "1")
+    ((raf-reaction unreachable-cycle r1 reactants (x) products (y))
+     (raf-reaction unreachable-cycle r2 reactants (y) products (x)))
+    ((raf-catalysis unreachable-cycle x r2)
+     (raf-catalysis unreachable-cycle y r1)))
+  ())
+!(test
+  (neutral-raf-maximal-pruned-ids
+    ("0" "1")
+    ((raf-reaction cascade r1 reactants ("0") products (x))
+     (raf-reaction cascade r2 reactants (x) products (y))
+     (raf-reaction cascade r3 reactants (y) products (z)))
+    ((raf-catalysis cascade "0" r1)
+     (raf-catalysis cascade z r2)))
+  (r1))
 !(test (neutral-raf-list-length (neutral-raf-l3-molecules)) 14)
 !(test (neutral-raf-l3-food) ("0" "00" "01" "1" "10" "11"))
 !(test (neutral-raf-l3-reaction-count) 40)
@@ -238,6 +279,15 @@
 !(test
   (neutral-raf-l3-sampled-catalysis generated-l3-seed-2 2 2)
   (neutral-raf-l3-sampled-catalysis generated-l3-seed-2 2 2))
+!(test
+  (neutral-raf-maximal-pruned-ids
+    (neutral-raf-l3-food)
+    (neutral-raf-l3-sampled-reactions generated-l3-seed-2 2)
+    (neutral-raf-l3-sampled-catalysis generated-l3-seed-2 2 2))
+  (neutral-raf-maximal-ids
+    (neutral-raf-l3-food)
+    (neutral-raf-l3-sampled-reactions generated-l3-seed-2 2)
+    (neutral-raf-l3-sampled-catalysis generated-l3-seed-2 2 2)))
 !(test (neutral-raf-hand-fixture-serialization-status)
        (neutral-raf-interface neutral-crs-v1 hand-fixtures 7
                               sampled-calibration embargoed
