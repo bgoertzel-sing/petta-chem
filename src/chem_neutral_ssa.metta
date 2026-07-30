@@ -3,6 +3,44 @@
 ; host-float/RNG dependencies while preserving the frozen propensities:
 ; g = 1e-4 + 10 * catalyst_count / V.
 
+!(import_prolog_function string_concat)
+
+(= (neutral-ssa-append $left $right)
+   (if (== $left ())
+       $right
+       (cons-atom
+         (car-atom $left)
+         (neutral-ssa-append (cdr-atom $left) $right))))
+
+; Construct every literal binary polymer without a host-generated chemistry
+; catalog. Each exact-length layer is lexical ("...0" before "...1"), and
+; layers are concatenated in increasing length as frozen by neutral-crs-v1.
+(= (neutral-ssa-extend-binary-layer $layer)
+   (if (== $layer ())
+       ()
+       (let $polymer (car-atom $layer)
+         (cons-atom
+           (string_concat $polymer "0")
+           (cons-atom
+             (string_concat $polymer "1")
+             (neutral-ssa-extend-binary-layer (cdr-atom $layer)))))))
+
+(= (neutral-ssa-binary-polymers-through
+      $remaining-levels $layer $molecules)
+   (if (== $remaining-levels 0)
+       $molecules
+       (let $next-layer (neutral-ssa-extend-binary-layer $layer)
+         (neutral-ssa-binary-polymers-through
+           (- $remaining-levels 1)
+           $next-layer
+           (neutral-ssa-append $molecules $next-layer)))))
+
+(= (neutral-ssa-binary-polymers $max-length)
+   (if (<= $max-length 0)
+       ()
+       (neutral-ssa-binary-polymers-through
+         (- $max-length 1) ("0" "1") ("0" "1"))))
+
 (= (neutral-ssa-count $molecule $counts)
    (if (== $counts ())
        0

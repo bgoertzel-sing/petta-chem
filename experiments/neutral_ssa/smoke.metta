@@ -1,6 +1,18 @@
 !(import! &self ../../src/chem_neutral_raf.metta)
 !(import! &self ../../src/chem_neutral_ssa.metta)
 
+!(test (neutral-ssa-binary-polymers 0) ())
+!(test
+  (neutral-ssa-binary-polymers 2)
+  ("0" "1" "00" "01" "10" "11"))
+!(test
+  (neutral-ssa-binary-polymers 3)
+  ("0" "1" "00" "01" "10" "11"
+   "000" "001" "010" "011" "100" "101" "110" "111"))
+!(test (neutral-ssa-list-length (neutral-ssa-binary-polymers 4)) 30)
+!(test (neutral-ssa-list-length (neutral-ssa-binary-polymers 5)) 62)
+!(test (neutral-ssa-list-length (neutral-ssa-binary-polymers 6)) 126)
+
 !(test (neutral-ssa-count "0" (("0" 20) ("1" 20))) 20)
 !(test (neutral-ssa-count "01" (("0" 20) ("1" 20))) 0)
 !(test (neutral-ssa-member? "01" ("0" "1" "01")) True)
