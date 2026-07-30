@@ -647,6 +647,33 @@
     () ("0" "1") 100.0 140.0)
   120.0)
 !(test
+  (neutral-ssa-run-causal-endpoints
+    (ssa-run
+      seed 7
+      events
+        ((ssa-draw
+           event (ligation lig-01 "0" "1" "01")
+           waiting-uniform (1 2)
+           total-weight 1
+           propensity-denominator 1
+           waiting-time 105.0))
+      final-counts (("0" 1) ("1" 1) ("01" 1))
+      final-time 140.0
+      stop time-bound)
+    (("0" 2) ("1" 2) ("01" 0))
+    ("0" "1") (lig-01) ("0" "1")
+    100.0 140.0 10.0 4 1)
+  (neutral-causal-endpoints
+    raf-events 1 evidence-bins 1 integrated-nonfood 35.0))
+!(test
+  (neutral-ssa-causal-endpoint-delta
+    (neutral-causal-endpoints
+      raf-events 7 evidence-bins 4 integrated-nonfood 90.0)
+    (neutral-causal-endpoints
+      raf-events 2 evidence-bins 1 integrated-nonfood 35.0))
+  (neutral-causal-endpoint-delta
+    raf-events 5 evidence-bins 3 integrated-nonfood 55.0))
+!(test
   (neutral-ssa-run-until
     1 2 0.0
     () ()

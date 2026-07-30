@@ -753,6 +753,55 @@
      $timed-transitions $food $burn-in $horizon
      0.0 $initial-counts 0.0))
 
+; Compose the frozen causal/productive measurements for one completed run.
+; Chemistry replay, transition timing, binning, and endpoint aggregation all
+; remain PeTTa-native; a host harness may serialize only this returned atom.
+(= (neutral-ssa-run-causal-endpoints
+      $run $initial-counts $food $raf-rule-ids $required-molecules
+      $burn-in $horizon $bin-width $bin-count $persistence-threshold)
+   (let $transitions
+     (neutral-ssa-run-timed-transitions $initial-counts $run)
+     (let $persistence
+       (neutral-ssa-raf-persistence-summary
+         (neutral-ssa-bin-timed-transitions
+           $transitions $burn-in $bin-width $bin-count)
+         $raf-rule-ids $required-molecules
+         $bin-count $persistence-threshold)
+       (neutral-causal-endpoints
+         raf-events
+           (neutral-ssa-persistence-qualifying-events $persistence)
+         evidence-bins
+           (neutral-ssa-persistence-evidence-bins $persistence)
+         integrated-nonfood
+           (neutral-ssa-integrated-nonfood
+             $initial-counts $transitions $food $burn-in $horizon)))))
+
+(= (neutral-ssa-persistence-qualifying-events
+      (raf-persistence-summary
+        qualifying-events $events evidence-bins $bins
+        total-bins $total persistent $persistent))
+   $events)
+
+(= (neutral-ssa-persistence-evidence-bins
+      (raf-persistence-summary
+        qualifying-events $events evidence-bins $bins
+        total-bins $total persistent $persistent))
+   $bins)
+
+(= (neutral-ssa-causal-endpoint-delta
+      (neutral-causal-endpoints
+        raf-events $baseline-events
+        evidence-bins $baseline-bins
+        integrated-nonfood $baseline-nonfood)
+      (neutral-causal-endpoints
+        raf-events $ablated-events
+        evidence-bins $ablated-bins
+        integrated-nonfood $ablated-nonfood))
+   (neutral-causal-endpoint-delta
+     raf-events (- $baseline-events $ablated-events)
+     evidence-bins (- $baseline-bins $ablated-bins)
+     integrated-nonfood (- $baseline-nonfood $ablated-nonfood)))
+
 (= (neutral-ssa-step
       $seed $event-index $food $molecules $reactions $volume $catalysis $counts)
    (let $weighted-events
