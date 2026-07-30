@@ -564,6 +564,66 @@
        (neutral-ssa-event-reaction-id $event) $raf-rule-ids)
      (neutral-ssa-all-positive? $required-molecules $before-counts)))
 
+; Aggregate the frozen active/persistence endpoint without host-side
+; chemistry.  Binned transitions arrive in time order, so equal bin indexes
+; are contiguous.  A bin contributes at most once even when several
+; qualifying RAF reactions fire in it; the raw qualifying event count is
+; retained separately.
+(= (neutral-ssa-binned-transition-bin
+      (ssa-binned-transition bin $bin transition $transition))
+   $bin)
+
+(= (neutral-ssa-raf-event-count
+      $binned-transitions $raf-rule-ids $required-molecules)
+   (if (== $binned-transitions ())
+       0
+       (let $transition (car-atom $binned-transitions)
+         (+ (if (neutral-ssa-transition-raf-evidence?
+                  $transition $raf-rule-ids $required-molecules)
+                1
+                0)
+            (neutral-ssa-raf-event-count
+              (cdr-atom $binned-transitions)
+              $raf-rule-ids $required-molecules)))))
+
+(= (neutral-ssa-raf-evidence-bin-count-from
+      $binned-transitions $raf-rule-ids $required-molecules $last-bin)
+   (if (== $binned-transitions ())
+       0
+       (let $transition (car-atom $binned-transitions)
+         (let $bin (neutral-ssa-binned-transition-bin $transition)
+           (let $new-evidence-bin
+             (and
+               (neutral-ssa-transition-raf-evidence?
+                 $transition $raf-rule-ids $required-molecules)
+               (not (== $bin $last-bin)))
+             (+ (if $new-evidence-bin 1 0)
+                (neutral-ssa-raf-evidence-bin-count-from
+                  (cdr-atom $binned-transitions)
+                  $raf-rule-ids $required-molecules
+                  (if $new-evidence-bin $bin $last-bin))))))))
+
+(= (neutral-ssa-raf-evidence-bin-count
+      $binned-transitions $raf-rule-ids $required-molecules)
+   (neutral-ssa-raf-evidence-bin-count-from
+     $binned-transitions $raf-rule-ids $required-molecules no-bin))
+
+(= (neutral-ssa-raf-persistence-summary
+      $binned-transitions $raf-rule-ids $required-molecules
+      $bin-count $persistent-bin-threshold)
+   (let $event-count
+     (neutral-ssa-raf-event-count
+       $binned-transitions $raf-rule-ids $required-molecules)
+     (let $evidence-bin-count
+       (neutral-ssa-raf-evidence-bin-count
+         $binned-transitions $raf-rule-ids $required-molecules)
+       (raf-persistence-summary
+         qualifying-events $event-count
+         evidence-bins $evidence-bin-count
+         total-bins $bin-count
+         persistent
+           (>= $evidence-bin-count $persistent-bin-threshold)))))
+
 (= (neutral-ssa-step
       $seed $event-index $food $molecules $reactions $volume $catalysis $counts)
    (let $weighted-events

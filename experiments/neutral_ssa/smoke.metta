@@ -502,6 +502,61 @@
     (lig-01) ("0" "1"))
   False)
 !(test
+  (neutral-ssa-raf-persistence-summary
+    ((ssa-binned-transition
+       bin 0
+       transition
+         (ssa-timed-transition
+           index 0 time 100.0
+           event (ligation lig-01 "0" "1" "01")
+           before-counts (("0" 2) ("1" 2) ("01" 0))
+           after-counts (("0" 1) ("1" 1) ("01" 1))))
+     (ssa-binned-transition
+       bin 0
+       transition
+         (ssa-timed-transition
+           index 1 time 101.0
+           event (ligation lig-01 "0" "1" "01")
+           before-counts (("0" 1) ("1" 1) ("01" 1))
+           after-counts (("0" 0) ("1" 0) ("01" 2))))
+     (ssa-binned-transition
+       bin 1
+       transition
+         (ssa-timed-transition
+           index 2 time 110.0
+           event (influx "0")
+           before-counts (("0" 0) ("1" 0) ("01" 2))
+           after-counts (("0" 1) ("1" 0) ("01" 2))))
+     (ssa-binned-transition
+       bin 2
+       transition
+         (ssa-timed-transition
+           index 3 time 120.0
+           event (cleavage cleave-01 "01" "0" "1")
+           before-counts (("0" 1) ("1" 1) ("01" 2))
+           after-counts (("0" 2) ("1" 2) ("01" 1)))))
+    (lig-01 cleave-01) ("0" "1") 40 32)
+  (raf-persistence-summary
+    qualifying-events 3 evidence-bins 2 total-bins 40 persistent False))
+!(test
+  (neutral-ssa-raf-persistence-summary
+    () (lig-01) ("0" "1") 40 32)
+  (raf-persistence-summary
+    qualifying-events 0 evidence-bins 0 total-bins 40 persistent False))
+!(test
+  (neutral-ssa-raf-persistence-summary
+    ((ssa-binned-transition
+       bin 31
+       transition
+         (ssa-timed-transition
+           index 0 time 410.0
+           event (ligation lig-01 "0" "1" "01")
+           before-counts (("0" 1) ("1" 1) ("01" 0))
+           after-counts (("0" 0) ("1" 0) ("01" 1)))))
+    (lig-01) ("0" "1") 40 1)
+  (raf-persistence-summary
+    qualifying-events 1 evidence-bins 1 total-bins 40 persistent True))
+!(test
   (neutral-ssa-run-until
     1 2 0.0
     () ()
