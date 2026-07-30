@@ -698,6 +698,43 @@
     ((ligation lig-01 "0" "1" "01"))
     100))
 !(test
+  (neutral-ssa-delete-catalysis-into
+    (lig-01 lig-010)
+    (("0" lig-01) ("1" cleave-01) ("01" lig-010)
+     ("010" cleave-010) ("1" lig-01)))
+  (("1" cleave-01) ("010" cleave-010)))
+!(test
+  (neutral-ssa-delete-catalysis-into
+    () (("0" lig-01) ("1" cleave-01)))
+  (("0" lig-01) ("1" cleave-01)))
+!(test
+  (neutral-ssa-delete-catalysis-into
+    (lig-01) ())
+  ())
+!(test
+  (neutral-ssa-run-catalysis-ablation-pair
+    1001 2001 2 0 0.0
+    ("0" "1") ("0" "1" "01")
+    ((ligation lig-01 "0" "1" "01"))
+    100 (lig-01))
+  (neutral-catalysis-ablation-pair
+    model neutral-crs-v1
+    graph-seed 1001
+    dynamics-seed 2001
+    raf-rule-ids (lig-01)
+    baseline-catalysis (("0" lig-01) ("1" lig-01) ("01" lig-01))
+    ablated-catalysis ()
+    baseline
+      (ssa-run
+        seed 2001 events ()
+        final-counts (("0" 20) ("1" 20) ("01" 0))
+        final-time 0.0 stop time-bound)
+    ablated
+      (ssa-run
+        seed 2001 events ()
+        final-counts (("0" 20) ("1" 20) ("01" 0))
+        final-time 0.0 stop time-bound)))
+!(test
   (neutral-ssa-counts-nonnegative?
     (neutral-ssa-step-counts
       (neutral-ssa-step

@@ -84,6 +84,22 @@
            (if (> $f-twice $denominator) $denominator $f-twice)
            $denominator 0 $molecules $reactions))))
 
+; Frozen causal ablation: delete every catalysis edge whose target reaction
+; belongs to the selected maximal RAF.  Molecules, reactions, and basal
+; chemistry remain unchanged; this is not a rule or molecule deletion.
+(= (neutral-ssa-delete-catalysis-into $raf-rule-ids $catalysis)
+   (if (== $catalysis ())
+       ()
+       (let $edge (car-atom $catalysis)
+         (if (neutral-ssa-member?
+               (car-atom (cdr-atom $edge)) $raf-rule-ids)
+             (neutral-ssa-delete-catalysis-into
+               $raf-rule-ids (cdr-atom $catalysis))
+             (cons-atom
+               $edge
+               (neutral-ssa-delete-catalysis-into
+                 $raf-rule-ids (cdr-atom $catalysis)))))))
+
 ; Population-scaling controls start every food species at V/5 molecules and
 ; every nonfood species at zero, matching 20 food molecules at V=100.
 ; Molecules and food arrive in their frozen canonical order.
@@ -830,6 +846,36 @@
            $dynamics-seed $event-count $time-limit
            $food $molecules $reactions $volume $catalysis
            (neutral-ssa-initial-counts $molecules $food $volume)))))
+
+; Matched causal/productive pair for one already-selected maximal RAF.
+; Both arms reuse the exact sampled graph, initial counts, dynamics seed,
+; horizon, and event bound.  Only catalysis edges into RAF reactions differ.
+(= (neutral-ssa-run-catalysis-ablation-pair
+      $graph-seed $dynamics-seed $f-twice
+      $event-count $time-limit
+      $food $molecules $reactions $volume $raf-rule-ids)
+   (let $catalysis
+     (neutral-ssa-sample-catalysis
+       $graph-seed $f-twice $molecules $reactions)
+     (let $ablated-catalysis
+       (neutral-ssa-delete-catalysis-into $raf-rule-ids $catalysis)
+       (neutral-catalysis-ablation-pair
+         model neutral-crs-v1
+         graph-seed $graph-seed
+         dynamics-seed $dynamics-seed
+         raf-rule-ids $raf-rule-ids
+         baseline-catalysis $catalysis
+         ablated-catalysis $ablated-catalysis
+         baseline
+           (neutral-ssa-run-until
+             $dynamics-seed $event-count $time-limit
+             $food $molecules $reactions $volume $catalysis
+             (neutral-ssa-initial-counts $molecules $food $volume))
+         ablated
+           (neutral-ssa-run-until
+             $dynamics-seed $event-count $time-limit
+             $food $molecules $reactions $volume $ablated-catalysis
+             (neutral-ssa-initial-counts $molecules $food $volume))))))
 
 (= (neutral-ssa-counts-nonnegative? $counts)
    (if (== $counts ())
