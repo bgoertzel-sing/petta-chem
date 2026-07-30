@@ -1030,6 +1030,27 @@
              $food $molecules $reactions $volume $ablated-catalysis
              (neutral-ssa-initial-counts $molecules $food $volume))))))
 
+; Complete PeTTa-native execution/measurement seam for one preregistered
+; calibration row.  The maximal RAF and its two molecule projections remain
+; explicit structural-detector inputs; chemistry execution and all dynamic
+; endpoint composition stay inside PeTTa.
+(= (neutral-ssa-run-catalysis-ablation-endpoints
+      $graph-seed $dynamics-seed $f-twice
+      $event-count $time-limit
+      $food $molecules $reactions $volume $raf-rule-ids
+      $persistence-molecules $closure-molecules
+      $burn-in $bin-width $bin-count $persistence-threshold)
+   (let $pair
+     (neutral-ssa-run-catalysis-ablation-pair
+       $graph-seed $dynamics-seed $f-twice
+       $event-count $time-limit
+       $food $molecules $reactions $volume $raf-rule-ids)
+     (neutral-ssa-ablation-pair-endpoints
+       $pair
+       (neutral-ssa-initial-counts $molecules $food $volume)
+       $food $raf-rule-ids $persistence-molecules $closure-molecules
+       $burn-in $time-limit $bin-width $bin-count $persistence-threshold)))
+
 (= (neutral-ssa-counts-nonnegative? $counts)
    (if (== $counts ())
        True

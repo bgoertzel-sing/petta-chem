@@ -837,6 +837,27 @@
         final-counts (("0" 20) ("1" 20) ("01" 0))
         final-time 0.0 stop time-bound)))
 !(test
+  (neutral-ssa-run-catalysis-ablation-endpoints
+    1001 2001 2 0 0.0
+    ("0" "1") ("0" "1" "01")
+    ((ligation lig-01 "0" "1" "01"))
+    100 (lig-01) ("0" "1") ("0" "1" "01")
+    0.0 10.0 0 0)
+  (neutral-ablation-endpoints
+    baseline-reachability
+      (raf-reachability-summary reachable False first-time censored)
+    ablated-reachability
+      (raf-reachability-summary reachable False first-time censored)
+    baseline-causal
+      (neutral-causal-endpoints
+        raf-events 0 evidence-bins 0 integrated-nonfood 0.0)
+    ablated-causal
+      (neutral-causal-endpoints
+        raf-events 0 evidence-bins 0 integrated-nonfood 0.0)
+    delta
+      (neutral-causal-endpoint-delta
+        raf-events 0 evidence-bins 0 integrated-nonfood 0.0)))
+!(test
   (neutral-ssa-counts-nonnegative?
     (neutral-ssa-step-counts
       (neutral-ssa-step
