@@ -503,6 +503,34 @@
                    (cdr-atom $timed-states)
                    $burn-in $bin-width $bin-count)))))))
 
+; Endpoint-safe persistence input.  Unlike post-event-only states, each row
+; preserves the resources present when its event fired.
+(= (neutral-ssa-timed-transition-time
+      (ssa-timed-transition
+        index $index time $time event $event
+        before-counts $before-counts after-counts $after-counts))
+   $time)
+
+(= (neutral-ssa-bin-timed-transitions
+      $timed-transitions $burn-in $bin-width $bin-count)
+   (if (== $timed-transitions ())
+       ()
+       (let $timed-transition (car-atom $timed-transitions)
+         (let $bin
+           (neutral-ssa-time-bin-index
+             (neutral-ssa-timed-transition-time $timed-transition)
+             $burn-in $bin-width $bin-count)
+           (if (== $bin outside-persistence-window)
+               (neutral-ssa-bin-timed-transitions
+                 (cdr-atom $timed-transitions)
+                 $burn-in $bin-width $bin-count)
+               (cons-atom
+                 (ssa-binned-transition
+                   bin $bin transition $timed-transition)
+                 (neutral-ssa-bin-timed-transitions
+                   (cdr-atom $timed-transitions)
+                   $burn-in $bin-width $bin-count)))))))
+
 (= (neutral-ssa-step
       $seed $event-index $food $molecules $reactions $volume $catalysis $counts)
    (let $weighted-events

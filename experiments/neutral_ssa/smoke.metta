@@ -396,6 +396,42 @@
      state
        (ssa-timed-state index 3 time 110.0 event next-bin counts (("0" 4))))))
 !(test
+  (neutral-ssa-bin-timed-transitions
+    ((ssa-timed-transition
+       index 0 time 99.0 event before
+       before-counts (("0" 1)) after-counts (("0" 0)))
+     (ssa-timed-transition
+       index 1 time 100.0 event consumes-last
+       before-counts (("0" 1)) after-counts (("0" 0)))
+     (ssa-timed-transition
+       index 2 time 109.0 event same-bin
+       before-counts (("0" 2)) after-counts (("0" 1)))
+     (ssa-timed-transition
+       index 3 time 110.0 event next-bin
+       before-counts (("0" 1)) after-counts (("0" 0)))
+     (ssa-timed-transition
+       index 4 time 500.0 event after
+       before-counts (("0" 1)) after-counts (("0" 0))))
+    100 10 40)
+  ((ssa-binned-transition
+     bin 0
+     transition
+       (ssa-timed-transition
+         index 1 time 100.0 event consumes-last
+         before-counts (("0" 1)) after-counts (("0" 0))))
+   (ssa-binned-transition
+     bin 0
+     transition
+       (ssa-timed-transition
+         index 2 time 109.0 event same-bin
+         before-counts (("0" 2)) after-counts (("0" 1))))
+   (ssa-binned-transition
+     bin 1
+     transition
+       (ssa-timed-transition
+         index 3 time 110.0 event next-bin
+         before-counts (("0" 1)) after-counts (("0" 0))))))
+!(test
   (neutral-ssa-run-until
     1 2 0.0
     () ()
