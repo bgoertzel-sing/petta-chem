@@ -608,6 +608,45 @@
     () (lig-01) ("0" "1" "01"))
   (raf-reachability-summary reachable False first-time censored))
 !(test
+  (neutral-ssa-nonfood-count
+    (("0" 20) ("1" 20) ("01" 3) ("10" 4))
+    ("0" "1"))
+  7)
+!(test
+  (neutral-ssa-window-duration 90.0 110.0 100.0 500.0)
+  10.0)
+!(test
+  (neutral-ssa-window-duration 490.0 510.0 100.0 500.0)
+  10.0)
+!(test
+  (neutral-ssa-window-duration 500.0 510.0 100.0 500.0)
+  0.0)
+!(test
+  (neutral-ssa-integrated-nonfood
+    (("0" 2) ("1" 2) ("01" 0))
+    ((ssa-timed-transition
+       index 0 time 90.0
+       event (ligation lig-01 "0" "1" "01")
+       before-counts (("0" 2) ("1" 2) ("01" 0))
+       after-counts (("0" 1) ("1" 1) ("01" 1)))
+     (ssa-timed-transition
+       index 1 time 110.0
+       event (ligation lig-01 "0" "1" "01")
+       before-counts (("0" 1) ("1" 1) ("01" 1))
+       after-counts (("0" 0) ("1" 0) ("01" 2)))
+     (ssa-timed-transition
+       index 2 time 130.0
+       event (cleavage cleave-01 "01" "0" "1")
+       before-counts (("0" 0) ("1" 0) ("01" 2))
+       after-counts (("0" 1) ("1" 1) ("01" 1))))
+    ("0" "1") 100.0 140.0)
+  60.0)
+!(test
+  (neutral-ssa-integrated-nonfood
+    (("0" 2) ("1" 2) ("01" 3))
+    () ("0" "1") 100.0 140.0)
+  120.0)
+!(test
   (neutral-ssa-run-until
     1 2 0.0
     () ()

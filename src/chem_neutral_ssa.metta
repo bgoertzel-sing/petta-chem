@@ -702,6 +702,57 @@
    (neutral-ssa-raf-reachability-loop
      $timed-transitions $raf-rule-ids $closure-molecules ()))
 
+; Time-integrated nonfood population for the frozen causal/productive
+; endpoint.  Counts are piecewise constant between timed transitions.  The
+; integration window is half-open [burn-in, horizon), so events exactly on
+; either boundary cannot create an ambiguous contribution.
+(= (neutral-ssa-nonfood-count $counts $food)
+   (if (== $counts ())
+       0
+       (let $row (car-atom $counts)
+         (+
+           (if (neutral-ssa-member? (car-atom $row) $food)
+               0
+               (car-atom (cdr-atom $row)))
+           (neutral-ssa-nonfood-count (cdr-atom $counts) $food)))))
+
+(= (neutral-ssa-window-duration $left $right $burn-in $horizon)
+   (if (or (<= $right $burn-in) (>= $left $horizon))
+       0.0
+       (-
+         (if (< $right $horizon) $right $horizon)
+         (if (> $left $burn-in) $left $burn-in))))
+
+(= (neutral-ssa-integrated-nonfood-loop
+      $timed-transitions $food $burn-in $horizon
+      $left-time $counts $total)
+   (if (== $timed-transitions ())
+       (+
+         $total
+         (*
+           (neutral-ssa-nonfood-count $counts $food)
+           (neutral-ssa-window-duration
+             $left-time $horizon $burn-in $horizon)))
+       (let $transition (car-atom $timed-transitions)
+         (let $right-time
+           (neutral-ssa-timed-transition-time $transition)
+           (neutral-ssa-integrated-nonfood-loop
+             (cdr-atom $timed-transitions) $food $burn-in $horizon
+             $right-time
+             (neutral-ssa-timed-transition-after-counts $transition)
+             (+
+               $total
+               (*
+                 (neutral-ssa-nonfood-count $counts $food)
+                 (neutral-ssa-window-duration
+                   $left-time $right-time $burn-in $horizon))))))))
+
+(= (neutral-ssa-integrated-nonfood
+      $initial-counts $timed-transitions $food $burn-in $horizon)
+   (neutral-ssa-integrated-nonfood-loop
+     $timed-transitions $food $burn-in $horizon
+     0.0 $initial-counts 0.0))
+
 (= (neutral-ssa-step
       $seed $event-index $food $molecules $reactions $volume $catalysis $counts)
    (let $weighted-events
