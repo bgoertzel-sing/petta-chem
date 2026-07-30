@@ -1051,6 +1051,100 @@
        $food $raf-rule-ids $persistence-molecules $closure-molecules
        $burn-in $time-limit $bin-width $bin-count $persistence-threshold)))
 
+; Convert the SSA reaction/edge representation to the canonical structural
+; RAF interface.  These projections contain no pathway or endpoint inputs.
+(= (neutral-ssa-raf-reactions $reactions)
+   (if (== $reactions ())
+       ()
+       (let $reaction (car-atom $reactions)
+         (cons-atom
+           (if (== (car-atom $reaction) ligation)
+               (raf-reaction neutral-calibration
+                 (neutral-ssa-reaction-id $reaction)
+                 reactants
+                   ((car-atom (cdr-atom (cdr-atom $reaction)))
+                    (car-atom (cdr-atom (cdr-atom (cdr-atom $reaction)))))
+                 products
+                   ((car-atom
+                      (cdr-atom
+                        (cdr-atom (cdr-atom (cdr-atom $reaction)))))))
+               (raf-reaction neutral-calibration
+                 (neutral-ssa-reaction-id $reaction)
+                 reactants
+                   ((car-atom (cdr-atom (cdr-atom $reaction))))
+                 products
+                   ((car-atom (cdr-atom (cdr-atom (cdr-atom $reaction))))
+                    (car-atom
+                      (cdr-atom
+                        (cdr-atom (cdr-atom (cdr-atom $reaction))))))))
+           (neutral-ssa-raf-reactions (cdr-atom $reactions))))))
+
+(= (neutral-ssa-raf-catalysis $catalysis)
+   (if (== $catalysis ())
+       ()
+       (let $edge (car-atom $catalysis)
+         (cons-atom
+           (raf-catalysis neutral-calibration
+             (car-atom $edge) (car-atom (cdr-atom $edge)))
+           (neutral-ssa-raf-catalysis (cdr-atom $catalysis))))))
+
+(= (neutral-ssa-add-molecules $molecules $available)
+   (if (== $molecules ())
+       $available
+       (neutral-ssa-add-molecules
+         (cdr-atom $molecules)
+         (neutral-raf-add-unique (car-atom $molecules) $available))))
+
+(= (neutral-ssa-raf-reactant-molecules $raf-reactions $available)
+   (if (== $raf-reactions ())
+       $available
+       (neutral-ssa-raf-reactant-molecules
+         (cdr-atom $raf-reactions)
+         (neutral-ssa-add-molecules
+           (raf-reaction-reactants (car-atom $raf-reactions))
+           $available))))
+
+(= (neutral-ssa-raf-catalyst-molecules
+      $catalysis $raf-rule-ids $closure $available)
+   (if (== $catalysis ())
+       $available
+       (let $edge (car-atom $catalysis)
+         (neutral-ssa-raf-catalyst-molecules
+           (cdr-atom $catalysis) $raf-rule-ids $closure
+           (if (and
+                 (neutral-ssa-member?
+                   (car-atom (cdr-atom $edge)) $raf-rule-ids)
+                 (neutral-ssa-member? (car-atom $edge) $closure))
+               (neutral-raf-add-unique (car-atom $edge) $available)
+               $available)))))
+
+(= (neutral-ssa-run-detected-raf-endpoints
+      $graph-seed $dynamics-seed $f-twice
+      $event-count $time-limit
+      $food $molecules $reactions $volume
+      $burn-in $bin-width $bin-count $persistence-threshold)
+   (let $catalysis
+     (neutral-ssa-sample-catalysis
+       $graph-seed $f-twice $molecules $reactions)
+     (let $raf-reactions
+       (neutral-raf-maximal-reactions
+         $food
+         (neutral-ssa-raf-reactions $reactions)
+         (neutral-ssa-raf-catalysis $catalysis))
+       (let $raf-rule-ids (neutral-raf-reaction-ids $raf-reactions)
+         (let $closure-molecules
+           (neutral-raf-closure $food $raf-reactions)
+           (let $persistence-molecules
+             (neutral-ssa-raf-catalyst-molecules
+               $catalysis $raf-rule-ids $closure-molecules
+               (neutral-ssa-raf-reactant-molecules $raf-reactions ()))
+             (neutral-ssa-run-catalysis-ablation-endpoints
+               $graph-seed $dynamics-seed $f-twice
+               $event-count $time-limit
+               $food $molecules $reactions $volume $raf-rule-ids
+               $persistence-molecules $closure-molecules
+               $burn-in $bin-width $bin-count $persistence-threshold)))))))
+
 (= (neutral-ssa-counts-nonnegative? $counts)
    (if (== $counts ())
        True
