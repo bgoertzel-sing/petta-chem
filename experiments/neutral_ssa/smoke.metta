@@ -557,6 +557,57 @@
   (raf-persistence-summary
     qualifying-events 1 evidence-bins 1 total-bins 40 persistent True))
 !(test
+  (neutral-ssa-raf-reachability-summary
+    ((ssa-timed-transition
+       index 0 time 2.0
+       event (ligation lig-01 "0" "1" "01")
+       before-counts (("0" 2) ("1" 2) ("01" 0) ("010" 0))
+       after-counts (("0" 1) ("1" 1) ("01" 1) ("010" 0)))
+     (ssa-timed-transition
+       index 1 time 3.0
+       event (ligation lig-010 "01" "0" "010")
+       before-counts (("0" 1) ("1" 1) ("01" 1) ("010" 0))
+       after-counts (("0" 0) ("1" 1) ("01" 0) ("010" 1)))
+     (ssa-timed-transition
+       index 2 time 4.0
+       event (influx "0")
+       before-counts (("0" 0) ("1" 1) ("01" 0) ("010" 1))
+       after-counts (("0" 1) ("1" 1) ("01" 0) ("010" 1)))
+     (ssa-timed-transition
+       index 3 time 5.0
+       event (cleavage cleave-010 "010" "01" "0")
+       before-counts (("0" 1) ("1" 1) ("01" 0) ("010" 1))
+       after-counts (("0" 2) ("1" 1) ("01" 1) ("010" 0))))
+    (lig-01 lig-010) ("0" "1" "01" "010"))
+  (raf-reachability-summary reachable False first-time censored))
+!(test
+  (neutral-ssa-raf-reachability-summary
+    ((ssa-timed-transition
+       index 0 time 2.0
+       event (ligation lig-01 "0" "1" "01")
+       before-counts (("0" 3) ("1" 2) ("01" 0) ("010" 0))
+       after-counts (("0" 2) ("1" 1) ("01" 1) ("010" 0)))
+     (ssa-timed-transition
+       index 1 time 3.0
+       event (ligation lig-010 "01" "0" "010")
+       before-counts (("0" 2) ("1" 1) ("01" 1) ("010" 0))
+       after-counts (("0" 1) ("1" 1) ("01" 1) ("010" 1))))
+    (lig-01 lig-010) ("0" "1" "01" "010"))
+  (raf-reachability-summary reachable True first-time 3.0))
+!(test
+  (neutral-ssa-raf-reachability-summary
+    ((ssa-timed-transition
+       index 0 time 2.0
+       event (ligation lig-01 "0" "1" "01")
+       before-counts (("0" 2) ("1" 2) ("01" 0))
+       after-counts (("0" 1) ("1" 1) ("01" 1))))
+    (lig-01 missing-rule) ("0" "1" "01"))
+  (raf-reachability-summary reachable False first-time censored))
+!(test
+  (neutral-ssa-raf-reachability-summary
+    () (lig-01) ("0" "1" "01"))
+  (raf-reachability-summary reachable False first-time censored))
+!(test
   (neutral-ssa-run-until
     1 2 0.0
     () ()

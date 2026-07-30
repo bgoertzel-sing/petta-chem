@@ -624,6 +624,68 @@
          persistent
            (>= $evidence-bin-count $persistent-bin-threshold)))))
 
+; Frozen dynamic-reachability endpoint.  A RAF is reached at the first
+; realized transition after which every molecule in its selected closure is
+; simultaneously positive and every RAF reaction has fired at least once.
+; Event identity and state evolution remain PeTTa-native; callers provide the
+; already selected structural RAF and its closure.
+(= (neutral-ssa-timed-transition-event
+      (ssa-timed-transition
+        index $index time $time event $event
+        before-counts $before-counts after-counts $after-counts))
+   $event)
+
+(= (neutral-ssa-timed-transition-after-counts
+      (ssa-timed-transition
+        index $index time $time event $event
+        before-counts $before-counts after-counts $after-counts))
+   $after-counts)
+
+(= (neutral-ssa-add-unique $item $items)
+   (if (neutral-ssa-member? $item $items)
+       $items
+       (neutral-ssa-list-append $items ($item))))
+
+(= (neutral-ssa-all-members? $required $observed)
+   (if (== $required ())
+       True
+       (and
+         (neutral-ssa-member? (car-atom $required) $observed)
+         (neutral-ssa-all-members? (cdr-atom $required) $observed))))
+
+(= (neutral-ssa-raf-reachability-loop
+      $timed-transitions $raf-rule-ids $closure-molecules $fired-rule-ids)
+   (if (== $timed-transitions ())
+       (raf-reachability-summary reachable False first-time censored)
+       (let $transition (car-atom $timed-transitions)
+         (let $reaction-id
+           (neutral-ssa-event-reaction-id
+             (neutral-ssa-timed-transition-event $transition))
+           (let $next-fired-rule-ids
+             (if (neutral-ssa-member? $reaction-id $raf-rule-ids)
+                 (neutral-ssa-add-unique $reaction-id $fired-rule-ids)
+                 $fired-rule-ids)
+             (if
+               (and
+                 (neutral-ssa-all-members?
+                   $raf-rule-ids $next-fired-rule-ids)
+                 (neutral-ssa-all-positive?
+                   $closure-molecules
+                   (neutral-ssa-timed-transition-after-counts $transition)))
+               (raf-reachability-summary
+                 reachable True
+                 first-time
+                   (neutral-ssa-timed-transition-time $transition))
+               (neutral-ssa-raf-reachability-loop
+                 (cdr-atom $timed-transitions)
+                 $raf-rule-ids $closure-molecules
+                 $next-fired-rule-ids)))))))
+
+(= (neutral-ssa-raf-reachability-summary
+      $timed-transitions $raf-rule-ids $closure-molecules)
+   (neutral-ssa-raf-reachability-loop
+     $timed-transitions $raf-rule-ids $closure-molecules ()))
+
 (= (neutral-ssa-step
       $seed $event-index $food $molecules $reactions $volume $catalysis $counts)
    (let $weighted-events
