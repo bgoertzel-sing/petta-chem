@@ -674,6 +674,42 @@
   (neutral-causal-endpoint-delta
     raf-events 5 evidence-bins 3 integrated-nonfood 55.0))
 !(test
+  (neutral-ssa-ablation-pair-endpoints
+    (neutral-catalysis-ablation-pair
+      model neutral-crs-v1 graph-seed 1001 dynamics-seed 2001
+      raf-rule-ids (lig-01)
+      baseline-catalysis (("0" lig-01))
+      ablated-catalysis ()
+      baseline
+        (ssa-run seed 2001
+          events
+            ((ssa-draw event (ligation lig-01 "0" "1" "01")
+               waiting-uniform (1 2) total-weight 1
+               propensity-denominator 1 waiting-time 105.0))
+          final-counts (("0" 1) ("1" 1) ("01" 1))
+          final-time 140.0 stop time-bound)
+      ablated
+        (ssa-run seed 2001 events ()
+          final-counts (("0" 2) ("1" 2) ("01" 0))
+          final-time 140.0 stop time-bound))
+    (("0" 2) ("1" 2) ("01" 0))
+    ("0" "1") (lig-01) ("0" "1") ("0" "1" "01")
+    100.0 140.0 10.0 4 1)
+  (neutral-ablation-endpoints
+    baseline-reachability
+      (raf-reachability-summary reachable True first-time 105.0)
+    ablated-reachability
+      (raf-reachability-summary reachable False first-time censored)
+    baseline-causal
+      (neutral-causal-endpoints
+        raf-events 1 evidence-bins 1 integrated-nonfood 35.0)
+    ablated-causal
+      (neutral-causal-endpoints
+        raf-events 0 evidence-bins 0 integrated-nonfood 0.0)
+    delta
+      (neutral-causal-endpoint-delta
+        raf-events 1 evidence-bins 1 integrated-nonfood 35.0)))
+!(test
   (neutral-ssa-run-until
     1 2 0.0
     () ()

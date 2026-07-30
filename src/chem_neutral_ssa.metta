@@ -802,6 +802,59 @@
      evidence-bins (- $baseline-bins $ablated-bins)
      integrated-nonfood (- $baseline-nonfood $ablated-nonfood)))
 
+; Compose both arms of the matched catalysis intervention without allowing
+; host glue to replay chemistry or recompute endpoint values.  Structural RAF
+; selection remains an explicit upstream input, and reachability is reported
+; separately from active/persistent and causal/productive measurements.
+(= (neutral-ssa-ablation-pair-baseline
+      (neutral-catalysis-ablation-pair
+        model $model graph-seed $graph-seed dynamics-seed $dynamics-seed
+        raf-rule-ids $raf-rule-ids
+        baseline-catalysis $baseline-catalysis
+        ablated-catalysis $ablated-catalysis
+        baseline $baseline ablated $ablated))
+   $baseline)
+
+(= (neutral-ssa-ablation-pair-ablated
+      (neutral-catalysis-ablation-pair
+        model $model graph-seed $graph-seed dynamics-seed $dynamics-seed
+        raf-rule-ids $raf-rule-ids
+        baseline-catalysis $baseline-catalysis
+        ablated-catalysis $ablated-catalysis
+        baseline $baseline ablated $ablated))
+   $ablated)
+
+(= (neutral-ssa-ablation-pair-endpoints
+      $pair $initial-counts $food $raf-rule-ids
+      $persistence-molecules $closure-molecules
+      $burn-in $horizon $bin-width $bin-count $persistence-threshold)
+   (let $baseline (neutral-ssa-ablation-pair-baseline $pair)
+     (let $ablated (neutral-ssa-ablation-pair-ablated $pair)
+       (let $baseline-causal
+         (neutral-ssa-run-causal-endpoints
+           $baseline $initial-counts $food $raf-rule-ids $persistence-molecules
+           $burn-in $horizon $bin-width $bin-count $persistence-threshold)
+         (let $ablated-causal
+           (neutral-ssa-run-causal-endpoints
+             $ablated $initial-counts $food $raf-rule-ids $persistence-molecules
+             $burn-in $horizon $bin-width $bin-count $persistence-threshold)
+           (neutral-ablation-endpoints
+             baseline-reachability
+               (neutral-ssa-raf-reachability-summary
+                 (neutral-ssa-run-timed-transitions
+                   $initial-counts $baseline)
+                 $raf-rule-ids $closure-molecules)
+             ablated-reachability
+               (neutral-ssa-raf-reachability-summary
+                 (neutral-ssa-run-timed-transitions
+                   $initial-counts $ablated)
+                 $raf-rule-ids $closure-molecules)
+             baseline-causal $baseline-causal
+             ablated-causal $ablated-causal
+             delta
+               (neutral-ssa-causal-endpoint-delta
+                 $baseline-causal $ablated-causal)))))))
+
 (= (neutral-ssa-step
       $seed $event-index $food $molecules $reactions $volume $catalysis $counts)
    (let $weighted-events
