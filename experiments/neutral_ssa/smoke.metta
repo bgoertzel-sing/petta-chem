@@ -432,6 +432,76 @@
          index 3 time 110.0 event next-bin
          before-counts (("0" 1)) after-counts (("0" 0))))))
 !(test
+  (neutral-ssa-event-reaction-id
+    (ligation lig-01 "0" "1" "01"))
+  lig-01)
+!(test
+  (neutral-ssa-event-reaction-id
+    (cleavage cleave-01 "01" "0" "1"))
+  cleave-01)
+!(test
+  (neutral-ssa-event-reaction-id (influx "0"))
+  no-reaction)
+!(test
+  (neutral-ssa-event-reaction-id (dilution "0"))
+  no-reaction)
+!(test
+  (neutral-ssa-all-positive?
+    ("0" "1") (("0" 1) ("1" 2) ("01" 0)))
+  True)
+!(test
+  (neutral-ssa-all-positive?
+    ("0" "01") (("0" 1) ("1" 2) ("01" 0)))
+  False)
+!(test
+  (neutral-ssa-transition-raf-evidence?
+    (ssa-binned-transition
+      bin 0
+      transition
+        (ssa-timed-transition
+          index 1 time 100.0
+          event (ligation lig-01 "0" "1" "01")
+          before-counts (("0" 1) ("1" 1) ("01" 0))
+          after-counts (("0" 0) ("1" 0) ("01" 1))))
+    (lig-01) ("0" "1"))
+  True)
+!(test
+  (neutral-ssa-transition-raf-evidence?
+    (ssa-binned-transition
+      bin 0
+      transition
+        (ssa-timed-transition
+          index 1 time 100.0
+          event (ligation lig-01 "0" "1" "01")
+          before-counts (("0" 1) ("1" 1) ("01" 0))
+          after-counts (("0" 0) ("1" 0) ("01" 1))))
+    (other-rule) ("0" "1"))
+  False)
+!(test
+  (neutral-ssa-transition-raf-evidence?
+    (ssa-binned-transition
+      bin 0
+      transition
+        (ssa-timed-transition
+          index 1 time 100.0
+          event (ligation lig-01 "0" "1" "01")
+          before-counts (("0" 1) ("1" 1) ("01" 0))
+          after-counts (("0" 0) ("1" 0) ("01" 1))))
+    (lig-01) ("0" "01"))
+  False)
+!(test
+  (neutral-ssa-transition-raf-evidence?
+    (ssa-binned-transition
+      bin 0
+      transition
+        (ssa-timed-transition
+          index 1 time 100.0
+          event (dilution "0")
+          before-counts (("0" 1) ("1" 1) ("01" 0))
+          after-counts (("0" 0) ("1" 1) ("01" 0))))
+    (lig-01) ("0" "1"))
+  False)
+!(test
   (neutral-ssa-run-until
     1 2 0.0
     () ()

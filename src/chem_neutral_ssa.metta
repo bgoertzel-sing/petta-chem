@@ -531,6 +531,39 @@
                    (cdr-atom $timed-transitions)
                    $burn-in $bin-width $bin-count)))))))
 
+; Frozen active/persistence endpoint evidence is evaluated from the
+; pre-event resource state.  Influx and dilution are never RAF reactions.
+(= (neutral-ssa-event-reaction-id
+      (ligation $rule-id $left $right $product))
+   $rule-id)
+(= (neutral-ssa-event-reaction-id
+      (cleavage $rule-id $polymer $left $right))
+   $rule-id)
+(= (neutral-ssa-event-reaction-id (influx $molecule))
+   no-reaction)
+(= (neutral-ssa-event-reaction-id (dilution $molecule))
+   no-reaction)
+
+(= (neutral-ssa-all-positive? $molecules $counts)
+   (if (== $molecules ())
+       True
+       (and
+         (> (neutral-ssa-count (car-atom $molecules) $counts) 0)
+         (neutral-ssa-all-positive? (cdr-atom $molecules) $counts))))
+
+(= (neutral-ssa-transition-raf-evidence?
+      (ssa-binned-transition
+        bin $bin
+        transition
+          (ssa-timed-transition
+            index $index time $time event $event
+            before-counts $before-counts after-counts $after-counts))
+      $raf-rule-ids $required-molecules)
+   (and
+     (neutral-ssa-member?
+       (neutral-ssa-event-reaction-id $event) $raf-rule-ids)
+     (neutral-ssa-all-positive? $required-molecules $before-counts)))
+
 (= (neutral-ssa-step
       $seed $event-index $food $molecules $reactions $volume $catalysis $counts)
    (let $weighted-events
