@@ -37,7 +37,7 @@ def run_shard(shard_dir: Path, runner: Path) -> dict:
         error = results_dir / f"{row['index']:03d}-{row['id']}.stderr"
         with output.open("wb") as stdout, error.open("wb") as stderr:
             proc = subprocess.run(
-                [str(runner), str(query)],
+                ["sh", str(runner), str(query)],
                 stdout=stdout,
                 stderr=stderr,
                 check=False,

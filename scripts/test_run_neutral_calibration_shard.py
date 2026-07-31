@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import json
-import stat
 import tempfile
 from pathlib import Path
 
@@ -32,8 +31,7 @@ def write_shard(root: Path, count: int = 2) -> Path:
 with tempfile.TemporaryDirectory() as tmp:
     root = Path(tmp)
     runner = root / "runner"
-    runner.write_text("#!/bin/sh\nprintf 'raw:%s\\n' \"$(basename \"$1\")\"\n", encoding="utf-8")
-    runner.chmod(runner.stat().st_mode | stat.S_IXUSR)
+    runner.write_text("printf 'raw:%s\\n' \"$(basename \"$1\")\"\n", encoding="utf-8")
     shard = write_shard(root)
     result = run_shard(shard, runner)
     assert result["status"] == "raw-complete-unanalysed"
@@ -44,8 +42,7 @@ with tempfile.TemporaryDirectory() as tmp:
 with tempfile.TemporaryDirectory() as tmp:
     root = Path(tmp)
     runner = root / "runner"
-    runner.write_text("#!/bin/sh\nexit 7\n", encoding="utf-8")
-    runner.chmod(runner.stat().st_mode | stat.S_IXUSR)
+    runner.write_text("exit 7\n", encoding="utf-8")
     shard = write_shard(root, count=3)
     result = run_shard(shard, runner)
     assert result["status"] == "failed"
