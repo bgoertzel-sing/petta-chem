@@ -12,6 +12,27 @@
 !(test (neutral-ssa-list-length (neutral-ssa-binary-polymers 4)) 30)
 !(test (neutral-ssa-list-length (neutral-ssa-binary-polymers 5)) 62)
 !(test (neutral-ssa-list-length (neutral-ssa-binary-polymers 6)) 126)
+!(test
+  (neutral-ssa-lexical-polymers 3)
+  ("0" "00" "000" "001" "01" "010" "011"
+   "1" "10" "100" "101" "11" "110" "111"))
+!(test
+  (neutral-ssa-binary-reactions 2)
+  ((cleavage "cleave:00:1" "00" "0" "0")
+   (cleavage "cleave:01:1" "01" "0" "1")
+   (cleavage "cleave:10:1" "10" "1" "0")
+   (cleavage "cleave:11:1" "11" "1" "1")
+   (ligation "lig:0:0" "0" "0" "00")
+   (ligation "lig:0:1" "0" "1" "01")
+   (ligation "lig:1:0" "1" "0" "10")
+   (ligation "lig:1:1" "1" "1" "11")))
+!(test
+  (neutral-ssa-raf-reactions (neutral-ssa-binary-reactions 3))
+  (neutral-raf-l3-reactions neutral-calibration))
+!(test (neutral-ssa-list-length (neutral-ssa-binary-reactions 3)) 40)
+!(test (neutral-ssa-list-length (neutral-ssa-binary-reactions 4)) 136)
+!(test (neutral-ssa-list-length (neutral-ssa-binary-reactions 5)) 392)
+!(test (neutral-ssa-list-length (neutral-ssa-binary-reactions 6)) 1032)
 
 !(test (neutral-ssa-count "0" (("0" 20) ("1" 20))) 20)
 !(test (neutral-ssa-count "01" (("0" 20) ("1" 20))) 0)

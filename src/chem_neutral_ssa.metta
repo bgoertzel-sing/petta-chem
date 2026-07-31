@@ -4,6 +4,8 @@
 ; g = 1e-4 + 10 * catalyst_count / V.
 
 !(import_prolog_function string_concat)
+!(import_prolog_function string_length)
+!(import_prolog_function sub_string)
 
 (= (neutral-ssa-append $left $right)
    (if (== $left ())
@@ -40,6 +42,97 @@
        ()
        (neutral-ssa-binary-polymers-through
          (- $max-length 1) ("0" "1") ("0" "1"))))
+
+; Reaction ordering follows the frozen (kind, reactants, products) order.
+; A prefix traversal supplies ordinary lexical molecule order for this
+; constructor without changing the length-layer order used by population
+; states above.
+(= (neutral-ssa-lexical-prefix $prefix $remaining-length)
+   (if (== $remaining-length 0)
+       ($prefix)
+       (cons-atom
+         $prefix
+         (neutral-ssa-append
+           (neutral-ssa-lexical-prefix
+             (string_concat $prefix "0") (- $remaining-length 1))
+           (neutral-ssa-lexical-prefix
+             (string_concat $prefix "1") (- $remaining-length 1))))))
+
+(= (neutral-ssa-lexical-polymers $max-length)
+   (if (<= $max-length 0)
+       ()
+       (neutral-ssa-append
+         (neutral-ssa-lexical-prefix "0" (- $max-length 1))
+         (neutral-ssa-lexical-prefix "1" (- $max-length 1)))))
+
+(= (neutral-ssa-index-string 1) "1")
+(= (neutral-ssa-index-string 2) "2")
+(= (neutral-ssa-index-string 3) "3")
+(= (neutral-ssa-index-string 4) "4")
+(= (neutral-ssa-index-string 5) "5")
+
+(= (neutral-ssa-cleavage-id $polymer $split-index)
+   (string_concat
+     (string_concat "cleave:" $polymer)
+     (string_concat ":" (neutral-ssa-index-string $split-index))))
+
+(= (neutral-ssa-ligation-id $left $right)
+   (string_concat
+     (string_concat "lig:" $left)
+     (string_concat ":" $right)))
+
+(= (neutral-ssa-cleavages-for
+      $polymer $split-index $polymer-length)
+   (if (== $split-index $polymer-length)
+       ()
+       (let $left (sub_string $polymer 0 $split-index $_)
+         (let $right
+           (sub_string
+             $polymer $split-index (- $polymer-length $split-index) 0)
+           (cons-atom
+             (cleavage
+               (neutral-ssa-cleavage-id $polymer $split-index)
+               $polymer $left $right)
+             (neutral-ssa-cleavages-for
+               $polymer (+ $split-index 1) $polymer-length))))))
+
+(= (neutral-ssa-cleavages $polymers)
+   (if (== $polymers ())
+       ()
+       (let $polymer (car-atom $polymers)
+         (neutral-ssa-append
+           (neutral-ssa-cleavages-for
+             $polymer 1 (string_length $polymer))
+           (neutral-ssa-cleavages (cdr-atom $polymers))))))
+
+(= (neutral-ssa-ligations-with-rights $left $rights $universe)
+   (if (== $rights ())
+       ()
+       (let $right (car-atom $rights)
+         (let $product (string_concat $left $right)
+           (if (neutral-ssa-member? $product $universe)
+               (cons-atom
+                 (ligation
+                   (neutral-ssa-ligation-id $left $right)
+                   $left $right $product)
+                 (neutral-ssa-ligations-with-rights
+                   $left (cdr-atom $rights) $universe))
+               (neutral-ssa-ligations-with-rights
+                 $left (cdr-atom $rights) $universe))))))
+
+(= (neutral-ssa-ligations $lefts $universe)
+   (if (== $lefts ())
+       ()
+       (neutral-ssa-append
+         (neutral-ssa-ligations-with-rights
+           (car-atom $lefts) $universe $universe)
+         (neutral-ssa-ligations (cdr-atom $lefts) $universe))))
+
+(= (neutral-ssa-binary-reactions $max-length)
+   (let $polymers (neutral-ssa-lexical-polymers $max-length)
+     (neutral-ssa-append
+       (neutral-ssa-cleavages $polymers)
+       (neutral-ssa-ligations $polymers $polymers))))
 
 (= (neutral-ssa-count $molecule $counts)
    (if (== $counts ())
