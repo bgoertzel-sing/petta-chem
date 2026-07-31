@@ -33,6 +33,36 @@
 !(test (neutral-ssa-list-length (neutral-ssa-binary-reactions 4)) 136)
 !(test (neutral-ssa-list-length (neutral-ssa-binary-reactions 5)) 392)
 !(test (neutral-ssa-list-length (neutral-ssa-binary-reactions 6)) 1032)
+!(test
+  (neutral-ssa-run-calibration-row
+    2 1 1 0
+    0 0.0 100
+    0.0 10.0 0 0)
+  (neutral-calibration-row
+    model neutral-crs-v1
+    max-length 2
+    graph-seed 1
+    dynamics-seed 1
+    f-twice 0
+    volume 100
+    molecule-count 6
+    reaction-count 8
+    maximal-raf-rule-ids ()
+    endpoints
+      (neutral-ablation-endpoints
+        baseline-reachability
+          (raf-reachability-summary reachable False first-time censored)
+        ablated-reachability
+          (raf-reachability-summary reachable False first-time censored)
+        baseline-causal
+          (neutral-causal-endpoints
+            raf-events 0 evidence-bins 0 integrated-nonfood 0.0)
+        ablated-causal
+          (neutral-causal-endpoints
+            raf-events 0 evidence-bins 0 integrated-nonfood 0.0)
+        delta
+          (neutral-causal-endpoint-delta
+            raf-events 0 evidence-bins 0 integrated-nonfood 0.0))))
 
 !(test (neutral-ssa-count "0" (("0" 20) ("1" 20))) 20)
 !(test (neutral-ssa-count "01" (("0" 20) ("1" 20))) 0)

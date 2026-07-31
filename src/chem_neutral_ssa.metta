@@ -1276,6 +1276,45 @@
                $persistence-molecules $closure-molecules
                $burn-in $bin-width $bin-count $persistence-threshold)))))))
 
+; Ledger-row boundary.  Maximum polymer length is the only structural input:
+; PeTTa constructs the complete molecule and reaction universes, detects the
+; sampled maximal RAF, records its exact rule identities, and evaluates the
+; already-reviewed matched endpoints.  Host orchestration supplies only the
+; frozen scalar row fields and must not construct or interpret chemistry.
+(= (neutral-ssa-run-calibration-row
+      $max-length $graph-seed $dynamics-seed $f-twice
+      $event-count $time-limit $volume
+      $burn-in $bin-width $bin-count $persistence-threshold)
+   (let $food ("0" "1" "00" "01" "10" "11")
+     (let $molecules (neutral-ssa-binary-polymers $max-length)
+       (let $reactions (neutral-ssa-binary-reactions $max-length)
+         (let $catalysis
+           (neutral-ssa-sample-catalysis
+             $graph-seed $f-twice $molecules $reactions)
+           (let $raf-reactions
+             (neutral-raf-maximal-reactions
+               $food
+               (neutral-ssa-raf-reactions $reactions)
+               (neutral-ssa-raf-catalysis $catalysis))
+             (let $raf-rule-ids (neutral-raf-reaction-ids $raf-reactions)
+               (neutral-calibration-row
+                 model neutral-crs-v1
+                 max-length $max-length
+                 graph-seed $graph-seed
+                 dynamics-seed $dynamics-seed
+                 f-twice $f-twice
+                 volume $volume
+                 molecule-count (neutral-ssa-list-length $molecules)
+                 reaction-count (neutral-ssa-list-length $reactions)
+                 maximal-raf-rule-ids $raf-rule-ids
+                 endpoints
+                   (neutral-ssa-run-detected-raf-endpoints
+                     $graph-seed $dynamics-seed $f-twice
+                     $event-count $time-limit
+                     $food $molecules $reactions $volume
+                     $burn-in $bin-width $bin-count
+                     $persistence-threshold)))))))))
+
 (= (neutral-ssa-counts-nonnegative? $counts)
    (if (== $counts ())
        True
