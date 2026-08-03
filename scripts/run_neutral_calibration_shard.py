@@ -11,11 +11,15 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
+RECOVERY_SCHEMA = "neutral-calibration-whole-shard-recovery-v1"
+RECOVERY_POLICY = "restart-entire-shard-no-prefix-reuse"
+
+
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def run_shard(shard_dir: Path, runner: Path) -> dict:
+def load_prepared_manifest(shard_dir: Path) -> tuple[Path, dict]:
     manifest_path = shard_dir / "MANIFEST.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     if manifest.get("schema") != "neutral-calibration-query-shard-v1":
@@ -26,6 +30,33 @@ def run_shard(shard_dir: Path, runner: Path) -> dict:
         raise ValueError("prepared manifest must not contain endpoint results")
     if manifest.get("run_count") != len(manifest.get("rows", [])):
         raise ValueError("manifest run_count does not match rows")
+    return manifest_path, manifest
+
+
+def validate_recovery_plan(shard_dir: Path, manifest_path: Path) -> None:
+    interrupted = sorted(shard_dir.glob("raw-interrupted-*"))
+    if not interrupted:
+        return
+    plan_path = shard_dir / "RECOVERY_PLAN.json"
+    if not plan_path.is_file():
+        raise ValueError("interrupted raw attempt requires RECOVERY_PLAN.json")
+    plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    if plan.get("schema") != RECOVERY_SCHEMA:
+        raise ValueError("unsupported recovery plan schema")
+    if plan.get("policy") != RECOVERY_POLICY:
+        raise ValueError("recovery plan must require whole-shard restart")
+    if plan.get("status") != "whole-shard-restart-authorized-unrun":
+        raise ValueError("recovery plan does not authorize an unrun restart")
+    if plan.get("source_manifest_sha256") != sha256(manifest_path):
+        raise ValueError("recovery plan source manifest hash mismatch")
+    archive = shard_dir / str(plan.get("archived_directory", ""))
+    if archive not in interrupted or not archive.is_dir():
+        raise ValueError("recovery plan archive is absent")
+
+
+def run_shard(shard_dir: Path, runner: Path) -> dict:
+    manifest_path, manifest = load_prepared_manifest(shard_dir)
+    validate_recovery_plan(shard_dir, manifest_path)
 
     results_dir = shard_dir / "raw"
     results_dir.mkdir(exist_ok=False)

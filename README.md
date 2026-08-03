@@ -45,12 +45,18 @@ scripts/test_neutral_calibration_ledger.sh
 scripts/test_neutral_calibration_shards.sh
 scripts/test_prepare_neutral_calibration_queries.sh
 scripts/test_run_neutral_calibration_shard.sh
+scripts/test_archive_interrupted_neutral_calibration_shard.sh
 ```
 
 `scripts/run_neutral_calibration_shard.py` is outcome-blind execution glue for
 one prepared graph-seed-complete shard. It invokes PeTTa on every row in fixed
 manifest order, retains raw stdout/stderr and hashes, stops on the first
 failure, and labels successful output `raw-complete-unanalysed`.
+
+Interrupted attempts follow the binding whole-shard policy in
+`docs/neutral_calibration_recovery_policy.md`: archive the complete raw
+directory without opening its files, then rerun every original manifest row.
+The runner refuses archived interruptions without a matching recovery plan.
 
 `experiments/exp00/smoke.metta` is a deliberately tiny deterministic chemistry spike. It establishes initial molecule/rule/state/candidate/candidate-pool/candidate-cap/event/chamber/metric atom contracts plus a generic bounded binary catalytic transition, candidate applicability checks, nonnegative abundance invariants, chamber-rule-based candidate generation, per-tick candidate caps, and a seed/tick deterministic candidate selector wired directly from bounded generated or externally scored candidate pools into chamber ticking before larger stochastic/harness work is added. Its current bounded live driver retains up to nine eight-tick sweeps, exact 64-event history, run-wide outcome accounting, early quiescent stop, explicit bound exhaustion, and post-exhaustion quiescence.
 
