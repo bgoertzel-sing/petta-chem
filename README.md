@@ -46,6 +46,7 @@ scripts/test_neutral_calibration_shards.sh
 scripts/test_prepare_neutral_calibration_queries.sh
 scripts/test_run_neutral_calibration_shard.sh
 scripts/test_archive_interrupted_neutral_calibration_shard.sh
+scripts/test_run_neutral_calibration_shard_v2.sh
 ```
 
 `scripts/run_neutral_calibration_shard.py` is outcome-blind execution glue for
@@ -62,6 +63,12 @@ is frozen by `docs/neutral_calibration_second_interruption_decision.md` until
 an outcome-blind, receipt-validated v2 runner passes its synthetic gate. The
 current second interruption must not be archived, resumed, parsed, or restarted
 under the v1 runner.
+
+`scripts/run_neutral_calibration_shard_v2.py` implements that separate v2
+attempt boundary. It fsyncs each successful raw pair, atomically publishes a
+hash-bound receipt, resumes only a validated contiguous prefix, quarantines
+only the next unreceipted pair, and permanently invalidates nonzero attempts.
+Its focused test is synthetic only; passing it does not launch calibration.
 
 `experiments/exp00/smoke.metta` is a deliberately tiny deterministic chemistry spike. It establishes initial molecule/rule/state/candidate/candidate-pool/candidate-cap/event/chamber/metric atom contracts plus a generic bounded binary catalytic transition, candidate applicability checks, nonnegative abundance invariants, chamber-rule-based candidate generation, per-tick candidate caps, and a seed/tick deterministic candidate selector wired directly from bounded generated or externally scored candidate pools into chamber ticking before larger stochastic/harness work is added. Its current bounded live driver retains up to nine eight-tick sweeps, exact 64-event history, run-wide outcome accounting, early quiescent stop, explicit bound exhaustion, and post-exhaustion quiescence.
 
