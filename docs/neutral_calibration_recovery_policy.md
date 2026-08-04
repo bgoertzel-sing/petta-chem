@@ -2,6 +2,12 @@
 
 Status: frozen before recovery execution on 2026-08-02.
 
+The repeated-interruption decision of 2026-08-04 supersedes this policy for
+any further `graph_seed=1001` execution. In particular, the v1 recovery plan
+was consumed by the second fresh attempt and does not authorize another v1
+archive or restart. See
+`docs/neutral_calibration_second_interruption_decision.md`.
+
 This policy applies to an interrupted `neutral-calibration-query-shard-v1`
 attempt that did not emit a `neutral-calibration-raw-shard-v1` run manifest.
 It preserves the preregistered graph-seed-complete sampling unit and prevents
