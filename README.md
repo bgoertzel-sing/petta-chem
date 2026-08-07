@@ -20,6 +20,12 @@ random catalytic reaction system, gated by exact PeTTa agreement with an
 independent exhaustive small-system RAF oracle before any calibration outcome
 is inspected.
 
+The outcome analysis is preregistered separately in
+`docs/neutral_calibration_analysis_plan.md`. It fixes graph-level estimands,
+censoring, uncertainty, and artifact rules but does not authorize opening the
+completed raw shard; a synthetic-tested extractor and complete declared batch
+are required first.
+
 ## Smoke tests
 
 From this repository:
