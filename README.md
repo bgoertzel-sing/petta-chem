@@ -26,6 +26,13 @@ censoring, uncertainty, and artifact rules but does not authorize opening the
 completed raw shard; a synthetic-tested extractor and complete declared batch
 are required first.
 
+The first extractor-contract review is frozen in
+`docs/neutral_calibration_extractor_contract_review.md`. It records that the
+initial synthetic flat endpoint atom does not match PeTTa's nested
+`neutral-calibration-row`, that irrRAF count is not serialized, and that a
+real adapter remains unauthorized pending a corrected nested synthetic gate
+and all 32 receipt-complete graph shards.
+
 ## Smoke tests
 
 From this repository:
