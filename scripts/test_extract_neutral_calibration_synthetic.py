@@ -1,71 +1,67 @@
 #!/usr/bin/env python3
-"""Synthetic-only validation gate for the neutral outcome extractor."""
+"""Exact nested-row and 32-shard synthetic extractor gate."""
 
 import copy
 import hashlib
 
 from extract_neutral_calibration_synthetic import ValidationError, extract
 
-
-def endpoint(dynamics_seed: int, *, graph_seed: int = 1001, status: str = "complete") -> str:
-    return (
-        "(neutral-calibration-endpoint model neutral-crs-v1 max-length 5 f-twice 4 "
-        f"volume 100 graph-seed {graph_seed} dynamics-seed {dynamics_seed} "
-        f"arm matched-pair status {status} raf-exists True maximal-raf-size 3 "
-        "irraf-count 1 reachable True first-reach-time 12.5 persistence-bins 32 "
-        "persistence-fraction 0.8 raf-events 9 delta-raf-events 4 "
-        "delta-integrated-nonfood 2.5 delta-persistence-fraction 0.25)\n"
-    )
+IDENTITY = {"source_manifest_sha256": "a", "neutral_source_sha256": "b", "runner_sha256": "c",
+            "petta_commit": "d", "petta_entrypoint_sha256": "e", "swipl_identity": "9.3.36", "mork_state": "absent"}
 
 
-def record(text: str) -> dict:
-    return {"text": text, "sha256": hashlib.sha256(text.encode()).hexdigest()}
+def atom(graph, dynamics, f2):
+    return (f"(neutral-calibration-row model neutral-crs-v1 max-length 5 graph-seed {graph} "
+            f"dynamics-seed {dynamics} f-twice {f2} volume 100 molecule-count 62 reaction-count 392 "
+            "maximal-raf-rule-ids (r1 r2) endpoints (neutral-ablation-endpoints "
+            "baseline-reachability (raf-reachability-summary reachable True first-time 12) "
+            "ablated-reachability (raf-reachability-summary reachable False first-time censored) "
+            "baseline-causal (neutral-causal-endpoints raf-events 9 evidence-bins 32 integrated-nonfood 20) "
+            "ablated-causal (neutral-causal-endpoints raf-events 1 evidence-bins 4 integrated-nonfood 3) "
+            "delta (neutral-causal-endpoint-delta raf-events 8 evidence-bins 28 integrated-nonfood 17)))")
 
 
-def fixture() -> dict:
-    seeds = [2001, 2002, 2003, 2004]
-    return {
-        "schema": "neutral-calibration-synthetic-endpoints-v1", "synthetic": True,
-        "expected_rows": [{"L": 5, "f_twice": 4, "volume": 100,
-                           "graph_seed": 1001, "dynamics_seed": seed,
-                           "arm": "matched-pair"} for seed in seeds],
-        "records": [record(endpoint(seed)) for seed in seeds],
-    }
+def fixture():
+    shards, records = [], []
+    for graph in range(1001, 1033):
+        receipts = []
+        for index in range(276):
+            dynamics, f2 = 2001 + index % 4, index // 4
+            key = ["primary-transition", 5, f2, 100, graph, dynamics]
+            receipts.append({"index": index, "exit_code": 0, "row_key": key})
+            text = atom(graph, dynamics, f2)
+            records.append({"graph_seed": graph, "index": index, "row_key": key,
+                            "text": text, "sha256": hashlib.sha256(text.encode()).hexdigest()})
+        shards.append({"schema": "neutral-calibration-raw-shard-v2", "status": "raw-complete-unanalysed",
+                       "graph_seed": graph, "planned_count": 276, "completed_count": 276,
+                       "receipts": receipts, **IDENTITY})
+    return {"schema": "neutral-calibration-nested-synthetic-v2", "synthetic": True,
+            "shards": shards, "records": records}
 
 
-def rejects(bundle: dict, label: str) -> None:
+def rejects(case, label):
     try:
-        extract(bundle)
+        extract(case)
     except ValidationError as exc:
         assert label in str(exc), (label, str(exc))
     else:
         raise AssertionError(f"expected {label} refusal")
 
 
-def main() -> None:
-    result = extract(fixture())
-    assert result["row_count"] == 4 and result["graph_count"] == 1
-    graph = result["graph_rows"][0]
-    assert graph["dynamics_seed_count"] == 4
-    assert graph["reachability_fraction"] == 1.0
-    assert graph["mean_delta_raf_events"] == 4.0
-
-    case = fixture(); case["records"].append(copy.deepcopy(case["records"][0])); rejects(case, "duplicate")
-    case = fixture(); case["records"].pop(); rejects(case, "missing")
-    case = fixture(); case["records"][0] = record(endpoint(2001, graph_seed=1002)); rejects(case, "mis-keyed")
-    case = fixture(); case["records"][0] = record("not an atom\n"); rejects(case, "malformed")
-    case = fixture(); case["records"][0] = record(endpoint(2001, status="censored")); rejects(case, "censored")
-    case = fixture(); case["records"][0]["sha256"] = "0" * 64; rejects(case, "hash-mismatched")
-    case = fixture(); case["synthetic"] = False; rejects(case, "authorized synthetic")
-
-    # Failure is atomic: extraction raises and therefore cannot return a partial summary.
-    case = fixture(); case["records"].pop()
-    try:
-        partial = extract(case)
-    except ValidationError:
-        partial = None
-    assert partial is None
-    print("neutral synthetic extractor: aggregation and 7 fail-closed classes passed")
+def main():
+    base = fixture()
+    result = extract(base)
+    assert result == {"schema": "neutral-calibration-nested-synthetic-summary-v2", "row_count": 8832,
+                      "shard_count": 32, "irraf_count": "unavailable"}
+    case = copy.deepcopy(base); case["shards"].pop(); rejects(case, "missing/duplicate shards")
+    case = copy.deepcopy(base); case["shards"][1]["graph_seed"] = 1001; rejects(case, "missing/duplicate shards")
+    case = copy.deepcopy(base); case["shards"][0]["receipts"].pop(); rejects(case, "receipt gaps")
+    case = copy.deepcopy(base); case["shards"][0]["runner_sha256"] = "changed"; rejects(case, "identity disagreement")
+    case = copy.deepcopy(base); case["records"].pop(); rejects(case, "row coverage disagreement")
+    case = copy.deepcopy(base); case["records"][0]["text"] = case["records"][0]["text"].replace("endpoints (", "endpoints ") ; case["records"][0]["sha256"] = hashlib.sha256(case["records"][0]["text"].encode()).hexdigest(); rejects(case, "malformed nesting")
+    case = copy.deepcopy(base); case["irraf_count"] = 2; rejects(case, "irrRAF count is unavailable")
+    case = copy.deepcopy(base); case["synthetic"] = False; rejects(case, "authorized synthetic")
+    print("neutral nested synthetic extractor: 32-shard contract and 8 refusals passed")
 
 
 if __name__ == "__main__":

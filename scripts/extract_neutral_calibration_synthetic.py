@@ -1,35 +1,19 @@
 #!/usr/bin/env python3
-"""Validate and aggregate inline synthetic neutral-calibration endpoint rows.
-
-This gate deliberately has no raw-shard path interface.  It accepts only a
-fabricated, inline JSON bundle marked synthetic and never opens PeTTa output
-files.  A later reviewed gate must provide any real-artifact adapter.
-"""
+"""Validate fabricated nested PeTTa rows and 32-shard metadata, inline only."""
 
 from __future__ import annotations
 
 import hashlib
 import json
-import math
 import re
 import sys
 
-
-SCHEMA = "neutral-calibration-synthetic-endpoints-v1"
-RECORD = re.compile(
-    r"^\(neutral-calibration-endpoint model neutral-crs-v1 "
-    r"max-length (?P<L>\d+) f-twice (?P<f_twice>\d+) volume (?P<volume>\d+) "
-    r"graph-seed (?P<graph_seed>\d+) dynamics-seed (?P<dynamics_seed>\d+) "
-    r"arm matched-pair status (?P<status>[a-z-]+) "
-    r"raf-exists (?P<raf>True|False) maximal-raf-size (?P<raf_size>\d+) "
-    r"irraf-count (?P<irraf_count>\d+) reachable (?P<reachable>True|False) "
-    r"first-reach-time (?P<first_time>censored|[-+]?\d+(?:\.\d+)?) "
-    r"persistence-bins (?P<bins>\d+) persistence-fraction (?P<persistence>[-+]?\d+(?:\.\d+)?) "
-    r"raf-events (?P<events>\d+) delta-raf-events (?P<delta_events>-?\d+) "
-    r"delta-integrated-nonfood (?P<delta_nonfood>[-+]?\d+(?:\.\d+)?) "
-    r"delta-persistence-fraction (?P<delta_persistence>[-+]?\d+(?:\.\d+)?)\)$"
-)
-KEYS = ("L", "f_twice", "volume", "graph_seed", "dynamics_seed", "arm")
+SCHEMA = "neutral-calibration-nested-synthetic-v2"
+GRAPH_SEEDS = tuple(range(1001, 1033))
+ROWS_PER_SHARD = 276
+IDENTITY_FIELDS = ("source_manifest_sha256", "neutral_source_sha256", "runner_sha256",
+                   "petta_commit", "petta_entrypoint_sha256", "swipl_identity", "mork_state")
+TOKEN = re.compile(r"\(|\)|[^\s()]+")
 
 
 class ValidationError(ValueError):
@@ -37,116 +21,159 @@ class ValidationError(ValueError):
 
 
 def _sha256(text: str) -> str:
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+    return hashlib.sha256(text.encode()).hexdigest()
 
 
-def _parse(text: str) -> dict:
-    lines = [line.strip() for line in text.splitlines() if line.strip()]
-    if len(lines) != 1:
-        raise ValidationError("malformed: expected exactly one endpoint record")
-    match = RECORD.fullmatch(lines[0])
-    if not match:
-        raise ValidationError("malformed: noncanonical endpoint record")
-    values = match.groupdict()
-    row = {name: int(values[name]) for name in (
-        "L", "f_twice", "volume", "graph_seed", "dynamics_seed",
-        "raf_size", "irraf_count", "bins", "events", "delta_events",
-    )}
-    row.update({
-        "arm": "matched-pair",
-        "status": values["status"],
-        "raf_exists": values["raf"] == "True",
-        "reachable": values["reachable"] == "True",
-        "first_reach_time": values["first_time"],
-        "persistence_fraction": float(values["persistence"]),
-        "delta_integrated_nonfood": float(values["delta_nonfood"]),
-        "delta_persistence_fraction": float(values["delta_persistence"]),
-    })
-    if row["status"] != "complete":
-        raise ValidationError("censored: row execution status is not complete")
-    numeric = (row["persistence_fraction"], row["delta_integrated_nonfood"],
-               row["delta_persistence_fraction"])
-    if not all(math.isfinite(value) for value in numeric):
-        raise ValidationError("malformed: nonfinite numeric value")
-    if not 0 <= row["persistence_fraction"] <= 1:
-        raise ValidationError("malformed: persistence fraction outside [0,1]")
-    if abs(row["delta_persistence_fraction"]) > 1:
-        raise ValidationError("malformed: persistence delta outside [-1,1]")
-    if row["bins"] > 40:
-        raise ValidationError("malformed: persistence bin count exceeds 40")
-    if row["raf_exists"] != (row["raf_size"] > 0):
-        raise ValidationError("malformed: RAF existence/size implication failed")
-    if not row["raf_exists"] and (row["reachable"] or row["bins"] or row["events"]):
-        raise ValidationError("malformed: non-RAF graph has applicable dynamic endpoints")
-    if row["reachable"] != (row["first_reach_time"] != "censored"):
-        raise ValidationError("malformed: reachability/time implication failed")
-    return row
+def _sexpr(text: str):
+    tokens = TOKEN.findall(text)
+    pos = 0
+
+    def parse():
+        nonlocal pos
+        if pos >= len(tokens) or tokens[pos] != "(":
+            raise ValidationError("malformed nesting")
+        pos += 1
+        out = []
+        while pos < len(tokens) and tokens[pos] != ")":
+            if tokens[pos] == "(":
+                out.append(parse())
+            else:
+                out.append(tokens[pos]); pos += 1
+        if pos >= len(tokens):
+            raise ValidationError("malformed nesting")
+        pos += 1
+        return out
+
+    value = parse()
+    if pos != len(tokens):
+        raise ValidationError("malformed nesting")
+    return value
+
+
+def _pairs(items, context: str) -> dict:
+    if len(items) % 2:
+        raise ValidationError(f"malformed nesting: {context}")
+    result = {}
+    for i in range(0, len(items), 2):
+        key = items[i]
+        if not isinstance(key, str) or key in result:
+            raise ValidationError(f"malformed nesting: {context}")
+        result[key] = items[i + 1]
+    return result
+
+
+def _tagged(value, tag: str) -> dict:
+    if not isinstance(value, list) or not value or value[0] != tag:
+        raise ValidationError(f"malformed nesting: expected {tag}")
+    return _pairs(value[1:], tag)
+
+
+def _integer(value, name: str) -> int:
+    if not isinstance(value, str) or not re.fullmatch(r"-?\d+", value):
+        raise ValidationError(f"malformed nesting: {name}")
+    return int(value)
+
+
+def _parse_row(text: str) -> dict:
+    top = _tagged(_sexpr(text), "neutral-calibration-row")
+    required = {"model", "max-length", "graph-seed", "dynamics-seed", "f-twice", "volume",
+                "molecule-count", "reaction-count", "maximal-raf-rule-ids", "endpoints"}
+    if set(top) != required or top["model"] != "neutral-crs-v1":
+        raise ValidationError("malformed nesting: calibration row fields")
+    rule_ids = top["maximal-raf-rule-ids"]
+    if not isinstance(rule_ids, list) or any(not isinstance(x, str) for x in rule_ids):
+        raise ValidationError("malformed nesting: maximal RAF rule ids")
+    endpoints = _tagged(top["endpoints"], "neutral-ablation-endpoints")
+    expected = {"baseline-reachability", "ablated-reachability", "baseline-causal", "ablated-causal", "delta"}
+    if set(endpoints) != expected:
+        raise ValidationError("malformed nesting: ablation endpoints")
+    base_reach = _tagged(endpoints["baseline-reachability"], "raf-reachability-summary")
+    base_causal = _tagged(endpoints["baseline-causal"], "neutral-causal-endpoints")
+    delta = _tagged(endpoints["delta"], "neutral-causal-endpoint-delta")
+    _tagged(endpoints["ablated-reachability"], "raf-reachability-summary")
+    _tagged(endpoints["ablated-causal"], "neutral-causal-endpoints")
+    if set(base_reach) != {"reachable", "first-time"} or set(base_causal) != {"raf-events", "evidence-bins", "integrated-nonfood"} or set(delta) != {"raf-events", "evidence-bins", "integrated-nonfood"}:
+        raise ValidationError("malformed nesting: endpoint fields")
+    bins = _integer(base_causal["evidence-bins"], "evidence-bins")
+    if not 0 <= bins <= 40 or base_reach["reachable"] not in ("True", "False"):
+        raise ValidationError("malformed nesting: endpoint values")
+    return {
+        "L": _integer(top["max-length"], "max-length"),
+        "f_twice": _integer(top["f-twice"], "f-twice"),
+        "volume": _integer(top["volume"], "volume"),
+        "graph_seed": _integer(top["graph-seed"], "graph-seed"),
+        "dynamics_seed": _integer(top["dynamics-seed"], "dynamics-seed"),
+        "molecule_count": _integer(top["molecule-count"], "molecule-count"),
+        "reaction_count": _integer(top["reaction-count"], "reaction-count"),
+        "raf_exists": bool(rule_ids), "maximal_raf_size": len(rule_ids),
+        "reachable": base_reach["reachable"] == "True", "first_reach_time": base_reach["first-time"],
+        "persistence_fraction": bins / 40,
+        "raf_events": _integer(base_causal["raf-events"], "raf-events"),
+        "delta_raf_events": _integer(delta["raf-events"], "delta raf-events"),
+        "delta_integrated_nonfood": _integer(delta["integrated-nonfood"], "delta integrated-nonfood"),
+        "irraf_count": None,
+    }
 
 
 def extract(bundle: dict) -> dict:
     if bundle.get("schema") != SCHEMA or bundle.get("synthetic") is not True:
         raise ValidationError("input is not an authorized synthetic bundle")
-    expected = bundle.get("expected_rows")
-    records = bundle.get("records")
-    if not isinstance(expected, list) or not isinstance(records, list):
-        raise ValidationError("malformed: expected_rows and records must be lists")
-    expected_keys = [tuple(row.get(key) for key in KEYS) for row in expected]
-    if len(set(expected_keys)) != len(expected_keys):
-        raise ValidationError("duplicate: expected row key")
-    parsed = []
+    if "irraf_count" in bundle or "irraf-count" in bundle:
+        raise ValidationError("irrRAF count is unavailable and must not be invented")
+    shards, records = bundle.get("shards"), bundle.get("records")
+    if not isinstance(shards, list) or not isinstance(records, list):
+        raise ValidationError("malformed: shards and records must be lists")
+    if any(not isinstance(s, dict) for s in shards):
+        raise ValidationError("malformed: shard metadata")
+    seeds = [s.get("graph_seed") for s in shards]
+    if len(shards) != 32 or len(set(seeds)) != len(seeds) or set(seeds) != set(GRAPH_SEEDS):
+        raise ValidationError("missing/duplicate shards")
+    reference = None
+    expected = {}
+    for shard in shards:
+        if shard.get("schema") != "neutral-calibration-raw-shard-v2" or shard.get("status") != "raw-complete-unanalysed" or shard.get("planned_count") != ROWS_PER_SHARD or shard.get("completed_count") != ROWS_PER_SHARD:
+            raise ValidationError("row coverage disagreement")
+        identity = tuple(shard.get(k) for k in IDENTITY_FIELDS)
+        if any(v is None for v in identity) or (reference is not None and identity != reference):
+            raise ValidationError("identity disagreement")
+        reference = identity
+        receipts = shard.get("receipts")
+        if not isinstance(receipts, list) or any(not isinstance(r, dict) for r in receipts):
+            raise ValidationError("receipt gaps")
+        if [r.get("index") for r in receipts] != list(range(ROWS_PER_SHARD)) or any(r.get("exit_code") != 0 for r in receipts):
+            raise ValidationError("receipt gaps")
+        for receipt in receipts:
+            key = tuple(receipt.get("row_key", []))
+            if len(key) != 6 or key[4] != shard["graph_seed"] or key in expected:
+                raise ValidationError("row coverage disagreement")
+            expected[key] = (shard["graph_seed"], receipt["index"])
+    if len(expected) != 8832:
+        raise ValidationError("row coverage disagreement")
+    parsed = {}
     for item in records:
-        if not isinstance(item, dict) or not isinstance(item.get("text"), str):
-            raise ValidationError("malformed: inline record required")
-        if item.get("sha256") != _sha256(item["text"]):
-            raise ValidationError("hash-mismatched: endpoint record")
-        parsed.append(_parse(item["text"]))
-    actual_keys = [tuple(row[key] for key in KEYS) for row in parsed]
-    if len(set(actual_keys)) != len(actual_keys):
-        raise ValidationError("duplicate: endpoint row key")
-    missing = sorted(set(expected_keys) - set(actual_keys))
-    extra = sorted(set(actual_keys) - set(expected_keys))
-    if missing or extra:
-        label = "mis-keyed" if missing and extra else "missing"
-        raise ValidationError(f"{label}: row coverage mismatch")
-
-    groups: dict[tuple, list[dict]] = {}
-    for row in parsed:
-        key = tuple(row[name] for name in ("L", "f_twice", "volume", "graph_seed"))
-        groups.setdefault(key, []).append(row)
-    graph_rows = []
-    for key, rows in sorted(groups.items()):
-        raf_values = {(r["raf_exists"], r["raf_size"], r["irraf_count"]) for r in rows}
-        if len(raf_values) != 1:
-            raise ValidationError("malformed: structural endpoints vary by dynamics seed")
-        raf_exists, raf_size, irraf_count = raf_values.pop()
-        applicable = [r for r in rows if raf_exists]
-        graph_rows.append({
-            "L": key[0], "f_twice": key[1], "volume": key[2], "graph_seed": key[3],
-            "raf_exists": raf_exists, "maximal_raf_size": raf_size,
-            "irraf_count": irraf_count, "dynamics_seed_count": len(rows),
-            "reachability_fraction": (sum(r["reachable"] for r in applicable) / len(applicable)
-                                      if applicable else None),
-            "mean_persistence_fraction": (sum(r["persistence_fraction"] for r in applicable) / len(applicable)
-                                          if applicable else None),
-            "mean_delta_raf_events": (sum(r["delta_events"] for r in applicable) / len(applicable)
-                                      if applicable else None),
-            "mean_delta_integrated_nonfood": (sum(r["delta_integrated_nonfood"] for r in applicable) / len(applicable)
-                                              if applicable else None),
-            "mean_delta_persistence_fraction": (sum(r["delta_persistence_fraction"] for r in applicable) / len(applicable)
-                                                if applicable else None),
-        })
-    return {"schema": "neutral-calibration-synthetic-summary-v1", "row_count": len(parsed),
-            "graph_count": len(graph_rows), "graph_rows": graph_rows}
+        if not isinstance(item, dict) or not isinstance(item.get("text"), str) or item.get("sha256") != _sha256(item.get("text", "")):
+            raise ValidationError("hash-mismatched or malformed inline record")
+        row = _parse_row(item["text"])
+        if "irraf_count" in item or "irraf-count" in item:
+            raise ValidationError("irrRAF count is unavailable and must not be invented")
+        key = tuple(item.get("row_key", []))
+        if expected.get(key) != (item.get("graph_seed"), item.get("index")) or key[1:] != (row["L"], row["f_twice"], row["volume"], row["graph_seed"], row["dynamics_seed"]):
+            raise ValidationError("row coverage disagreement")
+        if key in parsed:
+            raise ValidationError("duplicate endpoint row")
+        parsed[key] = row
+    if set(parsed) != set(expected):
+        raise ValidationError("row coverage disagreement")
+    return {"schema": "neutral-calibration-nested-synthetic-summary-v2", "row_count": len(parsed),
+            "shard_count": len(shards), "irraf_count": "unavailable"}
 
 
 def main() -> None:
     try:
-        result = extract(json.load(sys.stdin))
+        print(json.dumps(extract(json.load(sys.stdin)), sort_keys=True))
     except (ValidationError, json.JSONDecodeError) as exc:
-        print(json.dumps({"schema": "neutral-calibration-synthetic-failure-v1",
-                          "status": "failed", "error": str(exc)}, sort_keys=True))
+        print(json.dumps({"schema": "neutral-calibration-nested-synthetic-failure-v2", "status": "failed", "error": str(exc)}, sort_keys=True))
         raise SystemExit(1)
-    print(json.dumps(result, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":
