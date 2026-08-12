@@ -32,3 +32,16 @@ Continue metadata-only monitoring. Preserve the attempt at
 `raw-complete-unanalysed`; do not inspect endpoint content or run partial
 analysis. Any identity mismatch, receipt/hash gap, nonzero exit, or unexpected
 artifact freezes the attempt for another separate review.
+
+## Second stopped-lifecycle review
+
+At 2026-08-12 12:33 PDT, a second separate review found receipts 0 through 159
+exactly contiguous, zero-exit, and mechanically query/stdout/stderr
+SHA-256-valid. Row 160 had the sole unreceipted raw pair. Frozen identities
+matched, no lifecycle process or terminal manifest existed, and the focused
+durable-v2 synthetic gate, all nine RAF-oracle tests, and `git diff --check`
+passed. No endpoint content was opened.
+
+The same reviewed command resumed the same attempt at row 160, quarantining
+only its unreceipted pair. Tmux, runner, and PeTTa child were live at handoff.
+The original stop rule remains binding.
