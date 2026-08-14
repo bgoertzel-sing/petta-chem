@@ -58,3 +58,16 @@ endpoint content was opened.
 The same reviewed command resumed the same attempt at row 194 without
 quarantining any artifact. Tmux, runner, and PeTTa child were live at handoff.
 The original stop rule remains binding.
+
+## Fourth stopped-lifecycle review
+
+At 2026-08-13 18:34 PDT, a fourth separate review found receipts 0 through 231
+exactly contiguous, zero-exit, and mechanically query/stdout/stderr
+SHA-256-valid. Row 232 had the sole unreceipted raw pair. Frozen identities
+matched, no lifecycle process or terminal manifest existed, and the focused
+durable-v2 synthetic gate, all nine independent RAF-oracle tests, and `git
+diff --check` passed. No endpoint content was opened.
+
+The same reviewed command resumed the same attempt at row 232, quarantining
+only its unreceipted pair. Tmux, runner, and PeTTa child were live at handoff.
+The original stop rule remains binding.
