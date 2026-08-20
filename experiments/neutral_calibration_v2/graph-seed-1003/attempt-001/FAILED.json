@@ -1,0 +1,8 @@
+{
+  "attempt_id": "neutral-v2-g1003-a001",
+  "exit_code": 137,
+  "failed_utc": "2026-08-20T20:17:37.986514+00:00",
+  "row_id": "population-scaling-control-L5-f2-12-V200-g1003-d2003",
+  "row_index": 242,
+  "schema": "neutral-calibration-failed-attempt-v2"
+}
