@@ -1,0 +1,18 @@
+{
+  "attempt_id": "neutral-v2-g1001-a001",
+  "completed_utc": "2026-08-05T21:18:23.219944+00:00",
+  "exit_code": 0,
+  "id": "population-scaling-control-L5-f2-8-V200-g1001-d2004",
+  "index": 211,
+  "query": "queries/211-population-scaling-control-L5-f2-8-V200-g1001-d2004.metta",
+  "query_sha256": "70c9e2a181934137693ee2631c5d4ab6c9bab74f9657fad5c2ea3e95894e25c5",
+  "runner_sha256": "b0ee9930c7fbca5d221ff2e31a7cce30bc8e8902f463c5f80be2a971414e3aae",
+  "runtime_identity": "petta=4ce1d0ea58855abb772b911278312c8846e5cc08;run_sh=b0ee9930c7fbca5d221ff2e31a7cce30bc8e8902f463c5f80be2a971414e3aae;main_pl=cc381df25e778edd0a355ef945a9675f7f3d79ebd5fc5124a2d67bf8d02bc99c;swipl=9.3.36-x86_64-linux;mork_ffi=absent",
+  "schema": "neutral-calibration-row-receipt-v2",
+  "source_commit": "4b7c6de4ec8eb71502588d2714579c7d55d4bd50",
+  "source_manifest_sha256": "c92912f250ec9ecb44df160e3fc13d7480acfdf97eea7b791989a496326a441b",
+  "stderr": "raw/211-population-scaling-control-L5-f2-8-V200-g1001-d2004.stderr",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "raw/211-population-scaling-control-L5-f2-8-V200-g1001-d2004.stdout",
+  "stdout_sha256": "48788a5d3e233a345dc6e3ca2be067645dfa1e9a115170a5efa3147d2999e188"
+}

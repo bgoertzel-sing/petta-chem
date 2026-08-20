@@ -1,0 +1,25 @@
+{
+  "completed_run_count": 1,
+  "failed_row": "primary-transition-L5-f2-0-V100-g1001-d2001",
+  "finished_utc": "2026-07-31T11:31:27.316750+00:00",
+  "graph_seed": 1001,
+  "planned_run_count": 276,
+  "rows": [
+    {
+      "exit_code": 127,
+      "id": "primary-transition-L5-f2-0-V100-g1001-d2001",
+      "index": 0,
+      "query_sha256": "d7f2656ca81ddc5abf4655b3951fa0175b568673dd067ed272aaf1c0e3035509",
+      "stderr": "raw/000-primary-transition-L5-f2-0-V100-g1001-d2001.stderr",
+      "stderr_sha256": "0643088e4dbf9308cdb9b87c6f3192024e16274bd7e275a3ff961aa83a4933c0",
+      "stdout": "raw/000-primary-transition-L5-f2-0-V100-g1001-d2001.stdout",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "runner": "/home/openclaw/research-agent/projects/omegaclaw/repos/PeTTa/run.sh",
+  "schema": "neutral-calibration-raw-shard-v1",
+  "selection_policy": "execute every shard exactly once; no endpoint-conditioned retry, omission, extension, or resampling",
+  "source_manifest_sha256": "c92912f250ec9ecb44df160e3fc13d7480acfdf97eea7b791989a496326a441b",
+  "started_utc": "2026-07-31T11:31:27.314676+00:00",
+  "status": "failed"
+}

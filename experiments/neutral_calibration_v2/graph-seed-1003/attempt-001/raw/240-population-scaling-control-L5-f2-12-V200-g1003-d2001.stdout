@@ -1,0 +1,3506 @@
+[33m--> metta runnable  -->
+[36m!(import! &self /home/openclaw/research-agent/projects/petta-chem/repos/petta-chem/src/chem_neutral_ssa.metta)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           'import!'('&self',
+                     '/home/openclaw/research-agent/projects/petta-chem/repos/petta-chem/src/chem_neutral_ssa.metta',
+                     A),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta runnable  -->
+[36m!(import_prolog_function string_concat)
+[33m-->  prolog goal  -->[35m 
+:- findall(A, import_prolog_function(string_concat, A), _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta runnable  -->
+[36m!(import_prolog_function string_length)
+[33m-->  prolog goal  -->[35m 
+:- findall(A, import_prolog_function(string_length, A), _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta runnable  -->
+[36m!(import_prolog_function sub_string)
+[33m-->  prolog goal  -->[35m 
+:- findall(A, import_prolog_function(sub_string, A), _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-append $left $right)
+   (if (== $left ())
+       $right
+       (cons-atom
+         (car-atom $left)
+         (neutral-ssa-append (cdr-atom $left) $right))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-append'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=B
+    ;   'car-atom'(A, E),
+        'cdr-atom'(A, F),
+        'neutral-ssa-append'(F, B, G),
+        'cons-atom'(E, G, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-extend-binary-layer $layer)
+   (if (== $layer ())
+       ()
+       (let $polymer (car-atom $layer)
+         (cons-atom
+           (string_concat $polymer "0")
+           (cons-atom
+             (string_concat $polymer "1")
+             (neutral-ssa-extend-binary-layer (cdr-atom $layer)))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-extend-binary-layer'(A, B) :-
+    ==(A, [], C),
+    (   C==true
+    ->  B=[]
+    ;   D=E,
+        'car-atom'(A, E),
+        string_concat(D, "0", F),
+        string_concat(D, "1", G),
+        'cdr-atom'(A, H),
+        'neutral-ssa-extend-binary-layer'(H, I),
+        'cons-atom'(G, I, J),
+        'cons-atom'(F, J, B)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-binary-polymers-through
+      $remaining-levels $layer $molecules)
+   (if (== $remaining-levels 0)
+       $molecules
+       (let $next-layer (neutral-ssa-extend-binary-layer $layer)
+         (neutral-ssa-binary-polymers-through
+           (- $remaining-levels 1)
+           $next-layer
+           (neutral-ssa-append $molecules $next-layer)))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-binary-polymers-through'(A, B, C, D) :-
+    ==(A, 0, E),
+    (   E==true
+    ->  D=C
+    ;   F=G,
+        'neutral-ssa-extend-binary-layer'(B, G),
+        -(A, 1, H),
+        'neutral-ssa-append'(C, F, I),
+        'neutral-ssa-binary-polymers-through'(H, F, I, D)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-binary-polymers $max-length)
+   (if (<= $max-length 0)
+       ()
+       (neutral-ssa-binary-polymers-through
+         (- $max-length 1) ("0" "1") ("0" "1"))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-binary-polymers'(A, B) :-
+    <=(A, 0, C),
+    (   C==true
+    ->  B=[]
+    ;   -(A, 1, D),
+        'neutral-ssa-binary-polymers-through'(D, ["0", "1"], ["0", "1"], B)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-lexical-prefix $prefix $remaining-length)
+   (if (== $remaining-length 0)
+       ($prefix)
+       (cons-atom
+         $prefix
+         (neutral-ssa-append
+           (neutral-ssa-lexical-prefix
+             (string_concat $prefix "0") (- $remaining-length 1))
+           (neutral-ssa-lexical-prefix
+             (string_concat $prefix "1") (- $remaining-length 1))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-lexical-prefix'(A, B, C) :-
+    ==(B, 0, D),
+    (   D==true
+    ->  reduce([A], C)
+    ;   string_concat(A, "0", E),
+        -(B, 1, F),
+        'neutral-ssa-lexical-prefix'(E, F, G),
+        string_concat(A, "1", H),
+        -(B, 1, I),
+        'neutral-ssa-lexical-prefix'(H, I, J),
+        'neutral-ssa-append'(G, J, K),
+        'cons-atom'(A, K, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-lexical-polymers $max-length)
+   (if (<= $max-length 0)
+       ()
+       (neutral-ssa-append
+         (neutral-ssa-lexical-prefix "0" (- $max-length 1))
+         (neutral-ssa-lexical-prefix "1" (- $max-length 1)))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-lexical-polymers'(A, B) :-
+    <=(A, 0, C),
+    (   C==true
+    ->  B=[]
+    ;   -(A, 1, D),
+        'neutral-ssa-lexical-prefix'("0", D, E),
+        -(A, 1, F),
+        'neutral-ssa-lexical-prefix'("1", F, G),
+        'neutral-ssa-append'(E, G, B)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-index-string 1) "1")
+[33m--> prolog clause -->
+[32m'neutral-ssa-index-string'(1, "1").
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-index-string 2) "2")
+[33m--> prolog clause -->
+[32m'neutral-ssa-index-string'(2, "2").
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-index-string 3) "3")
+[33m--> prolog clause -->
+[32m'neutral-ssa-index-string'(3, "3").
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-index-string 4) "4")
+[33m--> prolog clause -->
+[32m'neutral-ssa-index-string'(4, "4").
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-index-string 5) "5")
+[33m--> prolog clause -->
+[32m'neutral-ssa-index-string'(5, "5").
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-cleavage-id $polymer $split-index)
+   (string_concat
+     (string_concat "cleave:" $polymer)
+     (string_concat ":" (neutral-ssa-index-string $split-index))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-cleavage-id'(A, B, C) :-
+    string_concat("cleave:", A, D),
+    'neutral-ssa-index-string'(B, E),
+    string_concat(":", E, F),
+    string_concat(D, F, C).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-ligation-id $left $right)
+   (string_concat
+     (string_concat "lig:" $left)
+     (string_concat ":" $right)))
+[33m--> prolog clause -->
+[32m'neutral-ssa-ligation-id'(A, B, C) :-
+    string_concat("lig:", A, D),
+    string_concat(":", B, E),
+    string_concat(D, E, C).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-cleavages-for
+      $polymer $split-index $polymer-length)
+   (if (== $split-index $polymer-length)
+       ()
+       (let $left (sub_string $polymer 0 $split-index $_)
+         (let $right
+           (sub_string
+             $polymer $split-index (- $polymer-length $split-index) 0)
+           (cons-atom
+             (cleavage
+               (neutral-ssa-cleavage-id $polymer $split-index)
+               $polymer $left $right)
+             (neutral-ssa-cleavages-for
+               $polymer (+ $split-index 1) $polymer-length))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-cleavages-for'(A, B, C, D) :-
+    ==(B, C, E),
+    (   E==true
+    ->  D=[]
+    ;   F=G,
+        sub_string(A, 0, B, _, G),
+        H=I,
+        -(C, B, J),
+        sub_string(A, B, J, 0, I),
+        'neutral-ssa-cleavage-id'(A, B, K),
+        +(B, 1, L),
+        'neutral-ssa-cleavages-for'(A, L, C, M),
+        'cons-atom'([cleavage, K, A, F, H],
+                    M,
+                    D)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-cleavages $polymers)
+   (if (== $polymers ())
+       ()
+       (let $polymer (car-atom $polymers)
+         (neutral-ssa-append
+           (neutral-ssa-cleavages-for
+             $polymer 1 (string_length $polymer))
+           (neutral-ssa-cleavages (cdr-atom $polymers))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-cleavages'(A, B) :-
+    ==(A, [], C),
+    (   C==true
+    ->  B=[]
+    ;   D=E,
+        'car-atom'(A, E),
+        string_length(D, F),
+        'neutral-ssa-cleavages-for'(D, 1, F, G),
+        'cdr-atom'(A, H),
+        'neutral-ssa-cleavages'(H, I),
+        'neutral-ssa-append'(G, I, B)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-ligations-with-rights $left $rights $universe)
+   (if (== $rights ())
+       ()
+       (let $right (car-atom $rights)
+         (let $product (string_concat $left $right)
+           (if (neutral-ssa-member? $product $universe)
+               (cons-atom
+                 (ligation
+                   (neutral-ssa-ligation-id $left $right)
+                   $left $right $product)
+                 (neutral-ssa-ligations-with-rights
+                   $left (cdr-atom $rights) $universe))
+               (neutral-ssa-ligations-with-rights
+                 $left (cdr-atom $rights) $universe))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-ligations-with-rights'(A, B, C, D) :-
+    ==(B, [], E),
+    (   E==true
+    ->  D=[]
+    ;   F=G,
+        'car-atom'(B, G),
+        H=I,
+        string_concat(A, F, I),
+        'neutral-ssa-member?'(H, C, J),
+        (   J==true
+        ->  'neutral-ssa-ligation-id'(A, F, K),
+            'cdr-atom'(B, L),
+            'neutral-ssa-ligations-with-rights'(A,
+                                                L,
+                                                C,
+                                                M),
+            'cons-atom'([ligation, K, A, F, H],
+                        M,
+                        D)
+        ;   'cdr-atom'(B, N),
+            'neutral-ssa-ligations-with-rights'(A,
+                                                N,
+                                                C,
+                                                D)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-ligations $lefts $universe)
+   (if (== $lefts ())
+       ()
+       (neutral-ssa-append
+         (neutral-ssa-ligations-with-rights
+           (car-atom $lefts) $universe $universe)
+         (neutral-ssa-ligations (cdr-atom $lefts) $universe))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-ligations'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=[]
+    ;   'car-atom'(A, E),
+        'neutral-ssa-ligations-with-rights'(E, B, B, F),
+        'cdr-atom'(A, G),
+        'neutral-ssa-ligations'(G, B, H),
+        'neutral-ssa-append'(F, H, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-binary-reactions $max-length)
+   (let $polymers (neutral-ssa-lexical-polymers $max-length)
+     (neutral-ssa-append
+       (neutral-ssa-cleavages $polymers)
+       (neutral-ssa-ligations $polymers $polymers))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-binary-reactions'(A, B) :-
+    C=D,
+    'neutral-ssa-lexical-polymers'(A, D),
+    'neutral-ssa-cleavages'(C, E),
+    'neutral-ssa-ligations'(C, C, F),
+    'neutral-ssa-append'(E, F, B).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-count $molecule $counts)
+   (if (== $counts ())
+       0
+       (let $entry (car-atom $counts)
+         (if (== $molecule (car-atom $entry))
+             (car-atom (cdr-atom $entry))
+             (neutral-ssa-count $molecule (cdr-atom $counts))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-count'(A, B, C) :-
+    ==(B, [], D),
+    (   D==true
+    ->  C=0
+    ;   E=F,
+        'car-atom'(B, F),
+        'car-atom'(E, G),
+        ==(A, G, H),
+        (   H==true
+        ->  'cdr-atom'(E, I),
+            'car-atom'(I, C)
+        ;   'cdr-atom'(B, J),
+            'neutral-ssa-count'(A, J, C)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-member? $item $items)
+   (if (== $items ())
+       False
+       (if (== $item (car-atom $items))
+           True
+           (neutral-ssa-member? $item (cdr-atom $items)))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-member?'(A, B, C) :-
+    ==(B, [], D),
+    (   D==true
+    ->  C=false
+    ;   'car-atom'(B, E),
+        ==(A, E, F),
+        (   F==true
+        ->  C=true
+        ;   'cdr-atom'(B, G),
+            'neutral-ssa-member?'(A, G, C)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-list-length $items)
+   (if (== $items ())
+       0
+       (+ 1 (neutral-ssa-list-length (cdr-atom $items)))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-list-length'(A, B) :-
+    ==(A, [], C),
+    (   C==true
+    ->  B=0
+    ;   'cdr-atom'(A, D),
+        'neutral-ssa-list-length'(D, E),
+        +(1, E, B)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-reaction-id
+      (ligation $rule-id $left $right $product))
+   $rule-id)
+[33m--> prolog clause -->
+[32m'neutral-ssa-reaction-id'([ligation, A, _, _, _],
+                               A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-reaction-id
+      (cleavage $rule-id $polymer $left $right))
+   $rule-id)
+[33m--> prolog clause -->
+[32m'neutral-ssa-reaction-id'([cleavage, A, _, _, _],
+                               A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-catalysis-draw
+      $graph-seed $molecule-index $reaction-index $denominator)
+   (#mod
+     (+ (* 1664525 $graph-seed)
+        (+ (* 1013904223 $molecule-index)
+           (* 69069 $reaction-index)))
+     $denominator))
+[33m--> prolog clause -->
+[32m'neutral-ssa-catalysis-draw'(A, B, C, D, E) :-
+    *(1664525, A, F),
+    *(1013904223, B, G),
+    *(69069, C, H),
+    +(G, H, I),
+    +(F, I, J),
+    '#mod'(J, D, E).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-sample-catalysis-reactions
+      $graph-seed $f-twice $denominator $molecule $molecule-index
+      $reaction-index $reactions)
+   (if (== $reactions ())
+       ()
+       (let $reaction (car-atom $reactions)
+         (if (< (neutral-ssa-catalysis-draw
+                  $graph-seed $molecule-index $reaction-index $denominator)
+                $f-twice)
+             (cons-atom
+               ($molecule (neutral-ssa-reaction-id $reaction))
+               (neutral-ssa-sample-catalysis-reactions
+                 $graph-seed $f-twice $denominator $molecule $molecule-index
+                 (+ $reaction-index 1) (cdr-atom $reactions)))
+             (neutral-ssa-sample-catalysis-reactions
+               $graph-seed $f-twice $denominator $molecule $molecule-index
+               (+ $reaction-index 1) (cdr-atom $reactions))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-sample-catalysis-reactions'(A,
+                                              B,
+                                              C,
+                                              D,
+                                              E,
+                                              F,
+                                              G,
+                                              H) :-
+    ==(G, [], I),
+    (   I==true
+    ->  H=[]
+    ;   J=K,
+        'car-atom'(G, K),
+        'neutral-ssa-catalysis-draw'(A, E, F, C, L),
+        <(L, B, M),
+        (   M==true
+        ->  'neutral-ssa-reaction-id'(J, N),
+            reduce([D, N], O),
+            +(F, 1, P),
+            'cdr-atom'(G, Q),
+            'neutral-ssa-sample-catalysis-reactions'(A,
+                                                     B,
+                                                     C,
+                                                     D,
+                                                     E,
+                                                     P,
+                                                     Q,
+                                                     R),
+            'cons-atom'(O, R, H)
+        ;   +(F, 1, S),
+            'cdr-atom'(G, T),
+            'neutral-ssa-sample-catalysis-reactions'(A,
+                                                     B,
+                                                     C,
+                                                     D,
+                                                     E,
+                                                     S,
+                                                     T,
+                                                     H)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-sample-catalysis-molecules
+      $graph-seed $f-twice $denominator $molecule-index
+      $molecules $reactions)
+   (if (== $molecules ())
+       ()
+       (neutral-ssa-list-append
+         (neutral-ssa-sample-catalysis-reactions
+           $graph-seed $f-twice $denominator
+           (car-atom $molecules) $molecule-index 0 $reactions)
+         (neutral-ssa-sample-catalysis-molecules
+           $graph-seed $f-twice $denominator (+ $molecule-index 1)
+           (cdr-atom $molecules) $reactions))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-sample-catalysis-molecules'(A,
+                                              B,
+                                              C,
+                                              D,
+                                              E,
+                                              F,
+                                              G) :-
+    ==(E, [], H),
+    (   H==true
+    ->  G=[]
+    ;   'car-atom'(E, I),
+        'neutral-ssa-sample-catalysis-reactions'(A,
+                                                 B,
+                                                 C,
+                                                 I,
+                                                 D,
+                                                 0,
+                                                 F,
+                                                 J),
+        +(D, 1, K),
+        'cdr-atom'(E, L),
+        'neutral-ssa-sample-catalysis-molecules'(A,
+                                                 B,
+                                                 C,
+                                                 K,
+                                                 L,
+                                                 F,
+                                                 M),
+        'neutral-ssa-list-append'(J, M, G)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-sample-catalysis
+      $graph-seed $f-twice $molecules $reactions)
+   (if (== $reactions ())
+       ()
+       (let $denominator (* 2 (neutral-ssa-list-length $reactions))
+         (neutral-ssa-sample-catalysis-molecules
+           $graph-seed
+           (if (> $f-twice $denominator) $denominator $f-twice)
+           $denominator 0 $molecules $reactions))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-sample-catalysis'(A, B, C, D, E) :-
+    ==(D, [], F),
+    (   F==true
+    ->  E=[]
+    ;   G=H,
+        'neutral-ssa-list-length'(D, I),
+        *(2, I, H),
+        >(B, G, J),
+        (   J==true
+        ->  K=G
+        ;   K=B
+        ),
+        'neutral-ssa-sample-catalysis-molecules'(A,
+                                                 K,
+                                                 G,
+                                                 0,
+                                                 C,
+                                                 D,
+                                                 E)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-delete-catalysis-into $raf-rule-ids $catalysis)
+   (if (== $catalysis ())
+       ()
+       (let $edge (car-atom $catalysis)
+         (if (neutral-ssa-member?
+               (car-atom (cdr-atom $edge)) $raf-rule-ids)
+             (neutral-ssa-delete-catalysis-into
+               $raf-rule-ids (cdr-atom $catalysis))
+             (cons-atom
+               $edge
+               (neutral-ssa-delete-catalysis-into
+                 $raf-rule-ids (cdr-atom $catalysis)))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-delete-catalysis-into'(A, B, C) :-
+    ==(B, [], D),
+    (   D==true
+    ->  C=[]
+    ;   E=F,
+        'car-atom'(B, F),
+        'cdr-atom'(E, G),
+        'car-atom'(G, H),
+        'neutral-ssa-member?'(H, A, I),
+        (   I==true
+        ->  'cdr-atom'(B, J),
+            'neutral-ssa-delete-catalysis-into'(A, J, C)
+        ;   'cdr-atom'(B, K),
+            'neutral-ssa-delete-catalysis-into'(A, K, L),
+            'cons-atom'(E, L, C)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-initial-counts $molecules $food $volume)
+   (if (== $molecules ())
+       ()
+       (let $molecule (car-atom $molecules)
+         (cons-atom
+           ($molecule
+            (if (neutral-ssa-member? $molecule $food)
+                (/ $volume 5)
+                0))
+           (neutral-ssa-initial-counts
+             (cdr-atom $molecules) $food $volume)))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-initial-counts'(A, B, C, D) :-
+    ==(A, [], E),
+    (   E==true
+    ->  D=[]
+    ;   F=G,
+        'car-atom'(A, G),
+        'neutral-ssa-member?'(F, B, H),
+        (   H==true
+        ->  /(C, 5, I)
+        ;   I=0
+        ),
+        reduce([F, I], J),
+        'cdr-atom'(A, K),
+        'neutral-ssa-initial-counts'(K, B, C, L),
+        'cons-atom'(J, L, D)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-catalyst-count $rule-id $counts $catalysis)
+   (if (== $catalysis ())
+       0
+       (let $edge (car-atom $catalysis)
+         (if (== $rule-id (car-atom (cdr-atom $edge)))
+             (+ (neutral-ssa-count (car-atom $edge) $counts)
+                (neutral-ssa-catalyst-count
+                  $rule-id $counts (cdr-atom $catalysis)))
+             (neutral-ssa-catalyst-count
+               $rule-id $counts (cdr-atom $catalysis))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-catalyst-count'(A, B, C, D) :-
+    ==(C, [], E),
+    (   E==true
+    ->  D=0
+    ;   F=G,
+        'car-atom'(C, G),
+        'cdr-atom'(F, H),
+        'car-atom'(H, I),
+        ==(A, I, J),
+        (   J==true
+        ->  'car-atom'(F, K),
+            'neutral-ssa-count'(K, B, L),
+            'cdr-atom'(C, M),
+            'neutral-ssa-catalyst-count'(A, B, M, N),
+            +(L, N, D)
+        ;   'cdr-atom'(C, O),
+            'neutral-ssa-catalyst-count'(A, B, O, D)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-g-numerator $rule-id $volume $counts $catalysis)
+   (+ $volume
+      (* 100000
+         (neutral-ssa-catalyst-count $rule-id $counts $catalysis))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-g-numerator'(A, B, C, D, E) :-
+    'neutral-ssa-catalyst-count'(A, C, D, F),
+    *(100000, F, G),
+    +(B, G, E).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-ligation-h-numerator $left $right $counts)
+   (if (== $left $right)
+       (/ (* (neutral-ssa-count $left $counts)
+             (- (neutral-ssa-count $left $counts) 1))
+          2)
+       (* (neutral-ssa-count $left $counts)
+          (neutral-ssa-count $right $counts))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-ligation-h-numerator'(A, B, C, D) :-
+    ==(A, B, E),
+    (   E==true
+    ->  'neutral-ssa-count'(A, C, F),
+        'neutral-ssa-count'(A, C, G),
+        -(G, 1, H),
+        *(F, H, I),
+        /(I, 2, D)
+    ;   'neutral-ssa-count'(A, C, J),
+        'neutral-ssa-count'(B, C, K),
+        *(J, K, D)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-ligation-propensity-numerator
+      $rule-id $left $right $volume $counts $catalysis)
+   (* (neutral-ssa-ligation-h-numerator $left $right $counts)
+      (neutral-ssa-g-numerator
+        $rule-id $volume $counts $catalysis)))
+[33m--> prolog clause -->
+[32m'neutral-ssa-ligation-propensity-numerator'(A,
+                                                 B,
+                                                 C,
+                                                 D,
+                                                 E,
+                                                 F,
+                                                 G) :-
+    'neutral-ssa-ligation-h-numerator'(B, C, E, H),
+    'neutral-ssa-g-numerator'(A, D, E, F, I),
+    *(H, I, G).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-cleavage-propensity-numerator
+      $rule-id $polymer $volume $counts $catalysis)
+   (* (neutral-ssa-count $polymer $counts)
+      (neutral-ssa-g-numerator
+        $rule-id $volume $counts $catalysis)))
+[33m--> prolog clause -->
+[32m'neutral-ssa-cleavage-propensity-numerator'(A,
+                                                 B,
+                                                 C,
+                                                 D,
+                                                 E,
+                                                 F) :-
+    'neutral-ssa-count'(B, D, G),
+    'neutral-ssa-g-numerator'(A, C, D, E, H),
+    *(G, H, F).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-ligation-enabled? $left $right $counts)
+   (if (== $left $right)
+       (>= (neutral-ssa-count $left $counts) 2)
+       (and (> (neutral-ssa-count $left $counts) 0)
+            (> (neutral-ssa-count $right $counts) 0))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-ligation-enabled?'(A, B, C, D) :-
+    ==(A, B, E),
+    (   E==true
+    ->  'neutral-ssa-count'(A, C, F),
+        >=(F, 2, D)
+    ;   'neutral-ssa-count'(A, C, G),
+        >(G, 0, H),
+        'neutral-ssa-count'(B, C, I),
+        >(I, 0, J),
+        and(H, J, D)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-adjust-count $molecule $delta $counts)
+   (if (== $counts ())
+       ()
+       (let $entry (car-atom $counts)
+         (if (== $molecule (car-atom $entry))
+             (cons-atom
+               ((car-atom $entry)
+                (+ (car-atom (cdr-atom $entry)) $delta))
+               (neutral-ssa-adjust-count
+                 $molecule 0 (cdr-atom $counts)))
+             (cons-atom
+               $entry
+               (neutral-ssa-adjust-count
+                 $molecule $delta (cdr-atom $counts)))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-adjust-count'(A, B, C, D) :-
+    ==(C, [], E),
+    (   E==true
+    ->  D=[]
+    ;   F=G,
+        'car-atom'(C, G),
+        'car-atom'(F, H),
+        ==(A, H, I),
+        (   I==true
+        ->  'car-atom'(F, J),
+            'cdr-atom'(F, K),
+            'car-atom'(K, L),
+            +(L, B, M),
+            reduce([J, M], N),
+            'cdr-atom'(C, O),
+            'neutral-ssa-adjust-count'(A, 0, O, P),
+            'cons-atom'(N, P, D)
+        ;   'cdr-atom'(C, Q),
+            'neutral-ssa-adjust-count'(A, B, Q, R),
+            'cons-atom'(F, R, D)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-apply-event (influx $molecule) $counts)
+   (neutral-ssa-adjust-count $molecule 1 $counts))
+[33m--> prolog clause -->
+[32m'neutral-ssa-apply-event'([influx, A], B, C) :-
+    'neutral-ssa-adjust-count'(A, 1, B, C).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-apply-event (dilution $molecule) $counts)
+   (neutral-ssa-adjust-count $molecule -1 $counts))
+[33m--> prolog clause -->
+[32m'neutral-ssa-apply-event'([dilution, A], B, C) :-
+    'neutral-ssa-adjust-count'(A, -1, B, C).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-apply-event
+      (ligation $rule-id $left $right $product) $counts)
+   (neutral-ssa-adjust-count
+     $product 1
+     (neutral-ssa-adjust-count
+       $right -1 (neutral-ssa-adjust-count $left -1 $counts))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-apply-event'([ligation, _, A, B, C],
+                               D,
+                               E) :-
+    'neutral-ssa-adjust-count'(A, -1, D, F),
+    'neutral-ssa-adjust-count'(B, -1, F, G),
+    'neutral-ssa-adjust-count'(C, 1, G, E).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-apply-event
+      (cleavage $rule-id $polymer $left $right) $counts)
+   (neutral-ssa-adjust-count
+     $right 1
+     (neutral-ssa-adjust-count
+       $left 1 (neutral-ssa-adjust-count $polymer -1 $counts))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-apply-event'([cleavage, _, A, B, C],
+                               D,
+                               E) :-
+    'neutral-ssa-adjust-count'(A, -1, D, F),
+    'neutral-ssa-adjust-count'(B, 1, F, G),
+    'neutral-ssa-adjust-count'(C, 1, G, E).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-event-enabled? (influx $molecule) $counts) True)
+[33m--> prolog clause -->
+[32m'neutral-ssa-event-enabled?'([influx, _], _, true).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-event-enabled? (dilution $molecule) $counts)
+   (> (neutral-ssa-count $molecule $counts) 0))
+[33m--> prolog clause -->
+[32m'neutral-ssa-event-enabled?'([dilution, A], B, C) :-
+    'neutral-ssa-count'(A, B, D),
+    >(D, 0, C).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-event-enabled?
+      (ligation $rule-id $left $right $product) $counts)
+   (neutral-ssa-ligation-enabled? $left $right $counts))
+[33m--> prolog clause -->
+[32m'neutral-ssa-event-enabled?'([ligation, _, A, B, _],
+                                  C,
+                                  D) :-
+    'neutral-ssa-ligation-enabled?'(A, B, C, D).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-event-enabled?
+      (cleavage $rule-id $polymer $left $right) $counts)
+   (> (neutral-ssa-count $polymer $counts) 0))
+[33m--> prolog clause -->
+[32m'neutral-ssa-event-enabled?'([cleavage, _, A, _, _],
+                                  B,
+                                  C) :-
+    'neutral-ssa-count'(A, B, D),
+    >(D, 0, C).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-list-append $left $right)
+   (if (== $left ())
+       $right
+       (cons-atom
+         (car-atom $left)
+         (neutral-ssa-list-append (cdr-atom $left) $right))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-list-append'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=B
+    ;   'car-atom'(A, E),
+        'cdr-atom'(A, F),
+        'neutral-ssa-list-append'(F, B, G),
+        'cons-atom'(E, G, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-influx-weight $volume)
+   (* 20 (* $volume (* $volume $volume))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-influx-weight'(A, B) :-
+    *(A, A, C),
+    *(A, C, D),
+    *(20, D, B).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-dilution-weight $molecule $volume $counts)
+   (* 100
+      (* (neutral-ssa-count $molecule $counts)
+         (* $volume $volume))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-dilution-weight'(A, B, C, D) :-
+    'neutral-ssa-count'(A, C, E),
+    *(B, B, F),
+    *(E, F, G),
+    *(100, G, D).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-enumerate-influx $food $volume)
+   (if (== $food ())
+       ()
+       (cons-atom
+         ((influx (car-atom $food))
+          (neutral-ssa-influx-weight $volume))
+         (neutral-ssa-enumerate-influx (cdr-atom $food) $volume))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-enumerate-influx'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=[]
+    ;   'car-atom'(A, E),
+        'neutral-ssa-influx-weight'(B, F),
+        'cdr-atom'(A, G),
+        'neutral-ssa-enumerate-influx'(G, B, H),
+        'cons-atom'([[influx, E], F], H, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-enumerate-dilution $molecules $volume $counts)
+   (if (== $molecules ())
+       ()
+       (let $molecule (car-atom $molecules)
+         (let $weight
+           (neutral-ssa-dilution-weight $molecule $volume $counts)
+           (if (== $weight 0)
+               (neutral-ssa-enumerate-dilution
+                 (cdr-atom $molecules) $volume $counts)
+               (cons-atom
+                 ((dilution $molecule) $weight)
+                 (neutral-ssa-enumerate-dilution
+                   (cdr-atom $molecules) $volume $counts)))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-enumerate-dilution'(A, B, C, D) :-
+    ==(A, [], E),
+    (   E==true
+    ->  D=[]
+    ;   F=G,
+        'car-atom'(A, G),
+        H=I,
+        'neutral-ssa-dilution-weight'(F, B, C, I),
+        ==(H, 0, J),
+        (   J==true
+        ->  'cdr-atom'(A, K),
+            'neutral-ssa-enumerate-dilution'(K, B, C, D)
+        ;   'cdr-atom'(A, L),
+            'neutral-ssa-enumerate-dilution'(L, B, C, M),
+            'cons-atom'([[dilution, F], H], M, D)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-reaction-weight
+      (ligation $rule-id $left $right $product)
+      $volume $counts $catalysis)
+   (neutral-ssa-ligation-propensity-numerator
+     $rule-id $left $right $volume $counts $catalysis))
+[33m--> prolog clause -->
+[32m'neutral-ssa-reaction-weight'([ligation, A, B, C, _],
+                                   D,
+                                   E,
+                                   F,
+                                   G) :-
+    'neutral-ssa-ligation-propensity-numerator'(A,
+                                                B,
+                                                C,
+                                                D,
+                                                E,
+                                                F,
+                                                G).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-reaction-weight
+      (cleavage $rule-id $polymer $left $right)
+      $volume $counts $catalysis)
+   (* $volume
+      (neutral-ssa-cleavage-propensity-numerator
+        $rule-id $polymer $volume $counts $catalysis)))
+[33m--> prolog clause -->
+[32m'neutral-ssa-reaction-weight'([cleavage, A, B, _, _],
+                                   C,
+                                   D,
+                                   E,
+                                   F) :-
+    'neutral-ssa-cleavage-propensity-numerator'(A,
+                                                B,
+                                                C,
+                                                D,
+                                                E,
+                                                G),
+    *(C, G, F).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-enumerate-reactions
+      $reactions $volume $counts $catalysis)
+   (if (== $reactions ())
+       ()
+       (let $reaction (car-atom $reactions)
+         (let $weight
+           (neutral-ssa-reaction-weight
+             $reaction $volume $counts $catalysis)
+           (if (== $weight 0)
+               (neutral-ssa-enumerate-reactions
+                 (cdr-atom $reactions) $volume $counts $catalysis)
+               (cons-atom
+                 ($reaction $weight)
+                 (neutral-ssa-enumerate-reactions
+                   (cdr-atom $reactions)
+                   $volume $counts $catalysis)))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-enumerate-reactions'(A, B, C, D, E) :-
+    ==(A, [], F),
+    (   F==true
+    ->  E=[]
+    ;   G=H,
+        'car-atom'(A, H),
+        I=J,
+        'neutral-ssa-reaction-weight'(G, B, C, D, J),
+        ==(I, 0, K),
+        (   K==true
+        ->  'cdr-atom'(A, L),
+            'neutral-ssa-enumerate-reactions'(L,
+                                              B,
+                                              C,
+                                              D,
+                                              E)
+        ;   reduce([G, I], M),
+            'cdr-atom'(A, N),
+            'neutral-ssa-enumerate-reactions'(N,
+                                              B,
+                                              C,
+                                              D,
+                                              O),
+            'cons-atom'(M, O, E)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-enumerate-events
+      $food $molecules $reactions $volume $counts $catalysis)
+   (neutral-ssa-list-append
+     (neutral-ssa-enumerate-influx $food $volume)
+     (neutral-ssa-list-append
+       (neutral-ssa-enumerate-dilution $molecules $volume $counts)
+       (neutral-ssa-enumerate-reactions
+         $reactions $volume $counts $catalysis))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-enumerate-events'(A,
+                                    B,
+                                    C,
+                                    D,
+                                    E,
+                                    F,
+                                    G) :-
+    'neutral-ssa-enumerate-influx'(A, D, H),
+    'neutral-ssa-enumerate-dilution'(B, D, E, I),
+    'neutral-ssa-enumerate-reactions'(C, D, E, F, J),
+    'neutral-ssa-list-append'(I, J, K),
+    'neutral-ssa-list-append'(H, K, G).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-apply-trace $events $counts)
+   (if (== $events ())
+       $counts
+       (neutral-ssa-apply-trace
+         (cdr-atom $events)
+         (neutral-ssa-apply-event (car-atom $events) $counts))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-apply-trace'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=B
+    ;   'cdr-atom'(A, E),
+        'car-atom'(A, F),
+        'neutral-ssa-apply-event'(F, B, G),
+        'neutral-ssa-apply-trace'(E, G, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-weight-total $weighted-events)
+   (if (== $weighted-events ())
+       0
+       (+ (car-atom (cdr-atom (car-atom $weighted-events)))
+          (neutral-ssa-weight-total (cdr-atom $weighted-events)))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-weight-total'(A, B) :-
+    ==(A, [], C),
+    (   C==true
+    ->  B=0
+    ;   'car-atom'(A, D),
+        'cdr-atom'(D, E),
+        'car-atom'(E, F),
+        'cdr-atom'(A, G),
+        'neutral-ssa-weight-total'(G, H),
+        +(F, H, B)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-select-threshold $threshold $weighted-events)
+   (let $entry (car-atom $weighted-events)
+     (let $weight (car-atom (cdr-atom $entry))
+       (if (< $threshold $weight)
+           (car-atom $entry)
+           (neutral-ssa-select-threshold
+             (- $threshold $weight) (cdr-atom $weighted-events))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-select-threshold'(A, B, C) :-
+    D=E,
+    'car-atom'(B, E),
+    F=G,
+    'cdr-atom'(D, H),
+    'car-atom'(H, G),
+    <(A, F, I),
+    (   I==true
+    ->  'car-atom'(D, C)
+    ;   -(A, F, J),
+        'cdr-atom'(B, K),
+        'neutral-ssa-select-threshold'(J, K, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-event-draw $seed $event-index $total)
+   (#mod (+ (* $seed 48271) (* $event-index 69621)) $total))
+[33m--> prolog clause -->
+[32m'neutral-ssa-event-draw'(A, B, C, D) :-
+    *(A, 48271, E),
+    *(B, 69621, F),
+    +(E, F, G),
+    '#mod'(G, C, D).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-waiting-uniform-numerator $seed $event-index)
+   (+ 1
+      (#mod (+ (+ (* $seed 40699) (* $event-index 65537)) 17) 1000000)))
+[33m--> prolog clause -->
+[32m'neutral-ssa-waiting-uniform-numerator'(A, B, C) :-
+    *(A, 40699, D),
+    *(B, 65537, E),
+    +(D, E, F),
+    +(F, 17, G),
+    '#mod'(G, 1000000, H),
+    +(1, H, C).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-waiting-time $uniform-numerator $total-weight $volume)
+   (/ (* (- 0
+            (log-math
+              2.718281828459045
+              (/ $uniform-numerator 1000000)))
+         (* 10000 (* $volume $volume)))
+      $total-weight))
+[33m--> prolog clause -->
+[32m'neutral-ssa-waiting-time'(A, B, C, D) :-
+    /(A, 1000000, E),
+    'log-math'(2.718281828459045, E, F),
+    -(0, F, G),
+    *(C, C, H),
+    *(10000, H, I),
+    *(G, I, J),
+    /(J, B, D).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-seeded-draw
+      $seed $event-index $volume $weighted-events)
+   (let $total (neutral-ssa-weight-total $weighted-events)
+     (if (== $total 0)
+         no-enabled-event
+         (let $uniform-numerator
+           (neutral-ssa-waiting-uniform-numerator $seed $event-index)
+           (ssa-draw
+             event
+               (neutral-ssa-select-threshold
+                 (neutral-ssa-event-draw $seed $event-index $total)
+                 $weighted-events)
+             waiting-uniform ($uniform-numerator 1000000)
+             total-weight $total
+             propensity-denominator
+               (* 10000 (* $volume $volume))
+             waiting-time
+               (neutral-ssa-waiting-time
+                 $uniform-numerator $total $volume))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-seeded-draw'(A, B, C, D, E) :-
+    F=G,
+    'neutral-ssa-weight-total'(D, G),
+    ==(F, 0, H),
+    (   H==true
+    ->  E='no-enabled-event'
+    ;   E=['ssa-draw', event, I, 'waiting-uniform', J, 'total-weight', F, 'propensity-denominator', K, 'waiting-time', L],
+        M=N,
+        'neutral-ssa-waiting-uniform-numerator'(A, B, N),
+        'neutral-ssa-event-draw'(A, B, F, O),
+        'neutral-ssa-select-threshold'(O, D, I),
+        reduce([M, 1000000], J),
+        *(C, C, P),
+        *(10000, P, K),
+        'neutral-ssa-waiting-time'(M, F, C, L)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-draw-event
+      (ssa-draw
+        event $event
+        waiting-uniform $waiting-uniform
+        total-weight $total-weight
+        propensity-denominator $propensity-denominator
+        waiting-time $waiting-time))
+   $event)
+[33m--> prolog clause -->
+[32m'neutral-ssa-draw-event'([ 'ssa-draw',
+                                event,
+                                A,
+                                'waiting-uniform',
+                                _,
+                                'total-weight',
+                                _,
+                                'propensity-denominator',
+                                _,
+                                'waiting-time',
+                                _
+                              ],
+                              A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-draw-waiting-time
+      (ssa-draw
+        event $event
+        waiting-uniform $waiting-uniform
+        total-weight $total-weight
+        propensity-denominator $propensity-denominator
+        waiting-time $waiting-time))
+   $waiting-time)
+[33m--> prolog clause -->
+[32m'neutral-ssa-draw-waiting-time'([ 'ssa-draw',
+                                       event,
+                                       _,
+                                       'waiting-uniform',
+                                       _,
+                                       'total-weight',
+                                       _,
+                                       'propensity-denominator',
+                                       _,
+                                       'waiting-time',
+                                       A
+                                     ],
+                                     A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-timed-events-loop $event-index $time $draws)
+   (if (== $draws ())
+       ()
+       (let $draw (car-atom $draws)
+         (let $next-time
+           (+ $time (neutral-ssa-draw-waiting-time $draw))
+           (cons-atom
+             (ssa-timed-event
+               index $event-index
+               time $next-time
+               event (neutral-ssa-draw-event $draw))
+             (neutral-ssa-timed-events-loop
+               (+ $event-index 1) $next-time (cdr-atom $draws)))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-timed-events-loop'(A, B, C, D) :-
+    ==(C, [], E),
+    (   E==true
+    ->  D=[]
+    ;   F=G,
+        'car-atom'(C, G),
+        H=I,
+        'neutral-ssa-draw-waiting-time'(F, J),
+        +(B, J, I),
+        'neutral-ssa-draw-event'(F, K),
+        +(A, 1, L),
+        'cdr-atom'(C, M),
+        'neutral-ssa-timed-events-loop'(L, H, M, N),
+        'cons-atom'([ 'ssa-timed-event',
+                      index,
+                      A,
+                      time,
+                      H,
+                      event,
+                      K
+                    ],
+                    N,
+                    D)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-timed-events $draws)
+   (neutral-ssa-timed-events-loop 0 0.0 $draws))
+[33m--> prolog clause -->
+[32m'neutral-ssa-timed-events'(A, B) :-
+    'neutral-ssa-timed-events-loop'(0, 0.0, A, B).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-run-events
+      (ssa-run
+        seed $seed
+        events $events
+        final-counts $counts
+        stop $stop))
+   $events)
+[33m--> prolog clause -->
+[32m'neutral-ssa-run-events'([ 'ssa-run',
+                                seed,
+                                _,
+                                events,
+                                A,
+                                'final-counts',
+                                _,
+                                stop,
+                                _
+                              ],
+                              A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-run-events
+      (ssa-run
+        seed $seed
+        events $events
+        final-counts $counts
+        final-time $time
+        stop $stop))
+   $events)
+[33m--> prolog clause -->
+[32m'neutral-ssa-run-events'([ 'ssa-run',
+                                seed,
+                                _,
+                                events,
+                                A,
+                                'final-counts',
+                                _,
+                                'final-time',
+                                _,
+                                stop,
+                                _
+                              ],
+                              A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-run-timed-events $run)
+   (neutral-ssa-timed-events (neutral-ssa-run-events $run)))
+[33m--> prolog clause -->
+[32m'neutral-ssa-run-timed-events'(A, B) :-
+    'neutral-ssa-run-events'(A, C),
+    'neutral-ssa-timed-events'(C, B).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-timed-states-loop $event-index $time $counts $draws)
+   (if (== $draws ())
+       ()
+       (let $draw (car-atom $draws)
+         (let $event (neutral-ssa-draw-event $draw)
+           (let $next-time
+             (+ $time (neutral-ssa-draw-waiting-time $draw))
+             (let $next-counts
+               (neutral-ssa-apply-event $event $counts)
+               (cons-atom
+                 (ssa-timed-state
+                   index $event-index
+                   time $next-time
+                   event $event
+                   counts $next-counts)
+                 (neutral-ssa-timed-states-loop
+                   (+ $event-index 1) $next-time $next-counts
+                   (cdr-atom $draws)))))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-timed-states-loop'(A, B, C, D, E) :-
+    ==(D, [], F),
+    (   F==true
+    ->  E=[]
+    ;   G=H,
+        'car-atom'(D, H),
+        I=J,
+        'neutral-ssa-draw-event'(G, J),
+        K=L,
+        'neutral-ssa-draw-waiting-time'(G, M),
+        +(B, M, L),
+        N=O,
+        'neutral-ssa-apply-event'(I, C, O),
+        +(A, 1, P),
+        'cdr-atom'(D, Q),
+        'neutral-ssa-timed-states-loop'(P,
+                                        K,
+                                        N,
+                                        Q,
+                                        R),
+        'cons-atom'([ 'ssa-timed-state',
+                      index,
+                      A,
+                      time,
+                      K,
+                      event,
+                      I,
+                      counts,
+                      N
+                    ],
+                    R,
+                    E)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-timed-states $initial-counts $draws)
+   (neutral-ssa-timed-states-loop 0 0.0 $initial-counts $draws))
+[33m--> prolog clause -->
+[32m'neutral-ssa-timed-states'(A, B, C) :-
+    'neutral-ssa-timed-states-loop'(0, 0.0, A, B, C).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-run-timed-states $initial-counts $run)
+   (neutral-ssa-timed-states
+     $initial-counts (neutral-ssa-run-events $run)))
+[33m--> prolog clause -->
+[32m'neutral-ssa-run-timed-states'(A, B, C) :-
+    'neutral-ssa-run-events'(B, D),
+    'neutral-ssa-timed-states'(A, D, C).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-timed-transitions-loop $event-index $time $counts $draws)
+   (if (== $draws ())
+       ()
+       (let $draw (car-atom $draws)
+         (let $event (neutral-ssa-draw-event $draw)
+           (let $next-time
+             (+ $time (neutral-ssa-draw-waiting-time $draw))
+             (let $next-counts
+               (neutral-ssa-apply-event $event $counts)
+               (cons-atom
+                 (ssa-timed-transition
+                   index $event-index
+                   time $next-time
+                   event $event
+                   before-counts $counts
+                   after-counts $next-counts)
+                 (neutral-ssa-timed-transitions-loop
+                   (+ $event-index 1) $next-time $next-counts
+                   (cdr-atom $draws)))))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-timed-transitions-loop'(A,
+                                          B,
+                                          C,
+                                          D,
+                                          E) :-
+    ==(D, [], F),
+    (   F==true
+    ->  E=[]
+    ;   G=H,
+        'car-atom'(D, H),
+        I=J,
+        'neutral-ssa-draw-event'(G, J),
+        K=L,
+        'neutral-ssa-draw-waiting-time'(G, M),
+        +(B, M, L),
+        N=O,
+        'neutral-ssa-apply-event'(I, C, O),
+        +(A, 1, P),
+        'cdr-atom'(D, Q),
+        'neutral-ssa-timed-transitions-loop'(P,
+                                             K,
+                                             N,
+                                             Q,
+                                             R),
+        'cons-atom'([ 'ssa-timed-transition',
+                      index,
+                      A,
+                      time,
+                      K,
+                      event,
+                      I,
+                      'before-counts',
+                      C,
+                      'after-counts',
+                      N
+                    ],
+                    R,
+                    E)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-timed-transitions $initial-counts $draws)
+   (neutral-ssa-timed-transitions-loop 0 0.0 $initial-counts $draws))
+[33m--> prolog clause -->
+[32m'neutral-ssa-timed-transitions'(A, B, C) :-
+    'neutral-ssa-timed-transitions-loop'(0, 0.0, A, B, C).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-run-timed-transitions $initial-counts $run)
+   (neutral-ssa-timed-transitions
+     $initial-counts (neutral-ssa-run-events $run)))
+[33m--> prolog clause -->
+[32m'neutral-ssa-run-timed-transitions'(A, B, C) :-
+    'neutral-ssa-run-events'(B, D),
+    'neutral-ssa-timed-transitions'(A, D, C).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-time-bin-index-loop
+      $time $bin-start $bin-width $bin-index $remaining)
+   (if (== $remaining 0)
+       outside-persistence-window
+       (if (< $time (+ $bin-start $bin-width))
+           $bin-index
+           (neutral-ssa-time-bin-index-loop
+             $time (+ $bin-start $bin-width) $bin-width
+             (+ $bin-index 1) (- $remaining 1)))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-time-bin-index-loop'(A,
+                                       B,
+                                       C,
+                                       D,
+                                       E,
+                                       F) :-
+    ==(E, 0, G),
+    (   G==true
+    ->  F='outside-persistence-window'
+    ;   +(B, C, H),
+        <(A, H, I),
+        (   I==true
+        ->  F=D
+        ;   +(B, C, J),
+            +(D, 1, K),
+            -(E, 1, L),
+            'neutral-ssa-time-bin-index-loop'(A,
+                                              J,
+                                              C,
+                                              K,
+                                              L,
+                                              F)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-time-bin-index $time $burn-in $bin-width $bin-count)
+   (if (< $time $burn-in)
+       outside-persistence-window
+       (neutral-ssa-time-bin-index-loop
+         $time $burn-in $bin-width 0 $bin-count)))
+[33m--> prolog clause -->
+[32m'neutral-ssa-time-bin-index'(A, B, C, D, E) :-
+    <(A, B, F),
+    (   F==true
+    ->  E='outside-persistence-window'
+    ;   'neutral-ssa-time-bin-index-loop'(A,
+                                          B,
+                                          C,
+                                          0,
+                                          D,
+                                          E)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-timed-state-time
+      (ssa-timed-state
+        index $index time $time event $event counts $counts))
+   $time)
+[33m--> prolog clause -->
+[32m'neutral-ssa-timed-state-time'([ 'ssa-timed-state',
+                                      index,
+                                      _,
+                                      time,
+                                      A,
+                                      event,
+                                      _,
+                                      counts,
+                                      _
+                                    ],
+                                    A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-bin-timed-states
+      $timed-states $burn-in $bin-width $bin-count)
+   (if (== $timed-states ())
+       ()
+       (let $timed-state (car-atom $timed-states)
+         (let $bin
+           (neutral-ssa-time-bin-index
+             (neutral-ssa-timed-state-time $timed-state)
+             $burn-in $bin-width $bin-count)
+           (if (== $bin outside-persistence-window)
+               (neutral-ssa-bin-timed-states
+                 (cdr-atom $timed-states)
+                 $burn-in $bin-width $bin-count)
+               (cons-atom
+                 (ssa-binned-state bin $bin state $timed-state)
+                 (neutral-ssa-bin-timed-states
+                   (cdr-atom $timed-states)
+                   $burn-in $bin-width $bin-count)))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-bin-timed-states'(A, B, C, D, E) :-
+    ==(A, [], F),
+    (   F==true
+    ->  E=[]
+    ;   G=H,
+        'car-atom'(A, H),
+        I=J,
+        'neutral-ssa-timed-state-time'(G, K),
+        'neutral-ssa-time-bin-index'(K, B, C, D, J),
+        ==(I, 'outside-persistence-window', L),
+        (   L==true
+        ->  'cdr-atom'(A, M),
+            'neutral-ssa-bin-timed-states'(M,
+                                           B,
+                                           C,
+                                           D,
+                                           E)
+        ;   'cdr-atom'(A, N),
+            'neutral-ssa-bin-timed-states'(N,
+                                           B,
+                                           C,
+                                           D,
+                                           O),
+            'cons-atom'(['ssa-binned-state', bin, I, state, G],
+                        O,
+                        E)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-timed-transition-time
+      (ssa-timed-transition
+        index $index time $time event $event
+        before-counts $before-counts after-counts $after-counts))
+   $time)
+[33m--> prolog clause -->
+[32m'neutral-ssa-timed-transition-time'([ 'ssa-timed-transition',
+                                           index,
+                                           _,
+                                           time,
+                                           A,
+                                           event,
+                                           _,
+                                           'before-counts',
+                                           _,
+                                           'after-counts',
+                                           _
+                                         ],
+                                         A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-bin-timed-transitions
+      $timed-transitions $burn-in $bin-width $bin-count)
+   (if (== $timed-transitions ())
+       ()
+       (let $timed-transition (car-atom $timed-transitions)
+         (let $bin
+           (neutral-ssa-time-bin-index
+             (neutral-ssa-timed-transition-time $timed-transition)
+             $burn-in $bin-width $bin-count)
+           (if (== $bin outside-persistence-window)
+               (neutral-ssa-bin-timed-transitions
+                 (cdr-atom $timed-transitions)
+                 $burn-in $bin-width $bin-count)
+               (cons-atom
+                 (ssa-binned-transition
+                   bin $bin transition $timed-transition)
+                 (neutral-ssa-bin-timed-transitions
+                   (cdr-atom $timed-transitions)
+                   $burn-in $bin-width $bin-count)))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-bin-timed-transitions'(A,
+                                         B,
+                                         C,
+                                         D,
+                                         E) :-
+    ==(A, [], F),
+    (   F==true
+    ->  E=[]
+    ;   G=H,
+        'car-atom'(A, H),
+        I=J,
+        'neutral-ssa-timed-transition-time'(G, K),
+        'neutral-ssa-time-bin-index'(K, B, C, D, J),
+        ==(I, 'outside-persistence-window', L),
+        (   L==true
+        ->  'cdr-atom'(A, M),
+            'neutral-ssa-bin-timed-transitions'(M,
+                                                B,
+                                                C,
+                                                D,
+                                                E)
+        ;   'cdr-atom'(A, N),
+            'neutral-ssa-bin-timed-transitions'(N,
+                                                B,
+                                                C,
+                                                D,
+                                                O),
+            'cons-atom'(['ssa-binned-transition', bin, I, transition, G],
+                        O,
+                        E)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-event-reaction-id
+      (ligation $rule-id $left $right $product))
+   $rule-id)
+[33m--> prolog clause -->
+[32m'neutral-ssa-event-reaction-id'([ ligation,
+                                       A,
+                                       _,
+                                       _,
+                                       _
+                                     ],
+                                     A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-event-reaction-id
+      (cleavage $rule-id $polymer $left $right))
+   $rule-id)
+[33m--> prolog clause -->
+[32m'neutral-ssa-event-reaction-id'([ cleavage,
+                                       A,
+                                       _,
+                                       _,
+                                       _
+                                     ],
+                                     A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-event-reaction-id (influx $molecule))
+   no-reaction)
+[33m--> prolog clause -->
+[32m'neutral-ssa-event-reaction-id'([influx, _], 'no-reaction').
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-event-reaction-id (dilution $molecule))
+   no-reaction)
+[33m--> prolog clause -->
+[32m'neutral-ssa-event-reaction-id'([dilution, _], 'no-reaction').
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-all-positive? $molecules $counts)
+   (if (== $molecules ())
+       True
+       (and
+         (> (neutral-ssa-count (car-atom $molecules) $counts) 0)
+         (neutral-ssa-all-positive? (cdr-atom $molecules) $counts))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-all-positive?'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=true
+    ;   'car-atom'(A, E),
+        'neutral-ssa-count'(E, B, F),
+        >(F, 0, G),
+        'cdr-atom'(A, H),
+        'neutral-ssa-all-positive?'(H, B, I),
+        and(G, I, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-transition-raf-evidence?
+      (ssa-binned-transition
+        bin $bin
+        transition
+          (ssa-timed-transition
+            index $index time $time event $event
+            before-counts $before-counts after-counts $after-counts))
+      $raf-rule-ids $required-molecules)
+   (and
+     (neutral-ssa-member?
+       (neutral-ssa-event-reaction-id $event) $raf-rule-ids)
+     (neutral-ssa-all-positive? $required-molecules $before-counts)))
+[33m--> prolog clause -->
+[32m'neutral-ssa-transition-raf-evidence?'([ 'ssa-binned-transition',
+                                              bin,
+                                              _,
+                                              transition,
+                                              [ 'ssa-timed-transition',
+                                                index,
+                                                _,
+                                                time,
+                                                _,
+                                                event,
+                                                A,
+                                                'before-counts',
+                                                B,
+                                                'after-counts',
+                                                _
+                                              ]
+                                            ],
+                                            C,
+                                            D,
+                                            E) :-
+    'neutral-ssa-event-reaction-id'(A, F),
+    'neutral-ssa-member?'(F, C, G),
+    'neutral-ssa-all-positive?'(D, B, H),
+    and(G, H, E).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-binned-transition-bin
+      (ssa-binned-transition bin $bin transition $transition))
+   $bin)
+[33m--> prolog clause -->
+[32m'neutral-ssa-binned-transition-bin'([ 'ssa-binned-transition',
+                                           bin,
+                                           A,
+                                           transition,
+                                           _
+                                         ],
+                                         A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-raf-event-count
+      $binned-transitions $raf-rule-ids $required-molecules)
+   (if (== $binned-transitions ())
+       0
+       (let $transition (car-atom $binned-transitions)
+         (+ (if (neutral-ssa-transition-raf-evidence?
+                  $transition $raf-rule-ids $required-molecules)
+                1
+                0)
+            (neutral-ssa-raf-event-count
+              (cdr-atom $binned-transitions)
+              $raf-rule-ids $required-molecules)))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-raf-event-count'(A, B, C, D) :-
+    ==(A, [], E),
+    (   E==true
+    ->  D=0
+    ;   F=G,
+        'car-atom'(A, G),
+        'neutral-ssa-transition-raf-evidence?'(F, B, C, H),
+        (   H==true
+        ->  I=1
+        ;   I=0
+        ),
+        'cdr-atom'(A, J),
+        'neutral-ssa-raf-event-count'(J, B, C, K),
+        +(I, K, D)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-raf-evidence-bin-count-from
+      $binned-transitions $raf-rule-ids $required-molecules $last-bin)
+   (if (== $binned-transitions ())
+       0
+       (let $transition (car-atom $binned-transitions)
+         (let $bin (neutral-ssa-binned-transition-bin $transition)
+           (let $new-evidence-bin
+             (and
+               (neutral-ssa-transition-raf-evidence?
+                 $transition $raf-rule-ids $required-molecules)
+               (not (== $bin $last-bin)))
+             (+ (if $new-evidence-bin 1 0)
+                (neutral-ssa-raf-evidence-bin-count-from
+                  (cdr-atom $binned-transitions)
+                  $raf-rule-ids $required-molecules
+                  (if $new-evidence-bin $bin $last-bin))))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-raf-evidence-bin-count-from'(A,
+                                               B,
+                                               C,
+                                               D,
+                                               E) :-
+    ==(A, [], F),
+    (   F==true
+    ->  E=0
+    ;   G=H,
+        'car-atom'(A, H),
+        I=J,
+        'neutral-ssa-binned-transition-bin'(G, J),
+        K=L,
+        'neutral-ssa-transition-raf-evidence?'(G, B, C, M),
+        ==(I, D, N),
+        not(N, O),
+        and(M, O, L),
+        (   K==true
+        ->  P=1
+        ;   P=0
+        ),
+        'cdr-atom'(A, Q),
+        (   K==true
+        ->  R=I
+        ;   R=D
+        ),
+        'neutral-ssa-raf-evidence-bin-count-from'(Q,
+                                                  B,
+                                                  C,
+                                                  R,
+                                                  S),
+        +(P, S, E)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-raf-evidence-bin-count
+      $binned-transitions $raf-rule-ids $required-molecules)
+   (neutral-ssa-raf-evidence-bin-count-from
+     $binned-transitions $raf-rule-ids $required-molecules no-bin))
+[33m--> prolog clause -->
+[32m'neutral-ssa-raf-evidence-bin-count'(A, B, C, D) :-
+    'neutral-ssa-raf-evidence-bin-count-from'(A,
+                                              B,
+                                              C,
+                                              'no-bin',
+                                              D).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-raf-persistence-summary
+      $binned-transitions $raf-rule-ids $required-molecules
+      $bin-count $persistent-bin-threshold)
+   (let $event-count
+     (neutral-ssa-raf-event-count
+       $binned-transitions $raf-rule-ids $required-molecules)
+     (let $evidence-bin-count
+       (neutral-ssa-raf-evidence-bin-count
+         $binned-transitions $raf-rule-ids $required-molecules)
+       (raf-persistence-summary
+         qualifying-events $event-count
+         evidence-bins $evidence-bin-count
+         total-bins $bin-count
+         persistent
+           (>= $evidence-bin-count $persistent-bin-threshold)))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-raf-persistence-summary'(A,
+                                           B,
+                                           C,
+                                           D,
+                                           E,
+                                           [ 'raf-persistence-summary',
+                                             'qualifying-events',
+                                             F,
+                                             'evidence-bins',
+                                             G,
+                                             'total-bins',
+                                             D,
+                                             persistent,
+                                             H
+                                           ]) :-
+    F=I,
+    'neutral-ssa-raf-event-count'(A, B, C, I),
+    G=J,
+    'neutral-ssa-raf-evidence-bin-count'(A, B, C, J),
+    >=(G, E, H).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-timed-transition-event
+      (ssa-timed-transition
+        index $index time $time event $event
+        before-counts $before-counts after-counts $after-counts))
+   $event)
+[33m--> prolog clause -->
+[32m'neutral-ssa-timed-transition-event'([ 'ssa-timed-transition',
+                                            index,
+                                            _,
+                                            time,
+                                            _,
+                                            event,
+                                            A,
+                                            'before-counts',
+                                            _,
+                                            'after-counts',
+                                            _
+                                          ],
+                                          A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-timed-transition-after-counts
+      (ssa-timed-transition
+        index $index time $time event $event
+        before-counts $before-counts after-counts $after-counts))
+   $after-counts)
+[33m--> prolog clause -->
+[32m'neutral-ssa-timed-transition-after-counts'([ 'ssa-timed-transition',
+                                                   index,
+                                                   _,
+                                                   time,
+                                                   _,
+                                                   event,
+                                                   _,
+                                                   'before-counts',
+                                                   _,
+                                                   'after-counts',
+                                                   A
+                                                 ],
+                                                 A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-add-unique $item $items)
+   (if (neutral-ssa-member? $item $items)
+       $items
+       (neutral-ssa-list-append $items ($item))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-add-unique'(A, B, C) :-
+    'neutral-ssa-member?'(A, B, D),
+    (   D==true
+    ->  C=B
+    ;   reduce([A], E),
+        'neutral-ssa-list-append'(B, E, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-all-members? $required $observed)
+   (if (== $required ())
+       True
+       (and
+         (neutral-ssa-member? (car-atom $required) $observed)
+         (neutral-ssa-all-members? (cdr-atom $required) $observed))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-all-members?'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=true
+    ;   'car-atom'(A, E),
+        'neutral-ssa-member?'(E, B, F),
+        'cdr-atom'(A, G),
+        'neutral-ssa-all-members?'(G, B, H),
+        and(F, H, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-raf-reachability-loop
+      $timed-transitions $raf-rule-ids $closure-molecules $fired-rule-ids)
+   (if (== $timed-transitions ())
+       (raf-reachability-summary reachable False first-time censored)
+       (let $transition (car-atom $timed-transitions)
+         (let $reaction-id
+           (neutral-ssa-event-reaction-id
+             (neutral-ssa-timed-transition-event $transition))
+           (let $next-fired-rule-ids
+             (if (neutral-ssa-member? $reaction-id $raf-rule-ids)
+                 (neutral-ssa-add-unique $reaction-id $fired-rule-ids)
+                 $fired-rule-ids)
+             (if
+               (and
+                 (neutral-ssa-all-members?
+                   $raf-rule-ids $next-fired-rule-ids)
+                 (neutral-ssa-all-positive?
+                   $closure-molecules
+                   (neutral-ssa-timed-transition-after-counts $transition)))
+               (raf-reachability-summary
+                 reachable True
+                 first-time
+                   (neutral-ssa-timed-transition-time $transition))
+               (neutral-ssa-raf-reachability-loop
+                 (cdr-atom $timed-transitions)
+                 $raf-rule-ids $closure-molecules
+                 $next-fired-rule-ids)))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-raf-reachability-loop'(A,
+                                         B,
+                                         C,
+                                         D,
+                                         E) :-
+    ==(A, [], F),
+    (   F==true
+    ->  E=['raf-reachability-summary', reachable, false, 'first-time', censored]
+    ;   G=H,
+        'car-atom'(A, H),
+        I=J,
+        'neutral-ssa-timed-transition-event'(G, K),
+        'neutral-ssa-event-reaction-id'(K, J),
+        L=M,
+        'neutral-ssa-member?'(I, B, N),
+        (   N==true
+        ->  'neutral-ssa-add-unique'(I, D, M)
+        ;   M=D
+        ),
+        'neutral-ssa-all-members?'(B, L, O),
+        'neutral-ssa-timed-transition-after-counts'(G, P),
+        'neutral-ssa-all-positive?'(C, P, Q),
+        and(O, Q, R),
+        (   R==true
+        ->  E=['raf-reachability-summary', reachable, true, 'first-time', S],
+            'neutral-ssa-timed-transition-time'(G, S)
+        ;   'cdr-atom'(A, T),
+            'neutral-ssa-raf-reachability-loop'(T,
+                                                B,
+                                                C,
+                                                L,
+                                                E)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-raf-reachability-summary
+      $timed-transitions $raf-rule-ids $closure-molecules)
+   (neutral-ssa-raf-reachability-loop
+     $timed-transitions $raf-rule-ids $closure-molecules ()))
+[33m--> prolog clause -->
+[32m'neutral-ssa-raf-reachability-summary'(A, B, C, D) :-
+    'neutral-ssa-raf-reachability-loop'(A, B, C, [], D).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-nonfood-count $counts $food)
+   (if (== $counts ())
+       0
+       (let $row (car-atom $counts)
+         (+
+           (if (neutral-ssa-member? (car-atom $row) $food)
+               0
+               (car-atom (cdr-atom $row)))
+           (neutral-ssa-nonfood-count (cdr-atom $counts) $food)))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-nonfood-count'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=0
+    ;   E=F,
+        'car-atom'(A, F),
+        'car-atom'(E, G),
+        'neutral-ssa-member?'(G, B, H),
+        (   H==true
+        ->  I=0
+        ;   'cdr-atom'(E, J),
+            'car-atom'(J, I)
+        ),
+        'cdr-atom'(A, K),
+        'neutral-ssa-nonfood-count'(K, B, L),
+        +(I, L, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-window-duration $left $right $burn-in $horizon)
+   (if (or (<= $right $burn-in) (>= $left $horizon))
+       0.0
+       (-
+         (if (< $right $horizon) $right $horizon)
+         (if (> $left $burn-in) $left $burn-in))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-window-duration'(A, B, C, D, E) :-
+    <=(B, C, F),
+    >=(A, D, G),
+    or(F, G, H),
+    (   H==true
+    ->  E=0.0
+    ;   <(B, D, I),
+        (   I==true
+        ->  J=B
+        ;   J=D
+        ),
+        >(A, C, K),
+        (   K==true
+        ->  L=A
+        ;   L=C
+        ),
+        -(J, L, E)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-integrated-nonfood-loop
+      $timed-transitions $food $burn-in $horizon
+      $left-time $counts $total)
+   (if (== $timed-transitions ())
+       (+
+         $total
+         (*
+           (neutral-ssa-nonfood-count $counts $food)
+           (neutral-ssa-window-duration
+             $left-time $horizon $burn-in $horizon)))
+       (let $transition (car-atom $timed-transitions)
+         (let $right-time
+           (neutral-ssa-timed-transition-time $transition)
+           (neutral-ssa-integrated-nonfood-loop
+             (cdr-atom $timed-transitions) $food $burn-in $horizon
+             $right-time
+             (neutral-ssa-timed-transition-after-counts $transition)
+             (+
+               $total
+               (*
+                 (neutral-ssa-nonfood-count $counts $food)
+                 (neutral-ssa-window-duration
+                   $left-time $right-time $burn-in $horizon))))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-integrated-nonfood-loop'(A,
+                                           B,
+                                           C,
+                                           D,
+                                           E,
+                                           F,
+                                           G,
+                                           H) :-
+    ==(A, [], I),
+    (   I==true
+    ->  'neutral-ssa-nonfood-count'(F, B, J),
+        'neutral-ssa-window-duration'(E, D, C, D, K),
+        *(J, K, L),
+        +(G, L, H)
+    ;   M=N,
+        'car-atom'(A, N),
+        O=P,
+        'neutral-ssa-timed-transition-time'(M, P),
+        'cdr-atom'(A, Q),
+        'neutral-ssa-timed-transition-after-counts'(M, R),
+        'neutral-ssa-nonfood-count'(F, B, S),
+        'neutral-ssa-window-duration'(E, O, C, D, T),
+        *(S, T, U),
+        +(G, U, V),
+        'neutral-ssa-integrated-nonfood-loop'(Q,
+                                              B,
+                                              C,
+                                              D,
+                                              O,
+                                              R,
+                                              V,
+                                              H)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-integrated-nonfood
+      $initial-counts $timed-transitions $food $burn-in $horizon)
+   (neutral-ssa-integrated-nonfood-loop
+     $timed-transitions $food $burn-in $horizon
+     0.0 $initial-counts 0.0))
+[33m--> prolog clause -->
+[32m'neutral-ssa-integrated-nonfood'(A,
+                                      B,
+                                      C,
+                                      D,
+                                      E,
+                                      F) :-
+    'neutral-ssa-integrated-nonfood-loop'(B,
+                                          C,
+                                          D,
+                                          E,
+                                          0.0,
+                                          A,
+                                          0.0,
+                                          F).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-run-causal-endpoints
+      $run $initial-counts $food $raf-rule-ids $required-molecules
+      $burn-in $horizon $bin-width $bin-count $persistence-threshold)
+   (let $transitions
+     (neutral-ssa-run-timed-transitions $initial-counts $run)
+     (let $persistence
+       (neutral-ssa-raf-persistence-summary
+         (neutral-ssa-bin-timed-transitions
+           $transitions $burn-in $bin-width $bin-count)
+         $raf-rule-ids $required-molecules
+         $bin-count $persistence-threshold)
+       (neutral-causal-endpoints
+         raf-events
+           (neutral-ssa-persistence-qualifying-events $persistence)
+         evidence-bins
+           (neutral-ssa-persistence-evidence-bins $persistence)
+         integrated-nonfood
+           (neutral-ssa-integrated-nonfood
+             $initial-counts $transitions $food $burn-in $horizon)))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-run-causal-endpoints'(A,
+                                        B,
+                                        C,
+                                        D,
+                                        E,
+                                        F,
+                                        G,
+                                        H,
+                                        I,
+                                        J,
+                                        [ 'neutral-causal-endpoints',
+                                          'raf-events',
+                                          K,
+                                          'evidence-bins',
+                                          L,
+                                          'integrated-nonfood',
+                                          M
+                                        ]) :-
+    N=O,
+    'neutral-ssa-run-timed-transitions'(B, A, O),
+    P=Q,
+    'neutral-ssa-bin-timed-transitions'(N,
+                                        F,
+                                        H,
+                                        I,
+                                        R),
+    'neutral-ssa-raf-persistence-summary'(R,
+                                          D,
+                                          E,
+                                          I,
+                                          J,
+                                          Q),
+    'neutral-ssa-persistence-qualifying-events'(P, K),
+    'neutral-ssa-persistence-evidence-bins'(P, L),
+    'neutral-ssa-integrated-nonfood'(B,
+                                     N,
+                                     C,
+                                     F,
+                                     G,
+                                     M).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-persistence-qualifying-events
+      (raf-persistence-summary
+        qualifying-events $events evidence-bins $bins
+        total-bins $total persistent $persistent))
+   $events)
+[33m--> prolog clause -->
+[32m'neutral-ssa-persistence-qualifying-events'([ 'raf-persistence-summary',
+                                                   'qualifying-events',
+                                                   A,
+                                                   'evidence-bins',
+                                                   _,
+                                                   'total-bins',
+                                                   _,
+                                                   persistent,
+                                                   _
+                                                 ],
+                                                 A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-persistence-evidence-bins
+      (raf-persistence-summary
+        qualifying-events $events evidence-bins $bins
+        total-bins $total persistent $persistent))
+   $bins)
+[33m--> prolog clause -->
+[32m'neutral-ssa-persistence-evidence-bins'([ 'raf-persistence-summary',
+                                               'qualifying-events',
+                                               _,
+                                               'evidence-bins',
+                                               A,
+                                               'total-bins',
+                                               _,
+                                               persistent,
+                                               _
+                                             ],
+                                             A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-causal-endpoint-delta
+      (neutral-causal-endpoints
+        raf-events $baseline-events
+        evidence-bins $baseline-bins
+        integrated-nonfood $baseline-nonfood)
+      (neutral-causal-endpoints
+        raf-events $ablated-events
+        evidence-bins $ablated-bins
+        integrated-nonfood $ablated-nonfood))
+   (neutral-causal-endpoint-delta
+     raf-events (- $baseline-events $ablated-events)
+     evidence-bins (- $baseline-bins $ablated-bins)
+     integrated-nonfood (- $baseline-nonfood $ablated-nonfood)))
+[33m--> prolog clause -->
+[32m'neutral-ssa-causal-endpoint-delta'([ 'neutral-causal-endpoints',
+                                           'raf-events',
+                                           A,
+                                           'evidence-bins',
+                                           B,
+                                           'integrated-nonfood',
+                                           C
+                                         ],
+                                         [ 'neutral-causal-endpoints',
+                                           'raf-events',
+                                           D,
+                                           'evidence-bins',
+                                           E,
+                                           'integrated-nonfood',
+                                           F
+                                         ],
+                                         [ 'neutral-causal-endpoint-delta',
+                                           'raf-events',
+                                           G,
+                                           'evidence-bins',
+                                           H,
+                                           'integrated-nonfood',
+                                           I
+                                         ]) :-
+    -(A, D, G),
+    -(B, E, H),
+    -(C, F, I).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-ablation-pair-baseline
+      (neutral-catalysis-ablation-pair
+        model $model graph-seed $graph-seed dynamics-seed $dynamics-seed
+        raf-rule-ids $raf-rule-ids
+        baseline-catalysis $baseline-catalysis
+        ablated-catalysis $ablated-catalysis
+        baseline $baseline ablated $ablated))
+   $baseline)
+[33m--> prolog clause -->
+[32m'neutral-ssa-ablation-pair-baseline'([ 'neutral-catalysis-ablation-pair',
+                                            model,
+                                            _,
+                                            'graph-seed',
+                                            _,
+                                            'dynamics-seed',
+                                            _,
+                                            'raf-rule-ids',
+                                            _,
+                                            'baseline-catalysis',
+                                            _,
+                                            'ablated-catalysis',
+                                            _,
+                                            baseline,
+                                            A,
+                                            ablated,
+                                            _
+                                          ],
+                                          A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-ablation-pair-ablated
+      (neutral-catalysis-ablation-pair
+        model $model graph-seed $graph-seed dynamics-seed $dynamics-seed
+        raf-rule-ids $raf-rule-ids
+        baseline-catalysis $baseline-catalysis
+        ablated-catalysis $ablated-catalysis
+        baseline $baseline ablated $ablated))
+   $ablated)
+[33m--> prolog clause -->
+[32m'neutral-ssa-ablation-pair-ablated'([ 'neutral-catalysis-ablation-pair',
+                                           model,
+                                           _,
+                                           'graph-seed',
+                                           _,
+                                           'dynamics-seed',
+                                           _,
+                                           'raf-rule-ids',
+                                           _,
+                                           'baseline-catalysis',
+                                           _,
+                                           'ablated-catalysis',
+                                           _,
+                                           baseline,
+                                           _,
+                                           ablated,
+                                           A
+                                         ],
+                                         A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-ablation-pair-endpoints
+      $pair $initial-counts $food $raf-rule-ids
+      $persistence-molecules $closure-molecules
+      $burn-in $horizon $bin-width $bin-count $persistence-threshold)
+   (let $baseline (neutral-ssa-ablation-pair-baseline $pair)
+     (let $ablated (neutral-ssa-ablation-pair-ablated $pair)
+       (let $baseline-causal
+         (neutral-ssa-run-causal-endpoints
+           $baseline $initial-counts $food $raf-rule-ids $persistence-molecules
+           $burn-in $horizon $bin-width $bin-count $persistence-threshold)
+         (let $ablated-causal
+           (neutral-ssa-run-causal-endpoints
+             $ablated $initial-counts $food $raf-rule-ids $persistence-molecules
+             $burn-in $horizon $bin-width $bin-count $persistence-threshold)
+           (neutral-ablation-endpoints
+             baseline-reachability
+               (neutral-ssa-raf-reachability-summary
+                 (neutral-ssa-run-timed-transitions
+                   $initial-counts $baseline)
+                 $raf-rule-ids $closure-molecules)
+             ablated-reachability
+               (neutral-ssa-raf-reachability-summary
+                 (neutral-ssa-run-timed-transitions
+                   $initial-counts $ablated)
+                 $raf-rule-ids $closure-molecules)
+             baseline-causal $baseline-causal
+             ablated-causal $ablated-causal
+             delta
+               (neutral-ssa-causal-endpoint-delta
+                 $baseline-causal $ablated-causal)))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-ablation-pair-endpoints'(A,
+                                           B,
+                                           C,
+                                           D,
+                                           E,
+                                           F,
+                                           G,
+                                           H,
+                                           I,
+                                           J,
+                                           K,
+                                           [ 'neutral-ablation-endpoints',
+                                             'baseline-reachability',
+                                             L,
+                                             'ablated-reachability',
+                                             M,
+                                             'baseline-causal',
+                                             N,
+                                             'ablated-causal',
+                                             O,
+                                             delta,
+                                             P
+                                           ]) :-
+    Q=R,
+    'neutral-ssa-ablation-pair-baseline'(A, R),
+    S=T,
+    'neutral-ssa-ablation-pair-ablated'(A, T),
+    N=U,
+    'neutral-ssa-run-causal-endpoints'(Q,
+                                       B,
+                                       C,
+                                       D,
+                                       E,
+                                       G,
+                                       H,
+                                       I,
+                                       J,
+                                       K,
+                                       U),
+    O=V,
+    'neutral-ssa-run-causal-endpoints'(S,
+                                       B,
+                                       C,
+                                       D,
+                                       E,
+                                       G,
+                                       H,
+                                       I,
+                                       J,
+                                       K,
+                                       V),
+    'neutral-ssa-run-timed-transitions'(B, Q, W),
+    'neutral-ssa-raf-reachability-summary'(W, D, F, L),
+    'neutral-ssa-run-timed-transitions'(B, S, X),
+    'neutral-ssa-raf-reachability-summary'(X, D, F, M),
+    'neutral-ssa-causal-endpoint-delta'(N, O, P).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-step
+      $seed $event-index $food $molecules $reactions $volume $catalysis $counts)
+   (let $weighted-events
+     (neutral-ssa-enumerate-events
+       $food $molecules $reactions $volume $counts $catalysis)
+     (let $draw
+       (neutral-ssa-seeded-draw
+         $seed $event-index $volume $weighted-events)
+       (if (== $draw no-enabled-event)
+           (ssa-step no-enabled-event counts $counts)
+           (let $event (neutral-ssa-draw-event $draw)
+             (ssa-step
+               draw $draw
+               counts (neutral-ssa-apply-event $event $counts)))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-step'(A,
+                        B,
+                        C,
+                        D,
+                        E,
+                        F,
+                        G,
+                        H,
+                        I) :-
+    J=K,
+    'neutral-ssa-enumerate-events'(C,
+                                   D,
+                                   E,
+                                   F,
+                                   H,
+                                   G,
+                                   K),
+    L=M,
+    'neutral-ssa-seeded-draw'(A, B, F, J, M),
+    ==(L, 'no-enabled-event', N),
+    (   N==true
+    ->  I=['ssa-step', 'no-enabled-event', counts, H]
+    ;   I=['ssa-step', draw, L, counts, O],
+        P=Q,
+        'neutral-ssa-draw-event'(L, Q),
+        'neutral-ssa-apply-event'(P, H, O)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-step-counts
+      (ssa-step no-enabled-event counts $counts))
+   $counts)
+[33m--> prolog clause -->
+[32m'neutral-ssa-step-counts'(['ssa-step', 'no-enabled-event', counts, A],
+                               A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-step-counts
+      (ssa-step draw $draw counts $counts))
+   $counts)
+[33m--> prolog clause -->
+[32m'neutral-ssa-step-counts'(['ssa-step', draw, _, counts, A], A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-step-record
+      (ssa-step no-enabled-event counts $counts))
+   no-enabled-event)
+[33m--> prolog clause -->
+[32m'neutral-ssa-step-record'(['ssa-step', 'no-enabled-event', counts, _],
+                               'no-enabled-event').
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-step-record
+      (ssa-step draw $draw counts $counts))
+   $draw)
+[33m--> prolog clause -->
+[32m'neutral-ssa-step-record'(['ssa-step', draw, A, counts, _], A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-run-loop
+      $seed $event-index $remaining
+      $food $molecules $reactions $volume $catalysis $counts $records)
+   (if (== $remaining 0)
+       (ssa-run
+         seed $seed
+         events $records
+         final-counts $counts
+         stop event-bound)
+       (let $step
+         (neutral-ssa-step
+           $seed $event-index
+           $food $molecules $reactions $volume $catalysis $counts)
+         (let $record (neutral-ssa-step-record $step)
+           (if (== $record no-enabled-event)
+               (ssa-run
+                 seed $seed
+                 events $records
+                 final-counts $counts
+                 stop no-enabled-event)
+               (neutral-ssa-run-loop
+                 $seed (+ $event-index 1) (- $remaining 1)
+                 $food $molecules $reactions $volume $catalysis
+                 (neutral-ssa-step-counts $step)
+                 (neutral-ssa-list-append $records ($record))))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-run-loop'(A,
+                            B,
+                            C,
+                            D,
+                            E,
+                            F,
+                            G,
+                            H,
+                            I,
+                            J,
+                            K) :-
+    ==(C, 0, L),
+    (   L==true
+    ->  K=['ssa-run', seed, A, events, J, 'final-counts', I, stop, 'event-bound']
+    ;   M=N,
+        'neutral-ssa-step'(A,
+                           B,
+                           D,
+                           E,
+                           F,
+                           G,
+                           H,
+                           I,
+                           N),
+        O=P,
+        'neutral-ssa-step-record'(M, P),
+        ==(O, 'no-enabled-event', Q),
+        (   Q==true
+        ->  K=['ssa-run', seed, A, events, J, 'final-counts', I, stop, 'no-enabled-event']
+        ;   +(B, 1, R),
+            -(C, 1, S),
+            'neutral-ssa-step-counts'(M, T),
+            reduce([O], U),
+            'neutral-ssa-list-append'(J, U, V),
+            'neutral-ssa-run-loop'(A,
+                                   R,
+                                   S,
+                                   D,
+                                   E,
+                                   F,
+                                   G,
+                                   H,
+                                   T,
+                                   V,
+                                   K)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-run
+      $seed $event-count
+      $food $molecules $reactions $volume $catalysis $initial-counts)
+   (neutral-ssa-run-loop
+     $seed 0 $event-count
+     $food $molecules $reactions $volume $catalysis $initial-counts ()))
+[33m--> prolog clause -->
+[32m'neutral-ssa-run'(A,
+                       B,
+                       C,
+                       D,
+                       E,
+                       F,
+                       G,
+                       H,
+                       I) :-
+    'neutral-ssa-run-loop'(A,
+                           0,
+                           B,
+                           C,
+                           D,
+                           E,
+                           F,
+                           G,
+                           H,
+                           [],
+                           I).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-run-until-loop
+      $seed $event-index $remaining $time $time-limit
+      $food $molecules $reactions $volume $catalysis $counts $records)
+   (if (>= $time $time-limit)
+       (ssa-run
+         seed $seed
+         events $records
+         final-counts $counts
+         final-time $time-limit
+         stop time-bound)
+       (if (== $remaining 0)
+           (ssa-run
+             seed $seed
+             events $records
+             final-counts $counts
+             final-time $time
+             stop event-bound)
+           (let $step
+             (neutral-ssa-step
+               $seed $event-index
+               $food $molecules $reactions $volume $catalysis $counts)
+             (let $record (neutral-ssa-step-record $step)
+               (if (== $record no-enabled-event)
+                   (ssa-run
+                     seed $seed
+                     events $records
+                     final-counts $counts
+                     final-time $time
+                     stop no-enabled-event)
+                   (let $next-time
+                     (+ $time (neutral-ssa-draw-waiting-time $record))
+                     (if (> $next-time $time-limit)
+                         (ssa-run
+                           seed $seed
+                           events $records
+                           final-counts $counts
+                           final-time $time-limit
+                           stop time-bound)
+                         (neutral-ssa-run-until-loop
+                           $seed (+ $event-index 1) (- $remaining 1)
+                           $next-time $time-limit
+                           $food $molecules $reactions $volume $catalysis
+                           (neutral-ssa-step-counts $step)
+                           (neutral-ssa-list-append
+                             $records ($record)))))))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-run-until-loop'(A,
+                                  B,
+                                  C,
+                                  D,
+                                  E,
+                                  F,
+                                  G,
+                                  H,
+                                  I,
+                                  J,
+                                  K,
+                                  L,
+                                  M) :-
+    >=(D, E, N),
+    (   N==true
+    ->  M=['ssa-run', seed, A, events, L, 'final-counts', K, 'final-time', E, stop, 'time-bound']
+    ;   ==(C, 0, O),
+        (   O==true
+        ->  M=['ssa-run', seed, A, events, L, 'final-counts', K, 'final-time', D, stop, 'event-bound']
+        ;   P=Q,
+            'neutral-ssa-step'(A,
+                               B,
+                               F,
+                               G,
+                               H,
+                               I,
+                               J,
+                               K,
+                               Q),
+            R=S,
+            'neutral-ssa-step-record'(P, S),
+            ==(R, 'no-enabled-event', T),
+            (   T==true
+            ->  M=['ssa-run', seed, A, events, L, 'final-counts', K, 'final-time', D, stop, 'no-enabled-event']
+            ;   U=V,
+                'neutral-ssa-draw-waiting-time'(R, W),
+                +(D, W, V),
+                >(U, E, X),
+                (   X==true
+                ->  M=['ssa-run', seed, A, events, L, 'final-counts', K, 'final-time', E, stop, 'time-bound']
+                ;   +(B, 1, Y),
+                    -(C, 1, Z),
+                    'neutral-ssa-step-counts'(P, A1),
+                    reduce([R], B1),
+                    'neutral-ssa-list-append'(L, B1, C1),
+                    'neutral-ssa-run-until-loop'(A,
+                                                 Y,
+                                                 Z,
+                                                 U,
+                                                 E,
+                                                 F,
+                                                 G,
+                                                 H,
+                                                 I,
+                                                 J,
+                                                 A1,
+                                                 C1,
+                                                 M)
+                )
+            )
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-run-until
+      $seed $event-count $time-limit
+      $food $molecules $reactions $volume $catalysis $initial-counts)
+   (neutral-ssa-run-until-loop
+     $seed 0 $event-count 0.0 $time-limit
+     $food $molecules $reactions $volume $catalysis $initial-counts ()))
+[33m--> prolog clause -->
+[32m'neutral-ssa-run-until'(A,
+                             B,
+                             C,
+                             D,
+                             E,
+                             F,
+                             G,
+                             H,
+                             I,
+                             J) :-
+    'neutral-ssa-run-until-loop'(A,
+                                 0,
+                                 B,
+                                 0.0,
+                                 C,
+                                 D,
+                                 E,
+                                 F,
+                                 G,
+                                 H,
+                                 I,
+                                 [],
+                                 J).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-run-system
+      $graph-seed $dynamics-seed $f-twice
+      $event-count $time-limit
+      $food $molecules $reactions $volume)
+   (let $catalysis
+     (neutral-ssa-sample-catalysis
+       $graph-seed $f-twice $molecules $reactions)
+     (neutral-system-run
+       model neutral-crs-v1
+       graph-seed $graph-seed
+       dynamics-seed $dynamics-seed
+       f-twice $f-twice
+       volume $volume
+       catalysis $catalysis
+       result
+         (neutral-ssa-run-until
+           $dynamics-seed $event-count $time-limit
+           $food $molecules $reactions $volume $catalysis
+           (neutral-ssa-initial-counts $molecules $food $volume)))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-run-system'(A,
+                              B,
+                              C,
+                              D,
+                              E,
+                              F,
+                              G,
+                              H,
+                              I,
+                              [ 'neutral-system-run',
+                                model,
+                                'neutral-crs-v1',
+                                'graph-seed',
+                                A,
+                                'dynamics-seed',
+                                B,
+                                'f-twice',
+                                C,
+                                volume,
+                                I,
+                                catalysis,
+                                J,
+                                result,
+                                K
+                              ]) :-
+    J=L,
+    'neutral-ssa-sample-catalysis'(A, C, G, H, L),
+    'neutral-ssa-initial-counts'(G, F, I, M),
+    'neutral-ssa-run-until'(B,
+                            D,
+                            E,
+                            F,
+                            G,
+                            H,
+                            I,
+                            J,
+                            M,
+                            K).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-run-catalysis-ablation-pair
+      $graph-seed $dynamics-seed $f-twice
+      $event-count $time-limit
+      $food $molecules $reactions $volume $raf-rule-ids)
+   (let $catalysis
+     (neutral-ssa-sample-catalysis
+       $graph-seed $f-twice $molecules $reactions)
+     (let $ablated-catalysis
+       (neutral-ssa-delete-catalysis-into $raf-rule-ids $catalysis)
+       (neutral-catalysis-ablation-pair
+         model neutral-crs-v1
+         graph-seed $graph-seed
+         dynamics-seed $dynamics-seed
+         raf-rule-ids $raf-rule-ids
+         baseline-catalysis $catalysis
+         ablated-catalysis $ablated-catalysis
+         baseline
+           (neutral-ssa-run-until
+             $dynamics-seed $event-count $time-limit
+             $food $molecules $reactions $volume $catalysis
+             (neutral-ssa-initial-counts $molecules $food $volume))
+         ablated
+           (neutral-ssa-run-until
+             $dynamics-seed $event-count $time-limit
+             $food $molecules $reactions $volume $ablated-catalysis
+             (neutral-ssa-initial-counts $molecules $food $volume))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-run-catalysis-ablation-pair'(A,
+                                               B,
+                                               C,
+                                               D,
+                                               E,
+                                               F,
+                                               G,
+                                               H,
+                                               I,
+                                               J,
+                                               [ 'neutral-catalysis-ablation-pair',
+                                                 model,
+                                                 'neutral-crs-v1',
+                                                 'graph-seed',
+                                                 A,
+                                                 'dynamics-seed',
+                                                 B,
+                                                 'raf-rule-ids',
+                                                 J,
+                                                 'baseline-catalysis',
+                                                 K,
+                                                 'ablated-catalysis',
+                                                 L,
+                                                 baseline,
+                                                 M,
+                                                 ablated,
+                                                 N
+                                               ]) :-
+    K=O,
+    'neutral-ssa-sample-catalysis'(A, C, G, H, O),
+    L=P,
+    'neutral-ssa-delete-catalysis-into'(J, K, P),
+    'neutral-ssa-initial-counts'(G, F, I, Q),
+    'neutral-ssa-run-until'(B,
+                            D,
+                            E,
+                            F,
+                            G,
+                            H,
+                            I,
+                            K,
+                            Q,
+                            M),
+    'neutral-ssa-initial-counts'(G, F, I, R),
+    'neutral-ssa-run-until'(B,
+                            D,
+                            E,
+                            F,
+                            G,
+                            H,
+                            I,
+                            L,
+                            R,
+                            N).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-run-catalysis-ablation-endpoints
+      $graph-seed $dynamics-seed $f-twice
+      $event-count $time-limit
+      $food $molecules $reactions $volume $raf-rule-ids
+      $persistence-molecules $closure-molecules
+      $burn-in $bin-width $bin-count $persistence-threshold)
+   (let $pair
+     (neutral-ssa-run-catalysis-ablation-pair
+       $graph-seed $dynamics-seed $f-twice
+       $event-count $time-limit
+       $food $molecules $reactions $volume $raf-rule-ids)
+     (neutral-ssa-ablation-pair-endpoints
+       $pair
+       (neutral-ssa-initial-counts $molecules $food $volume)
+       $food $raf-rule-ids $persistence-molecules $closure-molecules
+       $burn-in $time-limit $bin-width $bin-count $persistence-threshold)))
+[33m--> prolog clause -->
+[32m'neutral-ssa-run-catalysis-ablation-endpoints'(A,
+                                                    B,
+                                                    C,
+                                                    D,
+                                                    E,
+                                                    F,
+                                                    G,
+                                                    H,
+                                                    I,
+                                                    J,
+                                                    K,
+                                                    L,
+                                                    M,
+                                                    N,
+                                                    O,
+                                                    P,
+                                                    Q) :-
+    R=S,
+    'neutral-ssa-run-catalysis-ablation-pair'(A,
+                                              B,
+                                              C,
+                                              D,
+                                              E,
+                                              F,
+                                              G,
+                                              H,
+                                              I,
+                                              J,
+                                              S),
+    'neutral-ssa-initial-counts'(G, F, I, T),
+    'neutral-ssa-ablation-pair-endpoints'(R,
+                                          T,
+                                          F,
+                                          J,
+                                          K,
+                                          L,
+                                          M,
+                                          E,
+                                          N,
+                                          O,
+                                          P,
+                                          Q).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-raf-reactions $reactions)
+   (if (== $reactions ())
+       ()
+       (let $reaction (car-atom $reactions)
+         (cons-atom
+           (if (== (car-atom $reaction) ligation)
+               (raf-reaction neutral-calibration
+                 (neutral-ssa-reaction-id $reaction)
+                 reactants
+                   ((car-atom (cdr-atom (cdr-atom $reaction)))
+                    (car-atom (cdr-atom (cdr-atom (cdr-atom $reaction)))))
+                 products
+                   ((car-atom
+                      (cdr-atom
+                        (cdr-atom (cdr-atom (cdr-atom $reaction)))))))
+               (raf-reaction neutral-calibration
+                 (neutral-ssa-reaction-id $reaction)
+                 reactants
+                   ((car-atom (cdr-atom (cdr-atom $reaction))))
+                 products
+                   ((car-atom (cdr-atom (cdr-atom (cdr-atom $reaction))))
+                    (car-atom
+                      (cdr-atom
+                        (cdr-atom (cdr-atom (cdr-atom $reaction))))))))
+           (neutral-ssa-raf-reactions (cdr-atom $reactions))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-raf-reactions'(A, B) :-
+    ==(A, [], C),
+    (   C==true
+    ->  B=[]
+    ;   D=E,
+        'car-atom'(A, E),
+        'car-atom'(D, F),
+        ==(F, ligation, G),
+        (   G==true
+        ->  H=['raf-reaction', 'neutral-calibration', I, reactants, J, products, K],
+            'neutral-ssa-reaction-id'(D, I),
+            'cdr-atom'(D, L),
+            'cdr-atom'(L, M),
+            'car-atom'(M, N),
+            'cdr-atom'(D, O),
+            'cdr-atom'(O, P),
+            'cdr-atom'(P, Q),
+            'car-atom'(Q, R),
+            reduce([N, R], J),
+            'cdr-atom'(D, S),
+            'cdr-atom'(S, T),
+            'cdr-atom'(T, U),
+            'cdr-atom'(U, V),
+            'car-atom'(V, W),
+            reduce([W], K)
+        ;   H=['raf-reaction', 'neutral-calibration', X, reactants, Y, products, Z],
+            'neutral-ssa-reaction-id'(D, X),
+            'cdr-atom'(D, A1),
+            'cdr-atom'(A1, B1),
+            'car-atom'(B1, C1),
+            reduce([C1], Y),
+            'cdr-atom'(D, D1),
+            'cdr-atom'(D1, E1),
+            'cdr-atom'(E1, F1),
+            'car-atom'(F1, G1),
+            'cdr-atom'(D, H1),
+            'cdr-atom'(H1, I1),
+            'cdr-atom'(I1, J1),
+            'cdr-atom'(J1, K1),
+            'car-atom'(K1, L1),
+            reduce([G1, L1], Z)
+        ),
+        'cdr-atom'(A, M1),
+        'neutral-ssa-raf-reactions'(M1, N1),
+        'cons-atom'(H, N1, B)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-raf-catalysis $catalysis)
+   (if (== $catalysis ())
+       ()
+       (let $edge (car-atom $catalysis)
+         (cons-atom
+           (raf-catalysis neutral-calibration
+             (car-atom $edge) (car-atom (cdr-atom $edge)))
+           (neutral-ssa-raf-catalysis (cdr-atom $catalysis))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-raf-catalysis'(A, B) :-
+    ==(A, [], C),
+    (   C==true
+    ->  B=[]
+    ;   D=E,
+        'car-atom'(A, E),
+        'car-atom'(D, F),
+        'cdr-atom'(D, G),
+        'car-atom'(G, H),
+        'cdr-atom'(A, I),
+        'neutral-ssa-raf-catalysis'(I, J),
+        'cons-atom'(['raf-catalysis', 'neutral-calibration', F, H],
+                    J,
+                    B)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-add-molecules $molecules $available)
+   (if (== $molecules ())
+       $available
+       (neutral-ssa-add-molecules
+         (cdr-atom $molecules)
+         (neutral-raf-add-unique (car-atom $molecules) $available))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-add-molecules'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=B
+    ;   'cdr-atom'(A, E),
+        'car-atom'(A, F),
+        'neutral-ssa-add-molecules'(E,
+                                    ['neutral-raf-add-unique', F, B],
+                                    C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-raf-reactant-molecules $raf-reactions $available)
+   (if (== $raf-reactions ())
+       $available
+       (neutral-ssa-raf-reactant-molecules
+         (cdr-atom $raf-reactions)
+         (neutral-ssa-add-molecules
+           (raf-reaction-reactants (car-atom $raf-reactions))
+           $available))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-raf-reactant-molecules'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=B
+    ;   'cdr-atom'(A, E),
+        'car-atom'(A, F),
+        'neutral-ssa-add-molecules'(['raf-reaction-reactants', F],
+                                    B,
+                                    G),
+        'neutral-ssa-raf-reactant-molecules'(E, G, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-raf-catalyst-molecules
+      $catalysis $raf-rule-ids $closure $available)
+   (if (== $catalysis ())
+       $available
+       (let $edge (car-atom $catalysis)
+         (neutral-ssa-raf-catalyst-molecules
+           (cdr-atom $catalysis) $raf-rule-ids $closure
+           (if (and
+                 (neutral-ssa-member?
+                   (car-atom (cdr-atom $edge)) $raf-rule-ids)
+                 (neutral-ssa-member? (car-atom $edge) $closure))
+               (neutral-raf-add-unique (car-atom $edge) $available)
+               $available)))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-raf-catalyst-molecules'(A,
+                                          B,
+                                          C,
+                                          D,
+                                          E) :-
+    ==(A, [], F),
+    (   F==true
+    ->  E=D
+    ;   G=H,
+        'car-atom'(A, H),
+        'cdr-atom'(A, I),
+        'cdr-atom'(G, J),
+        'car-atom'(J, K),
+        'neutral-ssa-member?'(K, B, L),
+        'car-atom'(G, M),
+        'neutral-ssa-member?'(M, C, N),
+        and(L, N, O),
+        (   O==true
+        ->  P=['neutral-raf-add-unique', Q, D],
+            'car-atom'(G, Q)
+        ;   P=D
+        ),
+        'neutral-ssa-raf-catalyst-molecules'(I,
+                                             B,
+                                             C,
+                                             P,
+                                             E)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-run-detected-raf-endpoints
+      $graph-seed $dynamics-seed $f-twice
+      $event-count $time-limit
+      $food $molecules $reactions $volume
+      $burn-in $bin-width $bin-count $persistence-threshold)
+   (let $catalysis
+     (neutral-ssa-sample-catalysis
+       $graph-seed $f-twice $molecules $reactions)
+     (let $raf-reactions
+       (neutral-raf-maximal-reactions
+         $food
+         (neutral-ssa-raf-reactions $reactions)
+         (neutral-ssa-raf-catalysis $catalysis))
+       (let $raf-rule-ids (neutral-raf-reaction-ids $raf-reactions)
+         (let $closure-molecules
+           (neutral-raf-closure $food $raf-reactions)
+           (let $persistence-molecules
+             (neutral-ssa-raf-catalyst-molecules
+               $catalysis $raf-rule-ids $closure-molecules
+               (neutral-ssa-raf-reactant-molecules $raf-reactions ()))
+             (neutral-ssa-run-catalysis-ablation-endpoints
+               $graph-seed $dynamics-seed $f-twice
+               $event-count $time-limit
+               $food $molecules $reactions $volume $raf-rule-ids
+               $persistence-molecules $closure-molecules
+               $burn-in $bin-width $bin-count $persistence-threshold)))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-run-detected-raf-endpoints'(A,
+                                              B,
+                                              C,
+                                              D,
+                                              E,
+                                              F,
+                                              G,
+                                              H,
+                                              I,
+                                              J,
+                                              K,
+                                              L,
+                                              M,
+                                              N) :-
+    O=P,
+    'neutral-ssa-sample-catalysis'(A, C, G, H, P),
+    Q=['neutral-raf-maximal-reactions', F, R, S],
+    'neutral-ssa-raf-reactions'(H, R),
+    'neutral-ssa-raf-catalysis'(O, S),
+    T=['neutral-raf-reaction-ids', Q],
+    U=['neutral-raf-closure', F, Q],
+    V=W,
+    'neutral-ssa-raf-reactant-molecules'(Q, [], X),
+    'neutral-ssa-raf-catalyst-molecules'(O,
+                                         T,
+                                         U,
+                                         X,
+                                         W),
+    'neutral-ssa-run-catalysis-ablation-endpoints'(A,
+                                                   B,
+                                                   C,
+                                                   D,
+                                                   E,
+                                                   F,
+                                                   G,
+                                                   H,
+                                                   I,
+                                                   T,
+                                                   V,
+                                                   U,
+                                                   J,
+                                                   K,
+                                                   L,
+                                                   M,
+                                                   N).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-run-calibration-row
+      $max-length $graph-seed $dynamics-seed $f-twice
+      $event-count $time-limit $volume
+      $burn-in $bin-width $bin-count $persistence-threshold)
+   (let $food ("0" "1" "00" "01" "10" "11")
+     (let $molecules (neutral-ssa-binary-polymers $max-length)
+       (let $reactions (neutral-ssa-binary-reactions $max-length)
+         (let $catalysis
+           (neutral-ssa-sample-catalysis
+             $graph-seed $f-twice $molecules $reactions)
+           (let $raf-reactions
+             (neutral-raf-maximal-reactions
+               $food
+               (neutral-ssa-raf-reactions $reactions)
+               (neutral-ssa-raf-catalysis $catalysis))
+             (let $raf-rule-ids (neutral-raf-reaction-ids $raf-reactions)
+               (neutral-calibration-row
+                 model neutral-crs-v1
+                 max-length $max-length
+                 graph-seed $graph-seed
+                 dynamics-seed $dynamics-seed
+                 f-twice $f-twice
+                 volume $volume
+                 molecule-count (neutral-ssa-list-length $molecules)
+                 reaction-count (neutral-ssa-list-length $reactions)
+                 maximal-raf-rule-ids $raf-rule-ids
+                 endpoints
+                   (neutral-ssa-run-detected-raf-endpoints
+                     $graph-seed $dynamics-seed $f-twice
+                     $event-count $time-limit
+                     $food $molecules $reactions $volume
+                     $burn-in $bin-width $bin-count
+                     $persistence-threshold)))))))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-run-calibration-row'(A,
+                                       B,
+                                       C,
+                                       D,
+                                       E,
+                                       F,
+                                       G,
+                                       H,
+                                       I,
+                                       J,
+                                       K,
+                                       [ 'neutral-calibration-row',
+                                         model,
+                                         'neutral-crs-v1',
+                                         'max-length',
+                                         A,
+                                         'graph-seed',
+                                         B,
+                                         'dynamics-seed',
+                                         C,
+                                         'f-twice',
+                                         D,
+                                         volume,
+                                         G,
+                                         'molecule-count',
+                                         L,
+                                         'reaction-count',
+                                         M,
+                                         'maximal-raf-rule-ids',
+                                         N,
+                                         endpoints,
+                                         O
+                                       ]) :-
+    P=["0", "1", "00", "01", "10", "11"],
+    Q=R,
+    'neutral-ssa-binary-polymers'(A, R),
+    S=T,
+    'neutral-ssa-binary-reactions'(A, T),
+    U=V,
+    'neutral-ssa-sample-catalysis'(B, D, Q, S, V),
+    W=['neutral-raf-maximal-reactions', P, X, Y],
+    'neutral-ssa-raf-reactions'(S, X),
+    'neutral-ssa-raf-catalysis'(U, Y),
+    N=['neutral-raf-reaction-ids', W],
+    'neutral-ssa-list-length'(Q, L),
+    'neutral-ssa-list-length'(S, M),
+    'neutral-ssa-run-detected-raf-endpoints'(B,
+                                             C,
+                                             D,
+                                             E,
+                                             F,
+                                             P,
+                                             Q,
+                                             S,
+                                             G,
+                                             H,
+                                             I,
+                                             J,
+                                             K,
+                                             O).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-counts-nonnegative? $counts)
+   (if (== $counts ())
+       True
+       (and
+         (>= (car-atom (cdr-atom (car-atom $counts))) 0)
+         (neutral-ssa-counts-nonnegative? (cdr-atom $counts)))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-counts-nonnegative?'(A, B) :-
+    ==(A, [], C),
+    (   C==true
+    ->  B=true
+    ;   'car-atom'(A, D),
+        'cdr-atom'(D, E),
+        'car-atom'(E, F),
+        >=(F, 0, G),
+        'cdr-atom'(A, H),
+        'neutral-ssa-counts-nonnegative?'(H, I),
+        and(G, I, B)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-tiny-step $event-index (($a $na) ($b $nb) ($ab $nab)))
+   (if (== (neutral-ssa-tiny-choice $event-index) ligation)
+       (($a (- $na 1)) ($b (- $nb 1)) ($ab (+ $nab 1)))
+       (($a (+ $na 1)) ($b (+ $nb 1)) ($ab (- $nab 1)))))
+[33m--> prolog clause -->
+[32m'neutral-ssa-tiny-step'(A,
+                             [ [B, C],
+                               [D, E],
+                               [F, G]
+                             ],
+                             H) :-
+    'neutral-ssa-tiny-choice'(A, I),
+    ==(I, ligation, J),
+    (   J==true
+    ->  -(C, 1, K),
+        reduce([B, K], L),
+        -(E, 1, M),
+        reduce([D, M], N),
+        +(G, 1, O),
+        reduce([F, O], P),
+        reduce([L, N, P], H)
+    ;   +(C, 1, Q),
+        reduce([B, Q], R),
+        +(E, 1, S),
+        reduce([D, S], T),
+        -(G, 1, U),
+        reduce([F, U], V),
+        reduce([R, T, V], H)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-tiny-choice 0) ligation)
+[33m--> prolog clause -->
+[32m'neutral-ssa-tiny-choice'(0, ligation).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-tiny-choice 1) cleavage)
+[33m--> prolog clause -->
+[32m'neutral-ssa-tiny-choice'(1, cleavage).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-tiny-run $initial)
+   (neutral-ssa-tiny-step 1 (neutral-ssa-tiny-step 0 $initial)))
+[33m--> prolog clause -->
+[32m'neutral-ssa-tiny-run'(A, B) :-
+    'neutral-ssa-tiny-step'(0, A, C),
+    'neutral-ssa-tiny-step'(1, C, B).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-ssa-tiny-control-record)
+   (neutral-ssa-control
+     model neutral-crs-v1
+     initial (("0" 1) ("1" 1) ("01" 0))
+     event-stream (ligation cleavage)
+     final (("0" 1) ("1" 1) ("01" 0))
+     replay exact
+     calibration-endpoints uninspected))
+[33m--> prolog clause -->
+[32m'neutral-ssa-tiny-control-record'([ 'neutral-ssa-control',
+                                         model,
+                                         'neutral-crs-v1',
+                                         initial,
+                                         [["0", 1], ["1", 1], ["01", 0]],
+                                         'event-stream',
+                                         [ligation, cleavage],
+                                         final,
+                                         [["0", 1], ["1", 1], ["01", 0]],
+                                         replay,
+                                         exact,
+                                         'calibration-endpoints',
+                                         uninspected
+                                       ]).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta runnable  -->
+[36m!(neutral-ssa-run-calibration-row 5 1003 2001 12 1000000 500.0 200 100.0 10.0 40 32)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           'neutral-ssa-run-calibration-row'(5,
+                                             1003,
+                                             2001,
+                                             12,
+                                             1000000,
+                                             500.0,
+                                             200,
+                                             100.0,
+                                             10.0,
+                                             40,
+                                             32,
+                                             A),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mtrue
+(neutral-calibration-row model neutral-crs-v1 max-length 5 graph-seed 1003 dynamics-seed 2001 f-twice 12 volume 200 molecule-count 62 reaction-count 392 maximal-raf-rule-ids (neutral-raf-reaction-ids (neutral-raf-maximal-reactions ("0" "1" "00" "01" "10" "11") ((raf-reaction neutral-calibration "cleave:00:1" reactants ("00") products ("0" "0")) (raf-reaction neutral-calibration "cleave:000:1" reactants ("000") products ("0" "00")) (raf-reaction neutral-calibration "cleave:000:2" reactants ("000") products ("00" "0")) (raf-reaction neutral-calibration "cleave:0000:1" reactants ("0000") products ("0" "000")) (raf-reaction neutral-calibration "cleave:0000:2" reactants ("0000") products ("00" "00")) (raf-reaction neutral-calibration "cleave:0000:3" reactants ("0000") products ("000" "0")) (raf-reaction neutral-calibration "cleave:00000:1" reactants ("00000") products ("0" "0000")) (raf-reaction neutral-calibration "cleave:00000:2" reactants ("00000") products ("00" "000")) (raf-reaction neutral-calibration "cleave:00000:3" reactants ("00000") products ("000" "00")) (raf-reaction neutral-calibration "cleave:00000:4" reactants ("00000") products ("0000" "0")) (raf-reaction neutral-calibration "cleave:00001:1" reactants ("00001") products ("0" "0001")) (raf-reaction neutral-calibration "cleave:00001:2" reactants ("00001") products ("00" "001")) (raf-reaction neutral-calibration "cleave:00001:3" reactants ("00001") products ("000" "01")) (raf-reaction neutral-calibration "cleave:00001:4" reactants ("00001") products ("0000" "1")) (raf-reaction neutral-calibration "cleave:0001:1" reactants ("0001") products ("0" "001")) (raf-reaction neutral-calibration "cleave:0001:2" reactants ("0001") products ("00" "01")) (raf-reaction neutral-calibration "cleave:0001:3" reactants ("0001") products ("000" "1")) (raf-reaction neutral-calibration "cleave:00010:1" reactants ("00010") products ("0" "0010")) (raf-reaction neutral-calibration "cleave:00010:2" reactants ("00010") products ("00" "010")) (raf-reaction neutral-calibration "cleave:00010:3" reactants ("00010") products ("000" "10")) (raf-reaction neutral-calibration "cleave:00010:4" reactants ("00010") products ("0001" "0")) (raf-reaction neutral-calibration "cleave:00011:1" reactants ("00011") products ("0" "0011")) (raf-reaction neutral-calibration "cleave:00011:2" reactants ("00011") products ("00" "011")) (raf-reaction neutral-calibration "cleave:00011:3" reactants ("00011") products ("000" "11")) (raf-reaction neutral-calibration "cleave:00011:4" reactants ("00011") products ("0001" "1")) (raf-reaction neutral-calibration "cleave:001:1" reactants ("001") products ("0" "01")) (raf-reaction neutral-calibration "cleave:001:2" reactants ("001") products ("00" "1")) (raf-reaction neutral-calibration "cleave:0010:1" reactants ("0010") products ("0" "010")) (raf-reaction neutral-calibration "cleave:0010:2" reactants ("0010") products ("00" "10")) (raf-reaction neutral-calibration "cleave:0010:3" reactants ("0010") products ("001" "0")) (raf-reaction neutral-calibration "cleave:00100:1" reactants ("00100") products ("0" "0100")) (raf-reaction neutral-calibration "cleave:00100:2" reactants ("00100") products ("00" "100")) (raf-reaction neutral-calibration "cleave:00100:3" reactants ("00100") products ("001" "00")) (raf-reaction neutral-calibration "cleave:00100:4" reactants ("00100") products ("0010" "0")) (raf-reaction neutral-calibration "cleave:00101:1" reactants ("00101") products ("0" "0101")) (raf-reaction neutral-calibration "cleave:00101:2" reactants ("00101") products ("00" "101")) (raf-reaction neutral-calibration "cleave:00101:3" reactants ("00101") products ("001" "01")) (raf-reaction neutral-calibration "cleave:00101:4" reactants ("00101") products ("0010" "1")) (raf-reaction neutral-calibration "cleave:0011:1" reactants ("0011") products ("0" "011")) (raf-reaction neutral-calibration "cleave:0011:2" reactants ("0011") products ("00" "11")) (raf-reaction neutral-calibration "cleave:0011:3" reactants ("0011") products ("001" "1")) (raf-reaction neutral-calibration "cleave:00110:1" reactants ("00110") products ("0" "0110")) (raf-reaction neutral-calibration "cleave:00110:2" reactants ("00110") products ("00" "110")) (raf-reaction neutral-calibration "cleave:00110:3" reactants ("00110") products ("001" "10")) (raf-reaction neutral-calibration "cleave:00110:4" reactants ("00110") products ("0011" "0")) (raf-reaction neutral-calibration "cleave:00111:1" reactants ("00111") products ("0" "0111")) (raf-reaction neutral-calibration "cleave:00111:2" reactants ("00111") products ("00" "111")) (raf-reaction neutral-calibration "cleave:00111:3" reactants ("00111") products ("001" "11")) (raf-reaction neutral-calibration "cleave:00111:4" reactants ("00111") products ("0011" "1")) (raf-reaction neutral-calibration "cleave:01:1" reactants ("01") products ("0" "1")) (raf-reaction neutral-calibration "cleave:010:1" reactants ("010") products ("0" "10")) (raf-reaction neutral-calibration "cleave:010:2" reactants ("010") products ("01" "0")) (raf-reaction neutral-calibration "cleave:0100:1" reactants ("0100") products ("0" "100")) (raf-reaction neutral-calibration "cleave:0100:2" reactants ("0100") products ("01" "00")) (raf-reaction neutral-calibration "cleave:0100:3" reactants ("0100") products ("010" "0")) (raf-reaction neutral-calibration "cleave:01000:1" reactants ("01000") products ("0" "1000")) (raf-reaction neutral-calibration "cleave:01000:2" reactants ("01000") products ("01" "000")) (raf-reaction neutral-calibration "cleave:01000:3" reactants ("01000") products ("010" "00")) (raf-reaction neutral-calibration "cleave:01000:4" reactants ("01000") products ("0100" "0")) (raf-reaction neutral-calibration "cleave:01001:1" reactants ("01001") products ("0" "1001")) (raf-reaction neutral-calibration "cleave:01001:2" reactants ("01001") products ("01" "001")) (raf-reaction neutral-calibration "cleave:01001:3" reactants ("01001") products ("010" "01")) (raf-reaction neutral-calibration "cleave:01001:4" reactants ("01001") products ("0100" "1")) (raf-reaction neutral-calibration "cleave:0101:1" reactants ("0101") products ("0" "101")) (raf-reaction neutral-calibration "cleave:0101:2" reactants ("0101") products ("01" "01")) (raf-reaction neutral-calibration "cleave:0101:3" reactants ("0101") products ("010" "1")) (raf-reaction neutral-calibration "cleave:01010:1" reactants ("01010") products ("0" "1010")) (raf-reaction neutral-calibration "cleave:01010:2" reactants ("01010") products ("01" "010")) (raf-reaction neutral-calibration "cleave:01010:3" reactants ("01010") products ("010" "10")) (raf-reaction neutral-calibration "cleave:01010:4" reactants ("01010") products ("0101" "0")) (raf-reaction neutral-calibration "cleave:01011:1" reactants ("01011") products ("0" "1011")) (raf-reaction neutral-calibration "cleave:01011:2" reactants ("01011") products ("01" "011")) (raf-reaction neutral-calibration "cleave:01011:3" reactants ("01011") products ("010" "11")) (raf-reaction neutral-calibration "cleave:01011:4" reactants ("01011") products ("0101" "1")) (raf-reaction neutral-calibration "cleave:011:1" reactants ("011") products ("0" "11")) (raf-reaction neutral-calibration "cleave:011:2" reactants ("011") products ("01" "1")) (raf-reaction neutral-calibration "cleave:0110:1" reactants ("0110") products ("0" "110")) (raf-reaction neutral-calibration "cleave:0110:2" reactants ("0110") products ("01" "10")) (raf-reaction neutral-calibration "cleave:0110:3" reactants ("0110") products ("011" "0")) (raf-reaction neutral-calibration "cleave:01100:1" reactants ("01100") products ("0" "1100")) (raf-reaction neutral-calibration "cleave:01100:2" reactants ("01100") products ("01" "100")) (raf-reaction neutral-calibration "cleave:01100:3" reactants ("01100") products ("011" "00")) (raf-reaction neutral-calibration "cleave:01100:4" reactants ("01100") products ("0110" "0")) (raf-reaction neutral-calibration "cleave:01101:1" reactants ("01101") products ("0" "1101")) (raf-reaction neutral-calibration "cleave:01101:2" reactants ("01101") products ("01" "101")) (raf-reaction neutral-calibration "cleave:01101:3" reactants ("01101") products ("011" "01")) (raf-reaction neutral-calibration "cleave:01101:4" reactants ("01101") products ("0110" "1")) (raf-reaction neutral-calibration "cleave:0111:1" reactants ("0111") products ("0" "111")) (raf-reaction neutral-calibration "cleave:0111:2" reactants ("0111") products ("01" "11")) (raf-reaction neutral-calibration "cleave:0111:3" reactants ("0111") products ("011" "1")) (raf-reaction neutral-calibration "cleave:01110:1" reactants ("01110") products ("0" "1110")) (raf-reaction neutral-calibration "cleave:01110:2" reactants ("01110") products ("01" "110")) (raf-reaction neutral-calibration "cleave:01110:3" reactants ("01110") products ("011" "10")) (raf-reaction neutral-calibration "cleave:01110:4" reactants ("01110") products ("0111" "0")) (raf-reaction neutral-calibration "cleave:01111:1" reactants ("01111") products ("0" "1111")) (raf-reaction neutral-calibration "cleave:01111:2" reactants ("01111") products ("01" "111")) (raf-reaction neutral-calibration "cleave:01111:3" reactants ("01111") products ("011" "11")) (raf-reaction neutral-calibration "cleave:01111:4" reactants ("01111") products ("0111" "1")) (raf-reaction neutral-calibration "cleave:10:1" reactants ("10") products ("1" "0")) (raf-reaction neutral-calibration "cleave:100:1" reactants ("100") products ("1" "00")) (raf-reaction neutral-calibration "cleave:100:2" reactants ("100") products ("10" "0")) (raf-reaction neutral-calibration "cleave:1000:1" reactants ("1000") products ("1" "000")) (raf-reaction neutral-calibration "cleave:1000:2" reactants ("1000") products ("10" "00")) (raf-reaction neutral-calibration "cleave:1000:3" reactants ("1000") products ("100" "0")) (raf-reaction neutral-calibration "cleave:10000:1" reactants ("10000") products ("1" "0000")) (raf-reaction neutral-calibration "cleave:10000:2" reactants ("10000") products ("10" "000")) (raf-reaction neutral-calibration "cleave:10000:3" reactants ("10000") products ("100" "00")) (raf-reaction neutral-calibration "cleave:10000:4" reactants ("10000") products ("1000" "0")) (raf-reaction neutral-calibration "cleave:10001:1" reactants ("10001") products ("1" "0001")) (raf-reaction neutral-calibration "cleave:10001:2" reactants ("10001") products ("10" "001")) (raf-reaction neutral-calibration "cleave:10001:3" reactants ("10001") products ("100" "01")) (raf-reaction neutral-calibration "cleave:10001:4" reactants ("10001") products ("1000" "1")) (raf-reaction neutral-calibration "cleave:1001:1" reactants ("1001") products ("1" "001")) (raf-reaction neutral-calibration "cleave:1001:2" reactants ("1001") products ("10" "01")) (raf-reaction neutral-calibration "cleave:1001:3" reactants ("1001") products ("100" "1")) (raf-reaction neutral-calibration "cleave:10010:1" reactants ("10010") products ("1" "0010")) (raf-reaction neutral-calibration "cleave:10010:2" reactants ("10010") products ("10" "010")) (raf-reaction neutral-calibration "cleave:10010:3" reactants ("10010") products ("100" "10")) (raf-reaction neutral-calibration "cleave:10010:4" reactants ("10010") products ("1001" "0")) (raf-reaction neutral-calibration "cleave:10011:1" reactants ("10011") products ("1" "0011")) (raf-reaction neutral-calibration "cleave:10011:2" reactants ("10011") products ("10" "011")) (raf-reaction neutral-calibration "cleave:10011:3" reactants ("10011") products ("100" "11")) (raf-reaction neutral-calibration "cleave:10011:4" reactants ("10011") products ("1001" "1")) (raf-reaction neutral-calibration "cleave:101:1" reactants ("101") products ("1" "01")) (raf-reaction neutral-calibration "cleave:101:2" reactants ("101") products ("10" "1")) (raf-reaction neutral-calibration "cleave:1010:1" reactants ("1010") products ("1" "010")) (raf-reaction neutral-calibration "cleave:1010:2" reactants ("1010") products ("10" "10")) (raf-reaction neutral-calibration "cleave:1010:3" reactants ("1010") products ("101" "0")) (raf-reaction neutral-calibration "cleave:10100:1" reactants ("10100") products ("1" "0100")) (raf-reaction neutral-calibration "cleave:10100:2" reactants ("10100") products ("10" "100")) (raf-reaction neutral-calibration "cleave:10100:3" reactants ("10100") products ("101" "00")) (raf-reaction neutral-calibration "cleave:10100:4" reactants ("10100") products ("1010" "0")) (raf-reaction neutral-calibration "cleave:10101:1" reactants ("10101") products ("1" "0101")) (raf-reaction neutral-calibration "cleave:10101:2" reactants ("10101") products ("10" "101")) (raf-reaction neutral-calibration "cleave:10101:3" reactants ("10101") products ("101" "01")) (raf-reaction neutral-calibration "cleave:10101:4" reactants ("10101") products ("1010" "1")) (raf-reaction neutral-calibration "cleave:1011:1" reactants ("1011") products ("1" "011")) (raf-reaction neutral-calibration "cleave:1011:2" reactants ("1011") products ("10" "11")) (raf-reaction neutral-calibration "cleave:1011:3" reactants ("1011") products ("101" "1")) (raf-reaction neutral-calibration "cleave:10110:1" reactants ("10110") products ("1" "0110")) (raf-reaction neutral-calibration "cleave:10110:2" reactants ("10110") products ("10" "110")) (raf-reaction neutral-calibration "cleave:10110:3" reactants ("10110") products ("101" "10")) (raf-reaction neutral-calibration "cleave:10110:4" reactants ("10110") products ("1011" "0")) (raf-reaction neutral-calibration "cleave:10111:1" reactants ("10111") products ("1" "0111")) (raf-reaction neutral-calibration "cleave:10111:2" reactants ("10111") products ("10" "111")) (raf-reaction neutral-calibration "cleave:10111:3" reactants ("10111") products ("101" "11")) (raf-reaction neutral-calibration "cleave:10111:4" reactants ("10111") products ("1011" "1")) (raf-reaction neutral-calibration "cleave:11:1" reactants ("11") products ("1" "1")) (raf-reaction neutral-calibration "cleave:110:1" reactants ("110") products ("1" "10")) (raf-reaction neutral-calibration "cleave:110:2" reactants ("110") products ("11" "0")) (raf-reaction neutral-calibration "cleave:1100:1" reactants ("1100") products ("1" "100")) (raf-reaction neutral-calibration "cleave:1100:2" reactants ("1100") products ("11" "00")) (raf-reaction neutral-calibration "cleave:1100:3" reactants ("1100") products ("110" "0")) (raf-reaction neutral-calibration "cleave:11000:1" reactants ("11000") products ("1" "1000")) (raf-reaction neutral-calibration "cleave:11000:2" reactants ("11000") products ("11" "000")) (raf-reaction neutral-calibration "cleave:11000:3" reactants ("11000") products ("110" "00")) (raf-reaction neutral-calibration "cleave:11000:4" reactants ("11000") products ("1100" "0")) (raf-reaction neutral-calibration "cleave:11001:1" reactants ("11001") products ("1" "1001")) (raf-reaction neutral-calibration "cleave:11001:2" reactants ("11001") products ("11" "001")) (raf-reaction neutral-calibration "cleave:11001:3" reactants ("11001") products ("110" "01")) (raf-reaction neutral-calibration "cleave:11001:4" reactants ("11001") products ("1100" "1")) (raf-reaction neutral-calibration "cleave:1101:1" reactants ("1101") products ("1" "101")) (raf-reaction neutral-calibration "cleave:1101:2" reactants ("1101") products ("11" "01")) (raf-reaction neutral-calibration "cleave:1101:3" reactants ("1101") products ("110" "1")) (raf-reaction neutral-calibration "cleave:11010:1" reactants ("11010") products ("1" "1010")) (raf-reaction neutral-calibration "cleave:11010:2" reactants ("11010") products ("11" "010")) (raf-reaction neutral-calibration "cleave:11010:3" reactants ("11010") products ("110" "10")) (raf-reaction neutral-calibration "cleave:11010:4" reactants ("11010") products ("1101" "0")) (raf-reaction neutral-calibration "cleave:11011:1" reactants ("11011") products ("1" "1011")) (raf-reaction neutral-calibration "cleave:11011:2" reactants ("11011") products ("11" "011")) (raf-reaction neutral-calibration "cleave:11011:3" reactants ("11011") products ("110" "11")) (raf-reaction neutral-calibration "cleave:11011:4" reactants ("11011") products ("1101" "1")) (raf-reaction neutral-calibration "cleave:111:1" reactants ("111") products ("1" "11")) (raf-reaction neutral-calibration "cleave:111:2" reactants ("111") products ("11" "1")) (raf-reaction neutral-calibration "cleave:1110:1" reactants ("1110") products ("1" "110")) (raf-reaction neutral-calibration "cleave:1110:2" reactants ("1110") products ("11" "10")) (raf-reaction neutral-calibration "cleave:1110:3" reactants ("1110") products ("111" "0")) (raf-reaction neutral-calibration "cleave:11100:1" reactants ("11100") products ("1" "1100")) (raf-reaction neutral-calibration "cleave:11100:2" reactants ("11100") products ("11" "100")) (raf-reaction neutral-calibration "cleave:11100:3" reactants ("11100") products ("111" "00")) (raf-reaction neutral-calibration "cleave:11100:4" reactants ("11100") products ("1110" "0")) (raf-reaction neutral-calibration "cleave:11101:1" reactants ("11101") products ("1" "1101")) (raf-reaction neutral-calibration "cleave:11101:2" reactants ("11101") products ("11" "101")) (raf-reaction neutral-calibration "cleave:11101:3" reactants ("11101") products ("111" "01")) (raf-reaction neutral-calibration "cleave:11101:4" reactants ("11101") products ("1110" "1")) (raf-reaction neutral-calibration "cleave:1111:1" reactants ("1111") products ("1" "111")) (raf-reaction neutral-calibration "cleave:1111:2" reactants ("1111") products ("11" "11")) (raf-reaction neutral-calibration "cleave:1111:3" reactants ("1111") products ("111" "1")) (raf-reaction neutral-calibration "cleave:11110:1" reactants ("11110") products ("1" "1110")) (raf-reaction neutral-calibration "cleave:11110:2" reactants ("11110") products ("11" "110")) (raf-reaction neutral-calibration "cleave:11110:3" reactants ("11110") products ("111" "10")) (raf-reaction neutral-calibration "cleave:11110:4" reactants ("11110") products ("1111" "0")) (raf-reaction neutral-calibration "cleave:11111:1" reactants ("11111") products ("1" "1111")) (raf-reaction neutral-calibration "cleave:11111:2" reactants ("11111") products ("11" "111")) (raf-reaction neutral-calibration "cleave:11111:3" reactants ("11111") products ("111" "11")) (raf-reaction neutral-calibration "cleave:11111:4" reactants ("11111") products ("1111" "1")) (raf-reaction neutral-calibration "lig:0:0" reactants ("0" "0") products ("00")) (raf-reaction neutral-calibration "lig:0:00" reactants ("0" "00") products ("000")) (raf-reaction neutral-calibration "lig:0:000" reactants ("0" "000") products ("0000")) (raf-reaction neutral-calibration "lig:0:0000" reactants ("0" "0000") products ("00000")) (raf-reaction neutral-calibration "lig:0:0001" reactants ("0" "0001") products ("00001")) (raf-reaction neutral-calibration "lig:0:001" reactants ("0" "001") products ("0001")) (raf-reaction neutral-calibration "lig:0:0010" reactants ("0" "0010") products ("00010")) (raf-reaction neutral-calibration "lig:0:0011" reactants ("0" "0011") products ("00011")) (raf-reaction neutral-calibration "lig:0:01" reactants ("0" "01") products ("001")) (raf-reaction neutral-calibration "lig:0:010" reactants ("0" "010") products ("0010")) (raf-reaction neutral-calibration "lig:0:0100" reactants ("0" "0100") products ("00100")) (raf-reaction neutral-calibration "lig:0:0101" reactants ("0" "0101") products ("00101")) (raf-reaction neutral-calibration "lig:0:011" reactants ("0" "011") products ("0011")) (raf-reaction neutral-calibration "lig:0:0110" reactants ("0" "0110") products ("00110")) (raf-reaction neutral-calibration "lig:0:0111" reactants ("0" "0111") products ("00111")) (raf-reaction neutral-calibration "lig:0:1" reactants ("0" "1") products ("01")) (raf-reaction neutral-calibration "lig:0:10" reactants ("0" "10") products ("010")) (raf-reaction neutral-calibration "lig:0:100" reactants ("0" "100") products ("0100")) (raf-reaction neutral-calibration "lig:0:1000" reactants ("0" "1000") products ("01000")) (raf-reaction neutral-calibration "lig:0:1001" reactants ("0" "1001") products ("01001")) (raf-reaction neutral-calibration "lig:0:101" reactants ("0" "101") products ("0101")) (raf-reaction neutral-calibration "lig:0:1010" reactants ("0" "1010") products ("01010")) (raf-reaction neutral-calibration "lig:0:1011" reactants ("0" "1011") products ("01011")) (raf-reaction neutral-calibration "lig:0:11" reactants ("0" "11") products ("011")) (raf-reaction neutral-calibration "lig:0:110" reactants ("0" "110") products ("0110")) (raf-reaction neutral-calibration "lig:0:1100" reactants ("0" "1100") products ("01100")) (raf-reaction neutral-calibration "lig:0:1101" reactants ("0" "1101") products ("01101")) (raf-reaction neutral-calibration "lig:0:111" reactants ("0" "111") products ("0111")) (raf-reaction neutral-calibration "lig:0:1110" reactants ("0" "1110") products ("01110")) (raf-reaction neutral-calibration "lig:0:1111" reactants ("0" "1111") products ("01111")) (raf-reaction neutral-calibration "lig:00:0" reactants ("00" "0") products ("000")) (raf-reaction neutral-calibration "lig:00:00" reactants ("00" "00") products ("0000")) (raf-reaction neutral-calibration "lig:00:000" reactants ("00" "000") products ("00000")) (raf-reaction neutral-calibration "lig:00:001" reactants ("00" "001") products ("00001")) (raf-reaction neutral-calibration "lig:00:01" reactants ("00" "01") products ("0001")) (raf-reaction neutral-calibration "lig:00:010" reactants ("00" "010") products ("00010")) (raf-reaction neutral-calibration "lig:00:011" reactants ("00" "011") products ("00011")) (raf-reaction neutral-calibration "lig:00:1" reactants ("00" "1") products ("001")) (raf-reaction neutral-calibration "lig:00:10" reactants ("00" "10") products ("0010")) (raf-reaction neutral-calibration "lig:00:100" reactants ("00" "100") products ("00100")) (raf-reaction neutral-calibration "lig:00:101" reactants ("00" "101") products ("00101")) (raf-reaction neutral-calibration "lig:00:11" reactants ("00" "11") products ("0011")) (raf-reaction neutral-calibration "lig:00:110" reactants ("00" "110") products ("00110")) (raf-reaction neutral-calibration "lig:00:111" reactants ("00" "111") products ("00111")) (raf-reaction neutral-calibration "lig:000:0" reactants ("000" "0") products ("0000")) (raf-reaction neutral-calibration "lig:000:00" reactants ("000" "00") products ("00000")) (raf-reaction neutral-calibration "lig:000:01" reactants ("000" "01") products ("00001")) (raf-reaction neutral-calibration "lig:000:1" reactants ("000" "1") products ("0001")) (raf-reaction neutral-calibration "lig:000:10" reactants ("000" "10") products ("00010")) (raf-reaction neutral-calibration "lig:000:11" reactants ("000" "11") products ("00011")) (raf-reaction neutral-calibration "lig:0000:0" reactants ("0000" "0") products ("00000")) (raf-reaction neutral-calibration "lig:0000:1" reactants ("0000" "1") products ("00001")) (raf-reaction neutral-calibration "lig:0001:0" reactants ("0001" "0") products ("00010")) (raf-reaction neutral-calibration "lig:0001:1" reactants ("0001" "1") products ("00011")) (raf-reaction neutral-calibration "lig:001:0" reactants ("001" "0") products ("0010")) (raf-reaction neutral-calibration "lig:001:00" reactants ("001" "00") products ("00100")) (raf-reaction neutral-calibration "lig:001:01" reactants ("001" "01") products ("00101")) (raf-reaction neutral-calibration "lig:001:1" reactants ("001" "1") products ("0011")) (raf-reaction neutral-calibration "lig:001:10" reactants ("001" "10") products ("00110")) (raf-reaction neutral-calibration "lig:001:11" reactants ("001" "11") products ("00111")) (raf-reaction neutral-calibration "lig:0010:0" reactants ("0010" "0") products ("00100")) (raf-reaction neutral-calibration "lig:0010:1" reactants ("0010" "1") products ("00101")) (raf-reaction neutral-calibration "lig:0011:0" reactants ("0011" "0") products ("00110")) (raf-reaction neutral-calibration "lig:0011:1" reactants ("0011" "1") products ("00111")) (raf-reaction neutral-calibration "lig:01:0" reactants ("01" "0") products ("010")) (raf-reaction neutral-calibration "lig:01:00" reactants ("01" "00") products ("0100")) (raf-reaction neutral-calibration "lig:01:000" reactants ("01" "000") products ("01000")) (raf-reaction neutral-calibration "lig:01:001" reactants ("01" "001") products ("01001")) (raf-reaction neutral-calibration "lig:01:01" reactants ("01" "01") products ("0101")) (raf-reaction neutral-calibration "lig:01:010" reactants ("01" "010") products ("01010")) (raf-reaction neutral-calibration "lig:01:011" reactants ("01" "011") products ("01011")) (raf-reaction neutral-calibration "lig:01:1" reactants ("01" "1") products ("011")) (raf-reaction neutral-calibration "lig:01:10" reactants ("01" "10") products ("0110")) (raf-reaction neutral-calibration "lig:01:100" reactants ("01" "100") products ("01100")) (raf-reaction neutral-calibration "lig:01:101" reactants ("01" "101") products ("01101")) (raf-reaction neutral-calibration "lig:01:11" reactants ("01" "11") products ("0111")) (raf-reaction neutral-calibration "lig:01:110" reactants ("01" "110") products ("01110")) (raf-reaction neutral-calibration "lig:01:111" reactants ("01" "111") products ("01111")) (raf-reaction neutral-calibration "lig:010:0" reactants ("010" "0") products ("0100")) (raf-reaction neutral-calibration "lig:010:00" reactants ("010" "00") products ("01000")) (raf-reaction neutral-calibration "lig:010:01" reactants ("010" "01") products ("01001")) (raf-reaction neutral-calibration "lig:010:1" reactants ("010" "1") products ("0101")) (raf-reaction neutral-calibration "lig:010:10" reactants ("010" "10") products ("01010")) (raf-reaction neutral-calibration "lig:010:11" reactants ("010" "11") products ("01011")) (raf-reaction neutral-calibration "lig:0100:0" reactants ("0100" "0") products ("01000")) (raf-reaction neutral-calibration "lig:0100:1" reactants ("0100" "1") products ("01001")) (raf-reaction neutral-calibration "lig:0101:0" reactants ("0101" "0") products ("01010")) (raf-reaction neutral-calibration "lig:0101:1" reactants ("0101" "1") products ("01011")) (raf-reaction neutral-calibration "lig:011:0" reactants ("011" "0") products ("0110")) (raf-reaction neutral-calibration "lig:011:00" reactants ("011" "00") products ("01100")) (raf-reaction neutral-calibration "lig:011:01" reactants ("011" "01") products ("01101")) (raf-reaction neutral-calibration "lig:011:1" reactants ("011" "1") products ("0111")) (raf-reaction neutral-calibration "lig:011:10" reactants ("011" "10") products ("01110")) (raf-reaction neutral-calibration "lig:011:11" reactants ("011" "11") products ("01111")) (raf-reaction neutral-calibration "lig:0110:0" reactants ("0110" "0") products ("01100")) (raf-reaction neutral-calibration "lig:0110:1" reactants ("0110" "1") products ("01101")) (raf-reaction neutral-calibration "lig:0111:0" reactants ("0111" "0") products ("01110")) (raf-reaction neutral-calibration "lig:0111:1" reactants ("0111" "1") products ("01111")) (raf-reaction neutral-calibration "lig:1:0" reactants ("1" "0") products ("10")) (raf-reaction neutral-calibration "lig:1:00" reactants ("1" "00") products ("100")) (raf-reaction neutral-calibration "lig:1:000" reactants ("1" "000") products ("1000")) (raf-reaction neutral-calibration "lig:1:0000" reactants ("1" "0000") products ("10000")) (raf-reaction neutral-calibration "lig:1:0001" reactants ("1" "0001") products ("10001")) (raf-reaction neutral-calibration "lig:1:001" reactants ("1" "001") products ("1001")) (raf-reaction neutral-calibration "lig:1:0010" reactants ("1" "0010") products ("10010")) (raf-reaction neutral-calibration "lig:1:0011" reactants ("1" "0011") products ("10011")) (raf-reaction neutral-calibration "lig:1:01" reactants ("1" "01") products ("101")) (raf-reaction neutral-calibration "lig:1:010" reactants ("1" "010") products ("1010")) (raf-reaction neutral-calibration "lig:1:0100" reactants ("1" "0100") products ("10100")) (raf-reaction neutral-calibration "lig:1:0101" reactants ("1" "0101") products ("10101")) (raf-reaction neutral-calibration "lig:1:011" reactants ("1" "011") products ("1011")) (raf-reaction neutral-calibration "lig:1:0110" reactants ("1" "0110") products ("10110")) (raf-reaction neutral-calibration "lig:1:0111" reactants ("1" "0111") products ("10111")) (raf-reaction neutral-calibration "lig:1:1" reactants ("1" "1") products ("11")) (raf-reaction neutral-calibration "lig:1:10" reactants ("1" "10") products ("110")) (raf-reaction neutral-calibration "lig:1:100" reactants ("1" "100") products ("1100")) (raf-reaction neutral-calibration "lig:1:1000" reactants ("1" "1000") products ("11000")) (raf-reaction neutral-calibration "lig:1:1001" reactants ("1" "1001") products ("11001")) (raf-reaction neutral-calibration "lig:1:101" reactants ("1" "101") products ("1101")) (raf-reaction neutral-calibration "lig:1:1010" reactants ("1" "1010") products ("11010")) (raf-reaction neutral-calibration "lig:1:1011" reactants ("1" "1011") products ("11011")) (raf-reaction neutral-calibration "lig:1:11" reactants ("1" "11") products ("111")) (raf-reaction neutral-calibration "lig:1:110" reactants ("1" "110") products ("1110")) (raf-reaction neutral-calibration "lig:1:1100" reactants ("1" "1100") products ("11100")) (raf-reaction neutral-calibration "lig:1:1101" reactants ("1" "1101") products ("11101")) (raf-reaction neutral-calibration "lig:1:111" reactants ("1" "111") products ("1111")) (raf-reaction neutral-calibration "lig:1:1110" reactants ("1" "1110") products ("11110")) (raf-reaction neutral-calibration "lig:1:1111" reactants ("1" "1111") products ("11111")) (raf-reaction neutral-calibration "lig:10:0" reactants ("10" "0") products ("100")) (raf-reaction neutral-calibration "lig:10:00" reactants ("10" "00") products ("1000")) (raf-reaction neutral-calibration "lig:10:000" reactants ("10" "000") products ("10000")) (raf-reaction neutral-calibration "lig:10:001" reactants ("10" "001") products ("10001")) (raf-reaction neutral-calibration "lig:10:01" reactants ("10" "01") products ("1001")) (raf-reaction neutral-calibration "lig:10:010" reactants ("10" "010") products ("10010")) (raf-reaction neutral-calibration "lig:10:011" reactants ("10" "011") products ("10011")) (raf-reaction neutral-calibration "lig:10:1" reactants ("10" "1") products ("101")) (raf-reaction neutral-calibration "lig:10:10" reactants ("10" "10") products ("1010")) (raf-reaction neutral-calibration "lig:10:100" reactants ("10" "100") products ("10100")) (raf-reaction neutral-calibration "lig:10:101" reactants ("10" "101") products ("10101")) (raf-reaction neutral-calibration "lig:10:11" reactants ("10" "11") products ("1011")) (raf-reaction neutral-calibration "lig:10:110" reactants ("10" "110") products ("10110")) (raf-reaction neutral-calibration "lig:10:111" reactants ("10" "111") products ("10111")) (raf-reaction neutral-calibration "lig:100:0" reactants ("100" "0") products ("1000")) (raf-reaction neutral-calibration "lig:100:00" reactants ("100" "00") products ("10000")) (raf-reaction neutral-calibration "lig:100:01" reactants ("100" "01") products ("10001")) (raf-reaction neutral-calibration "lig:100:1" reactants ("100" "1") products ("1001")) (raf-reaction neutral-calibration "lig:100:10" reactants ("100" "10") products ("10010")) (raf-reaction neutral-calibration "lig:100:11" reactants ("100" "11") products ("10011")) (raf-reaction neutral-calibration "lig:1000:0" reactants ("1000" "0") products ("10000")) (raf-reaction neutral-calibration "lig:1000:1" reactants ("1000" "1") products ("10001")) (raf-reaction neutral-calibration "lig:1001:0" reactants ("1001" "0") products ("10010")) (raf-reaction neutral-calibration "lig:1001:1" reactants ("1001" "1") products ("10011")) (raf-reaction neutral-calibration "lig:101:0" reactants ("101" "0") products ("1010")) (raf-reaction neutral-calibration "lig:101:00" reactants ("101" "00") products ("10100")) (raf-reaction neutral-calibration "lig:101:01" reactants ("101" "01") products ("10101")) (raf-reaction neutral-calibration "lig:101:1" reactants ("101" "1") products ("1011")) (raf-reaction neutral-calibration "lig:101:10" reactants ("101" "10") products ("10110")) (raf-reaction neutral-calibration "lig:101:11" reactants ("101" "11") products ("10111")) (raf-reaction neutral-calibration "lig:1010:0" reactants ("1010" "0") products ("10100")) (raf-reaction neutral-calibration "lig:1010:1" reactants ("1010" "1") products ("10101")) (raf-reaction neutral-calibration "lig:1011:0" reactants ("1011" "0") products ("10110")) (raf-reaction neutral-calibration "lig:1011:1" reactants ("1011" "1") products ("10111")) (raf-reaction neutral-calibration "lig:11:0" reactants ("11" "0") products ("110")) (raf-reaction neutral-calibration "lig:11:00" reactants ("11" "00") products ("1100")) (raf-reaction neutral-calibration "lig:11:000" reactants ("11" "000") products ("11000")) (raf-reaction neutral-calibration "lig:11:001" reactants ("11" "001") products ("11001")) (raf-reaction neutral-calibration "lig:11:01" reactants ("11" "01") products ("1101")) (raf-reaction neutral-calibration "lig:11:010" reactants ("11" "010") products ("11010")) (raf-reaction neutral-calibration "lig:11:011" reactants ("11" "011") products ("11011")) (raf-reaction neutral-calibration "lig:11:1" reactants ("11" "1") products ("111")) (raf-reaction neutral-calibration "lig:11:10" reactants ("11" "10") products ("1110")) (raf-reaction neutral-calibration "lig:11:100" reactants ("11" "100") products ("11100")) (raf-reaction neutral-calibration "lig:11:101" reactants ("11" "101") products ("11101")) (raf-reaction neutral-calibration "lig:11:11" reactants ("11" "11") products ("1111")) (raf-reaction neutral-calibration "lig:11:110" reactants ("11" "110") products ("11110")) (raf-reaction neutral-calibration "lig:11:111" reactants ("11" "111") products ("11111")) (raf-reaction neutral-calibration "lig:110:0" reactants ("110" "0") products ("1100")) (raf-reaction neutral-calibration "lig:110:00" reactants ("110" "00") products ("11000")) (raf-reaction neutral-calibration "lig:110:01" reactants ("110" "01") products ("11001")) (raf-reaction neutral-calibration "lig:110:1" reactants ("110" "1") products ("1101")) (raf-reaction neutral-calibration "lig:110:10" reactants ("110" "10") products ("11010")) (raf-reaction neutral-calibration "lig:110:11" reactants ("110" "11") products ("11011")) (raf-reaction neutral-calibration "lig:1100:0" reactants ("1100" "0") products ("11000")) (raf-reaction neutral-calibration "lig:1100:1" reactants ("1100" "1") products ("11001")) (raf-reaction neutral-calibration "lig:1101:0" reactants ("1101" "0") products ("11010")) (raf-reaction neutral-calibration "lig:1101:1" reactants ("1101" "1") products ("11011")) (raf-reaction neutral-calibration "lig:111:0" reactants ("111" "0") products ("1110")) (raf-reaction neutral-calibration "lig:111:00" reactants ("111" "00") products ("11100")) (raf-reaction neutral-calibration "lig:111:01" reactants ("111" "01") products ("11101")) (raf-reaction neutral-calibration "lig:111:1" reactants ("111" "1") products ("1111")) (raf-reaction neutral-calibration "lig:111:10" reactants ("111" "10") products ("11110")) (raf-reaction neutral-calibration "lig:111:11" reactants ("111" "11") products ("11111")) (raf-reaction neutral-calibration "lig:1110:0" reactants ("1110" "0") products ("11100")) (raf-reaction neutral-calibration "lig:1110:1" reactants ("1110" "1") products ("11101")) (raf-reaction neutral-calibration "lig:1111:0" reactants ("1111" "0") products ("11110")) (raf-reaction neutral-calibration "lig:1111:1" reactants ("1111" "1") products ("11111"))) ((raf-catalysis neutral-calibration "0" "cleave:00110:1") (raf-catalysis neutral-calibration "0" "cleave:01110:3") (raf-catalysis neutral-calibration "0" "cleave:11000:1") (raf-catalysis neutral-calibration "0" "lig:0:01") (raf-catalysis neutral-calibration "0" "lig:01:010") (raf-catalysis neutral-calibration "0" "lig:1:1011") (raf-catalysis neutral-calibration "0" "lig:110:11") (raf-catalysis neutral-calibration "1" "cleave:0010:3") (raf-catalysis neutral-calibration "1" "cleave:01110:1") (raf-catalysis neutral-calibration "1" "cleave:10110:3") (raf-catalysis neutral-calibration "1" "lig:0:0010") (raf-catalysis neutral-calibration "1" "lig:001:1") (raf-catalysis neutral-calibration "1" "lig:1:101") (raf-catalysis neutral-calibration "1" "lig:11:1") (raf-catalysis neutral-calibration "00" "cleave:00010:1") (raf-catalysis neutral-calibration "00" "cleave:0110:3") (raf-catalysis neutral-calibration "00" "cleave:10100:2") (raf-catalysis neutral-calibration "00" "cleave:11110:3") (raf-catalysis neutral-calibration "00" "lig:000:00") (raf-catalysis neutral-calibration "00" "lig:1:01") (raf-catalysis neutral-calibration "00" "lig:101:11") (raf-catalysis neutral-calibration "01" "cleave:01010:1") (raf-catalysis neutral-calibration "01" "cleave:11100:2") (raf-catalysis neutral-calibration "01" "lig:0110:0") (raf-catalysis neutral-calibration "10" "cleave:0000:1") (raf-catalysis neutral-calibration "10" "cleave:0100:3") (raf-catalysis neutral-calibration "10" "cleave:10010:1") (raf-catalysis neutral-calibration "10" "cleave:11010:3") (raf-catalysis neutral-calibration "10" "lig:00:00") (raf-catalysis neutral-calibration "10" "lig:010:10") (raf-catalysis neutral-calibration "10" "lig:100:00") (raf-catalysis neutral-calibration "10" "lig:1111:0") (raf-catalysis neutral-calibration "11" "cleave:1000:3") (raf-catalysis neutral-calibration "11" "lig:0:1001") (raf-catalysis neutral-calibration "11" "lig:10:001") (raf-catalysis neutral-calibration "000" "cleave:0011:3") (raf-catalysis neutral-calibration "000" "cleave:01110:2") (raf-catalysis neutral-calibration "000" "cleave:1100:3") (raf-catalysis neutral-calibration "000" "lig:0:0011") (raf-catalysis neutral-calibration "000" "lig:01:01") (raf-catalysis neutral-calibration "000" "lig:1:1010") (raf-catalysis neutral-calibration "000" "lig:110:10") (raf-catalysis neutral-calibration "001" "cleave:0010:2") (raf-catalysis neutral-calibration "001" "cleave:01100:1") (raf-catalysis neutral-calibration "001" "cleave:10110:2") (raf-catalysis neutral-calibration "001" "cleave:11110:4") (raf-catalysis neutral-calibration "001" "lig:001:01") (raf-catalysis neutral-calibration "001" "lig:1:010") (raf-catalysis neutral-calibration "001" "lig:11:011") (raf-catalysis neutral-calibration "010" "cleave:0001:3") (raf-catalysis neutral-calibration "010" "cleave:0110:2") (raf-catalysis neutral-calibration "010" "cleave:10100:1") (raf-catalysis neutral-calibration "010" "cleave:11110:2") (raf-catalysis neutral-calibration "010" "lig:000:0") (raf-catalysis neutral-calibration "010" "lig:1:0011") (raf-catalysis neutral-calibration "010" "lig:101:10") (raf-catalysis neutral-calibration "011" "cleave:0000:2") (raf-catalysis neutral-calibration "011" "cleave:0101:3") (raf-catalysis neutral-calibration "011" "cleave:10010:2") (raf-catalysis neutral-calibration "011" "cleave:11100:1") (raf-catalysis neutral-calibration "011" "lig:00:000") (raf-catalysis neutral-calibration "011" "lig:011:11") (raf-catalysis neutral-calibration "011" "lig:100:01") (raf-catalysis neutral-calibration "100" "cleave:0100:2") (raf-catalysis neutral-calibration "100" "cleave:11010:2") (raf-catalysis neutral-calibration "100" "lig:010:1") (raf-catalysis neutral-calibration "100" "lig:1110:1") (raf-catalysis neutral-calibration "101" "cleave:00110:1") (raf-catalysis neutral-calibration "101" "cleave:1000:2") (raf-catalysis neutral-calibration "101" "cleave:11000:1") (raf-catalysis neutral-calibration "101" "lig:0:1000") (raf-catalysis neutral-calibration "101" "lig:01:010") (raf-catalysis neutral-calibration "101" "lig:10:000") (raf-catalysis neutral-calibration "101" "lig:110:11") (raf-catalysis neutral-calibration "110" "cleave:01110:1") (raf-catalysis neutral-calibration "110" "lig:0:0010") (raf-catalysis neutral-calibration "110" "lig:1:101") (raf-catalysis neutral-calibration "111" "cleave:0010:1") (raf-catalysis neutral-calibration "111" "cleave:0110:3") (raf-catalysis neutral-calibration "111" "cleave:10110:1") (raf-catalysis neutral-calibration "111" "cleave:11110:3") (raf-catalysis neutral-calibration "111" "lig:001:00") (raf-catalysis neutral-calibration "111" "lig:1:01") (raf-catalysis neutral-calibration "111" "lig:11:010") (raf-catalysis neutral-calibration "0000" "cleave:0001:2") (raf-catalysis neutral-calibration "0000" "cleave:01010:1") (raf-catalysis neutral-calibration "0000" "cleave:1010:3") (raf-catalysis neutral-calibration "0000" "cleave:11100:2") (raf-catalysis neutral-calibration "0000" "lig:00:111") (raf-catalysis neutral-calibration "0000" "lig:0110:0") (raf-catalysis neutral-calibration "0000" "lig:101:1") (raf-catalysis neutral-calibration "0001" "cleave:0000:1") (raf-catalysis neutral-calibration "0001" "cleave:0101:2") (raf-catalysis neutral-calibration "0001" "cleave:10010:1") (raf-catalysis neutral-calibration "0001" "cleave:1110:3") (raf-catalysis neutral-calibration "0001" "lig:00:00") (raf-catalysis neutral-calibration "0001" "lig:011:10") (raf-catalysis neutral-calibration "0001" "lig:100:00") (raf-catalysis neutral-calibration "0010" "cleave:0100:1") (raf-catalysis neutral-calibration "0010" "cleave:1000:3") (raf-catalysis neutral-calibration "0010" "cleave:11010:1") (raf-catalysis neutral-calibration "0010" "lig:0:1001") (raf-catalysis neutral-calibration "0010" "lig:010:01") (raf-catalysis neutral-calibration "0010" "lig:10:001") (raf-catalysis neutral-calibration "0010" "lig:1110:0") (raf-catalysis neutral-calibration "0011" "cleave:0011:3") (raf-catalysis neutral-calibration "0011" "cleave:1100:3") (raf-catalysis neutral-calibration "0011" "lig:01:01") (raf-catalysis neutral-calibration "0011" "lig:110:10") (raf-catalysis neutral-calibration "0100" "cleave:0010:2") (raf-catalysis neutral-calibration "0100" "cleave:0111:3") (raf-catalysis neutral-calibration "0100" "cleave:10110:2") (raf-catalysis neutral-calibration "0100" "lig:0:001") (raf-catalysis neutral-calibration "0100" "lig:001:01") (raf-catalysis neutral-calibration "0100" "lig:1:1001") (raf-catalysis neutral-calibration "0100" "lig:11:011") (raf-catalysis neutral-calibration "0101" "cleave:0110:2") (raf-catalysis neutral-calibration "0101" "cleave:11110:2") (raf-catalysis neutral-calibration "0101" "lig:1:0011") (raf-catalysis neutral-calibration "0110" "cleave:0001:1") (raf-catalysis neutral-calibration "0110" "cleave:0101:3") (raf-catalysis neutral-calibration "0110" "cleave:1010:2") (raf-catalysis neutral-calibration "0110" "cleave:11100:1") (raf-catalysis neutral-calibration "0110" "lig:00:110") (raf-catalysis neutral-calibration "0110" "lig:011:11") (raf-catalysis neutral-calibration "0110" "lig:101:01") (raf-catalysis neutral-calibration "0111" "cleave:000:2") (raf-catalysis neutral-calibration "0111" "cleave:0100:2") (raf-catalysis neutral-calibration "0111" "cleave:1001:3") (raf-catalysis neutral-calibration "0111" "cleave:11010:2") (raf-catalysis neutral-calibration "0111" "lig:00:0") (raf-catalysis neutral-calibration "0111" "lig:010:1") (raf-catalysis neutral-calibration "0111" "lig:100:0") (raf-catalysis neutral-calibration "0111" "lig:1110:1") (raf-catalysis neutral-calibration "1000" "cleave:010:2") (raf-catalysis neutral-calibration "1000" "cleave:1000:2") (raf-catalysis neutral-calibration "1000" "cleave:1101:3") (raf-catalysis neutral-calibration "1000" "lig:0:1000") (raf-catalysis neutral-calibration "1000" "lig:010:00") (raf-catalysis neutral-calibration "1000" "lig:10:000") (raf-catalysis neutral-calibration "1000" "lig:111:11") (raf-catalysis neutral-calibration "1001" "cleave:0011:2") (raf-catalysis neutral-calibration "1001" "cleave:01110:1") (raf-catalysis neutral-calibration "1001" "cleave:1100:2") (raf-catalysis neutral-calibration "1001" "lig:0:0010") (raf-catalysis neutral-calibration "1001" "lig:01:001") (raf-catalysis neutral-calibration "1001" "lig:1:101") (raf-catalysis neutral-calibration "1001" "lig:110:1") (raf-catalysis neutral-calibration "1010" "cleave:0010:1") (raf-catalysis neutral-calibration "1010" "cleave:10110:1") (raf-catalysis neutral-calibration "1010" "lig:001:00") (raf-catalysis neutral-calibration "1010" "lig:11:010") (raf-catalysis neutral-calibration "1011" "cleave:0001:2") (raf-catalysis neutral-calibration "1011" "cleave:0110:1") (raf-catalysis neutral-calibration "1011" "cleave:1010:3") (raf-catalysis neutral-calibration "1011" "cleave:11110:1") (raf-catalysis neutral-calibration "1011" "lig:00:111") (raf-catalysis neutral-calibration "1011" "lig:1:0010") (raf-catalysis neutral-calibration "1011" "lig:101:1") (raf-catalysis neutral-calibration "1100" "cleave:0101:2") (raf-catalysis neutral-calibration "1100" "cleave:1110:3") (raf-catalysis neutral-calibration "1100" "lig:011:10") (raf-catalysis neutral-calibration "1101" "cleave:000:1") (raf-catalysis neutral-calibration "1101" "cleave:0100:1") (raf-catalysis neutral-calibration "1101" "cleave:1001:2") (raf-catalysis neutral-calibration "1101" "cleave:11010:1") (raf-catalysis neutral-calibration "1101" "lig:0:1111") (raf-catalysis neutral-calibration "1101" "lig:010:01") (raf-catalysis neutral-calibration "1101" "lig:10:111") (raf-catalysis neutral-calibration "1101" "lig:1110:0") (raf-catalysis neutral-calibration "1110" "cleave:0011:3") (raf-catalysis neutral-calibration "1110" "cleave:1000:1") (raf-catalysis neutral-calibration "1110" "cleave:1100:3") (raf-catalysis neutral-calibration "1110" "lig:0:100") (raf-catalysis neutral-calibration "1110" "lig:01:01") (raf-catalysis neutral-calibration "1110" "lig:10:00") (raf-catalysis neutral-calibration "1110" "lig:110:10") (raf-catalysis neutral-calibration "1111" "cleave:0011:1") (raf-catalysis neutral-calibration "1111" "cleave:0111:3") (raf-catalysis neutral-calibration "1111" "cleave:1100:1") (raf-catalysis neutral-calibration "1111" "lig:0:001") (raf-catalysis neutral-calibration "1111" "lig:01:000") (raf-catalysis neutral-calibration "1111" "lig:1:1001") (raf-catalysis neutral-calibration "1111" "lig:110:01") (raf-catalysis neutral-calibration "00000" "cleave:001:2") (raf-catalysis neutral-calibration "00000" "cleave:0110:2") (raf-catalysis neutral-calibration "00000" "cleave:1011:3") (raf-catalysis neutral-calibration "00000" "cleave:11110:2") (raf-catalysis neutral-calibration "00000" "lig:001:0") (raf-catalysis neutral-calibration "00000" "lig:1:0011") (raf-catalysis neutral-calibration "00000" "lig:11:01") (raf-catalysis neutral-calibration "00001" "cleave:0001:1") (raf-catalysis neutral-calibration "00001" "cleave:1010:2") (raf-catalysis neutral-calibration "00001" "lig:00:110") (raf-catalysis neutral-calibration "00001" "lig:101:01") (raf-catalysis neutral-calibration "00010" "cleave:000:2") (raf-catalysis neutral-calibration "00010" "cleave:0101:1") (raf-catalysis neutral-calibration "00010" "cleave:1001:3") (raf-catalysis neutral-calibration "00010" "cleave:1110:2") (raf-catalysis neutral-calibration "00010" "lig:00:0") (raf-catalysis neutral-calibration "00010" "lig:011:1") (raf-catalysis neutral-calibration "00010" "lig:100:0") (raf-catalysis neutral-calibration "00011" "cleave:010:2") (raf-catalysis neutral-calibration "00011" "cleave:1101:3") (raf-catalysis neutral-calibration "00011" "lig:010:00") (raf-catalysis neutral-calibration "00011" "lig:111:11") (raf-catalysis neutral-calibration "00100" "cleave:0011:2") (raf-catalysis neutral-calibration "00100" "cleave:100:2") (raf-catalysis neutral-calibration "00100" "cleave:1100:2") (raf-catalysis neutral-calibration "00100" "lig:0:10") (raf-catalysis neutral-calibration "00100" "lig:01:001") (raf-catalysis neutral-calibration "00100" "lig:10:0") (raf-catalysis neutral-calibration "00100" "lig:110:1") (raf-catalysis neutral-calibration "00101" "cleave:0010:1") (raf-catalysis neutral-calibration "00101" "cleave:0111:2") (raf-catalysis neutral-calibration "00101" "cleave:10110:1") (raf-catalysis neutral-calibration "00101" "lig:0:0001") (raf-catalysis neutral-calibration "00101" "lig:001:00") (raf-catalysis neutral-calibration "00101" "lig:1:1000") (raf-catalysis neutral-calibration "00101" "lig:11:010") (raf-catalysis neutral-calibration "00110" "cleave:001:1") (raf-catalysis neutral-calibration "00110" "cleave:0110:1") (raf-catalysis neutral-calibration "00110" "cleave:1011:2") (raf-catalysis neutral-calibration "00110" "cleave:11110:1") (raf-catalysis neutral-calibration "00110" "lig:0001:1") (raf-catalysis neutral-calibration "00110" "lig:1:0010") (raf-catalysis neutral-calibration "00110" "lig:11:001") (raf-catalysis neutral-calibration "00111" "cleave:00001:4") (raf-catalysis neutral-calibration "00111" "cleave:0101:2") (raf-catalysis neutral-calibration "00111" "cleave:1010:1") (raf-catalysis neutral-calibration "00111" "cleave:1110:3") (raf-catalysis neutral-calibration "00111" "lig:00:11") (raf-catalysis neutral-calibration "00111" "lig:011:10") (raf-catalysis neutral-calibration "00111" "lig:101:00") (raf-catalysis neutral-calibration "01000" "cleave:000:1") (raf-catalysis neutral-calibration "01000" "cleave:1001:2") (raf-catalysis neutral-calibration "01000" "lig:0:1111") (raf-catalysis neutral-calibration "01000" "lig:10:111") (raf-catalysis neutral-calibration "01001" "cleave:010:1") (raf-catalysis neutral-calibration "01001" "cleave:1000:1") (raf-catalysis neutral-calibration "01001" "cleave:1101:2") (raf-catalysis neutral-calibration "01001" "lig:0:100") (raf-catalysis neutral-calibration "01001" "lig:010:0") (raf-catalysis neutral-calibration "01001" "lig:10:00") (raf-catalysis neutral-calibration "01001" "lig:111:10") (raf-catalysis neutral-calibration "01010" "cleave:0011:1") (raf-catalysis neutral-calibration "01010" "cleave:1100:1") (raf-catalysis neutral-calibration "01010" "lig:01:000") (raf-catalysis neutral-calibration "01010" "lig:110:01") (raf-catalysis neutral-calibration "01011" "cleave:001:2") (raf-catalysis neutral-calibration "01011" "cleave:0111:1") (raf-catalysis neutral-calibration "01011" "cleave:1011:3") (raf-catalysis neutral-calibration "01011" "lig:0:0000") (raf-catalysis neutral-calibration "01011" "lig:001:0") (raf-catalysis neutral-calibration "01011" "lig:1:100") (raf-catalysis neutral-calibration "01011" "lig:11:01") (raf-catalysis neutral-calibration "01100" "cleave:0001:1") (raf-catalysis neutral-calibration "01100" "cleave:011:2") (raf-catalysis neutral-calibration "01100" "cleave:1010:2") (raf-catalysis neutral-calibration "01100" "cleave:1111:3") (raf-catalysis neutral-calibration "01100" "lig:00:110") (raf-catalysis neutral-calibration "01100" "lig:1:001") (raf-catalysis neutral-calibration "01100" "lig:101:01") (raf-catalysis neutral-calibration "01101" "cleave:00001:3") (raf-catalysis neutral-calibration "01101" "cleave:0101:1") (raf-catalysis neutral-calibration "01101" "cleave:101:2") (raf-catalysis neutral-calibration "01101" "cleave:1110:2") (raf-catalysis neutral-calibration "01101" "lig:00:101") (raf-catalysis neutral-calibration "01101" "lig:011:1") (raf-catalysis neutral-calibration "01101" "lig:101:0") (raf-catalysis neutral-calibration "01110" "cleave:00:1") (raf-catalysis neutral-calibration "01110" "cleave:010:2") (raf-catalysis neutral-calibration "01110" "cleave:1001:1") (raf-catalysis neutral-calibration "01110" "cleave:1101:3") (raf-catalysis neutral-calibration "01110" "lig:0:1110") (raf-catalysis neutral-calibration "01110" "lig:010:00") (raf-catalysis neutral-calibration "01110" "lig:10:110") (raf-catalysis neutral-calibration "01110" "lig:111:11") (raf-catalysis neutral-calibration "01111" "cleave:100:2") (raf-catalysis neutral-calibration "01111" "lig:0:10") (raf-catalysis neutral-calibration "01111" "lig:10:0") (raf-catalysis neutral-calibration "10000" "cleave:00101:4") (raf-catalysis neutral-calibration "10000" "cleave:0111:2") (raf-catalysis neutral-calibration "10000" "cleave:110:2") (raf-catalysis neutral-calibration "10000" "lig:0:0001") (raf-catalysis neutral-calibration "10000" "lig:01:00") (raf-catalysis neutral-calibration "10000" "lig:1:1000") (raf-catalysis neutral-calibration "10000" "lig:110:00") (raf-catalysis neutral-calibration "10001" "cleave:001:1") (raf-catalysis neutral-calibration "10001" "cleave:1011:2") (raf-catalysis neutral-calibration "10001" "lig:0001:1") (raf-catalysis neutral-calibration "10001" "lig:11:001") (raf-catalysis neutral-calibration "10010" "cleave:00001:4") (raf-catalysis neutral-calibration "10010" "cleave:011:1") (raf-catalysis neutral-calibration "10010" "cleave:1010:1") (raf-catalysis neutral-calibration "10010" "cleave:1111:2") (raf-catalysis neutral-calibration "10010" "lig:00:11") (raf-catalysis neutral-calibration "10010" "lig:1:0001") (raf-catalysis neutral-calibration "10010" "lig:101:00") (raf-catalysis neutral-calibration "10011" "cleave:000:1") (raf-catalysis neutral-calibration "10011" "cleave:01001:4") (raf-catalysis neutral-calibration "10011" "cleave:1001:2") (raf-catalysis neutral-calibration "10011" "cleave:1110:1") (raf-catalysis neutral-calibration "10011" "lig:0:1111") (raf-catalysis neutral-calibration "10011" "lig:011:01") (raf-catalysis neutral-calibration "10011" "lig:10:111") (raf-catalysis neutral-calibration "10100" "cleave:010:1") (raf-catalysis neutral-calibration "10100" "cleave:10001:4") (raf-catalysis neutral-calibration "10100" "cleave:1101:2") (raf-catalysis neutral-calibration "10100" "lig:0:111") (raf-catalysis neutral-calibration "10100" "lig:010:0") (raf-catalysis neutral-calibration "10100" "lig:10:11") (raf-catalysis neutral-calibration "10100" "lig:111:10") (raf-catalysis neutral-calibration "10101" "cleave:0011:1") (raf-catalysis neutral-calibration "10101" "cleave:100:1") (raf-catalysis neutral-calibration "10101" "cleave:1100:1") (raf-catalysis neutral-calibration "10101" "lig:0:1") (raf-catalysis neutral-calibration "10101" "lig:01:000") (raf-catalysis neutral-calibration "10101" "lig:1:1111") (raf-catalysis neutral-calibration "10101" "lig:110:01") (raf-catalysis neutral-calibration "10110" "cleave:0111:1") (raf-catalysis neutral-calibration "10110" "lig:0:0000") (raf-catalysis neutral-calibration "10110" "lig:1:100") (raf-catalysis neutral-calibration "10111" "cleave:00011:4") (raf-catalysis neutral-calibration "10111" "cleave:011:2") (raf-catalysis neutral-calibration "10111" "cleave:1011:1") (raf-catalysis neutral-calibration "10111" "cleave:1111:3") (raf-catalysis neutral-calibration "10111" "lig:0001:0") (raf-catalysis neutral-calibration "10111" "lig:1:001") (raf-catalysis neutral-calibration "10111" "lig:11:000") (raf-catalysis neutral-calibration "11000" "cleave:00001:3") (raf-catalysis neutral-calibration "11000" "cleave:101:2") (raf-catalysis neutral-calibration "11000" "lig:00:101") (raf-catalysis neutral-calibration "11000" "lig:101:0") (raf-catalysis neutral-calibration "11001" "cleave:00:1") (raf-catalysis neutral-calibration "11001" "cleave:01001:3") (raf-catalysis neutral-calibration "11001" "cleave:1001:1") (raf-catalysis neutral-calibration "11001" "cleave:111:2") (raf-catalysis neutral-calibration "11001" "lig:0:1110") (raf-catalysis neutral-calibration "11001" "lig:011:00") (raf-catalysis neutral-calibration "11001" "lig:10:110") (raf-catalysis neutral-calibration "11010" "cleave:01:1") (raf-catalysis neutral-calibration "11010" "cleave:100:2") (raf-catalysis neutral-calibration "11010" "cleave:1101:1") (raf-catalysis neutral-calibration "11010" "lig:0:10") (raf-catalysis neutral-calibration "11010" "lig:01:111") (raf-catalysis neutral-calibration "11010" "lig:10:0") (raf-catalysis neutral-calibration "11010" "lig:111:1") (raf-catalysis neutral-calibration "11011" "cleave:00101:4") (raf-catalysis neutral-calibration "11011" "cleave:10:1") (raf-catalysis neutral-calibration "11011" "cleave:110:2") (raf-catalysis neutral-calibration "11011" "lig:0:0111") (raf-catalysis neutral-calibration "11011" "lig:01:00") (raf-catalysis neutral-calibration "11011" "lig:1:1110") (raf-catalysis neutral-calibration "11011" "lig:110:00") (raf-catalysis neutral-calibration "11100" "cleave:001:1") (raf-catalysis neutral-calibration "11100" "cleave:01101:4") (raf-catalysis neutral-calibration "11100" "cleave:1011:2") (raf-catalysis neutral-calibration "11100" "lig:0:000") (raf-catalysis neutral-calibration "11100" "lig:0001:1") (raf-catalysis neutral-calibration "11100" "lig:1:10") (raf-catalysis neutral-calibration "11100" "lig:11:001") (raf-catalysis neutral-calibration "11101" "cleave:011:1") (raf-catalysis neutral-calibration "11101" "cleave:1111:2") (raf-catalysis neutral-calibration "11101" "lig:1:0001") (raf-catalysis neutral-calibration "11110" "cleave:00001:2") (raf-catalysis neutral-calibration "11110" "cleave:01001:4") (raf-catalysis neutral-calibration "11110" "cleave:101:1") (raf-catalysis neutral-calibration "11110" "cleave:1110:1") (raf-catalysis neutral-calibration "11110" "lig:00:100") (raf-catalysis neutral-calibration "11110" "lig:011:01") (raf-catalysis neutral-calibration "11110" "lig:1001:1") (raf-catalysis neutral-calibration "11111" "cleave:10001:4") (raf-catalysis neutral-calibration "11111" "lig:0:111") (raf-catalysis neutral-calibration "11111" "lig:10:11")))) endpoints (neutral-ablation-endpoints baseline-reachability (raf-reachability-summary reachable false first-time censored) ablated-reachability (raf-reachability-summary reachable false first-time censored) baseline-causal (neutral-causal-endpoints raf-events 0 evidence-bins 0 integrated-nonfood 10400.0) ablated-causal (neutral-causal-endpoints raf-events 0 evidence-bins 0 integrated-nonfood 10400.0) delta (neutral-causal-endpoint-delta raf-events 0 evidence-bins 0 integrated-nonfood 0.0)))

@@ -1,0 +1,18 @@
+{
+  "attempt_id": "neutral-v2-g1001-a001",
+  "completed_utc": "2026-08-04T21:14:29.385762+00:00",
+  "exit_code": 0,
+  "id": "finite-size-control-L4-f2-16-V100-g1001-d2004",
+  "index": 103,
+  "query": "queries/103-finite-size-control-L4-f2-16-V100-g1001-d2004.metta",
+  "query_sha256": "289bae916ea0bb390d4d98ade99d9830cca9b1b40b49862ddf0c791e8585c4e9",
+  "runner_sha256": "b0ee9930c7fbca5d221ff2e31a7cce30bc8e8902f463c5f80be2a971414e3aae",
+  "runtime_identity": "petta=4ce1d0ea58855abb772b911278312c8846e5cc08;run_sh=b0ee9930c7fbca5d221ff2e31a7cce30bc8e8902f463c5f80be2a971414e3aae;main_pl=cc381df25e778edd0a355ef945a9675f7f3d79ebd5fc5124a2d67bf8d02bc99c;swipl=9.3.36-x86_64-linux;mork_ffi=absent",
+  "schema": "neutral-calibration-row-receipt-v2",
+  "source_commit": "4b7c6de4ec8eb71502588d2714579c7d55d4bd50",
+  "source_manifest_sha256": "c92912f250ec9ecb44df160e3fc13d7480acfdf97eea7b791989a496326a441b",
+  "stderr": "raw/103-finite-size-control-L4-f2-16-V100-g1001-d2004.stderr",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "raw/103-finite-size-control-L4-f2-16-V100-g1001-d2004.stdout",
+  "stdout_sha256": "5c11bc3c99d83309aa54570a7ab69c8a75a5b6c1bd2e90bae7672cffb4b52df3"
+}

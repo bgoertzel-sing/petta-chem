@@ -1,0 +1,18 @@
+{
+  "attempt_id": "neutral-v2-g1001-a001",
+  "completed_utc": "2026-08-04T22:41:05.050410+00:00",
+  "exit_code": 0,
+  "id": "finite-size-control-L6-f2-6-V100-g1001-d2001",
+  "index": 116,
+  "query": "queries/116-finite-size-control-L6-f2-6-V100-g1001-d2001.metta",
+  "query_sha256": "107ad4b3c51d6e9566990fe7cdb296268308179586c5101ac50bb437d3643413",
+  "runner_sha256": "b0ee9930c7fbca5d221ff2e31a7cce30bc8e8902f463c5f80be2a971414e3aae",
+  "runtime_identity": "petta=4ce1d0ea58855abb772b911278312c8846e5cc08;run_sh=b0ee9930c7fbca5d221ff2e31a7cce30bc8e8902f463c5f80be2a971414e3aae;main_pl=cc381df25e778edd0a355ef945a9675f7f3d79ebd5fc5124a2d67bf8d02bc99c;swipl=9.3.36-x86_64-linux;mork_ffi=absent",
+  "schema": "neutral-calibration-row-receipt-v2",
+  "source_commit": "4b7c6de4ec8eb71502588d2714579c7d55d4bd50",
+  "source_manifest_sha256": "c92912f250ec9ecb44df160e3fc13d7480acfdf97eea7b791989a496326a441b",
+  "stderr": "raw/116-finite-size-control-L6-f2-6-V100-g1001-d2001.stderr",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "raw/116-finite-size-control-L6-f2-6-V100-g1001-d2001.stdout",
+  "stdout_sha256": "432cb00644b60ebb1ffe98284f5da49f2d8146e986eae5a633e5bf755e4a89b0"
+}

@@ -1,0 +1,18 @@
+{
+  "attempt_id": "neutral-v2-g1003-a001",
+  "completed_utc": "2026-08-12T06:26:49.302466+00:00",
+  "exit_code": 0,
+  "id": "primary-transition-L5-f2-16-V100-g1003-d2002",
+  "index": 65,
+  "query": "queries/065-primary-transition-L5-f2-16-V100-g1003-d2002.metta",
+  "query_sha256": "ca62ec29a66e9d17bc6c5f36dbc4cce77fa4a5f71112cd506333ff74b9698cba",
+  "runner_sha256": "b0ee9930c7fbca5d221ff2e31a7cce30bc8e8902f463c5f80be2a971414e3aae",
+  "runtime_identity": "petta=4ce1d0ea58855abb772b911278312c8846e5cc08;run_sh=b0ee9930c7fbca5d221ff2e31a7cce30bc8e8902f463c5f80be2a971414e3aae;main_pl=cc381df25e778edd0a355ef945a9675f7f3d79ebd5fc5124a2d67bf8d02bc99c;swipl=9.3.36-x86_64-linux;mork_ffi=absent",
+  "schema": "neutral-calibration-row-receipt-v2",
+  "source_commit": "4b7c6de4ec8eb71502588d2714579c7d55d4bd50",
+  "source_manifest_sha256": "18b5a961215cd1d321e7919ae8b335d3b8e665772b19690935617f6bf98ade64",
+  "stderr": "raw/065-primary-transition-L5-f2-16-V100-g1003-d2002.stderr",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "raw/065-primary-transition-L5-f2-16-V100-g1003-d2002.stdout",
+  "stdout_sha256": "1edcb0e47f18bbc52cee613e4b9b0ee7793df1a6c3bd65c981ab6214383f2346"
+}

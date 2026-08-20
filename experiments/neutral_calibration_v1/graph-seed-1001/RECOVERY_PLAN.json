@@ -1,0 +1,94 @@
+{
+  "archived_directory": "raw-interrupted-20260802T2118PDT",
+  "created_utc": "2026-08-03T04:14:13.791220+00:00",
+  "graph_seed": 1001,
+  "inventory": [
+    {
+      "kind": "file",
+      "path": "000-primary-transition-L5-f2-0-V100-g1001-d2001.stderr",
+      "size_bytes": 0
+    },
+    {
+      "kind": "file",
+      "path": "000-primary-transition-L5-f2-0-V100-g1001-d2001.stdout",
+      "size_bytes": 168128
+    },
+    {
+      "kind": "file",
+      "path": "001-primary-transition-L5-f2-0-V100-g1001-d2002.stderr",
+      "size_bytes": 0
+    },
+    {
+      "kind": "file",
+      "path": "001-primary-transition-L5-f2-0-V100-g1001-d2002.stdout",
+      "size_bytes": 168126
+    },
+    {
+      "kind": "file",
+      "path": "002-primary-transition-L5-f2-0-V100-g1001-d2003.stderr",
+      "size_bytes": 0
+    },
+    {
+      "kind": "file",
+      "path": "002-primary-transition-L5-f2-0-V100-g1001-d2003.stdout",
+      "size_bytes": 168128
+    },
+    {
+      "kind": "file",
+      "path": "003-primary-transition-L5-f2-0-V100-g1001-d2004.stderr",
+      "size_bytes": 0
+    },
+    {
+      "kind": "file",
+      "path": "003-primary-transition-L5-f2-0-V100-g1001-d2004.stdout",
+      "size_bytes": 168128
+    },
+    {
+      "kind": "file",
+      "path": "004-primary-transition-L5-f2-1-V100-g1001-d2001.stderr",
+      "size_bytes": 0
+    },
+    {
+      "kind": "file",
+      "path": "004-primary-transition-L5-f2-1-V100-g1001-d2001.stdout",
+      "size_bytes": 169918
+    },
+    {
+      "kind": "file",
+      "path": "005-primary-transition-L5-f2-1-V100-g1001-d2002.stderr",
+      "size_bytes": 0
+    },
+    {
+      "kind": "file",
+      "path": "005-primary-transition-L5-f2-1-V100-g1001-d2002.stdout",
+      "size_bytes": 169916
+    },
+    {
+      "kind": "file",
+      "path": "006-primary-transition-L5-f2-1-V100-g1001-d2003.stderr",
+      "size_bytes": 0
+    },
+    {
+      "kind": "file",
+      "path": "006-primary-transition-L5-f2-1-V100-g1001-d2003.stdout",
+      "size_bytes": 169916
+    },
+    {
+      "kind": "file",
+      "path": "007-primary-transition-L5-f2-1-V100-g1001-d2004.stderr",
+      "size_bytes": 0
+    },
+    {
+      "kind": "file",
+      "path": "007-primary-transition-L5-f2-1-V100-g1001-d2004.stdout",
+      "size_bytes": 131822
+    }
+  ],
+  "inventory_basis": "lstat-only-no-file-content-read",
+  "planned_run_count": 276,
+  "policy": "restart-entire-shard-no-prefix-reuse",
+  "raw_content_opened": false,
+  "schema": "neutral-calibration-whole-shard-recovery-v1",
+  "source_manifest_sha256": "c92912f250ec9ecb44df160e3fc13d7480acfdf97eea7b791989a496326a441b",
+  "status": "whole-shard-restart-authorized-unrun"
+}
