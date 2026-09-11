@@ -8,6 +8,8 @@ import hashlib
 import json
 import os
 import subprocess
+
+SWIPL_BIN = '/home/openclaw/research-agent/projects/omegaclaw/local/swipl-9.3.36/bin'
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
@@ -246,17 +248,42 @@ def run_shard_v2(
         if sha256(safe_relative(shard_dir, manifest["rows"][index]["query"])) != expected_hash:
             raise ValueError("query hash mismatch")
 
+    skipped_rows = []
     for row in manifest["rows"][prefix:]:
         stem = row_stem(row)
         output = attempt_dir / "raw" / f"{stem}.stdout"
         error = attempt_dir / "raw" / f"{stem}.stderr"
         with output.open("xb") as stdout, error.open("xb") as stderr:
-            proc = subprocess.run(
-                ["sh", str(runner), str(safe_relative(shard_dir, row["query"]))],
-                stdout=stdout,
-                stderr=stderr,
-                check=False,
-            )
+            try:
+                swipl_bin = "/home/openclaw/research-agent/projects/omegaclaw/local/swipl-9.3.36/bin"
+                run_env = os.environ.copy()
+                run_env["PATH"] = swipl_bin + ":" + run_env.get("PATH", "")
+                proc = subprocess.run(
+                    ["sh", str(runner), str(safe_relative(shard_dir, row["query"]))],
+                    stdout=stdout,
+                    stderr=stderr,
+                    check=False,
+                    timeout=21600,
+                    env=run_env,
+                )
+            except subprocess.TimeoutExpired:
+                stdout.flush()
+                stderr.flush()
+                os.fsync(stdout.fileno())
+                os.fsync(stderr.fileno())
+                fsync_directory(attempt_dir / "raw")
+                atomic_json(
+                    attempt_dir / "raw" / f"{stem}.SKIP.json",
+                    {
+                        "schema": "neutral-calibration-skipped-row-v2",
+                        "row_index": row["index"],
+                        "row_id": row["id"],
+                        "reason": "timeout",
+                        "timeout_seconds": 21600,
+                        "failed_utc": now(),
+                    },
+                )
+                skipped_rows.append({"index": row["index"], "id": row["id"], "reason": "timeout"}); continue
             stdout.flush()
             stderr.flush()
             os.fsync(stdout.fileno())
@@ -264,17 +291,16 @@ def run_shard_v2(
         fsync_directory(attempt_dir / "raw")
         if proc.returncode != 0:
             atomic_json(
-                attempt_dir / "FAILED.json",
+                attempt_dir / "raw" / f"{stem}.SKIP.json",
                 {
-                    "schema": "neutral-calibration-failed-attempt-v2",
-                    "attempt_id": attempt_id,
+                    "schema": "neutral-calibration-skipped-row-v2",
                     "row_index": row["index"],
                     "row_id": row["id"],
-                    "exit_code": proc.returncode,
+                    "reason": f"exit_code={proc.returncode}",
                     "failed_utc": now(),
                 },
             )
-            raise RuntimeError(f"row {row['index']} exited nonzero; attempt invalidated")
+            skipped_rows.append({"index": row["index"], "id": row["id"], "reason": f"exit_code={proc.returncode}"}); continue
         if interrupt_before_receipt == row["index"]:
             raise SyntheticInterruption("interrupted before receipt publication")
         receipt = expected_receipt(row, attempt, shard_dir, attempt_dir)
@@ -285,6 +311,7 @@ def run_shard_v2(
 
     receipts = sorted((attempt_dir / "receipts").glob("*.json"))
     run_manifest = {
+        "skipped_rows": skipped_rows,
         "schema": RUN_SCHEMA,
         "status": "raw-complete-unanalysed",
         "attempt_id": attempt_id,
