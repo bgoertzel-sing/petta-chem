@@ -12,7 +12,6 @@ MAX_SLOTS=10
 
 log() { echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) $*"; }
 
-# Count currently running shards
 count_running() {
   local count=0
   for s in $(seq 1001 1032); do
@@ -23,15 +22,14 @@ count_running() {
   echo $count
 }
 
-# Check if a shard needs resuming (has ATTEMPT.json but no RUN_MANIFEST.json, or no ATTEMPT.json at all)
 needs_resume() {
   local shard=$1
   local dir="$ROOT/experiments/neutral_calibration_v2/graph-seed-${shard}/attempt-001"
   if [ -f "$dir/RUN_MANIFEST.json" ]; then
-    return 1  # already complete
+    return 1
   fi
   if tmux has-session -t "petta-neutral-v2-g${shard}-a001" 2>/dev/null; then
-    return 1  # already running
+    return 1
   fi
   return 0
 }
@@ -41,23 +39,15 @@ resume_shard() {
   local shard_dir="$ROOT/experiments/neutral_calibration_v1/graph-seed-${shard}"
   local attempt_dir="$ROOT/experiments/neutral_calibration_v2/graph-seed-${shard}/attempt-001"
   local attempt_id="neutral-v2-g${shard}-001"
+  local session_name="petta-neutral-v2-g${shard}-a001"
   
   mkdir -p "$attempt_dir/receipts"
   
   log "Resuming g${shard}..."
-  tmux new-session -d -s "petta-neutral-v2-g${shard}-a001" \
-    "cd '$ROOT' && python3 '$ROOT/scripts/run_neutral_calibration_shard_v2.py' \
-      --shard-dir '$shard_dir' \
-      --runner '$RUNNER' \
-      --attempt-dir '$attempt_dir' \
-      --attempt-id '$attempt_id' \
-      --source-commit '$SOURCE_COMMIT' \
-      --runtime-identity '$RUNTIME_IDENTITY' \
-      2>&1 | tee -a '$ROOT/experiments/neutral_calibration_v2/graph-seed-${shard}/orch-watchdog.log'
-  log "g${shard} resumed in tmux session petta-neutral-v2-g${shard}-a001"
+  tmux new-session -d -s "$session_name" "cd '$ROOT' && python3 '$ROOT/scripts/run_neutral_calibration_shard_v2.py' --shard-dir '$shard_dir' --runner '$RUNNER' --attempt-dir '$attempt_dir' --attempt-id '$attempt_id' --source-commit '$SOURCE_COMMIT' --runtime-identity '$RUNTIME_IDENTITY' 2>&1 | tee -a '$ROOT/experiments/neutral_calibration_v2/graph-seed-${shard}/orch-watchdog.log'"
+  log "g${shard} resumed in tmux session $session_name"
 }
 
-# Main loop
 log "Checking for stalled shards to resume..."
 
 STALLED_SHARDS="1003 1010 1011 1012 1013"
@@ -70,7 +60,7 @@ for shard in $STALLED_SHARDS; do
       break
     fi
     resume_shard "$shard"
-    sleep 5  # stagger starts
+    sleep 5
   else
     log "g${shard}: already complete or running, skipping."
   fi
