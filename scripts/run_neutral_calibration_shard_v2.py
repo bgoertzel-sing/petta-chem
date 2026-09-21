@@ -229,19 +229,40 @@ def validate_prefix(manifest: dict, shard_dir: Path, attempt_dir: Path, attempt:
         raise ValueError("unexpected raw artifact type")
     extras = actual_raw - expected_raw
     if extras:
-        next_index = prefix
-        if next_index >= manifest["run_count"]:
-            raise ValueError("unexpected raw file after complete prefix")
-        next_stem = row_stem(manifest["rows"][next_index])
-        allowed = {f"raw/{next_stem}.stdout", f"raw/{next_stem}.stderr"}
-        if not extras <= allowed:
-            raise ValueError("unexpected raw file outside next unreceipted row")
-        quarantine = attempt_dir / "quarantine" / f"row-{next_index:03d}-{uuid.uuid4().hex}"
-        quarantine.mkdir(parents=True)
-        for relative in sorted(extras):
-            os.replace(attempt_dir / relative, quarantine / Path(relative).name)
-        fsync_directory(raw_dir)
-        fsync_directory(quarantine)
+        # Quarantine stale stdout/stderr for any row beyond prefix (from crashed runs)
+        # These will be re-processed when the shard resumes
+        quarantined = set()
+        for rel in sorted(extras):
+            if rel.endswith((".stdout", ".stderr")):
+                # Parse row index from filename: raw/NNN-...
+                fname = Path(rel).name
+                try:
+                    row_idx = int(fname.split("-")[0])
+                except ValueError:
+                    continue
+                if row_idx >= prefix:
+                    quarantine = attempt_dir / "quarantine" / f"row-{row_idx:03d}-{uuid.uuid4().hex}"
+                    quarantine.mkdir(parents=True)
+                    os.replace(attempt_dir / rel, quarantine / Path(rel).name)
+                    quarantined.add(rel)
+        if quarantined:
+            fsync_directory(raw_dir)
+        remaining = extras - quarantined
+        if remaining:
+            # Still have unexpected files (e.g. SKIP.json for wrong row)
+            next_index = prefix
+            if next_index >= manifest["run_count"]:
+                raise ValueError("unexpected raw file after complete prefix")
+            next_stem = row_stem(manifest["rows"][next_index])
+            allowed = {f"raw/{next_stem}.stdout", f"raw/{next_stem}.stderr"}
+            if not remaining <= allowed:
+                raise ValueError(f"unexpected raw file outside next unreceipted row: {sorted(remaining)}")
+            quarantine = attempt_dir / "quarantine" / f"row-{next_index:03d}-{uuid.uuid4().hex}"
+            quarantine.mkdir(parents=True)
+            for relative in sorted(remaining):
+                os.replace(attempt_dir / relative, quarantine / Path(relative).name)
+            fsync_directory(raw_dir)
+            fsync_directory(quarantine)
     return prefix
 
 
