@@ -8,8 +8,6 @@ import hashlib
 import json
 import os
 import subprocess
-
-SWIPL_BIN = '/home/openclaw/research-agent/projects/omegaclaw/local/swipl-9.3.36/bin'
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
@@ -141,9 +139,9 @@ def expected_receipt(row: dict, attempt: dict, shard_dir: Path, attempt_dir: Pat
         "query": row["query"],
         "query_sha256": sha256(query),
         "stdout": str(stdout.relative_to(attempt_dir)),
-        "stdout_sha256": sha256(stdout) if stdout.exists() else None,
+        "stdout_sha256": sha256(stdout),
         "stderr": str(stderr.relative_to(attempt_dir)),
-        "stderr_sha256": sha256(stderr) if stderr.exists() else None,
+        "stderr_sha256": sha256(stderr),
         "exit_code": 0,
     }
 
@@ -157,113 +155,46 @@ def validate_prefix(manifest: dict, shard_dir: Path, attempt_dir: Path, attempt:
     if len(receipt_files) > manifest["run_count"]:
         raise ValueError("too many receipts")
 
-    # Build maps: row_index -> receipt_path and row_index -> skip_path
-    receipt_by_index: dict[int, Path] = {}
-    skip_by_index: dict[int, Path] = {}
-    for path in receipt_files:
-        idx = int(path.name.split("-")[0])
-        receipt_by_index[idx] = path
-    if raw_dir.exists():
-        for path in raw_dir.iterdir():
-            if path.is_file() and path.name.endswith(".SKIP.json"):
-                idx = int(path.name.split("-")[0])
-                skip_by_index[idx] = path
-
-    # Find longest contiguous prefix [0..N-1] where each row has receipt OR skip
-    prefix = 0
-    for i in range(manifest["run_count"]):
-        if i in receipt_by_index or i in skip_by_index:
-            prefix = i + 1
-        else:
-            break
-
-    # Validate receipts within the prefix
     expected_raw = set()
-    for i in range(prefix):
-        if i in receipt_by_index:
-            row = manifest["rows"][i]
-            receipt_path = receipt_by_index[i]
-            if receipt_path.name != f"{row_stem(row)}.json":
-                raise ValueError(f"receipt name mismatch at row {i}")
-            receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
-            if receipt.get("exit_code") != 0:
-                raise ValueError("nonzero receipt invalidates attempt")
-            expected = expected_receipt(row, attempt, shard_dir, attempt_dir)
-            for key, value in expected.items():
-                if value is None:
-                    continue
-                if receipt.get(key) != value:
-                    raise ValueError(f"receipt mismatch: {key}")
-            if not isinstance(receipt.get("completed_utc"), str):
-                raise ValueError("receipt lacks completion timestamp")
-            expected_raw.update({receipt["stdout"], receipt["stderr"]})
-        # For skipped rows, the SKIP.json itself is expected raw
-        # Also allow stdout/stderr which may be leftover from a previous failed run
-        if i in skip_by_index:
-            row = manifest["rows"][i]
-            stem = row_stem(row)
-            expected_raw.add(f"raw/{stem}.SKIP.json")
-            expected_raw.add(f"raw/{stem}.stdout")
-            expected_raw.add(f"raw/{stem}.stderr")
+    for position, receipt_path in enumerate(receipt_files):
+        row = manifest["rows"][position]
+        if receipt_path.name != f"{row_stem(row)}.json":
+            raise ValueError("receipt gap, duplicate, or ordering mismatch")
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+        if receipt.get("exit_code") != 0:
+            raise ValueError("nonzero receipt invalidates attempt")
+        expected = expected_receipt(row, attempt, shard_dir, attempt_dir)
+        for key, value in expected.items():
+            if receipt.get(key) != value:
+                raise ValueError(f"receipt mismatch: {key}")
+        if not isinstance(receipt.get("completed_utc"), str):
+            raise ValueError("receipt lacks completion timestamp")
+        expected_raw.update({receipt["stdout"], receipt["stderr"]})
 
-    # Also allow SKIP files for rows beyond the prefix (pre-existing skips from previous runs)
-    # Also allow their stdout/stderr files which may be leftover from a previous failed run
-    for idx in skip_by_index:
-        if idx >= prefix:
-            row = manifest["rows"][idx]
-            stem = row_stem(row)
-            expected_raw.add(f"raw/{stem}.SKIP.json")
-            expected_raw.add(f"raw/{stem}.stdout")
-            expected_raw.add(f"raw/{stem}.stderr")
-
-    # Check for unexpected raw files
-    actual_raw = set()
-    if raw_dir.exists() and any(True for _ in raw_dir.iterdir()):
-        actual_raw = {
-            str(path.relative_to(attempt_dir))
-            for path in raw_dir.iterdir()
-            if path.is_file()
-        }
-    unexpected_types = [path for path in raw_dir.iterdir() if not path.is_file()] if raw_dir.exists() else []
+    actual_raw = {
+        str(path.relative_to(attempt_dir))
+        for path in raw_dir.iterdir()
+        if path.is_file()
+    }
+    unexpected_types = [path for path in raw_dir.iterdir() if not path.is_file()]
     if unexpected_types:
         raise ValueError("unexpected raw artifact type")
     extras = actual_raw - expected_raw
     if extras:
-        # Quarantine stale stdout/stderr for any row beyond prefix (from crashed runs)
-        # These will be re-processed when the shard resumes
-        quarantined = set()
-        for rel in sorted(extras):
-            if rel.endswith((".stdout", ".stderr")):
-                # Parse row index from filename: raw/NNN-...
-                fname = Path(rel).name
-                try:
-                    row_idx = int(fname.split("-")[0])
-                except ValueError:
-                    continue
-                if row_idx >= prefix:
-                    quarantine = attempt_dir / "quarantine" / f"row-{row_idx:03d}-{uuid.uuid4().hex}"
-                    quarantine.mkdir(parents=True)
-                    os.replace(attempt_dir / rel, quarantine / Path(rel).name)
-                    quarantined.add(rel)
-        if quarantined:
-            fsync_directory(raw_dir)
-        remaining = extras - quarantined
-        if remaining:
-            # Still have unexpected files (e.g. SKIP.json for wrong row)
-            next_index = prefix
-            if next_index >= manifest["run_count"]:
-                raise ValueError("unexpected raw file after complete prefix")
-            next_stem = row_stem(manifest["rows"][next_index])
-            allowed = {f"raw/{next_stem}.stdout", f"raw/{next_stem}.stderr"}
-            if not remaining <= allowed:
-                raise ValueError(f"unexpected raw file outside next unreceipted row: {sorted(remaining)}")
-            quarantine = attempt_dir / "quarantine" / f"row-{next_index:03d}-{uuid.uuid4().hex}"
-            quarantine.mkdir(parents=True)
-            for relative in sorted(remaining):
-                os.replace(attempt_dir / relative, quarantine / Path(relative).name)
-            fsync_directory(raw_dir)
-            fsync_directory(quarantine)
-    return prefix
+        next_index = len(receipt_files)
+        if next_index >= manifest["run_count"]:
+            raise ValueError("unexpected raw file after complete prefix")
+        next_stem = row_stem(manifest["rows"][next_index])
+        allowed = {f"raw/{next_stem}.stdout", f"raw/{next_stem}.stderr"}
+        if not extras <= allowed:
+            raise ValueError("unexpected raw file outside next unreceipted row")
+        quarantine = attempt_dir / "quarantine" / f"row-{next_index:03d}-{uuid.uuid4().hex}"
+        quarantine.mkdir(parents=True)
+        for relative in sorted(extras):
+            os.replace(attempt_dir / relative, quarantine / Path(relative).name)
+        fsync_directory(raw_dir)
+        fsync_directory(quarantine)
+    return len(receipt_files)
 
 
 def run_shard_v2(
@@ -315,62 +246,17 @@ def run_shard_v2(
         if sha256(safe_relative(shard_dir, manifest["rows"][index]["query"])) != expected_hash:
             raise ValueError("query hash mismatch")
 
-    skipped_rows = []
-    # Collect pre-existing skip reasons from previous runs
-    preexisting_skips = {}
-    if (attempt_dir / "raw").exists():
-        for path in (attempt_dir / "raw").iterdir():
-            if path.is_file() and path.name.endswith(".SKIP.json"):
-                idx = int(path.name.split("-")[0])
-                try:
-                    skip_data = json.loads(path.read_text(encoding="utf-8"))
-                    preexisting_skips[idx] = skip_data.get("reason", "pre-existing skip")
-                except (json.JSONDecodeError, OSError):
-                    preexisting_skips[idx] = "pre-existing skip"
     for row in manifest["rows"][prefix:]:
         stem = row_stem(row)
-        # Skip rows that already have a .SKIP.json from a previous run
-        if row["index"] in preexisting_skips:
-            skipped_rows.append({"index": row["index"], "id": row["id"], "reason": preexisting_skips[row["index"]]})
-            continue
         output = attempt_dir / "raw" / f"{stem}.stdout"
         error = attempt_dir / "raw" / f"{stem}.stderr"
-        # Remove stale raw files from previous failed attempt
-        if output.exists():
-            output.unlink()
-        if error.exists():
-            error.unlink()
         with output.open("xb") as stdout, error.open("xb") as stderr:
-            try:
-                swipl_bin = "/home/openclaw/research-agent/projects/omegaclaw/local/swipl-9.3.36/bin"
-                run_env = os.environ.copy()
-                run_env["PATH"] = swipl_bin + ":" + run_env.get("PATH", "")
-                proc = subprocess.run(
-                    ["sh", str(runner), str(safe_relative(shard_dir, row["query"]))],
-                    stdout=stdout,
-                    stderr=stderr,
-                    check=False,
-                    timeout=21600,
-                    env=run_env,
-                )
-            except subprocess.TimeoutExpired:
-                stdout.flush()
-                stderr.flush()
-                os.fsync(stdout.fileno())
-                os.fsync(stderr.fileno())
-                fsync_directory(attempt_dir / "raw")
-                atomic_json(
-                    attempt_dir / "raw" / f"{stem}.SKIP.json",
-                    {
-                        "schema": "neutral-calibration-skipped-row-v2",
-                        "row_index": row["index"],
-                        "row_id": row["id"],
-                        "reason": "timeout",
-                        "timeout_seconds": 21600,
-                        "failed_utc": now(),
-                    },
-                )
-                skipped_rows.append({"index": row["index"], "id": row["id"], "reason": "timeout"}); continue
+            proc = subprocess.run(
+                ["sh", str(runner), str(safe_relative(shard_dir, row["query"]))],
+                stdout=stdout,
+                stderr=stderr,
+                check=False,
+            )
             stdout.flush()
             stderr.flush()
             os.fsync(stdout.fileno())
@@ -378,16 +264,17 @@ def run_shard_v2(
         fsync_directory(attempt_dir / "raw")
         if proc.returncode != 0:
             atomic_json(
-                attempt_dir / "raw" / f"{stem}.SKIP.json",
+                attempt_dir / "FAILED.json",
                 {
-                    "schema": "neutral-calibration-skipped-row-v2",
+                    "schema": "neutral-calibration-failed-attempt-v2",
+                    "attempt_id": attempt_id,
                     "row_index": row["index"],
                     "row_id": row["id"],
-                    "reason": f"exit_code={proc.returncode}",
+                    "exit_code": proc.returncode,
                     "failed_utc": now(),
                 },
             )
-            skipped_rows.append({"index": row["index"], "id": row["id"], "reason": f"exit_code={proc.returncode}"}); continue
+            raise RuntimeError(f"row {row['index']} exited nonzero; attempt invalidated")
         if interrupt_before_receipt == row["index"]:
             raise SyntheticInterruption("interrupted before receipt publication")
         receipt = expected_receipt(row, attempt, shard_dir, attempt_dir)
@@ -398,7 +285,6 @@ def run_shard_v2(
 
     receipts = sorted((attempt_dir / "receipts").glob("*.json"))
     run_manifest = {
-        "skipped_rows": skipped_rows,
         "schema": RUN_SCHEMA,
         "status": "raw-complete-unanalysed",
         "attempt_id": attempt_id,
