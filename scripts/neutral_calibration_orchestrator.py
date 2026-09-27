@@ -90,6 +90,7 @@ NICE = 10
 CPU_LIST = "1-7"  # CPU0 excluded (keeps gateway/UI responsive)
 RECEIPT_SCHEMA = "neutral-calibration-row-receipt-v2"
 ATTEMPT_RE = re.compile(r"^attempt-(\d{3})$")
+ALERTS_ENABLED = True  # main() disables for --dry-run
 
 ALERT_KINDS = {
     "complete-validated", "validation-failed", "failed", "invalid", "interrupted",
@@ -138,7 +139,7 @@ def record_event(state: dict, kind: str, detail: dict) -> None:
     event = {"utc": now(), "kind": kind, **detail}
     state["events"].append(event)
     state["events"] = state["events"][-500:]
-    if kind in ALERT_KINDS:
+    if kind in ALERT_KINDS and ALERTS_ENABLED:
         with ALERTS_PATH.open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(event, sort_keys=True) + "\n")
 
@@ -603,6 +604,8 @@ def main() -> int:
     args = parser.parse_args()
     if args.max_slots > 4:
         parser.error("plan amendment caps concurrency at 4")
+    global ALERTS_ENABLED
+    ALERTS_ENABLED = not args.dry_run
     if args.preflight_only:
         problems = identity_preflight()
         print("identity preflight:", "PASS" if not problems else problems)
