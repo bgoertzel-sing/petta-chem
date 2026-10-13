@@ -677,6 +677,22 @@
   (neutral-ssa-raf-reachability-summary
     () (lig-01) ("0" "1" "01"))
   (raf-reachability-summary reachable False first-time censored))
+; Empty-RAF guard (v3): an empty selected maximal RAF is never "reached", even
+; though every (zero) RAF rule has trivially fired and the food closure is
+; positive at the first event.  Before the guard this returned reachable True
+; first-time 2.0 (vacuous).
+!(test
+  (neutral-ssa-raf-reachability-summary
+    ((ssa-timed-transition
+       index 0 time 2.0
+       event (influx "0")
+       before-counts (("0" 1) ("1" 1))
+       after-counts (("0" 2) ("1" 1))))
+    () ("0" "1"))
+  (raf-reachability-summary reachable False first-time censored))
+!(test
+  (neutral-ssa-raf-reachability-summary () () ("0" "1"))
+  (raf-reachability-summary reachable False first-time censored))
 !(test
   (neutral-ssa-nonfood-count
     (("0" 20) ("1" 20) ("01" 3) ("10" 4))

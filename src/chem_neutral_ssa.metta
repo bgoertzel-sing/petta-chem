@@ -828,10 +828,18 @@
                  $raf-rule-ids $closure-molecules
                  $next-fired-rule-ids)))))))
 
+; Empty-RAF guard (neutral v3, Ben Goertzel option A, Telegram msg 7897,
+; 2026-10-13): reachability is defined relative to the selected maximal RAF
+; (docs/neutral_crs_oracle_protocol.md section 6).  If that RAF is empty there
+; is nothing to reach, so the result is reachable False / censored instead of
+; the vacuous True the loop would report at the first event.  Baseline and
+; ablated reachability both go through this function.
 (= (neutral-ssa-raf-reachability-summary
       $timed-transitions $raf-rule-ids $closure-molecules)
-   (neutral-ssa-raf-reachability-loop
-     $timed-transitions $raf-rule-ids $closure-molecules ()))
+   (if (== $raf-rule-ids ())
+       (raf-reachability-summary reachable False first-time censored)
+       (neutral-ssa-raf-reachability-loop
+         $timed-transitions $raf-rule-ids $closure-molecules ())))
 
 ; Time-integrated nonfood population for the frozen causal/productive
 ; endpoint.  Counts are piecewise constant between timed transitions.  The
