@@ -64,10 +64,12 @@ class GoodRows(unittest.TestCase):
     def test_real_v3_smoke_rows_pass_if_present(self):
         for path in sorted(FIX.glob("v3_smoke_good_*.stdout")):
             parts = path.stem.split("-")
-            exp = {"L": int(parts[-6][1:]), "f_twice": int(parts[-5]), "volume": int(parts[-4][1:]),
-                   "graph_seed": int(parts[-3][1:]), "dynamics_seed": int(parts[-2][1:])}
+            exp = {"L": int(parts[-6][1:]), "f_twice": int(parts[-4]), "volume": int(parts[-3][1:]),
+                   "graph_seed": int(parts[-2][1:]), "dynamics_seed": int(parts[-1][1:])}
             r = v.validate_files(path, path.with_suffix(".stderr"), exp)
             self.assertEqual(r["verdict"], "pass", (path.name, r["reasons"]))
+            self.assertGreater(r["summary"]["raf_size"], 0)
+        self.assertTrue(list(FIX.glob("v3_smoke_good_*.stdout")), "real v3 positive fixture missing")
 
 
 class BadRows(unittest.TestCase):
