@@ -1,0 +1,426 @@
+{
+ "exclusions": 670,
+ "maximal_raf_field_status": {
+  "unreduced:neutral-raf-reaction-ids": 6672
+ },
+ "missing_rows": 2160,
+ "per_attempt": [
+  {
+   "attempt": "attempt-001",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1001,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-001",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1002,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-002",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1003,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-001",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1004,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-001",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1005,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-001",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1006,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-001",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1007,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-001",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1008,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-001",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1009,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-001",
+   "excluded": {
+    "raw-lost": 200
+   },
+   "hash_verified": 0,
+   "kind": "partial-canonical",
+   "parsed": 0,
+   "receipts": 200,
+   "seed": 1010,
+   "selected": 0,
+   "skip_files": 76
+  },
+  {
+   "attempt": "attempt-003",
+   "excluded": {},
+   "hash_verified": 202,
+   "kind": "partial-canonical",
+   "parsed": 202,
+   "receipts": 202,
+   "seed": 1011,
+   "selected": 202,
+   "skip_files": 75
+  },
+  {
+   "attempt": "attempt-003",
+   "excluded": {},
+   "hash_verified": 132,
+   "kind": "partial-canonical",
+   "parsed": 132,
+   "receipts": 132,
+   "seed": 1012,
+   "selected": 132,
+   "skip_files": 1
+  },
+  {
+   "attempt": "attempt-001",
+   "excluded": {
+    "raw-lost": 30
+   },
+   "hash_verified": 136,
+   "kind": "partial-canonical",
+   "parsed": 136,
+   "receipts": 166,
+   "seed": 1012,
+   "selected": 136,
+   "skip_files": 110
+  },
+  {
+   "attempt": "attempt-001",
+   "excluded": {
+    "raw-lost": 218
+   },
+   "hash_verified": 0,
+   "kind": "partial-canonical",
+   "parsed": 0,
+   "receipts": 218,
+   "seed": 1013,
+   "selected": 0,
+   "skip_files": 58
+  },
+  {
+   "attempt": "attempt-002.stale-20260916212158",
+   "excluded": {},
+   "hash_verified": 22,
+   "kind": "partial-stale",
+   "parsed": 22,
+   "receipts": 22,
+   "seed": 1014,
+   "selected": 22,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-003",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1015,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-002",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1016,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-003",
+   "excluded": {},
+   "hash_verified": 8,
+   "kind": "partial-canonical",
+   "parsed": 8,
+   "receipts": 8,
+   "seed": 1017,
+   "selected": 8,
+   "skip_files": 68
+  },
+  {
+   "attempt": "attempt-002.stale-20260916212158",
+   "excluded": {},
+   "hash_verified": 22,
+   "kind": "partial-stale",
+   "parsed": 22,
+   "receipts": 22,
+   "seed": 1018,
+   "selected": 22,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-002.stale-20260916212158",
+   "excluded": {},
+   "hash_verified": 17,
+   "kind": "partial-stale",
+   "parsed": 17,
+   "receipts": 17,
+   "seed": 1019,
+   "selected": 17,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-002.stale-20260916212158",
+   "excluded": {},
+   "hash_verified": 17,
+   "kind": "partial-stale",
+   "parsed": 17,
+   "receipts": 17,
+   "seed": 1020,
+   "selected": 17,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-001",
+   "excluded": {
+    "raw-lost": 222
+   },
+   "hash_verified": 44,
+   "kind": "partial-canonical",
+   "parsed": 44,
+   "receipts": 266,
+   "seed": 1021,
+   "selected": 44,
+   "skip_files": 10
+  },
+  {
+   "attempt": "attempt-002",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1022,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-002",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1023,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-002",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1024,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-004",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1025,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-002",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1026,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-004",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1027,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-004",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1028,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-002",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1029,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-002",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1030,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-002",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1031,
+   "selected": 276,
+   "skip_files": 0
+  },
+  {
+   "attempt": "attempt-002",
+   "excluded": {},
+   "hash_verified": 276,
+   "kind": "validated-complete",
+   "parsed": 276,
+   "receipts": 276,
+   "seed": 1032,
+   "selected": 276,
+   "skip_files": 0
+  }
+ ],
+ "provenance": {
+  "extractor_sha256": "fc806620a567ef055ee8859f96d221884484decb6604a8598a2307f03c8f7ec2",
+  "extractor_version": "neutral-calibration-real-exploratory-v1",
+  "label": "EXPLORATORY (Ben D1=B authorization 2026-10-13); not the frozen confirmatory analysis",
+  "orchestrator_state_sha256": "bccb03420bb772f79d376bf2b41c34119c27c080213e16cbdb29b00e085529d7",
+  "repo_head": "21e2395d2e51bd66dd475d43d6a7b6c2b1e8f036"
+ },
+ "rows_selected": 6672,
+ "seeds_with_zero_rows": [
+  1010,
+  1013
+ ],
+ "source_manifest_sha256": {
+  "1001": "c92912f250ec9ecb44df160e3fc13d7480acfdf97eea7b791989a496326a441b",
+  "1002": "eed88a91ee92d48b902cc248c5f993334c18c2ff1b7af4834ff1c51f862bf242",
+  "1003": "18b5a961215cd1d321e7919ae8b335d3b8e665772b19690935617f6bf98ade64",
+  "1004": "bca03063368962dec156585ba861cb4e98506bc636360b179d2de6be393996ac",
+  "1005": "72fcf7bbac3083eeff533fc192d9bea428f6fbc8ec5ca456c75b902202500acd",
+  "1006": "6c5fd1c54d74a9a771c6351238f657600895655ab58e4fee6005044bec9ceb61",
+  "1007": "0954837560be4d0522da444a816c12e52f8e34339e1fe9f0005c31db89678667",
+  "1008": "bc5b248fa166ff88a363d332d56a007f247208b3fcda042a511b61a73cd50c59",
+  "1009": "4751ae191ef71f62afe269f984d30fe2432781f7e70c6f88c0dea75bdf8e5b26",
+  "1010": "4327a6771838d4110f50fd453de2e72c0eba3ce5faff4fa50382495d657a3c74",
+  "1011": "578acb8bbe92ea9a776cb961410ee77ca46f27306d47a7c016582645b19c744f",
+  "1012": "c61948af6b8fbb595b671d88b75e667ccda75bd5430bed3752c2eb2a12fbc51f",
+  "1013": "bdab02d8dfdf9157b148ef0d48dbf3cc8792bf85e904dce69dae3ecca4318b6c",
+  "1014": "54de29fd550f8135474d275112319673c7a379c76a32e51818b5591a24fc5aaf",
+  "1015": "66f36b35d6ba7f0aa987c492bd1cba12721968f57e3aa49c2e07539bf139f18f",
+  "1016": "b38c78532f93e76445ee11ddb83281e188b87d5fe02152d8af1297673a44955a",
+  "1017": "f4188221d4d505cf53fdf811800e44e22ff763b0f6b3f9a8b5932fbb07415214",
+  "1018": "0ed2503cfb2eee048795396491be3b3699e23145ce77c299b7d790638ce5c926",
+  "1019": "367b2a25174f772ba425fcc57a054f0e6075106d3256ebba1808412a06b9ec62",
+  "1020": "88fab10051043f31e039697f7585f1a855b327691c62963ad9a03f3341ac9d7d",
+  "1021": "1707d87f41e51b6647330c4e9def506ef25012965de2cd63b7adda202cf19861",
+  "1022": "4dff97f9b8126be243eedde5574e8961a47f88cb613631296c536fcc08117419",
+  "1023": "7de1cea080df3d4b299c689aee6b55ec2efcf6602d4382ad8425df47fa64f700",
+  "1024": "71d56cad171548da543f8c67157d43d01327c1ec0227eb497247653ded5a9624",
+  "1025": "1ba2d04e4f70258308ad7d3dd0ec14d029a23b479ad3869cc4625b5350108c92",
+  "1026": "7f9a750836c28d08183fe9e186f3bd440eab6b042bec0b2e46ffc4aefb7e793b",
+  "1027": "399dd7e188f0d0439a75a4d53692f1298edf6020b16d689f033dce435dd77b61",
+  "1028": "ae4bdc5a8fd815a4626bf8455e8ea94ffbb65ca4ff64816a66abb5a3b7a83c90",
+  "1029": "f815c2c5828c11358c50a2119d181d21a24269e12c488a008c74d3f2dee695ba",
+  "1030": "872e7ae0d40a69bc9ae74a5ad9628c86e5aa45c1ce69e14b0e2352828a36d8db",
+  "1031": "a63155f5835d687fbb7bb4962c67392a4dde83847150e2abac325fc7f554c8ea",
+  "1032": "29c02db3d20764c079a275e7998d03f80de29a07c28bf34af897e567013c9968"
+ }
+}

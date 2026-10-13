@@ -1,0 +1,7863 @@
+{
+ "label": "EXPLORATORY - not the frozen confirmatory analysis",
+ "analysis_seed": 73020260727,
+ "bootstrap_resamples": 10000,
+ "canonical_rows_sha256": "4c3fd9758218a5d6c780e28bbefe843bf9d461a1384c9972df28e9b6ee92f4bb",
+ "script_sha256": "58f9d5fcf7dfcff13747e66a4922cf245d6baf85f51d7fe50a091a232949c3be",
+ "panels": {
+  "primary-transition/core": {
+   "n_rows": 1496,
+   "n_graph_units": 374,
+   "n_graphs": 22,
+   "curve": [
+    {
+     "L": 5,
+     "V": 100,
+     "f": 0.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 3.475602975139495,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3.475602975139495,
+      3.475602975139495
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 0.5,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 38.88873852975084,
+     "baseline_integrated_nonfood_mean_boot95": [
+      4.019443875131014,
+      107.9867769377354
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 1.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 45.54049221947015,
+     "baseline_integrated_nonfood_mean_boot95": [
+      6.467559040135938,
+      116.76542104111536
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 1.5,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 50.13575045878144,
+     "baseline_integrated_nonfood_mean_boot95": [
+      10.286812746936164,
+      121.55045502595453
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 2.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 87.84490658541849,
+     "baseline_integrated_nonfood_mean_boot95": [
+      25.279585397079824,
+      173.29517393670943
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 2.5,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 80.72324890976995,
+     "baseline_integrated_nonfood_mean_boot95": [
+      24.310371692303423,
+      161.0431504163812
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 3.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 83.72943728380547,
+     "baseline_integrated_nonfood_mean_boot95": [
+      28.01708142851312,
+      162.7693900742524
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 3.5,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 104.25086963171223,
+     "baseline_integrated_nonfood_mean_boot95": [
+      37.468503082344725,
+      187.9134471316236
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 4.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 173.90594173411435,
+     "baseline_integrated_nonfood_mean_boot95": [
+      68.03586834395229,
+      302.9424292856457
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 4.5,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 245.70618338288094,
+     "baseline_integrated_nonfood_mean_boot95": [
+      110.00420550014584,
+      400.6393159618801
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 5.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 204.59879693217843,
+     "baseline_integrated_nonfood_mean_boot95": [
+      93.63627444177398,
+      334.01686868360974
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 5.5,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 318.7225386803788,
+     "baseline_integrated_nonfood_mean_boot95": [
+      146.10074906873461,
+      531.1752982736022
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 6.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 846.8608891455341,
+     "baseline_integrated_nonfood_mean_boot95": [
+      262.49437252285867,
+      1601.7264058773842
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 6.5,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1266.7411264858417,
+     "baseline_integrated_nonfood_mean_boot95": [
+      412.8108242248959,
+      2342.5288943064197
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 7.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1127.5440381853136,
+     "baseline_integrated_nonfood_mean_boot95": [
+      444.839522957168,
+      1916.8771111227675
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 7.5,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1201.288122912041,
+     "baseline_integrated_nonfood_mean_boot95": [
+      416.4491276593709,
+      2156.6294078047567
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 8.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1215.6761866970494,
+     "baseline_integrated_nonfood_mean_boot95": [
+      476.02061683967185,
+      2116.101440795256
+     ]
+    }
+   ],
+   "f50": "not-estimable: structural RAF field unavailable in 17/17 control points"
+  },
+  "primary-transition/sensitivity_all": {
+   "n_rows": 1711,
+   "n_graph_units": 432,
+   "n_graphs": 29,
+   "curve": [
+    {
+     "L": 5,
+     "V": 100,
+     "f": 0.0,
+     "n_graphs": 29,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 3.475602975139495,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3.475602975139495,
+      3.475602975139495
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 0.5,
+     "n_graphs": 29,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 30.655931676962016,
+     "baseline_integrated_nonfood_mean_boot95": [
+      4.110544214128498,
+      83.15603100871522
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 1.0,
+     "n_graphs": 28,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 40.81268898522967,
+     "baseline_integrated_nonfood_mean_boot95": [
+      8.373600030933625,
+      99.02852762446332
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 1.5,
+     "n_graphs": 28,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 41.326029541694254,
+     "baseline_integrated_nonfood_mean_boot95": [
+      9.944821633379998,
+      98.00491832094866
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 2.0,
+     "n_graphs": 28,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 71.00335194969446,
+     "baseline_integrated_nonfood_mean_boot95": [
+      20.852899263964915,
+      140.79584606817423
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 2.5,
+     "n_graphs": 26,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 146.43055145679915,
+     "baseline_integrated_nonfood_mean_boot95": [
+      30.52556695374145,
+      324.20133395773814
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 3.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 118.53262895146743,
+     "baseline_integrated_nonfood_mean_boot95": [
+      36.71300056499371,
+      224.11729080545132
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 3.5,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 115.57863519076932,
+     "baseline_integrated_nonfood_mean_boot95": [
+      47.5627891922018,
+      197.12265070645861
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 4.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 171.56279033426685,
+     "baseline_integrated_nonfood_mean_boot95": [
+      73.72113707078178,
+      290.75303915642
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 4.5,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 241.0968270659487,
+     "baseline_integrated_nonfood_mean_boot95": [
+      113.06961517088213,
+      389.2610138317953
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 5.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 189.1229320104343,
+     "baseline_integrated_nonfood_mean_boot95": [
+      85.02924871513473,
+      312.3323803837049
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 5.5,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 293.7363619462847,
+     "baseline_integrated_nonfood_mean_boot95": [
+      130.76014467167576,
+      490.2737389659258
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 6.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 803.272441018898,
+     "baseline_integrated_nonfood_mean_boot95": [
+      262.23188051068576,
+      1500.2976784591017
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 6.5,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1197.5791268976664,
+     "baseline_integrated_nonfood_mean_boot95": [
+      414.40918466189527,
+      2198.3707691138347
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 7.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1069.3314238218602,
+     "baseline_integrated_nonfood_mean_boot95": [
+      446.1299597776715,
+      1801.3098513079228
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 7.5,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1136.9301681546933,
+     "baseline_integrated_nonfood_mean_boot95": [
+      435.82559396231164,
+      2006.2068169062345
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 8.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1150.1192266242847,
+     "baseline_integrated_nonfood_mean_boot95": [
+      481.20393445212244,
+      1981.3336776301594
+     ]
+    }
+   ],
+   "f50": "not-estimable: structural RAF field unavailable in 17/17 control points"
+  },
+  "finite-size/core": {
+   "n_rows": 2376,
+   "n_graph_units": 594,
+   "n_graphs": 22,
+   "curve": [
+    {
+     "L": 4,
+     "V": 100,
+     "f": 0.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 3.475634214675147,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3.475634214675147,
+      3.475634214675147
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 1.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 413.29640623671224,
+     "baseline_integrated_nonfood_mean_boot95": [
+      27.035082352645812,
+      1077.629840251841
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 2.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 411.2375657489763,
+     "baseline_integrated_nonfood_mean_boot95": [
+      135.52434706595471,
+      740.9496536209601
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 3.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 860.2634405301727,
+     "baseline_integrated_nonfood_mean_boot95": [
+      476.8885699185505,
+      1287.1364701168445
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 4.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 2219.612552877919,
+     "baseline_integrated_nonfood_mean_boot95": [
+      1321.1536322890663,
+      3203.616793962729
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 5.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 2362.6033352893455,
+     "baseline_integrated_nonfood_mean_boot95": [
+      1443.5081782419825,
+      3455.0640156849026
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 6.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 2471.9441946016,
+     "baseline_integrated_nonfood_mean_boot95": [
+      1369.9673827900397,
+      3825.8298774683913
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 7.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1944.0956094908986,
+     "baseline_integrated_nonfood_mean_boot95": [
+      1108.6107572405292,
+      3008.213493349529
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 8.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 2668.287698465851,
+     "baseline_integrated_nonfood_mean_boot95": [
+      1643.0755859930573,
+      4167.5408695349815
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 0.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 3.475602975139495,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3.475602975139495,
+      3.475602975139495
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 1.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 45.54049221947015,
+     "baseline_integrated_nonfood_mean_boot95": [
+      6.467559040135938,
+      116.76542104111536
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 2.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 87.84490658541849,
+     "baseline_integrated_nonfood_mean_boot95": [
+      25.279585397079824,
+      173.29517393670943
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 3.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 83.72943728380547,
+     "baseline_integrated_nonfood_mean_boot95": [
+      28.01708142851312,
+      162.7693900742524
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 4.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 173.90594173411435,
+     "baseline_integrated_nonfood_mean_boot95": [
+      68.03586834395229,
+      302.9424292856457
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 5.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 204.59879693217843,
+     "baseline_integrated_nonfood_mean_boot95": [
+      93.63627444177398,
+      334.01686868360974
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 6.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 846.8608891455341,
+     "baseline_integrated_nonfood_mean_boot95": [
+      262.49437252285867,
+      1601.7264058773842
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 7.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1127.5440381853136,
+     "baseline_integrated_nonfood_mean_boot95": [
+      444.839522957168,
+      1916.8771111227675
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 8.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1215.6761866970494,
+     "baseline_integrated_nonfood_mean_boot95": [
+      476.02061683967185,
+      2116.101440795256
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 0.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 3.4755500931004017,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3.4755500931004017,
+      3.4755500931004017
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 1.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 31.430311778526175,
+     "baseline_integrated_nonfood_mean_boot95": [
+      4.086139869517953,
+      85.22542465410501
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 2.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 32.39886194685677,
+     "baseline_integrated_nonfood_mean_boot95": [
+      4.420022300136873,
+      86.52201772935155
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 3.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 31.92875300139228,
+     "baseline_integrated_nonfood_mean_boot95": [
+      4.53794979797642,
+      85.80650424340513
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 4.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 33.49157632849721,
+     "baseline_integrated_nonfood_mean_boot95": [
+      5.235968065785572,
+      87.7820861040507
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 5.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 32.71500370534931,
+     "baseline_integrated_nonfood_mean_boot95": [
+      5.067486744704623,
+      86.70109301505322
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 6.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 35.386436057800786,
+     "baseline_integrated_nonfood_mean_boot95": [
+      5.921813222158722,
+      90.45333827793665
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 7.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 35.82868926895672,
+     "baseline_integrated_nonfood_mean_boot95": [
+      6.857326975781828,
+      85.349497573004
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 8.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 37.77862707863785,
+     "baseline_integrated_nonfood_mean_boot95": [
+      7.597527452123291,
+      88.27674168312217
+     ]
+    }
+   ]
+  },
+  "finite-size/sensitivity_all": {
+   "n_rows": 2628,
+   "n_graph_units": 660,
+   "n_graphs": 29,
+   "curve": [
+    {
+     "L": 4,
+     "V": 100,
+     "f": 0.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 3.4756342146751464,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3.4756342146751464,
+      3.4756342146751464
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 1.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 390.87487596889633,
+     "baseline_integrated_nonfood_mean_boot95": [
+      35.563185630809386,
+      1015.9989708158328
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 2.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 392.15777643406426,
+     "baseline_integrated_nonfood_mean_boot95": [
+      140.04005349561103,
+      688.3215533864783
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 3.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 799.5558464707997,
+     "baseline_integrated_nonfood_mean_boot95": [
+      439.08375247587935,
+      1189.3852951013498
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 4.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 2304.0606844099607,
+     "baseline_integrated_nonfood_mean_boot95": [
+      1463.099732455,
+      3225.251646900169
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 5.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 2278.8961342847483,
+     "baseline_integrated_nonfood_mean_boot95": [
+      1420.3161061810238,
+      3298.6949662811685
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 6.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 2438.994165296201,
+     "baseline_integrated_nonfood_mean_boot95": [
+      1429.2712558790781,
+      3693.3192927330983
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 7.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 2124.136416860593,
+     "baseline_integrated_nonfood_mean_boot95": [
+      1247.8353000167401,
+      3205.0877364595767
+     ]
+    },
+    {
+     "L": 4,
+     "V": 100,
+     "f": 8.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 2509.467784708045,
+     "baseline_integrated_nonfood_mean_boot95": [
+      1539.9428584898149,
+      3888.591386729651
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 0.0,
+     "n_graphs": 29,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 3.475602975139495,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3.475602975139495,
+      3.475602975139495
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 1.0,
+     "n_graphs": 28,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 40.81268898522967,
+     "baseline_integrated_nonfood_mean_boot95": [
+      8.373600030933625,
+      99.02852762446332
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 2.0,
+     "n_graphs": 28,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 71.00335194969446,
+     "baseline_integrated_nonfood_mean_boot95": [
+      20.852899263964915,
+      140.79584606817423
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 3.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 118.53262895146743,
+     "baseline_integrated_nonfood_mean_boot95": [
+      36.71300056499371,
+      224.11729080545132
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 4.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 171.56279033426685,
+     "baseline_integrated_nonfood_mean_boot95": [
+      73.72113707078178,
+      290.75303915642
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 5.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 189.1229320104343,
+     "baseline_integrated_nonfood_mean_boot95": [
+      85.02924871513473,
+      312.3323803837049
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 6.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 803.272441018898,
+     "baseline_integrated_nonfood_mean_boot95": [
+      262.23188051068576,
+      1500.2976784591017
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 7.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1069.3314238218602,
+     "baseline_integrated_nonfood_mean_boot95": [
+      446.1299597776715,
+      1801.3098513079228
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 8.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1150.1192266242847,
+     "baseline_integrated_nonfood_mean_boot95": [
+      481.20393445212244,
+      1981.3336776301594
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 0.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 3.475550093100402,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3.475550093100402,
+      3.475550093100402
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 1.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 31.041993420872455,
+     "baseline_integrated_nonfood_mean_boot95": [
+      4.297370117407934,
+      81.93027131866118
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 2.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 32.101693297708074,
+     "baseline_integrated_nonfood_mean_boot95": [
+      4.979679594137859,
+      83.0162228517497
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 3.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 31.67772697731446,
+     "baseline_integrated_nonfood_mean_boot95": [
+      4.848089516397667,
+      82.73647228833428
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 4.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 33.66489761283381,
+     "baseline_integrated_nonfood_mean_boot95": [
+      6.214377430788749,
+      84.86470233594993
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 5.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 32.67262631729707,
+     "baseline_integrated_nonfood_mean_boot95": [
+      5.857267660135649,
+      83.41189895821124
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 6.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 33.056375438315,
+     "baseline_integrated_nonfood_mean_boot95": [
+      6.049138452270575,
+      83.81163680110582
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 7.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 33.29053418435979,
+     "baseline_integrated_nonfood_mean_boot95": [
+      6.705030627251523,
+      79.59785792880862
+     ]
+    },
+    {
+     "L": 6,
+     "V": 100,
+     "f": 8.0,
+     "n_graphs": 23,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 36.49386426571,
+     "baseline_integrated_nonfood_mean_boot95": [
+      7.759334813127895,
+      85.19757691116921
+     ]
+    }
+   ]
+  },
+  "population-scaling/core": {
+   "n_rows": 2376,
+   "n_graph_units": 594,
+   "n_graphs": 22,
+   "curve": [
+    {
+     "L": 5,
+     "V": 50,
+     "f": 0.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 155.38316198636588,
+     "baseline_integrated_nonfood_mean_boot95": [
+      155.38316198636588,
+      155.38316198636588
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 1.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 6425.245342792197,
+     "baseline_integrated_nonfood_mean_boot95": [
+      2880.036572951055,
+      10822.702894695667
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 2.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 7367.1203462988315,
+     "baseline_integrated_nonfood_mean_boot95": [
+      2564.4135259423306,
+      13925.569788509669
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 3.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 4207.29734329357,
+     "baseline_integrated_nonfood_mean_boot95": [
+      2295.980123657221,
+      6869.1458569656115
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 4.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 6644.211394105925,
+     "baseline_integrated_nonfood_mean_boot95": [
+      2701.2439734174586,
+      12114.859395440692
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 5.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 5408.485809685592,
+     "baseline_integrated_nonfood_mean_boot95": [
+      2703.7921194100663,
+      9574.837795820064
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 6.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 7271.781391891477,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3151.286895352257,
+      14163.17524451019
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 7.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 4258.788741076602,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3039.114709947089,
+      5529.127248646013
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 8.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 4140.4012010112965,
+     "baseline_integrated_nonfood_mean_boot95": [
+      2843.3988253694174,
+      5544.411757011567
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 0.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 3.475602975139495,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3.475602975139495,
+      3.475602975139495
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 1.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 45.54049221947015,
+     "baseline_integrated_nonfood_mean_boot95": [
+      6.467559040135938,
+      116.76542104111536
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 2.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 87.84490658541849,
+     "baseline_integrated_nonfood_mean_boot95": [
+      25.279585397079824,
+      173.29517393670943
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 3.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 83.72943728380547,
+     "baseline_integrated_nonfood_mean_boot95": [
+      28.01708142851312,
+      162.7693900742524
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 4.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 173.90594173411435,
+     "baseline_integrated_nonfood_mean_boot95": [
+      68.03586834395229,
+      302.9424292856457
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 5.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 204.59879693217843,
+     "baseline_integrated_nonfood_mean_boot95": [
+      93.63627444177398,
+      334.01686868360974
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 6.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 846.8608891455341,
+     "baseline_integrated_nonfood_mean_boot95": [
+      262.49437252285867,
+      1601.7264058773842
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 7.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1127.5440381853136,
+     "baseline_integrated_nonfood_mean_boot95": [
+      444.839522957168,
+      1916.8771111227675
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 8.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1215.6761866970494,
+     "baseline_integrated_nonfood_mean_boot95": [
+      476.02061683967185,
+      2116.101440795256
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 0.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 0.0,
+     "baseline_integrated_nonfood_mean_boot95": [
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 1.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 6353.135591626836,
+     "baseline_integrated_nonfood_mean_boot95": [
+      2731.713914950631,
+      10506.318965764978
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 2.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 11998.888461761357,
+     "baseline_integrated_nonfood_mean_boot95": [
+      7606.391801625313,
+      16904.05568526418
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 3.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 12508.630275920365,
+     "baseline_integrated_nonfood_mean_boot95": [
+      8293.294721691072,
+      17119.994839944255
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 4.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 13203.334631701106,
+     "baseline_integrated_nonfood_mean_boot95": [
+      9287.376250203122,
+      17122.06795148988
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 5.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 12063.247733424952,
+     "baseline_integrated_nonfood_mean_boot95": [
+      7860.142223597026,
+      16786.50651952959
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 6.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 14407.954028194728,
+     "baseline_integrated_nonfood_mean_boot95": [
+      10049.88591707253,
+      19120.490424892385
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 7.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 14117.039047668786,
+     "baseline_integrated_nonfood_mean_boot95": [
+      9526.198071832925,
+      19174.559594323255
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 8.0,
+     "n_graphs": 22,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 14453.53748974852,
+     "baseline_integrated_nonfood_mean_boot95": [
+      9846.311194039885,
+      19399.779345194598
+     ]
+    }
+   ]
+  },
+  "population-scaling/sensitivity_all": {
+   "n_rows": 2623,
+   "n_graph_units": 659,
+   "n_graphs": 30,
+   "curve": [
+    {
+     "L": 5,
+     "V": 50,
+     "f": 0.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 155.3831619863659,
+     "baseline_integrated_nonfood_mean_boot95": [
+      155.3831619863659,
+      155.3831619863659
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 1.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 6731.766811556382,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3328.522816997881,
+      11005.74020286074
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 2.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 9464.086437242444,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3248.298978724321,
+      17165.6630042264
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 3.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 4061.9588613121164,
+     "baseline_integrated_nonfood_mean_boot95": [
+      2302.1053423026015,
+      6522.580579931505
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 4.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 6437.634571428792,
+     "baseline_integrated_nonfood_mean_boot95": [
+      2768.479893830737,
+      11492.13007445326
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 5.0,
+     "n_graphs": 25,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 6353.986537300865,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3227.7855976526484,
+      10512.206298185873
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 6.0,
+     "n_graphs": 25,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 7297.336620653573,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3577.463980967504,
+      13509.178269896296
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 7.0,
+     "n_graphs": 25,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 4608.704445367006,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3431.620979414087,
+      5823.096275134632
+     ]
+    },
+    {
+     "L": 5,
+     "V": 50,
+     "f": 8.0,
+     "n_graphs": 25,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 4426.350248306883,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3190.8738185269012,
+      5681.1403383969655
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 0.0,
+     "n_graphs": 29,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 3.475602975139495,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3.475602975139495,
+      3.475602975139495
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 1.0,
+     "n_graphs": 28,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 40.81268898522967,
+     "baseline_integrated_nonfood_mean_boot95": [
+      8.373600030933625,
+      99.02852762446332
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 2.0,
+     "n_graphs": 28,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 71.00335194969446,
+     "baseline_integrated_nonfood_mean_boot95": [
+      20.852899263964915,
+      140.79584606817423
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 3.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 118.53262895146743,
+     "baseline_integrated_nonfood_mean_boot95": [
+      36.71300056499371,
+      224.11729080545132
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 4.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 171.56279033426685,
+     "baseline_integrated_nonfood_mean_boot95": [
+      73.72113707078178,
+      290.75303915642
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 5.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 189.1229320104343,
+     "baseline_integrated_nonfood_mean_boot95": [
+      85.02924871513473,
+      312.3323803837049
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 6.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 803.272441018898,
+     "baseline_integrated_nonfood_mean_boot95": [
+      262.23188051068576,
+      1500.2976784591017
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 7.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1069.3314238218602,
+     "baseline_integrated_nonfood_mean_boot95": [
+      446.1299597776715,
+      1801.3098513079228
+     ]
+    },
+    {
+     "L": 5,
+     "V": 100,
+     "f": 8.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 1150.1192266242847,
+     "baseline_integrated_nonfood_mean_boot95": [
+      481.20393445212244,
+      1981.3336776301594
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 0.0,
+     "n_graphs": 23,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 0.0,
+     "baseline_integrated_nonfood_mean_boot95": [
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 1.0,
+     "n_graphs": 23,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 6685.207622559082,
+     "baseline_integrated_nonfood_mean_boot95": [
+      3196.981784120194,
+      10763.10485815502
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 2.0,
+     "n_graphs": 23,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 11914.284680194998,
+     "baseline_integrated_nonfood_mean_boot95": [
+      7710.524479382096,
+      16500.929454323243
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 3.0,
+     "n_graphs": 23,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 12400.917210393645,
+     "baseline_integrated_nonfood_mean_boot95": [
+      8272.120025910743,
+      16810.074627830625
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 4.0,
+     "n_graphs": 23,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 13065.969439004271,
+     "baseline_integrated_nonfood_mean_boot95": [
+      9222.93728093597,
+      16940.08718607496
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 5.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 13102.284586916647,
+     "baseline_integrated_nonfood_mean_boot95": [
+      8532.955660418207,
+      18215.580350922035
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 6.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 14183.73780626423,
+     "baseline_integrated_nonfood_mean_boot95": [
+      10197.015686190456,
+      18458.968877303174
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 7.0,
+     "n_graphs": 24,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 14116.114365633393,
+     "baseline_integrated_nonfood_mean_boot95": [
+      9887.929037780441,
+      18818.03975336102
+     ]
+    },
+    {
+     "L": 5,
+     "V": 200,
+     "f": 8.0,
+     "n_graphs": 23,
+     "n_graphs_structural_available": 0,
+     "raf_incidence": null,
+     "wilson95": [
+      null,
+      null
+     ],
+     "endpoint_validity": [
+      "diagnostic-only:raf-field-unreduced"
+     ],
+     "reach_frac": 0.0,
+     "reach_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_mean_frac": 0.0,
+     "persist_mean_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "persist_ge32_frac": 0.0,
+     "persist_ge32_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "raf_events_mean": 0.0,
+     "raf_events_mean_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_raf_events": 0.0,
+     "delta_raf_events_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_integrated_nonfood": 0.0,
+     "delta_integrated_nonfood_boot95": [
+      0.0,
+      0.0
+     ],
+     "delta_persist_frac": 0.0,
+     "delta_persist_frac_boot95": [
+      0.0,
+      0.0
+     ],
+     "baseline_integrated_nonfood_mean": 14284.925342435141,
+     "baseline_integrated_nonfood_mean_boot95": [
+      9856.318247140383,
+      19009.970475594586
+     ]
+    }
+   ]
+  }
+ }
+}
