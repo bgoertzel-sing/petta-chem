@@ -11,6 +11,15 @@ from plan_neutral_calibration_shards import LEDGER, build_plan
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "src" / "chem_neutral_ssa.metta"
+# v3 fix (2026-10-13): chem_neutral_ssa.metta calls neutral-raf-* functions
+# (maximal RAF, rule IDs, closure, add-unique) that are defined only in
+# chem_neutral_raf.metta.  v2 queries imported only the SSA file, so every row
+# printed an unevaluated (neutral-raf-reaction-ids ...) term.  The RAF file
+# must be imported FIRST (same order as experiments/neutral_ssa/smoke.metta):
+# PeTTa compiles each function at load time, and PeTTa import! resolves
+# relative paths against the query file's directory and does not deduplicate,
+# so the import is placed here rather than inside the SSA source.
+RAF_SOURCE = ROOT / "src" / "chem_neutral_raf.metta"
 
 
 def row_id(row: dict) -> str:
@@ -22,6 +31,7 @@ def row_id(row: dict) -> str:
 
 def query_text(row: dict, fixed: dict) -> str:
     return (
+        f"!(import! &self {RAF_SOURCE})\n"
         f"!(import! &self {SOURCE})\n"
         "!(neutral-ssa-run-calibration-row "
         f"{row['L']} {row['graph_seed']} {row['dynamics_seed']} "

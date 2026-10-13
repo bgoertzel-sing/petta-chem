@@ -19,6 +19,11 @@ with tempfile.TemporaryDirectory() as tmp:
     first = (root / "graph-seed-1001" / manifest["rows"][0]["query"]).read_text()
     assert "neutral-ssa-run-calibration-row 5 1001 2001 0 1000000 500.0 100" in first
     assert first.endswith("100.0 10.0 40 32)\n")
+    lines = first.splitlines()
+    # v3: RAF definitions must be imported before (and in addition to) SSA.
+    assert lines[0].startswith("!(import! &self ") and lines[0].endswith("src/chem_neutral_raf.metta)")
+    assert lines[1].startswith("!(import! &self ") and lines[1].endswith("src/chem_neutral_ssa.metta)")
+    assert len(lines) == 3 and first.count("import!") == 2
 
     disk = json.loads((root / "graph-seed-1001" / "MANIFEST.json").read_text())
     assert disk == manifest
