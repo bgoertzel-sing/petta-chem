@@ -1,5 +1,66 @@
 # Neutral calibration v3 - pre-launch smoke gate
 
+## RE-SMOKE AFTER EMPTY-RAF GUARD (2026-10-13 15:41-16:12 PDT): **PASS -> pilot launched 16:12 PDT**
+
+Authority: Ben Goertzel, Telegram msg 7897 (option A).  Source identity
+`6a5c0c1cb0ae01bca85aaa29998e3fd5bbd7ccbb` (guard on top of import fix
+10a8ed88): `neutral-ssa-raf-reachability-summary` returns
+`reachable False first-time censored` when the selected maximal-RAF list is
+empty (baseline and ablated both use it).  src/chem_neutral_ssa.metta sha256
+c868f88a0dce00ee002f3dc719d714cf51a2a0e4892618c9c0ede6e6adf4ef0c;
+chem_neutral_raf.metta, prepare script, ledger, validator v1 (9db9d368...),
+runner (fa05b4a8...) unchanged.  Prepared queries: regenerating g1001/g1002
+through the frozen prepare path gives byte-identical directories (queries embed
+no source hash), so they were not regenerated.
+
+Same method as below: real prepared batch queries, `scripts/run_neutral_v3_smoke.sh`
+(exact batch command), outputs in `smoke_guard/`, production validator via
+`scripts/summarize_neutral_v3_smoke.py smoke_guard` (`smoke_guard/summary.json`).
+Up to 4-5 PeTTa processes concurrent.
+
+| row | wall s | exit | stderr | fn symbols | maximal RAF | baseline/ablated reachability | validator | row atom vs pre-guard |
+|---|---|---|---|---|---|---|---|---|
+| 000 L5 f2-0 V100 g1001 d2001 | 39 | 0 | empty | none | 0 | false / censored (both) | **PASS** | only reachability changed (was vacuous true @0.3403) |
+| 000 L5 f2-0 V100 g1002 d2001 | 43 | 0 | empty | none | 0 | false / censored (both) | **PASS** | only reachability changed (was vacuous true @0.3403) |
+| 064 L5 f2-16 (f=8) V100 g1001 d2001 | 1760 | 0 | empty | none | 204 | false / censored | **PASS** | byte-identical (sha256 402efd61...) |
+| 064 L5 f2-16 (f=8) V100 g1002 d2001 | 1820 | 0 | empty | none | 216 | false / censored | **PASS** | byte-identical (sha256 9e13ff72...) |
+| 100 L4 f2-16 V100 g1001 d2001 (regression row) | 184 | 0 | empty | none | 136 | false / censored | **PASS** | byte-identical (sha256 5d878390...) |
+
+Stdout differs from pre-guard output only in PeTTa's echo of the compiled
+source (the guarded function) and, for f=0 rows, the two reachability fields.
+
+Tests (all PASS): experiments/neutral_ssa/smoke.metta 125/125 incl. 2 new
+empty-RAF cases (old source returns `reachable true first-time 2.0` on the new
+case - test is discriminating; guard/unit_tests.log); validator tests 24/24;
+runner v3 tests; prepare-queries test; batch-path regression INDEX=0 (f=0, 0
+rule IDs, PASS; guard/regression_index0.log); new
+scripts/test_neutral_v3_empty_raf_guard.sh (real f=0 row through batch path:
+empty RAF, baseline+ablated reachable false/censored; guard/empty_raf_guard_test.log).
+
+Pre-guard smoke rows that finished after the first report (validator on
+pre-guard source; timings remain valid for non-empty RAF since those row atoms
+are unchanged by the guard):
+
+| row | wall s | maximal RAF | validator |
+|---|---|---|---|
+| 032 L5 f2-8 (f=4) V100 g1001 | 734 | 141 | PASS |
+| 064 L5 f2-16 V100 g1003 | 1650 | 215 | PASS |
+| 100 L4 f2-16 V100 g1001 | 124 | 136 | PASS |
+| 136 **L6** f2-16 V100 g1001 | **5535** | 166 | PASS |
+| 272 **V200** L5 f2-16 g1001 | **4072** | 204 | PASS |
+| RAF-only probe L5 f2-16 g1001 (one maximal-RAF call incl. load) | 947 | - | - |
+
+All smoke tmux sessions (petta-neutral-v3-smoke-a/b/c, -probe, -guard-a/b/c)
+had exited by 16:12; nothing left to kill.
+
+Preflight PASS; dry-run (dry_run_20261013_guard.txt): only g1001, g1002 queued
+with --source-commit 6a5c0c1c; 30 seeds "outside pilot allowlist".
+
+---
+
+## Original smoke gate (pre-guard, superseded verdict)
+
+
 Date: 2026-10-13 (America/Vancouver).  Authority: Ben Goertzel, Telegram msg 7878.
 Verdict: **FAIL -> pilot NOT launched.**  The import fix works (no unevaluated
 terms; non-empty flat RAF rule-ID lists at f=8), but every f=0 row reports

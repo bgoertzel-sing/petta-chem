@@ -6,11 +6,47 @@ process a detailed check of each experiments result file when it is completed".
 External-review requirements relayed by the main agent the same day (pilot first,
 batch-path regression test, protocol amendment, worktree cleanup) adopted.
 
-**Status: NOT LAUNCHED.**  Everything is built and tested, the identity
-preflight and dry-run pass, but the smoke gate shows that every f=0 (empty-RAF)
-row reports vacuous `reachable true`, which the required validator rule rejects.
-Launching would freeze both pilot seeds at row 000.  Needs Ben's decision
-(section 6).
+**Status (2026-10-13 16:14 PDT): PILOT RUNNING (g1001, g1002 only).**
+Ben chose option A (Telegram msg 7897, 15:39 PDT).  Empty-RAF guard commit
+`6a5c0c1cb0ae01bca85aaa29998e3fd5bbd7ccbb` is the frozen v3 source identity;
+re-smoke PASS (SMOKE_GATE.md top section); pilot launched 16:12 PDT via
+scripts/neutral_v3_supervisor.sh ensure.  Seeds 1003-1032 not authorized.
+
+*Sections 1-7 below were written before the decision; section 0 supersedes
+them where they differ.*
+
+## 0. Update after option A (2026-10-13 15:39-16:14 PDT)
+
+| item | value |
+|---|---|
+| v3 source identity (guard) | 6a5c0c1cb0ae01bca85aaa29998e3fd5bbd7ccbb (parent chain: cc50130 -> 6a5c0c1c) |
+| chem_neutral_ssa.metta | c868f88a0dce00ee002f3dc719d714cf51a2a0e4892618c9c0ede6e6adf4ef0c (only change: guard in neutral-ssa-raf-reachability-summary) |
+| pin commit | 4d8174a4 (orchestrator SOURCE_COMMIT + SOURCE_HASHES; batch-path guard test) |
+| everything else | unchanged (raf .metta, prepare/plan, ledger, validator v1, runner, PeTTa, SWI, grid/seeds/T/bins/threshold); prepared queries byte-identical on regeneration |
+
+Change: `neutral-ssa-raf-reachability-summary` returns
+`(raf-reachability-summary reachable False first-time censored)` when the
+selected maximal-RAF rule list is `()`; otherwise it calls the unchanged loop.
+Both baseline and ablated reachability go through this function.  No speedup
+(RAF once per row / caching) - not approved.
+
+Evidence: unit tests 125/125 (2 new empty-RAF tests, which the old source fails
+with vacuous `reachable true`); batch-path f=0 row reachable false/censored in
+both arms (scripts/test_neutral_v3_empty_raf_guard.sh); non-empty-RAF rows
+(L4 f=8 regression row, L5 f=8 V100 g1001 and g1002) produce byte-identical
+row atoms before and after the guard.  Smoke table: SMOKE_GATE.md.
+
+Pilot: tmux petta-neutral-v3-orchestrator (supervisor), petta-neutral-v3-g1001-a001
+(runner pid 1899351), petta-neutral-v3-g1002-a001 (runner pid 1899359); first
+5 receipts per seed (rows 000-004) all validator PASS, ALERTS.jsonl empty.
+
+Runtime estimate (rough, from smoke rows run under 4-5 concurrent PeTTa
+processes; assumes row time roughly linear in f between the measured f2-0, f2-8
+and f2-16 points): L5 V100 68 rows ~17 h; L5 V50 68 rows <=~17 h; L5 V200 68
+rows ~39 h (f2-16 row 4072 s); L4 36 rows ~1 h; L6 36 rows ~28 h (f2-16 row
+5535 s) => **~4 days per seed (plausible range 3-6 days)**, so the 2-seed pilot
+should finish in roughly 4-5 days; the full 32 seeds at 3 slots would be on the
+order of 6-7 weeks.  The pilot itself will replace this estimate.
 
 ## 1. Identity
 
@@ -143,7 +179,7 @@ Tests:
   Cron f28e1331 (v2 health check) was already disabled; left disabled.  7 AM
   overview job 6fb7b7bc scratch updated to report v3 status and validator alerts.
 
-## 6. Decision needed (blocker)
+## 6. Decision needed (blocker) - RESOLVED: Ben chose A (msg 7897); see section 0
 
 Every row whose maximal RAF is empty - all f=0 rows, and plausibly many low-f
 rows - will report `reachable true` at the first event time.  Options:
