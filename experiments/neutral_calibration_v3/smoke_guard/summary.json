@@ -1,0 +1,67 @@
+[
+ {
+  "row": "000-primary-transition-L5-f2-0-V100-g1001-d2001",
+  "seconds": 39,
+  "exit": 0,
+  "verdict": "pass",
+  "reasons": [],
+  "raf_size": 0,
+  "fn_symbols_in_atom": [],
+  "baseline_reachable": false,
+  "stdout_sha256": "8f0801c3070167dad25401b64d27fce7092618c0a799369c1c17cdf7523d9b66",
+  "query_sha256": "0c2fa96eb299569b061c33fc8cee1156bd8e0c4cfe4d1704e8b0b8788faacb1b",
+  "validator_sha256": "9db9d368aa552b48dd1bdd45d60ff181d1844b0131fe89b8d13135442cf24038"
+ },
+ {
+  "row": "000-primary-transition-L5-f2-0-V100-g1002-d2001",
+  "seconds": 43,
+  "exit": 0,
+  "verdict": "pass",
+  "reasons": [],
+  "raf_size": 0,
+  "fn_symbols_in_atom": [],
+  "baseline_reachable": false,
+  "stdout_sha256": "943a058f59177f32e085ac7ff3cc140a233b4646bb97d8a846b7741b6124c4f0",
+  "query_sha256": "d14dc7994cd0bdb7861f34cc5c75632e809ecc038b2a4b5961b7aabe6ffa5ee7",
+  "validator_sha256": "9db9d368aa552b48dd1bdd45d60ff181d1844b0131fe89b8d13135442cf24038"
+ },
+ {
+  "row": "064-primary-transition-L5-f2-16-V100-g1001-d2001",
+  "seconds": 1760,
+  "exit": 0,
+  "verdict": "pass",
+  "reasons": [],
+  "raf_size": 204,
+  "fn_symbols_in_atom": [],
+  "baseline_reachable": false,
+  "stdout_sha256": "30fc4682c5af159ede6dba4e5629b8e92514e420a56c3a353e709a1c6bfb1c33",
+  "query_sha256": "091cd1da7a14fcfa7eb171e94302d7a28d3e54394eb2fe88cd109864caa400af",
+  "validator_sha256": "9db9d368aa552b48dd1bdd45d60ff181d1844b0131fe89b8d13135442cf24038"
+ },
+ {
+  "row": "064-primary-transition-L5-f2-16-V100-g1002-d2001",
+  "seconds": 1820,
+  "exit": 0,
+  "verdict": "pass",
+  "reasons": [],
+  "raf_size": 216,
+  "fn_symbols_in_atom": [],
+  "baseline_reachable": false,
+  "stdout_sha256": "daca1e272a0ab862b4d4f8d0f9ec957ca9cac3e079745f008c16e033f4ef96fd",
+  "query_sha256": "1d19e99d2d5ded5819ed862e9defe7e5f52de144b769f3aa2ccf3537dce5717e",
+  "validator_sha256": "9db9d368aa552b48dd1bdd45d60ff181d1844b0131fe89b8d13135442cf24038"
+ },
+ {
+  "row": "100-finite-size-control-L4-f2-16-V100-g1001-d2001",
+  "seconds": 184,
+  "exit": 0,
+  "verdict": "pass",
+  "reasons": [],
+  "raf_size": 136,
+  "fn_symbols_in_atom": [],
+  "baseline_reachable": false,
+  "stdout_sha256": "f7f27a3249b395ce13a9b5f059478179128811c5c9f6ed36c444429fe57b3cfd",
+  "query_sha256": "6c9bbafcf5fdadf8a16a03872fa37a9f66da3d59a5781979294851ed6ce5503e",
+  "validator_sha256": "9db9d368aa552b48dd1bdd45d60ff181d1844b0131fe89b8d13135442cf24038"
+ }
+]
