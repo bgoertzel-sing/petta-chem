@@ -34,6 +34,18 @@ sources are byte-identical to the v2 frozen source (sha256 ebdcf044... and
 template rather than adding an import inside the SSA file is in LAUNCH_REVIEW.md
 section 2.
 
+**Empty-RAF guard (final v3 source identity).**  Commit
+`6a5c0c1cb0ae01bca85aaa29998e3fd5bbd7ccbb` (authority: Ben Goertzel, Telegram
+msg 7897, 2026-10-13, option A): `neutral-ssa-raf-reachability-summary` returns
+`(raf-reachability-summary reachable False first-time censored)` when the
+selected maximal-RAF rule list is empty, instead of the vacuous
+`reachable True` at the first event.  Baseline and ablated reachability both use
+this function.  src/chem_neutral_ssa.metta sha256 is now c868f88a...;
+chem_neutral_raf.metta, the query template, all prepared queries, grid, seeds,
+T, bins and thresholds are unchanged (prepared queries re-generated through the
+frozen prepare path are byte-identical; they embed no source hash).  No speedup
+(RAF computed once / cached) was applied - not approved.
+
 ## 3. Protocol amendment: content checks are required, not outcome inspection
 
 The v1/v2 "outcome-blind" rule (never open raw stdout) prevented anyone from

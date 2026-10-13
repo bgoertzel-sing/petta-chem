@@ -52,7 +52,7 @@ REVIEWS_DIR = V2_ROOT / "reviews"
 # 2026-09-08 and is no longer used for this batch.
 PETTA_ROOT = Path("/home/openclaw/research-agent/projects/petta-chem/repos/PeTTa-pinned-4ce1d0ea")
 RUNNER = str(PETTA_ROOT / "run.sh")
-SOURCE_COMMIT = "10a8ed88e4f6df2d4f42d0a0af32fda8ba3b1cd1"  # v3 fix commit
+SOURCE_COMMIT = "6a5c0c1cb0ae01bca85aaa29998e3fd5bbd7ccbb"  # v3 empty-RAF guard commit (on top of import fix 10a8ed88)
 PETTA_COMMIT = "4ce1d0ea58855abb772b911278312c8846e5cc08"
 RUN_SH_SHA256 = "b0ee9930c7fbca5d221ff2e31a7cce30bc8e8902f463c5f80be2a971414e3aae"
 MAIN_PL_SHA256 = "cc381df25e778edd0a355ef945a9675f7f3d79ebd5fc5124a2d67bf8d02bc99c"
@@ -61,7 +61,7 @@ V2_RUNNER_SCRIPT_SHA256 = "fa05b4a80ef54e6876edfc0a7d8b8a6d12c7ee8bafbbfe730d7df
 VALIDATOR_SCRIPT = ROOT / "scripts" / "validate_neutral_calibration_row.py"
 VALIDATOR_SHA256 = "9db9d368aa552b48dd1bdd45d60ff181d1844b0131fe89b8d13135442cf24038"
 SOURCE_HASHES = {
-    "src/chem_neutral_ssa.metta": "ebdcf0449bd783cab6c924f1c455d51141d1d74ff59251237a5e7596908f2ca3",
+    "src/chem_neutral_ssa.metta": "c868f88a0dce00ee002f3dc719d714cf51a2a0e4892618c9c0ede6e6adf4ef0c",  # empty-RAF guard 6a5c0c1c
     "src/chem_neutral_raf.metta": "0ed75203fff2b9d31c0dac054290aeb5c29fac890ddcda13be6af528c0b26073",
     "scripts/prepare_neutral_calibration_queries.py": "afb6690399c4ad5268493b19b7c42b5739dce8dc530f32d4c983c7ebc01bbd56",
     "scripts/plan_neutral_calibration_shards.py": "4bb7c5c639bb7e94dbb1c242e406535f310a72866dd3bc39447329464f7f8cd7",
