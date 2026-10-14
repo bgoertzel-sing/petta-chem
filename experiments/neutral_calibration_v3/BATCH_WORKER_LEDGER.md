@@ -30,3 +30,13 @@
 Running at hand-off: pilot only (g1001, g1002 attempt-001) under supervisor
 tmux petta-neutral-v3-orchestrator (10-min ticks; exits at PILOT_DONE).  Seeds
 1003-1032 NOT authorized.  No smoke sessions remain.
+
+| 17:47 PDT | subagent 92aecb84 | Ben msg 7901: speed up without changing results; reachability known-answer canary | this file |
+| 17:49 PDT | subagent | worktree repos/petta-chem-v3-speedup, branch neutral-v3-raf-once (from d40d4db); main tree src untouched because the pilot imports it live | git worktree list |
+| 17:52 PDT | subagent | RAF-only L5 f2-16 probe on new source: 947 s -> 5 s (same 204 reactions); unit tests ssa 125/125, raf 43/43, raf oracle 9/9 | speedup branch: experiments/neutral_calibration_v3/speedup_validation/ |
+| 17:53 PDT | subagent | **reachability canary FAILS** (positive canary reachable false on old AND new source); summary function itself passes a direct known-answer test; cause: SSA event/waiting-time draws are arithmetic progressions in the event index (non-random sweep) | speedup branch: experiments/neutral_calibration_v3/REACHABILITY_CANARY.md |
+| 17:52-20:09 PDT | subagent | byte-identity validation, 9 rows (f=0 x2, f=4, f=8 x2 L5 V100; L4 f=8; L6 f=8; V50 f=8; V200 f=8): ALL byte-identical; all new rows validator PASS; wall s old->new: 1760->288, 1820->349, 1201->143 (f=4), 5535->1190 (L6), 2424->202 (V50), 184->93 (L4), 4072->4133 (V200, SSA-dominated) | speedup branch SPEEDUP_VALIDATION.md (commit 9077894) |
+| 18:59 PDT | subagent | harness incident: stale wait loop tmux-killed the first new-source V200 validation run at ~51 min (validation-only process; pilot untouched); rerun 19:00 | speedup branch speedup_validation/aborted_v200_killed_by_harness/ |
+| 19:03 PDT | subagent | diagnostic: same positive canary with ONLY the two draw functions replaced by a nonlinear mix -> reachable true @2.20, ablated false | REACHABILITY_CANARY.md |
+| 18:51 PDT | subagent | speedup source commit 322cafc3 on branch neutral-v3-raf-once (not pushed, not merged) | git show 322cafc3 |
+| (end) | subagent | **pilot NOT relaunched / NOT stopped** (canary failed -> brief says do not relaunch); attempt-001 on 6a5c0c1c keeps running; orchestrator pins unchanged; Ben decision needed on the SSA sampler | LAUNCH_REVIEW.md top |

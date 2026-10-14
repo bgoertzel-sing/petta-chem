@@ -6,6 +6,24 @@ process a detailed check of each experiments result file when it is completed".
 External-review requirements relayed by the main agent the same day (pilot first,
 batch-path regression test, protocol amendment, worktree cleanup) adopted.
 
+**UPDATE 2026-10-13 ~19:00 PDT (subagent 92aecb84, Ben msg 7901): BLOCKER FOUND.**
+The reachability known-answer canary FAILS: an obviously self-sustaining,
+food-catalysed 2-reaction RAF (77% of total propensity at t=0) reports
+`reachable false / censored` through the batch SSA/reachability path, on the
+pilot source 6a5c0c1c and on the speedup source alike.  The reachability
+summary function is correct (direct known-answer test passes); the SSA event
+sampler is not random: `neutral-ssa-event-draw` = (48271*seed + 69621*index) mod
+total and the waiting-time uniform = (40699*seed + 65537*index + 17) mod 1e6 are
+arithmetic progressions, so trajectories are slow deterministic sweeps and four
+dynamics seeds give near-identical runs (R1 fires once in 1,338 events).  All
+dynamic endpoints of v1-v3 rows come from this sampler (structural RAF field
+unaffected).  Evidence: branch neutral-v3-raf-once,
+experiments/neutral_calibration_v3/REACHABILITY_CANARY.md.  Pilot attempt-001
+left running on 6a5c0c1c (not stopped, not relaunched); fixing the sampler is a
+model change needing Ben's decision.
+The speedup (commit 322cafc3 on that branch) is validated byte-identical
+(SPEEDUP_VALIDATION.md there) but is NOT adopted in the orchestrator pins.
+
 **Status (2026-10-13 16:14 PDT): PILOT RUNNING (g1001, g1002 only).**
 Ben chose option A (Telegram msg 7897, 15:39 PDT).  Empty-RAF guard commit
 `6a5c0c1cb0ae01bca85aaa29998e3fd5bbd7ccbb` is the frozen v3 source identity;
