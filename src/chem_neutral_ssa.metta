@@ -1149,6 +1149,18 @@
    (let $catalysis
      (neutral-ssa-sample-catalysis
        $graph-seed $f-twice $molecules $reactions)
+     (neutral-ssa-run-catalysis-ablation-pair-sampled
+       $graph-seed $dynamics-seed $f-twice
+       $event-count $time-limit
+       $food $molecules $reactions $volume $raf-rule-ids $catalysis)))
+
+; v3 speedup (Ben Goertzel, Telegram msg 7901, 2026-10-13): identical pair
+; computation, but takes the already-sampled catalysis (a pure function of
+; graph-seed, f-twice, molecules, reactions) instead of re-sampling it.
+(= (neutral-ssa-run-catalysis-ablation-pair-sampled
+      $graph-seed $dynamics-seed $f-twice
+      $event-count $time-limit
+      $food $molecules $reactions $volume $raf-rule-ids $catalysis)
      (let $ablated-catalysis
        (neutral-ssa-delete-catalysis-into $raf-rule-ids $catalysis)
        (neutral-catalysis-ablation-pair
@@ -1167,7 +1179,7 @@
            (neutral-ssa-run-until
              $dynamics-seed $event-count $time-limit
              $food $molecules $reactions $volume $ablated-catalysis
-             (neutral-ssa-initial-counts $molecules $food $volume))))))
+             (neutral-ssa-initial-counts $molecules $food $volume)))))
 
 ; Complete PeTTa-native execution/measurement seam for one preregistered
 ; calibration row.  The maximal RAF and its two molecule projections remain
@@ -1179,11 +1191,28 @@
       $food $molecules $reactions $volume $raf-rule-ids
       $persistence-molecules $closure-molecules
       $burn-in $bin-width $bin-count $persistence-threshold)
-   (let $pair
-     (neutral-ssa-run-catalysis-ablation-pair
+   (let $catalysis
+     (neutral-ssa-sample-catalysis
+       $graph-seed $f-twice $molecules $reactions)
+     (neutral-ssa-run-catalysis-ablation-endpoints-sampled
        $graph-seed $dynamics-seed $f-twice
        $event-count $time-limit
-       $food $molecules $reactions $volume $raf-rule-ids)
+       $food $molecules $reactions $volume $raf-rule-ids
+       $persistence-molecules $closure-molecules
+       $burn-in $bin-width $bin-count $persistence-threshold $catalysis)))
+
+; v3 speedup: same endpoints with the already-sampled catalysis.
+(= (neutral-ssa-run-catalysis-ablation-endpoints-sampled
+      $graph-seed $dynamics-seed $f-twice
+      $event-count $time-limit
+      $food $molecules $reactions $volume $raf-rule-ids
+      $persistence-molecules $closure-molecules
+      $burn-in $bin-width $bin-count $persistence-threshold $catalysis)
+   (let $pair
+     (neutral-ssa-run-catalysis-ablation-pair-sampled
+       $graph-seed $dynamics-seed $f-twice
+       $event-count $time-limit
+       $food $molecules $reactions $volume $raf-rule-ids $catalysis)
      (neutral-ssa-ablation-pair-endpoints
        $pair
        (neutral-ssa-initial-counts $molecules $food $volume)
@@ -1271,18 +1300,38 @@
          (neutral-ssa-raf-reactions $reactions)
          (neutral-ssa-raf-catalysis $catalysis))
        (let $raf-rule-ids (neutral-raf-reaction-ids $raf-reactions)
-         (let $closure-molecules
-           (neutral-raf-closure $food $raf-reactions)
-           (let $persistence-molecules
-             (neutral-ssa-raf-catalyst-molecules
-               $catalysis $raf-rule-ids $closure-molecules
-               (neutral-ssa-raf-reactant-molecules $raf-reactions ()))
-             (neutral-ssa-run-catalysis-ablation-endpoints
-               $graph-seed $dynamics-seed $f-twice
-               $event-count $time-limit
-               $food $molecules $reactions $volume $raf-rule-ids
-               $persistence-molecules $closure-molecules
-               $burn-in $bin-width $bin-count $persistence-threshold)))))))
+         (neutral-ssa-run-selected-raf-endpoints
+           $graph-seed $dynamics-seed $f-twice
+           $event-count $time-limit
+           $food $molecules $reactions $volume
+           $burn-in $bin-width $bin-count $persistence-threshold
+           $catalysis $raf-reactions $raf-rule-ids)))))
+
+; v3 speedup (Ben Goertzel, Telegram msg 7901, 2026-10-13): the endpoint
+; computation of neutral-ssa-run-detected-raf-endpoints for an already
+; sampled catalysis and already selected maximal RAF.  All three inputs are
+; pure functions of (max-length, graph-seed, f-twice); passing them down
+; replaces recomputation (the maximal RAF was computed twice per row, and the
+; catalysis sampled three times) without changing any value.
+(= (neutral-ssa-run-selected-raf-endpoints
+      $graph-seed $dynamics-seed $f-twice
+      $event-count $time-limit
+      $food $molecules $reactions $volume
+      $burn-in $bin-width $bin-count $persistence-threshold
+      $catalysis $raf-reactions $raf-rule-ids)
+   (let $closure-molecules
+     (neutral-raf-closure $food $raf-reactions)
+     (let $persistence-molecules
+       (neutral-ssa-raf-catalyst-molecules
+         $catalysis $raf-rule-ids $closure-molecules
+         (neutral-ssa-raf-reactant-molecules $raf-reactions ()))
+       (neutral-ssa-run-catalysis-ablation-endpoints-sampled
+         $graph-seed $dynamics-seed $f-twice
+         $event-count $time-limit
+         $food $molecules $reactions $volume $raf-rule-ids
+         $persistence-molecules $closure-molecules
+         $burn-in $bin-width $bin-count $persistence-threshold
+         $catalysis))))
 
 ; Ledger-row boundary.  Maximum polymer length is the only structural input:
 ; PeTTa constructs the complete molecule and reaction universes, detects the
@@ -1316,12 +1365,13 @@
                  reaction-count (neutral-ssa-list-length $reactions)
                  maximal-raf-rule-ids $raf-rule-ids
                  endpoints
-                   (neutral-ssa-run-detected-raf-endpoints
+                   (neutral-ssa-run-selected-raf-endpoints
                      $graph-seed $dynamics-seed $f-twice
                      $event-count $time-limit
                      $food $molecules $reactions $volume
                      $burn-in $bin-width $bin-count
-                     $persistence-threshold)))))))))
+                     $persistence-threshold
+                     $catalysis $raf-reactions $raf-rule-ids)))))))))
 
 (= (neutral-ssa-counts-nonnegative? $counts)
    (if (== $counts ())

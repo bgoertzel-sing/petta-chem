@@ -78,13 +78,21 @@
        0
        (+ 1 (neutral-raf-list-length (cdr-atom $items)))))
 
+; v3 speedup (Ben Goertzel, Telegram msg 7901, 2026-10-13): stop as soon as
+; a pass leaves the available list unchanged.  closure-pass is a pure function
+; of (reactions, available), so once one pass returns its input unchanged
+; every remaining pass would return that same list; the early return yields
+; the identical value (same elements, same order) with fewer passes.
 (= (neutral-raf-closure-iterations $remaining $reactions $available)
    (if (== $remaining 0)
        $available
-       (neutral-raf-closure-iterations
-         (- $remaining 1)
-         $reactions
-         (neutral-raf-closure-pass $reactions $available))))
+       (let $next (neutral-raf-closure-pass $reactions $available)
+         (if (== $next $available)
+             $available
+             (neutral-raf-closure-iterations
+               (- $remaining 1)
+               $reactions
+               $next)))))
 
 (= (neutral-raf-closure $food $reactions)
    (neutral-raf-closure-iterations
@@ -144,6 +152,10 @@
              (neutral-raf-filter-valid-reactions
                (cdr-atom $reactions) $available $catalysis)))))
 
+; v3 speedup (Ben Goertzel, Telegram msg 7901, 2026-10-13): return as soon
+; as a pruning pass keeps every reaction.  The pass is a pure function of
+; (food, reactions, catalysis), so all remaining passes would return the same
+; list; the early return yields the identical value with fewer passes.
 (= (neutral-raf-maximal-prune-iterations
       $remaining $food $reactions $catalysis)
    (if (== $remaining 0)
@@ -153,8 +165,10 @@
            $reactions
            (neutral-raf-closure $food $reactions)
            $catalysis)
-         (neutral-raf-maximal-prune-iterations
-           (- $remaining 1) $food $retained $catalysis))))
+         (if (== $retained $reactions)
+             $reactions
+             (neutral-raf-maximal-prune-iterations
+               (- $remaining 1) $food $retained $catalysis)))))
 
 (= (neutral-raf-maximal-reactions $food $reactions $catalysis)
    (neutral-raf-maximal-prune-iterations
