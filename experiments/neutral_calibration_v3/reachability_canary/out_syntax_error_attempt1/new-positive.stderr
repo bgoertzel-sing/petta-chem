@@ -1,0 +1,22 @@
+
+ERROR: [Thread main] /home/openclaw/research-agent/projects/petta-chem/repos/PeTTa-pinned-4ce1d0ea/src/main.pl:23: user:main Syntax error: failed to process form: parsed(function,(= (canary-row $dynamics-seed $event-count $time-limit $volume)
+   (let $food (canary-food)
+     (let $molecules (neutral-ssa-binary-polymers 4)
+       (let $reactions (canary-reactions)
+         (let $catalysis (canary-catalysis)
+           (let $raf-reactions
+             (neutral-raf-maximal-reactions
+               $food
+               (neutral-ssa-raf-reactions $reactions)
+               (neutral-ssa-raf-catalysis $catalysis))
+             (let $raf-rule-ids (neutral-raf-reaction-ids $raf-reactions)
+               (canary-row label positive
+                 maximal-raf-rule-ids $raf-rule-ids
+                 closure (neutral-raf-closure $food $raf-reactions)
+                 endpoints
+                   (neutral-ssa-run-selected-raf-endpoints
+                     0 $dynamics-seed 0
+                     $event-count $time-limit
+                     $food $molecules $reactions $volume
+                     100.0 10.0 40 32
+                     $catalysis $raf-reactions $raf-rule-ids))))))))),[=,[canary-row,_1024,_1030,_1036,_1042],[let,_1060,[canary-food],[let,_1090,[neutral-ssa-binary-polymers,4],[let,_1126,[canary-reactions],[let,_1156,[canary-catalysis],[let,_1186,[neutral-raf-maximal-reactions,_1060,[neutral-ssa-raf-reactions,_1126],[neutral-ssa-raf-catalysis,_1156]],[let,_1258,[neutral-raf-reaction-ids,_1186],[canary-row,label,positive,maximal-raf-rule-ids,_1258,closure,[neutral-raf-closure,_1060,_1186],endpoints,[neutral-ssa-run-selected-raf-endpoints,0,_1024,0,_1030,_1036,_1060,_1090,_1126,_1042,100.0,10.0,40,32,_1156,_1186,_1258]]]]]]]]])

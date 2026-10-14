@@ -1,0 +1,3675 @@
+[33m--> metta runnable  -->
+[36m!(import! &self ../../src/chem_neutral_raf.metta)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           'import!'('&self', '../../src/chem_neutral_raf.metta', A),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (raf-system-id
+      (raf-system $system-id model neutral-crs-v1 food $food))
+   $system-id)
+[33m--> prolog clause -->
+[32m'raf-system-id'(['raf-system', A, model, 'neutral-crs-v1', food, _],
+                     A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (raf-system-food
+      (raf-system $system-id model neutral-crs-v1 food $food))
+   $food)
+[33m--> prolog clause -->
+[32m'raf-system-food'(['raf-system', _, model, 'neutral-crs-v1', food, A],
+                       A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (raf-reaction-id
+      (raf-reaction $system-id $rule-id reactants $reactants products $products))
+   $rule-id)
+[33m--> prolog clause -->
+[32m'raf-reaction-id'([ 'raf-reaction',
+                         _,
+                         A,
+                         reactants,
+                         _,
+                         products,
+                         _
+                       ],
+                       A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (raf-reaction-reactants
+      (raf-reaction $system-id $rule-id reactants $reactants products $products))
+   $reactants)
+[33m--> prolog clause -->
+[32m'raf-reaction-reactants'([ 'raf-reaction',
+                                _,
+                                _,
+                                reactants,
+                                A,
+                                products,
+                                _
+                              ],
+                              A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (raf-reaction-products
+      (raf-reaction $system-id $rule-id reactants $reactants products $products))
+   $products)
+[33m--> prolog clause -->
+[32m'raf-reaction-products'([ 'raf-reaction',
+                               _,
+                               _,
+                               reactants,
+                               _,
+                               products,
+                               A
+                             ],
+                             A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (raf-catalysis-catalyst
+      (raf-catalysis $system-id $catalyst $rule-id))
+   $catalyst)
+[33m--> prolog clause -->
+[32m'raf-catalysis-catalyst'(['raf-catalysis', _, A, _], A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (raf-catalysis-rule-id
+      (raf-catalysis $system-id $catalyst $rule-id))
+   $rule-id)
+[33m--> prolog clause -->
+[32m'raf-catalysis-rule-id'(['raf-catalysis', _, _, A], A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-member? $wanted $items)
+   (if (== $items ())
+       False
+       (if (== $wanted (car-atom $items))
+           True
+           (neutral-raf-member? $wanted (cdr-atom $items)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-member?'(A, B, C) :-
+    ==(B, [], D),
+    (   D==true
+    ->  C=false
+    ;   'car-atom'(B, E),
+        ==(A, E, F),
+        (   F==true
+        ->  C=true
+        ;   'cdr-atom'(B, G),
+            'neutral-raf-member?'(A, G, C)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-all-members? $wanted $available)
+   (if (== $wanted ())
+       True
+       (and (neutral-raf-member? (car-atom $wanted) $available)
+            (neutral-raf-all-members? (cdr-atom $wanted) $available))))
+[33m--> prolog clause -->
+[32m'neutral-raf-all-members?'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=true
+    ;   'car-atom'(A, E),
+        'neutral-raf-member?'(E, B, F),
+        'cdr-atom'(A, G),
+        'neutral-raf-all-members?'(G, B, H),
+        and(F, H, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-add-unique $molecule $available)
+   (if (neutral-raf-member? $molecule $available)
+       $available
+       (cons-atom $molecule $available)))
+[33m--> prolog clause -->
+[32m'neutral-raf-add-unique'(A, B, C) :-
+    'neutral-raf-member?'(A, B, D),
+    (   D==true
+    ->  C=B
+    ;   'cons-atom'(A, B, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-add-products $products $available)
+   (if (== $products ())
+       $available
+       (neutral-raf-add-products
+         (cdr-atom $products)
+         (neutral-raf-add-unique (car-atom $products) $available))))
+[33m--> prolog clause -->
+[32m'neutral-raf-add-products'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=B
+    ;   'cdr-atom'(A, E),
+        'car-atom'(A, F),
+        'neutral-raf-add-unique'(F, B, G),
+        'neutral-raf-add-products'(E, G, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-closure-pass $reactions $available)
+   (if (== $reactions ())
+       $available
+       (let $reaction (car-atom $reactions)
+         (let $next
+           (if (neutral-raf-all-members?
+                 (raf-reaction-reactants $reaction) $available)
+               (neutral-raf-add-products
+                 (raf-reaction-products $reaction) $available)
+               $available)
+           (neutral-raf-closure-pass (cdr-atom $reactions) $next)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-closure-pass'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=B
+    ;   E=F,
+        'car-atom'(A, F),
+        G=H,
+        'raf-reaction-reactants'(E, I),
+        'neutral-raf-all-members?'(I, B, J),
+        (   J==true
+        ->  'raf-reaction-products'(E, K),
+            'neutral-raf-add-products'(K, B, H)
+        ;   H=B
+        ),
+        'cdr-atom'(A, L),
+        'neutral-raf-closure-pass'(L, G, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-list-length $items)
+   (if (== $items ())
+       0
+       (+ 1 (neutral-raf-list-length (cdr-atom $items)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-list-length'(A, B) :-
+    ==(A, [], C),
+    (   C==true
+    ->  B=0
+    ;   'cdr-atom'(A, D),
+        'neutral-raf-list-length'(D, E),
+        +(1, E, B)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-closure-iterations $remaining $reactions $available)
+   (if (== $remaining 0)
+       $available
+       (let $next (neutral-raf-closure-pass $reactions $available)
+         (if (== $next $available)
+             $available
+             (neutral-raf-closure-iterations
+               (- $remaining 1)
+               $reactions
+               $next)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-closure-iterations'(A, B, C, D) :-
+    ==(A, 0, E),
+    (   E==true
+    ->  D=C
+    ;   F=G,
+        'neutral-raf-closure-pass'(B, C, G),
+        ==(F, C, H),
+        (   H==true
+        ->  D=C
+        ;   -(A, 1, I),
+            'neutral-raf-closure-iterations'(I, B, F, D)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-closure $food $reactions)
+   (neutral-raf-closure-iterations
+     (neutral-raf-list-length $reactions) $reactions $food))
+[33m--> prolog clause -->
+[32m'neutral-raf-closure'(A, B, C) :-
+    'neutral-raf-list-length'(B, D),
+    'neutral-raf-closure-iterations'(D, B, A, C).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-has-catalyst? $rule-id $available $catalysis)
+   (if (== $catalysis ())
+       False
+       (let $edge (car-atom $catalysis)
+         (if (and (== (raf-catalysis-rule-id $edge) $rule-id)
+                  (neutral-raf-member?
+                    (raf-catalysis-catalyst $edge) $available))
+             True
+             (neutral-raf-has-catalyst?
+               $rule-id $available (cdr-atom $catalysis))))))
+[33m--> prolog clause -->
+[32m'neutral-raf-has-catalyst?'(A, B, C, D) :-
+    ==(C, [], E),
+    (   E==true
+    ->  D=false
+    ;   F=G,
+        'car-atom'(C, G),
+        'raf-catalysis-rule-id'(F, H),
+        ==(H, A, I),
+        'raf-catalysis-catalyst'(F, J),
+        'neutral-raf-member?'(J, B, K),
+        and(I, K, L),
+        (   L==true
+        ->  D=true
+        ;   'cdr-atom'(C, M),
+            'neutral-raf-has-catalyst?'(A, B, M, D)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-all-reactions-valid? $reactions $available $catalysis)
+   (if (== $reactions ())
+       True
+       (let $reaction (car-atom $reactions)
+         (and
+           (neutral-raf-all-members?
+             (raf-reaction-reactants $reaction) $available)
+           (and
+             (neutral-raf-has-catalyst?
+               (raf-reaction-id $reaction) $available $catalysis)
+             (neutral-raf-all-reactions-valid?
+               (cdr-atom $reactions) $available $catalysis))))))
+[33m--> prolog clause -->
+[32m'neutral-raf-all-reactions-valid?'(A, B, C, D) :-
+    ==(A, [], E),
+    (   E==true
+    ->  D=true
+    ;   F=G,
+        'car-atom'(A, G),
+        'raf-reaction-reactants'(F, H),
+        'neutral-raf-all-members?'(H, B, I),
+        'raf-reaction-id'(F, J),
+        'neutral-raf-has-catalyst?'(J, B, C, K),
+        'cdr-atom'(A, L),
+        'neutral-raf-all-reactions-valid?'(L, B, C, M),
+        and(K, M, N),
+        and(I, N, D)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-is-raf? $food $reactions $catalysis)
+   (if (== $reactions ())
+       False
+       (let $available (neutral-raf-closure $food $reactions)
+         (neutral-raf-all-reactions-valid?
+           $reactions $available $catalysis))))
+[33m--> prolog clause -->
+[32m'neutral-raf-is-raf?'(A, B, C, D) :-
+    ==(B, [], E),
+    (   E==true
+    ->  D=false
+    ;   F=G,
+        'neutral-raf-closure'(A, B, G),
+        'neutral-raf-all-reactions-valid?'(B, F, C, D)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-filter-valid-reactions $reactions $available $catalysis)
+   (if (== $reactions ())
+       ()
+       (let $reaction (car-atom $reactions)
+         (if (and
+               (neutral-raf-all-members?
+                 (raf-reaction-reactants $reaction) $available)
+               (neutral-raf-has-catalyst?
+                 (raf-reaction-id $reaction) $available $catalysis))
+             (cons-atom
+               $reaction
+               (neutral-raf-filter-valid-reactions
+                 (cdr-atom $reactions) $available $catalysis))
+             (neutral-raf-filter-valid-reactions
+               (cdr-atom $reactions) $available $catalysis)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-filter-valid-reactions'(A, B, C, D) :-
+    ==(A, [], E),
+    (   E==true
+    ->  D=[]
+    ;   F=G,
+        'car-atom'(A, G),
+        'raf-reaction-reactants'(F, H),
+        'neutral-raf-all-members?'(H, B, I),
+        'raf-reaction-id'(F, J),
+        'neutral-raf-has-catalyst?'(J, B, C, K),
+        and(I, K, L),
+        (   L==true
+        ->  'cdr-atom'(A, M),
+            'neutral-raf-filter-valid-reactions'(M,
+                                                 B,
+                                                 C,
+                                                 N),
+            'cons-atom'(F, N, D)
+        ;   'cdr-atom'(A, O),
+            'neutral-raf-filter-valid-reactions'(O,
+                                                 B,
+                                                 C,
+                                                 D)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-maximal-prune-iterations
+      $remaining $food $reactions $catalysis)
+   (if (== $remaining 0)
+       $reactions
+       (let $retained
+         (neutral-raf-filter-valid-reactions
+           $reactions
+           (neutral-raf-closure $food $reactions)
+           $catalysis)
+         (if (== $retained $reactions)
+             $reactions
+             (neutral-raf-maximal-prune-iterations
+               (- $remaining 1) $food $retained $catalysis)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-maximal-prune-iterations'(A,
+                                            B,
+                                            C,
+                                            D,
+                                            E) :-
+    ==(A, 0, F),
+    (   F==true
+    ->  E=C
+    ;   G=H,
+        'neutral-raf-closure'(B, C, I),
+        'neutral-raf-filter-valid-reactions'(C, I, D, H),
+        ==(G, C, J),
+        (   J==true
+        ->  E=C
+        ;   -(A, 1, K),
+            'neutral-raf-maximal-prune-iterations'(K,
+                                                   B,
+                                                   G,
+                                                   D,
+                                                   E)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-maximal-reactions $food $reactions $catalysis)
+   (neutral-raf-maximal-prune-iterations
+     (neutral-raf-list-length $reactions)
+     $food $reactions $catalysis))
+[33m--> prolog clause -->
+[32m'neutral-raf-maximal-reactions'(A, B, C, D) :-
+    'neutral-raf-list-length'(B, E),
+    'neutral-raf-maximal-prune-iterations'(E,
+                                           A,
+                                           B,
+                                           C,
+                                           D).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-maximal-pruned-ids $food $reactions $catalysis)
+   (neutral-raf-reaction-ids
+     (neutral-raf-maximal-reactions $food $reactions $catalysis)))
+[33m--> prolog clause -->
+[32m'neutral-raf-maximal-pruned-ids'(A, B, C, D) :-
+    'neutral-raf-maximal-reactions'(A, B, C, E),
+    'neutral-raf-reaction-ids'(E, D).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-append $left $right)
+   (if (== $left ())
+       $right
+       (cons-atom
+         (car-atom $left)
+         (neutral-raf-append (cdr-atom $left) $right))))
+[33m--> prolog clause -->
+[32m'neutral-raf-append'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=B
+    ;   'car-atom'(A, E),
+        'cdr-atom'(A, F),
+        'neutral-raf-append'(F, B, G),
+        'cons-atom'(E, G, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-prepend-to-each $item $subsets)
+   (if (== $subsets ())
+       ()
+       (cons-atom
+         (cons-atom $item (car-atom $subsets))
+         (neutral-raf-prepend-to-each $item (cdr-atom $subsets)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-prepend-to-each'(A, B, C) :-
+    ==(B, [], D),
+    (   D==true
+    ->  C=[]
+    ;   'car-atom'(B, E),
+        'cons-atom'(A, E, F),
+        'cdr-atom'(B, G),
+        'neutral-raf-prepend-to-each'(A, G, H),
+        'cons-atom'(F, H, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-subsets $items)
+   (if (== $items ())
+       (())
+       (let $tail-subsets (neutral-raf-subsets (cdr-atom $items))
+         (neutral-raf-append
+           $tail-subsets
+           (neutral-raf-prepend-to-each
+             (car-atom $items) $tail-subsets)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-subsets'(A, B) :-
+    ==(A, [], C),
+    (   C==true
+    ->  B=[[]]
+    ;   D=E,
+        'cdr-atom'(A, F),
+        'neutral-raf-subsets'(F, E),
+        'car-atom'(A, G),
+        'neutral-raf-prepend-to-each'(G, D, H),
+        'neutral-raf-append'(D, H, B)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-filter-subsets $food $subsets $catalysis)
+   (if (== $subsets ())
+       ()
+       (let $subset (car-atom $subsets)
+         (if (neutral-raf-is-raf? $food $subset $catalysis)
+             (cons-atom
+               $subset
+               (neutral-raf-filter-subsets
+                 $food (cdr-atom $subsets) $catalysis))
+             (neutral-raf-filter-subsets
+               $food (cdr-atom $subsets) $catalysis)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-filter-subsets'(A, B, C, D) :-
+    ==(B, [], E),
+    (   E==true
+    ->  D=[]
+    ;   F=G,
+        'car-atom'(B, G),
+        'neutral-raf-is-raf?'(A, F, C, H),
+        (   H==true
+        ->  'cdr-atom'(B, I),
+            'neutral-raf-filter-subsets'(A, I, C, J),
+            'cons-atom'(F, J, D)
+        ;   'cdr-atom'(B, K),
+            'neutral-raf-filter-subsets'(A, K, C, D)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-exhaustive-subsets $food $reactions $catalysis)
+   (neutral-raf-filter-subsets
+     $food (neutral-raf-subsets $reactions) $catalysis))
+[33m--> prolog clause -->
+[32m'neutral-raf-exhaustive-subsets'(A, B, C, D) :-
+    'neutral-raf-subsets'(B, E),
+    'neutral-raf-filter-subsets'(A, E, C, D).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-reaction-ids $reactions)
+   (if (== $reactions ())
+       ()
+       (cons-atom
+         (raf-reaction-id (car-atom $reactions))
+         (neutral-raf-reaction-ids (cdr-atom $reactions)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-reaction-ids'(A, B) :-
+    ==(A, [], C),
+    (   C==true
+    ->  B=[]
+    ;   'car-atom'(A, D),
+        'raf-reaction-id'(D, E),
+        'cdr-atom'(A, F),
+        'neutral-raf-reaction-ids'(F, G),
+        'cons-atom'(E, G, B)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-subset-ids $subsets)
+   (if (== $subsets ())
+       ()
+       (cons-atom
+         (neutral-raf-reaction-ids (car-atom $subsets))
+         (neutral-raf-subset-ids (cdr-atom $subsets)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-subset-ids'(A, B) :-
+    ==(A, [], C),
+    (   C==true
+    ->  B=[]
+    ;   'car-atom'(A, D),
+        'neutral-raf-reaction-ids'(D, E),
+        'cdr-atom'(A, F),
+        'neutral-raf-subset-ids'(F, G),
+        'cons-atom'(E, G, B)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-exhaustive-subset-ids $food $reactions $catalysis)
+   (neutral-raf-subset-ids
+     (neutral-raf-exhaustive-subsets $food $reactions $catalysis)))
+[33m--> prolog clause -->
+[32m'neutral-raf-exhaustive-subset-ids'(A, B, C, D) :-
+    'neutral-raf-exhaustive-subsets'(A, B, C, E),
+    'neutral-raf-subset-ids'(E, D).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-reaction-member? $wanted $reactions)
+   (if (== $reactions ())
+       False
+       (if (== (raf-reaction-id $wanted)
+               (raf-reaction-id (car-atom $reactions)))
+           True
+           (neutral-raf-reaction-member? $wanted (cdr-atom $reactions)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-reaction-member?'(A, B, C) :-
+    ==(B, [], D),
+    (   D==true
+    ->  C=false
+    ;   'raf-reaction-id'(A, E),
+        'car-atom'(B, F),
+        'raf-reaction-id'(F, G),
+        ==(E, G, H),
+        (   H==true
+        ->  C=true
+        ;   'cdr-atom'(B, I),
+            'neutral-raf-reaction-member?'(A, I, C)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-reaction-in-any-subset? $wanted $subsets)
+   (if (== $subsets ())
+       False
+       (if (neutral-raf-reaction-member? $wanted (car-atom $subsets))
+           True
+           (neutral-raf-reaction-in-any-subset?
+             $wanted (cdr-atom $subsets)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-reaction-in-any-subset?'(A, B, C) :-
+    ==(B, [], D),
+    (   D==true
+    ->  C=false
+    ;   'car-atom'(B, E),
+        'neutral-raf-reaction-member?'(A, E, F),
+        (   F==true
+        ->  C=true
+        ;   'cdr-atom'(B, G),
+            'neutral-raf-reaction-in-any-subset?'(A, G, C)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-maximal-from-subsets $reactions $subsets)
+   (if (== $reactions ())
+       ()
+       (let $reaction (car-atom $reactions)
+         (if (neutral-raf-reaction-in-any-subset? $reaction $subsets)
+             (cons-atom
+               $reaction
+               (neutral-raf-maximal-from-subsets
+                 (cdr-atom $reactions) $subsets))
+             (neutral-raf-maximal-from-subsets
+               (cdr-atom $reactions) $subsets)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-maximal-from-subsets'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=[]
+    ;   E=F,
+        'car-atom'(A, F),
+        'neutral-raf-reaction-in-any-subset?'(E, B, G),
+        (   G==true
+        ->  'cdr-atom'(A, H),
+            'neutral-raf-maximal-from-subsets'(H, B, I),
+            'cons-atom'(E, I, C)
+        ;   'cdr-atom'(A, J),
+            'neutral-raf-maximal-from-subsets'(J, B, C)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-maximal-ids $food $reactions $catalysis)
+   (neutral-raf-reaction-ids
+     (neutral-raf-maximal-from-subsets
+       $reactions
+       (neutral-raf-exhaustive-subsets $food $reactions $catalysis))))
+[33m--> prolog clause -->
+[32m'neutral-raf-maximal-ids'(A, B, C, D) :-
+    'neutral-raf-exhaustive-subsets'(A, B, C, E),
+    'neutral-raf-maximal-from-subsets'(B, E, F),
+    'neutral-raf-reaction-ids'(F, D).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-reaction-subset? $left $right)
+   (if (== $left ())
+       True
+       (and (neutral-raf-reaction-member? (car-atom $left) $right)
+            (neutral-raf-reaction-subset? (cdr-atom $left) $right))))
+[33m--> prolog clause -->
+[32m'neutral-raf-reaction-subset?'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=true
+    ;   'car-atom'(A, E),
+        'neutral-raf-reaction-member?'(E, B, F),
+        'cdr-atom'(A, G),
+        'neutral-raf-reaction-subset?'(G, B, H),
+        and(F, H, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-proper-reaction-subset? $left $right)
+   (and (neutral-raf-reaction-subset? $left $right)
+        (< (neutral-raf-list-length $left)
+           (neutral-raf-list-length $right))))
+[33m--> prolog clause -->
+[32m'neutral-raf-proper-reaction-subset?'(A, B, C) :-
+    'neutral-raf-reaction-subset?'(A, B, D),
+    'neutral-raf-list-length'(A, E),
+    'neutral-raf-list-length'(B, F),
+    <(E, F, G),
+    and(D, G, C).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-has-proper-raf-subset? $wanted $raf-subsets)
+   (if (== $raf-subsets ())
+       False
+       (if (neutral-raf-proper-reaction-subset?
+             (car-atom $raf-subsets) $wanted)
+           True
+           (neutral-raf-has-proper-raf-subset?
+             $wanted (cdr-atom $raf-subsets)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-has-proper-raf-subset?'(A, B, C) :-
+    ==(B, [], D),
+    (   D==true
+    ->  C=false
+    ;   'car-atom'(B, E),
+        'neutral-raf-proper-reaction-subset?'(E, A, F),
+        (   F==true
+        ->  C=true
+        ;   'cdr-atom'(B, G),
+            'neutral-raf-has-proper-raf-subset?'(A, G, C)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-filter-irreducible $remaining $all-raf-subsets)
+   (if (== $remaining ())
+       ()
+       (let $subset (car-atom $remaining)
+         (if (neutral-raf-has-proper-raf-subset? $subset $all-raf-subsets)
+             (neutral-raf-filter-irreducible
+               (cdr-atom $remaining) $all-raf-subsets)
+             (cons-atom
+               $subset
+               (neutral-raf-filter-irreducible
+                 (cdr-atom $remaining) $all-raf-subsets))))))
+[33m--> prolog clause -->
+[32m'neutral-raf-filter-irreducible'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=[]
+    ;   E=F,
+        'car-atom'(A, F),
+        'neutral-raf-has-proper-raf-subset?'(E, B, G),
+        (   G==true
+        ->  'cdr-atom'(A, H),
+            'neutral-raf-filter-irreducible'(H, B, C)
+        ;   'cdr-atom'(A, I),
+            'neutral-raf-filter-irreducible'(I, B, J),
+            'cons-atom'(E, J, C)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-irreducible-subset-ids $food $reactions $catalysis)
+   (let $raf-subsets
+     (neutral-raf-exhaustive-subsets $food $reactions $catalysis)
+     (neutral-raf-subset-ids
+       (neutral-raf-filter-irreducible $raf-subsets $raf-subsets))))
+[33m--> prolog clause -->
+[32m'neutral-raf-irreducible-subset-ids'(A, B, C, D) :-
+    E=F,
+    'neutral-raf-exhaustive-subsets'(A, B, C, F),
+    'neutral-raf-filter-irreducible'(E, E, G),
+    'neutral-raf-subset-ids'(G, D).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-l3-molecules)
+   ("0" "00" "000" "001" "01" "010" "011"
+    "1" "10" "100" "101" "11" "110" "111"))
+[33m--> prolog clause -->
+[32m'neutral-raf-l3-molecules'([ "0",
+                                  "00",
+                                  "000",
+                                  "001",
+                                  "01",
+                                  "010",
+                                  "011",
+                                  "1",
+                                  "10",
+                                  "100",
+                                  "101",
+                                  "11",
+                                  "110",
+                                  "111"
+                                ]).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-l3-food)
+   ("0" "00" "01" "1" "10" "11"))
+[33m--> prolog clause -->
+[32m'neutral-raf-l3-food'(["0", "00", "01", "1", "10", "11"]).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-l3-reactions $system-id)
+   ((raf-reaction $system-id "cleave:00:1" reactants ("00") products ("0" "0"))
+    (raf-reaction $system-id "cleave:000:1" reactants ("000") products ("0" "00"))
+    (raf-reaction $system-id "cleave:000:2" reactants ("000") products ("00" "0"))
+    (raf-reaction $system-id "cleave:001:1" reactants ("001") products ("0" "01"))
+    (raf-reaction $system-id "cleave:001:2" reactants ("001") products ("00" "1"))
+    (raf-reaction $system-id "cleave:01:1" reactants ("01") products ("0" "1"))
+    (raf-reaction $system-id "cleave:010:1" reactants ("010") products ("0" "10"))
+    (raf-reaction $system-id "cleave:010:2" reactants ("010") products ("01" "0"))
+    (raf-reaction $system-id "cleave:011:1" reactants ("011") products ("0" "11"))
+    (raf-reaction $system-id "cleave:011:2" reactants ("011") products ("01" "1"))
+    (raf-reaction $system-id "cleave:10:1" reactants ("10") products ("1" "0"))
+    (raf-reaction $system-id "cleave:100:1" reactants ("100") products ("1" "00"))
+    (raf-reaction $system-id "cleave:100:2" reactants ("100") products ("10" "0"))
+    (raf-reaction $system-id "cleave:101:1" reactants ("101") products ("1" "01"))
+    (raf-reaction $system-id "cleave:101:2" reactants ("101") products ("10" "1"))
+    (raf-reaction $system-id "cleave:11:1" reactants ("11") products ("1" "1"))
+    (raf-reaction $system-id "cleave:110:1" reactants ("110") products ("1" "10"))
+    (raf-reaction $system-id "cleave:110:2" reactants ("110") products ("11" "0"))
+    (raf-reaction $system-id "cleave:111:1" reactants ("111") products ("1" "11"))
+    (raf-reaction $system-id "cleave:111:2" reactants ("111") products ("11" "1"))
+    (raf-reaction $system-id "lig:0:0" reactants ("0" "0") products ("00"))
+    (raf-reaction $system-id "lig:0:00" reactants ("0" "00") products ("000"))
+    (raf-reaction $system-id "lig:0:01" reactants ("0" "01") products ("001"))
+    (raf-reaction $system-id "lig:0:1" reactants ("0" "1") products ("01"))
+    (raf-reaction $system-id "lig:0:10" reactants ("0" "10") products ("010"))
+    (raf-reaction $system-id "lig:0:11" reactants ("0" "11") products ("011"))
+    (raf-reaction $system-id "lig:00:0" reactants ("00" "0") products ("000"))
+    (raf-reaction $system-id "lig:00:1" reactants ("00" "1") products ("001"))
+    (raf-reaction $system-id "lig:01:0" reactants ("01" "0") products ("010"))
+    (raf-reaction $system-id "lig:01:1" reactants ("01" "1") products ("011"))
+    (raf-reaction $system-id "lig:1:0" reactants ("1" "0") products ("10"))
+    (raf-reaction $system-id "lig:1:00" reactants ("1" "00") products ("100"))
+    (raf-reaction $system-id "lig:1:01" reactants ("1" "01") products ("101"))
+    (raf-reaction $system-id "lig:1:1" reactants ("1" "1") products ("11"))
+    (raf-reaction $system-id "lig:1:10" reactants ("1" "10") products ("110"))
+    (raf-reaction $system-id "lig:1:11" reactants ("1" "11") products ("111"))
+    (raf-reaction $system-id "lig:10:0" reactants ("10" "0") products ("100"))
+    (raf-reaction $system-id "lig:10:1" reactants ("10" "1") products ("101"))
+    (raf-reaction $system-id "lig:11:0" reactants ("11" "0") products ("110"))
+    (raf-reaction $system-id "lig:11:1" reactants ("11" "1") products ("111"))))
+[33m--> prolog clause -->
+[32m'neutral-raf-l3-reactions'(A,
+                                [ [ 'raf-reaction',
+                                    A,
+                                    "cleave:00:1",
+                                    reactants,
+                                    ["00"],
+                                    products,
+                                    ["0", "0"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:000:1",
+                                    reactants,
+                                    ["000"],
+                                    products,
+                                    ["0", "00"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:000:2",
+                                    reactants,
+                                    ["000"],
+                                    products,
+                                    ["00", "0"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:001:1",
+                                    reactants,
+                                    ["001"],
+                                    products,
+                                    ["0", "01"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:001:2",
+                                    reactants,
+                                    ["001"],
+                                    products,
+                                    ["00", "1"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:01:1",
+                                    reactants,
+                                    ["01"],
+                                    products,
+                                    ["0", "1"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:010:1",
+                                    reactants,
+                                    ["010"],
+                                    products,
+                                    ["0", "10"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:010:2",
+                                    reactants,
+                                    ["010"],
+                                    products,
+                                    ["01", "0"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:011:1",
+                                    reactants,
+                                    ["011"],
+                                    products,
+                                    ["0", "11"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:011:2",
+                                    reactants,
+                                    ["011"],
+                                    products,
+                                    ["01", "1"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:10:1",
+                                    reactants,
+                                    ["10"],
+                                    products,
+                                    ["1", "0"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:100:1",
+                                    reactants,
+                                    ["100"],
+                                    products,
+                                    ["1", "00"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:100:2",
+                                    reactants,
+                                    ["100"],
+                                    products,
+                                    ["10", "0"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:101:1",
+                                    reactants,
+                                    ["101"],
+                                    products,
+                                    ["1", "01"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:101:2",
+                                    reactants,
+                                    ["101"],
+                                    products,
+                                    ["10", "1"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:11:1",
+                                    reactants,
+                                    ["11"],
+                                    products,
+                                    ["1", "1"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:110:1",
+                                    reactants,
+                                    ["110"],
+                                    products,
+                                    ["1", "10"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:110:2",
+                                    reactants,
+                                    ["110"],
+                                    products,
+                                    ["11", "0"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:111:1",
+                                    reactants,
+                                    ["111"],
+                                    products,
+                                    ["1", "11"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "cleave:111:2",
+                                    reactants,
+                                    ["111"],
+                                    products,
+                                    ["11", "1"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:0:0",
+                                    reactants,
+                                    ["0", "0"],
+                                    products,
+                                    ["00"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:0:00",
+                                    reactants,
+                                    ["0", "00"],
+                                    products,
+                                    ["000"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:0:01",
+                                    reactants,
+                                    ["0", "01"],
+                                    products,
+                                    ["001"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:0:1",
+                                    reactants,
+                                    ["0", "1"],
+                                    products,
+                                    ["01"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:0:10",
+                                    reactants,
+                                    ["0", "10"],
+                                    products,
+                                    ["010"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:0:11",
+                                    reactants,
+                                    ["0", "11"],
+                                    products,
+                                    ["011"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:00:0",
+                                    reactants,
+                                    ["00", "0"],
+                                    products,
+                                    ["000"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:00:1",
+                                    reactants,
+                                    ["00", "1"],
+                                    products,
+                                    ["001"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:01:0",
+                                    reactants,
+                                    ["01", "0"],
+                                    products,
+                                    ["010"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:01:1",
+                                    reactants,
+                                    ["01", "1"],
+                                    products,
+                                    ["011"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:1:0",
+                                    reactants,
+                                    ["1", "0"],
+                                    products,
+                                    ["10"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:1:00",
+                                    reactants,
+                                    ["1", "00"],
+                                    products,
+                                    ["100"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:1:01",
+                                    reactants,
+                                    ["1", "01"],
+                                    products,
+                                    ["101"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:1:1",
+                                    reactants,
+                                    ["1", "1"],
+                                    products,
+                                    ["11"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:1:10",
+                                    reactants,
+                                    ["1", "10"],
+                                    products,
+                                    ["110"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:1:11",
+                                    reactants,
+                                    ["1", "11"],
+                                    products,
+                                    ["111"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:10:0",
+                                    reactants,
+                                    ["10", "0"],
+                                    products,
+                                    ["100"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:10:1",
+                                    reactants,
+                                    ["10", "1"],
+                                    products,
+                                    ["101"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:11:0",
+                                    reactants,
+                                    ["11", "0"],
+                                    products,
+                                    ["110"]
+                                  ],
+                                  [ 'raf-reaction',
+                                    A,
+                                    "lig:11:1",
+                                    reactants,
+                                    ["11", "1"],
+                                    products,
+                                    ["111"]
+                                  ]
+                                ]).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-l3-reaction-count)
+   (neutral-raf-list-length
+     (neutral-raf-l3-reactions generated-l3-catalog)))
+[33m--> prolog clause -->
+[32m'neutral-raf-l3-reaction-count'(A) :-
+    'neutral-raf-l3-reactions'('generated-l3-catalog', B),
+    'neutral-raf-list-length'(B, A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-l3-reaction-ids)
+   (neutral-raf-reaction-ids
+     (neutral-raf-l3-reactions generated-l3-catalog)))
+[33m--> prolog clause -->
+[32m'neutral-raf-l3-reaction-ids'(A) :-
+    'neutral-raf-l3-reactions'('generated-l3-catalog', B),
+    'neutral-raf-reaction-ids'(B, A).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-nth $index $items)
+   (if (== $index 0)
+       (car-atom $items)
+       (neutral-raf-nth (- $index 1) (cdr-atom $items))))
+[33m--> prolog clause -->
+[32m'neutral-raf-nth'(A, B, C) :-
+    ==(A, 0, D),
+    (   D==true
+    ->  'car-atom'(B, C)
+    ;   -(A, 1, E),
+        'cdr-atom'(B, F),
+        'neutral-raf-nth'(E, F, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-remove-at $index $items)
+   (if (== $index 0)
+       (cdr-atom $items)
+       (cons-atom
+         (car-atom $items)
+         (neutral-raf-remove-at (- $index 1) (cdr-atom $items)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-remove-at'(A, B, C) :-
+    ==(A, 0, D),
+    (   D==true
+    ->  'cdr-atom'(B, C)
+    ;   'car-atom'(B, E),
+        -(A, 1, F),
+        'cdr-atom'(B, G),
+        'neutral-raf-remove-at'(F, G, H),
+        'cons-atom'(E, H, C)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-reaction-rng-next $rng-state)
+   (#mod (+ (* 1103515245 $rng-state) 12345) 2147483648))
+[33m--> prolog clause -->
+[32m'neutral-raf-reaction-rng-next'(A, B) :-
+    *(1103515245, A, C),
+    +(C, 12345, D),
+    '#mod'(D, 2147483648, B).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-draw-reactions $count $rng-state $remaining)
+   (if (== $count 0)
+       ()
+       (let $next-state (neutral-raf-reaction-rng-next $rng-state)
+         (let $chosen-index
+           (#mod $next-state (neutral-raf-list-length $remaining))
+           (let $chosen (neutral-raf-nth $chosen-index $remaining)
+             (cons-atom
+               $chosen
+               (neutral-raf-draw-reactions
+                 (- $count 1)
+                 $next-state
+                 (neutral-raf-remove-at $chosen-index $remaining))))))))
+[33m--> prolog clause -->
+[32m'neutral-raf-draw-reactions'(A, B, C, D) :-
+    ==(A, 0, E),
+    (   E==true
+    ->  D=[]
+    ;   F=G,
+        'neutral-raf-reaction-rng-next'(B, G),
+        H=I,
+        'neutral-raf-list-length'(C, J),
+        '#mod'(F, J, I),
+        K=L,
+        'neutral-raf-nth'(H, C, L),
+        -(A, 1, M),
+        'neutral-raf-remove-at'(H, C, N),
+        'neutral-raf-draw-reactions'(M, F, N, O),
+        'cons-atom'(K, O, D)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-filter-selected-reactions $canonical $selected)
+   (if (== $canonical ())
+       ()
+       (let $reaction (car-atom $canonical)
+         (if (neutral-raf-reaction-member? $reaction $selected)
+             (cons-atom
+               $reaction
+               (neutral-raf-filter-selected-reactions
+                 (cdr-atom $canonical) $selected))
+             (neutral-raf-filter-selected-reactions
+               (cdr-atom $canonical) $selected)))))
+[33m--> prolog clause -->
+[32m'neutral-raf-filter-selected-reactions'(A, B, C) :-
+    ==(A, [], D),
+    (   D==true
+    ->  C=[]
+    ;   E=F,
+        'car-atom'(A, F),
+        'neutral-raf-reaction-member?'(E, B, G),
+        (   G==true
+        ->  'cdr-atom'(A, H),
+            'neutral-raf-filter-selected-reactions'(H, B, I),
+            'cons-atom'(E, I, C)
+        ;   'cdr-atom'(A, J),
+            'neutral-raf-filter-selected-reactions'(J, B, C)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-l3-sampled-reactions $system-id $graph-seed)
+   (let $canonical (neutral-raf-l3-reactions $system-id)
+     (neutral-raf-filter-selected-reactions
+       $canonical
+       (neutral-raf-draw-reactions 8 $graph-seed $canonical))))
+[33m--> prolog clause -->
+[32m'neutral-raf-l3-sampled-reactions'(A, B, C) :-
+    D=E,
+    'neutral-raf-l3-reactions'(A, E),
+    'neutral-raf-draw-reactions'(8, B, D, F),
+    'neutral-raf-filter-selected-reactions'(D, F, C).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-catalysis-draw
+      $graph-seed $molecule-index $reaction-index)
+   (#mod (+ (* 1664525 $graph-seed)
+            (+ (* 1013904223 $molecule-index)
+               (* 69069 $reaction-index)))
+         40))
+[33m--> prolog clause -->
+[32m'neutral-raf-catalysis-draw'(A, B, C, D) :-
+    *(1664525, A, E),
+    *(1013904223, B, F),
+    *(69069, C, G),
+    +(F, G, H),
+    +(E, H, I),
+    '#mod'(I, 40, D).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-catalysis-for-reactions
+      $system-id $graph-seed $f $molecule $molecule-index
+      $reaction-index $reactions)
+   (if (== $reactions ())
+       ()
+       (let $reaction (car-atom $reactions)
+         (if (< (neutral-raf-catalysis-draw
+                  $graph-seed $molecule-index $reaction-index) $f)
+             (cons-atom
+               (raf-catalysis
+                 $system-id $molecule (raf-reaction-id $reaction))
+               (neutral-raf-catalysis-for-reactions
+                 $system-id $graph-seed $f $molecule $molecule-index
+                 (+ $reaction-index 1) (cdr-atom $reactions)))
+             (neutral-raf-catalysis-for-reactions
+               $system-id $graph-seed $f $molecule $molecule-index
+               (+ $reaction-index 1) (cdr-atom $reactions))))))
+[33m--> prolog clause -->
+[32m'neutral-raf-catalysis-for-reactions'(A,
+                                           B,
+                                           C,
+                                           D,
+                                           E,
+                                           F,
+                                           G,
+                                           H) :-
+    ==(G, [], I),
+    (   I==true
+    ->  H=[]
+    ;   J=K,
+        'car-atom'(G, K),
+        'neutral-raf-catalysis-draw'(B, E, F, L),
+        <(L, C, M),
+        (   M==true
+        ->  'raf-reaction-id'(J, N),
+            +(F, 1, O),
+            'cdr-atom'(G, P),
+            'neutral-raf-catalysis-for-reactions'(A,
+                                                  B,
+                                                  C,
+                                                  D,
+                                                  E,
+                                                  O,
+                                                  P,
+                                                  Q),
+            'cons-atom'(['raf-catalysis', A, D, N],
+                        Q,
+                        H)
+        ;   +(F, 1, R),
+            'cdr-atom'(G, S),
+            'neutral-raf-catalysis-for-reactions'(A,
+                                                  B,
+                                                  C,
+                                                  D,
+                                                  E,
+                                                  R,
+                                                  S,
+                                                  H)
+        )
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-l3-sampled-catalysis-from
+      $system-id $graph-seed $f $molecule-index $molecules $reactions)
+   (if (== $molecules ())
+       ()
+       (neutral-raf-append
+         (neutral-raf-catalysis-for-reactions
+           $system-id $graph-seed $f (car-atom $molecules)
+           $molecule-index 0 $reactions)
+         (neutral-raf-l3-sampled-catalysis-from
+           $system-id $graph-seed $f (+ $molecule-index 1)
+           (cdr-atom $molecules) $reactions))))
+[33m--> prolog clause -->
+[32m'neutral-raf-l3-sampled-catalysis-from'(A,
+                                             B,
+                                             C,
+                                             D,
+                                             E,
+                                             F,
+                                             G) :-
+    ==(E, [], H),
+    (   H==true
+    ->  G=[]
+    ;   'car-atom'(E, I),
+        'neutral-raf-catalysis-for-reactions'(A,
+                                              B,
+                                              C,
+                                              I,
+                                              D,
+                                              0,
+                                              F,
+                                              J),
+        +(D, 1, K),
+        'cdr-atom'(E, L),
+        'neutral-raf-l3-sampled-catalysis-from'(A,
+                                                B,
+                                                C,
+                                                K,
+                                                L,
+                                                F,
+                                                M),
+        'neutral-raf-append'(J, M, G)
+    ).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-l3-sampled-catalysis $system-id $graph-seed $f)
+   (neutral-raf-l3-sampled-catalysis-from
+     $system-id $graph-seed $f 0
+     (neutral-raf-l3-molecules)
+     (neutral-raf-l3-sampled-reactions $system-id $graph-seed)))
+[33m--> prolog clause -->
+[32m'neutral-raf-l3-sampled-catalysis'(A, B, C, D) :-
+    'neutral-raf-l3-molecules'(E),
+    'neutral-raf-l3-sampled-reactions'(A, B, F),
+    'neutral-raf-l3-sampled-catalysis-from'(A,
+                                            B,
+                                            C,
+                                            0,
+                                            E,
+                                            F,
+                                            D).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-l3-generated-record $graph-seed $f)
+   (let $system-id (generated-l3 $graph-seed $f)
+     (let $reactions
+       (neutral-raf-l3-sampled-reactions $system-id $graph-seed)
+       (let $catalysis
+         (neutral-raf-l3-sampled-catalysis $system-id $graph-seed $f)
+         (generated-raf-record
+           $graph-seed $f
+           (neutral-raf-l3-food)
+           $reactions
+           $catalysis
+           (neutral-raf-exhaustive-subset-ids
+             (neutral-raf-l3-food) $reactions $catalysis)
+           (neutral-raf-maximal-ids
+             (neutral-raf-l3-food) $reactions $catalysis)
+           (neutral-raf-irreducible-subset-ids
+             (neutral-raf-l3-food) $reactions $catalysis))))))
+[33m--> prolog clause -->
+[32m'neutral-raf-l3-generated-record'(A,
+                                       B,
+                                       [ 'generated-raf-record',
+                                         A,
+                                         B,
+                                         C,
+                                         D,
+                                         E,
+                                         F,
+                                         G,
+                                         H
+                                       ]) :-
+    I=['generated-l3', A, B],
+    D=J,
+    'neutral-raf-l3-sampled-reactions'(I, A, J),
+    E=K,
+    'neutral-raf-l3-sampled-catalysis'(I, A, B, K),
+    'neutral-raf-l3-food'(C),
+    'neutral-raf-l3-food'(L),
+    'neutral-raf-exhaustive-subset-ids'(L, D, E, F),
+    'neutral-raf-l3-food'(M),
+    'neutral-raf-maximal-ids'(M, D, E, G),
+    'neutral-raf-l3-food'(N),
+    'neutral-raf-irreducible-subset-ids'(N, D, E, H).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-fixture-food-chain)
+   ((raf-system food-chain model neutral-crs-v1 food ("0" "1"))
+    (raf-reaction food-chain r1 reactants ("0" "1") products ("01"))
+    (raf-reaction food-chain r2 reactants ("01" "1") products ("011"))
+    (raf-catalysis food-chain "0" r1)
+    (raf-catalysis food-chain "011" r2)))
+[33m--> prolog clause -->
+[32m'neutral-raf-fixture-food-chain'([ [ 'raf-system',
+                                          'food-chain',
+                                          model,
+                                          'neutral-crs-v1',
+                                          food,
+                                          ["0", "1"]
+                                        ],
+                                        [ 'raf-reaction',
+                                          'food-chain',
+                                          r1,
+                                          reactants,
+                                          ["0", "1"],
+                                          products,
+                                          ["01"]
+                                        ],
+                                        [ 'raf-reaction',
+                                          'food-chain',
+                                          r2,
+                                          reactants,
+                                          ["01", "1"],
+                                          products,
+                                          ["011"]
+                                        ],
+                                        ['raf-catalysis', 'food-chain', "0", r1],
+                                        ['raf-catalysis', 'food-chain', "011", r2]
+                                      ]).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-fixture-multiple-products-catalysts)
+   ((raf-system multiple-products model neutral-crs-v1 food ("0" "01" "1"))
+    (raf-reaction multiple-products cleave reactants ("01") products ("0" "1"))
+    (raf-reaction multiple-products left reactants ("0" "0") products ("00"))
+    (raf-reaction multiple-products right reactants ("1" "1") products ("11"))
+    (raf-catalysis multiple-products "0" cleave)
+    (raf-catalysis multiple-products "0" left)
+    (raf-catalysis multiple-products "1" cleave)
+    (raf-catalysis multiple-products "1" right)))
+[33m--> prolog clause -->
+[32m'neutral-raf-fixture-multiple-products-catalysts'([ [ 'raf-system',
+                                                           'multiple-products',
+                                                           model,
+                                                           'neutral-crs-v1',
+                                                           food,
+                                                           ["0", "01", "1"]
+                                                         ],
+                                                         [ 'raf-reaction',
+                                                           'multiple-products',
+                                                           cleave,
+                                                           reactants,
+                                                           ["01"],
+                                                           products,
+                                                           ["0", "1"]
+                                                         ],
+                                                         [ 'raf-reaction',
+                                                           'multiple-products',
+                                                           left,
+                                                           reactants,
+                                                           ["0", "0"],
+                                                           products,
+                                                           ["00"]
+                                                         ],
+                                                         [ 'raf-reaction',
+                                                           'multiple-products',
+                                                           right,
+                                                           reactants,
+                                                           ["1", "1"],
+                                                           products,
+                                                           ["11"]
+                                                         ],
+                                                         [ 'raf-catalysis',
+                                                           'multiple-products',
+                                                           "0",
+                                                           cleave
+                                                         ],
+                                                         [ 'raf-catalysis',
+                                                           'multiple-products',
+                                                           "0",
+                                                           left
+                                                         ],
+                                                         [ 'raf-catalysis',
+                                                           'multiple-products',
+                                                           "1",
+                                                           cleave
+                                                         ],
+                                                         [ 'raf-catalysis',
+                                                           'multiple-products',
+                                                           "1",
+                                                           right
+                                                         ]
+                                                       ]).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-fixture-food-catalyst)
+   ((raf-system food-catalyst model neutral-crs-v1 food ("0" "1"))
+    (raf-reaction food-catalyst r reactants ("0" "1") products ("01"))
+    (raf-catalysis food-catalyst "0" r)))
+[33m--> prolog clause -->
+[32m'neutral-raf-fixture-food-catalyst'([ [ 'raf-system',
+                                             'food-catalyst',
+                                             model,
+                                             'neutral-crs-v1',
+                                             food,
+                                             ["0", "1"]
+                                           ],
+                                           [ 'raf-reaction',
+                                             'food-catalyst',
+                                             r,
+                                             reactants,
+                                             ["0", "1"],
+                                             products,
+                                             ["01"]
+                                           ],
+                                           ['raf-catalysis', 'food-catalyst', "0", r]
+                                         ]).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-fixture-self-catalysis)
+   ((raf-system self-catalysis model neutral-crs-v1 food ("0" "1"))
+    (raf-reaction self-catalysis r reactants ("0" "1") products ("01"))
+    (raf-catalysis self-catalysis "01" r)))
+[33m--> prolog clause -->
+[32m'neutral-raf-fixture-self-catalysis'([ [ 'raf-system',
+                                              'self-catalysis',
+                                              model,
+                                              'neutral-crs-v1',
+                                              food,
+                                              ["0", "1"]
+                                            ],
+                                            [ 'raf-reaction',
+                                              'self-catalysis',
+                                              r,
+                                              reactants,
+                                              ["0", "1"],
+                                              products,
+                                              ["01"]
+                                            ],
+                                            [ 'raf-catalysis',
+                                              'self-catalysis',
+                                              "01",
+                                              r
+                                            ]
+                                          ]).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-fixture-unreachable-cycle)
+   ((raf-system unreachable-cycle model neutral-crs-v1 food ("0" "1"))
+    (raf-reaction unreachable-cycle r1 reactants (x) products (y))
+    (raf-reaction unreachable-cycle r2 reactants (y) products (x))
+    (raf-catalysis unreachable-cycle x r2)
+    (raf-catalysis unreachable-cycle y r1)))
+[33m--> prolog clause -->
+[32m'neutral-raf-fixture-unreachable-cycle'([ [ 'raf-system',
+                                                 'unreachable-cycle',
+                                                 model,
+                                                 'neutral-crs-v1',
+                                                 food,
+                                                 ["0", "1"]
+                                               ],
+                                               [ 'raf-reaction',
+                                                 'unreachable-cycle',
+                                                 r1,
+                                                 reactants,
+                                                 [x],
+                                                 products,
+                                                 [y]
+                                               ],
+                                               [ 'raf-reaction',
+                                                 'unreachable-cycle',
+                                                 r2,
+                                                 reactants,
+                                                 [y],
+                                                 products,
+                                                 [x]
+                                               ],
+                                               [ 'raf-catalysis',
+                                                 'unreachable-cycle',
+                                                 x,
+                                                 r2
+                                               ],
+                                               [ 'raf-catalysis',
+                                                 'unreachable-cycle',
+                                                 y,
+                                                 r1
+                                               ]
+                                             ]).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-fixture-edge-monotonic-base)
+   ((raf-system edge-base model neutral-crs-v1 food ("0" "1"))
+    (raf-reaction edge-base r1 reactants ("0") products ("00"))
+    (raf-reaction edge-base r2 reactants ("1") products ("11"))
+    (raf-catalysis edge-base "0" r1)))
+[33m--> prolog clause -->
+[32m'neutral-raf-fixture-edge-monotonic-base'([ [ 'raf-system',
+                                                   'edge-base',
+                                                   model,
+                                                   'neutral-crs-v1',
+                                                   food,
+                                                   ["0", "1"]
+                                                 ],
+                                                 [ 'raf-reaction',
+                                                   'edge-base',
+                                                   r1,
+                                                   reactants,
+                                                   ["0"],
+                                                   products,
+                                                   ["00"]
+                                                 ],
+                                                 [ 'raf-reaction',
+                                                   'edge-base',
+                                                   r2,
+                                                   reactants,
+                                                   ["1"],
+                                                   products,
+                                                   ["11"]
+                                                 ],
+                                                 [ 'raf-catalysis',
+                                                   'edge-base',
+                                                   "0",
+                                                   r1
+                                                 ]
+                                               ]).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-fixture-edge-monotonic-added)
+   ((raf-system edge-added model neutral-crs-v1 food ("0" "1"))
+    (raf-reaction edge-added r1 reactants ("0") products ("00"))
+    (raf-reaction edge-added r2 reactants ("1") products ("11"))
+    (raf-catalysis edge-added "0" r1)
+    (raf-catalysis edge-added "1" r2)))
+[33m--> prolog clause -->
+[32m'neutral-raf-fixture-edge-monotonic-added'([ [ 'raf-system',
+                                                    'edge-added',
+                                                    model,
+                                                    'neutral-crs-v1',
+                                                    food,
+                                                    ["0", "1"]
+                                                  ],
+                                                  [ 'raf-reaction',
+                                                    'edge-added',
+                                                    r1,
+                                                    reactants,
+                                                    ["0"],
+                                                    products,
+                                                    ["00"]
+                                                  ],
+                                                  [ 'raf-reaction',
+                                                    'edge-added',
+                                                    r2,
+                                                    reactants,
+                                                    ["1"],
+                                                    products,
+                                                    ["11"]
+                                                  ],
+                                                  [ 'raf-catalysis',
+                                                    'edge-added',
+                                                    "0",
+                                                    r1
+                                                  ],
+                                                  [ 'raf-catalysis',
+                                                    'edge-added',
+                                                    "1",
+                                                    r2
+                                                  ]
+                                                ]).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-fixture-deletion-positive)
+   ((raf-system deletion-positive model neutral-crs-v1 food ("0" "1"))
+    (raf-reaction deletion-positive r1 reactants ("0") products ("00"))
+    (raf-reaction deletion-positive r2 reactants ("00" "1") products ("001"))
+    (raf-catalysis deletion-positive "0" r1)
+    (raf-catalysis deletion-positive "001" r2)))
+[33m--> prolog clause -->
+[32m'neutral-raf-fixture-deletion-positive'([ [ 'raf-system',
+                                                 'deletion-positive',
+                                                 model,
+                                                 'neutral-crs-v1',
+                                                 food,
+                                                 ["0", "1"]
+                                               ],
+                                               [ 'raf-reaction',
+                                                 'deletion-positive',
+                                                 r1,
+                                                 reactants,
+                                                 ["0"],
+                                                 products,
+                                                 ["00"]
+                                               ],
+                                               [ 'raf-reaction',
+                                                 'deletion-positive',
+                                                 r2,
+                                                 reactants,
+                                                 ["00", "1"],
+                                                 products,
+                                                 ["001"]
+                                               ],
+                                               [ 'raf-catalysis',
+                                                 'deletion-positive',
+                                                 "0",
+                                                 r1
+                                               ],
+                                               [ 'raf-catalysis',
+                                                 'deletion-positive',
+                                                 "001",
+                                                 r2
+                                               ]
+                                             ]).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-fixture-deletion-edge)
+   ((raf-system deletion-edge model neutral-crs-v1 food ("0" "1"))
+    (raf-reaction deletion-edge r1 reactants ("0") products ("00"))
+    (raf-reaction deletion-edge r2 reactants ("00" "1") products ("001"))
+    (raf-catalysis deletion-edge "0" r1)))
+[33m--> prolog clause -->
+[32m'neutral-raf-fixture-deletion-edge'([ [ 'raf-system',
+                                             'deletion-edge',
+                                             model,
+                                             'neutral-crs-v1',
+                                             food,
+                                             ["0", "1"]
+                                           ],
+                                           [ 'raf-reaction',
+                                             'deletion-edge',
+                                             r1,
+                                             reactants,
+                                             ["0"],
+                                             products,
+                                             ["00"]
+                                           ],
+                                           [ 'raf-reaction',
+                                             'deletion-edge',
+                                             r2,
+                                             reactants,
+                                             ["00", "1"],
+                                             products,
+                                             ["001"]
+                                           ],
+                                           ['raf-catalysis', 'deletion-edge', "0", r1]
+                                         ]).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-fixture-deletion-reaction)
+   ((raf-system deletion-reaction model neutral-crs-v1 food ("0" "1"))
+    (raf-reaction deletion-reaction r2 reactants ("00" "1") products ("001"))
+    (raf-catalysis deletion-reaction "001" r2)))
+[33m--> prolog clause -->
+[32m'neutral-raf-fixture-deletion-reaction'([ [ 'raf-system',
+                                                 'deletion-reaction',
+                                                 model,
+                                                 'neutral-crs-v1',
+                                                 food,
+                                                 ["0", "1"]
+                                               ],
+                                               [ 'raf-reaction',
+                                                 'deletion-reaction',
+                                                 r2,
+                                                 reactants,
+                                                 ["00", "1"],
+                                                 products,
+                                                 ["001"]
+                                               ],
+                                               [ 'raf-catalysis',
+                                                 'deletion-reaction',
+                                                 "001",
+                                                 r2
+                                               ]
+                                             ]).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-hand-fixture-family-count) 7)
+[33m--> prolog clause -->
+[32m'neutral-raf-hand-fixture-family-count'(7).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta function -->
+[36m(= (neutral-raf-hand-fixture-serialization-status)
+   (neutral-raf-interface neutral-crs-v1 hand-fixtures 7
+                          sampled-calibration embargoed
+                          subset-predicate implemented
+                          exhaustive-enumeration implemented
+                          maximal-and-irrraf implemented))
+[33m--> prolog clause -->
+[32m'neutral-raf-hand-fixture-serialization-status'([ 'neutral-raf-interface',
+                                                       'neutral-crs-v1',
+                                                       'hand-fixtures',
+                                                       7,
+                                                       'sampled-calibration',
+                                                       embargoed,
+                                                       'subset-predicate',
+                                                       implemented,
+                                                       'exhaustive-enumeration',
+                                                       implemented,
+                                                       'maximal-and-irrraf',
+                                                       implemented
+                                                     ]).
+[33m^^^^^^^^^^^^^^^^^^^^^^
+[0m[33m--> metta runnable  -->
+[36m!(test
+  (raf-system-food (raf-system fixture model neutral-crs-v1 food ("0" "1")))
+  ("0" "1"))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'raf-system-food'([ 'raf-system',
+                                         fixture,
+                                         model,
+                                         'neutral-crs-v1',
+                                         food,
+                                         ["0", "1"]
+                                       ],
+                                       B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, ["0", "1"], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ("0" "1"), should ("0" "1"). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (raf-reaction-reactants
+    (raf-reaction fixture r reactants ("0" "0") products ("00")))
+  ("0" "0"))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'raf-reaction-reactants'([ 'raf-reaction',
+                                                fixture,
+                                                r,
+                                                reactants,
+                                                ["0", "0"],
+                                                products,
+                                                ["00"]
+                                              ],
+                                              B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, ["0", "0"], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ("0" "0"), should ("0" "0"). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (raf-reaction-products
+    (raf-reaction fixture cleave reactants ("01") products ("0" "1")))
+  ("0" "1"))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'raf-reaction-products'([ 'raf-reaction',
+                                               fixture,
+                                               cleave,
+                                               reactants,
+                                               ["01"],
+                                               products,
+                                               ["0", "1"]
+                                             ],
+                                             B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, ["0", "1"], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ("0" "1"), should ("0" "1"). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (raf-catalysis-rule-id (raf-catalysis fixture "01" r))
+  r)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'raf-catalysis-rule-id'(['raf-catalysis', fixture, "01", r],
+                                             B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, r, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis r, should r. ✅ 
+[33m--> metta runnable  -->
+[36m!(test (neutral-raf-hand-fixture-family-count) 7)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-hand-fixture-family-count'(B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, 7, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis 7, should 7. ✅ 
+[33m--> metta runnable  -->
+[36m!(test (neutral-raf-fixture-food-catalyst)
+       ((raf-system food-catalyst model neutral-crs-v1 food ("0" "1"))
+        (raf-reaction food-catalyst r reactants ("0" "1") products ("01"))
+        (raf-catalysis food-catalyst "0" r)))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-fixture-food-catalyst'(B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D,
+                  [ ['raf-system', 'food-catalyst', model, 'neutral-crs-v1', food, ["0", "1"]],
+                    [ 'raf-reaction',
+                      'food-catalyst',
+                      r,
+                      reactants,
+                      ["0", "1"],
+                      products,
+                      ["01"]
+                    ],
+                    ['raf-catalysis', 'food-catalyst', "0", r]
+                  ],
+                  A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ((raf-system food-catalyst model neutral-crs-v1 food ("0" "1")) (raf-reaction food-catalyst r reactants ("0" "1") products ("01")) (raf-catalysis food-catalyst "0" r)), should ((raf-system food-catalyst model neutral-crs-v1 food ("0" "1")) (raf-reaction food-catalyst r reactants ("0" "1") products ("01")) (raf-catalysis food-catalyst "0" r)). ✅ 
+[33m--> metta runnable  -->
+[36m!(test (neutral-raf-fixture-self-catalysis)
+       ((raf-system self-catalysis model neutral-crs-v1 food ("0" "1"))
+        (raf-reaction self-catalysis r reactants ("0" "1") products ("01"))
+        (raf-catalysis self-catalysis "01" r)))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-fixture-self-catalysis'(B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D,
+                  [ [ 'raf-system',
+                      'self-catalysis',
+                      model,
+                      'neutral-crs-v1',
+                      food,
+                      ["0", "1"]
+                    ],
+                    [ 'raf-reaction',
+                      'self-catalysis',
+                      r,
+                      reactants,
+                      ["0", "1"],
+                      products,
+                      ["01"]
+                    ],
+                    ['raf-catalysis', 'self-catalysis', "01", r]
+                  ],
+                  A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ((raf-system self-catalysis model neutral-crs-v1 food ("0" "1")) (raf-reaction self-catalysis r reactants ("0" "1") products ("01")) (raf-catalysis self-catalysis "01" r)), should ((raf-system self-catalysis model neutral-crs-v1 food ("0" "1")) (raf-reaction self-catalysis r reactants ("0" "1") products ("01")) (raf-catalysis self-catalysis "01" r)). ✅ 
+[33m--> metta runnable  -->
+[36m!(test (neutral-raf-fixture-unreachable-cycle)
+       ((raf-system unreachable-cycle model neutral-crs-v1 food ("0" "1"))
+        (raf-reaction unreachable-cycle r1 reactants (x) products (y))
+        (raf-reaction unreachable-cycle r2 reactants (y) products (x))
+        (raf-catalysis unreachable-cycle x r2)
+        (raf-catalysis unreachable-cycle y r1)))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-fixture-unreachable-cycle'(B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D,
+                  [ [ 'raf-system',
+                      'unreachable-cycle',
+                      model,
+                      'neutral-crs-v1',
+                      food,
+                      ["0", "1"]
+                    ],
+                    [ 'raf-reaction',
+                      'unreachable-cycle',
+                      r1,
+                      reactants,
+                      [x],
+                      products,
+                      [y]
+                    ],
+                    [ 'raf-reaction',
+                      'unreachable-cycle',
+                      r2,
+                      reactants,
+                      [y],
+                      products,
+                      [x]
+                    ],
+                    ['raf-catalysis', 'unreachable-cycle', x, r2],
+                    ['raf-catalysis', 'unreachable-cycle', y, r1]
+                  ],
+                  A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ((raf-system unreachable-cycle model neutral-crs-v1 food ("0" "1")) (raf-reaction unreachable-cycle r1 reactants (x) products (y)) (raf-reaction unreachable-cycle r2 reactants (y) products (x)) (raf-catalysis unreachable-cycle x r2) (raf-catalysis unreachable-cycle y r1)), should ((raf-system unreachable-cycle model neutral-crs-v1 food ("0" "1")) (raf-reaction unreachable-cycle r1 reactants (x) products (y)) (raf-reaction unreachable-cycle r2 reactants (y) products (x)) (raf-catalysis unreachable-cycle x r2) (raf-catalysis unreachable-cycle y r1)). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-closure
+    ("0" "1")
+    ((raf-reaction food-chain r1 reactants ("0" "1") products ("01"))
+     (raf-reaction food-chain r2 reactants ("01" "1") products ("011"))))
+  ("011" "01" "0" "1"))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-closure'(["0", "1"],
+                                           [ [ 'raf-reaction',
+                                               'food-chain',
+                                               r1,
+                                               reactants,
+                                               ["0", "1"],
+                                               products,
+                                               ["01"]
+                                             ],
+                                             [ 'raf-reaction',
+                                               'food-chain',
+                                               r2,
+                                               reactants,
+                                               ["01", "1"],
+                                               products,
+                                               ["011"]
+                                             ]
+                                           ],
+                                           B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, ["011", "01", "0", "1"], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ("011" "01" "0" "1"), should ("011" "01" "0" "1"). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-is-raf?
+    ("0" "1")
+    ((raf-reaction food-chain r2 reactants ("01" "1") products ("011")))
+    ((raf-catalysis food-chain "011" r2)))
+  False)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-is-raf?'(["0", "1"],
+                                           [ [ 'raf-reaction',
+                                               'food-chain',
+                                               r2,
+                                               reactants,
+                                               ["01", "1"],
+                                               products,
+                                               ["011"]
+                                             ]
+                                           ],
+                                           [['raf-catalysis', 'food-chain', "011", r2]],
+                                           B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, false, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis false, should false. ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-is-raf?
+    ("0" "1")
+    ((raf-reaction food-chain r1 reactants ("0" "1") products ("01"))
+     (raf-reaction food-chain r2 reactants ("01" "1") products ("011")))
+    ((raf-catalysis food-chain "0" r1)
+     (raf-catalysis food-chain "011" r2)))
+  True)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-is-raf?'(["0", "1"],
+                                           [ [ 'raf-reaction',
+                                               'food-chain',
+                                               r1,
+                                               reactants,
+                                               ["0", "1"],
+                                               products,
+                                               ["01"]
+                                             ],
+                                             [ 'raf-reaction',
+                                               'food-chain',
+                                               r2,
+                                               reactants,
+                                               ["01", "1"],
+                                               products,
+                                               ["011"]
+                                             ]
+                                           ],
+                                           [ ['raf-catalysis', 'food-chain', "0", r1],
+                                             ['raf-catalysis', 'food-chain', "011", r2]
+                                           ],
+                                           B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, true, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis true, should true. ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-is-raf?
+    ("0" "01" "1")
+    ((raf-reaction multiple-products cleave
+       reactants ("01") products ("0" "1")))
+    ((raf-catalysis multiple-products "0" cleave)
+     (raf-catalysis multiple-products "1" cleave)))
+  True)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-is-raf?'(["0", "01", "1"],
+                                           [ [ 'raf-reaction',
+                                               'multiple-products',
+                                               cleave,
+                                               reactants,
+                                               ["01"],
+                                               products,
+                                               ["0", "1"]
+                                             ]
+                                           ],
+                                           [ [ 'raf-catalysis',
+                                               'multiple-products',
+                                               "0",
+                                               cleave
+                                             ],
+                                             [ 'raf-catalysis',
+                                               'multiple-products',
+                                               "1",
+                                               cleave
+                                             ]
+                                           ],
+                                           B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, true, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis true, should true. ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-is-raf?
+    ("0" "1")
+    ((raf-reaction food-catalyst r reactants ("0" "1") products ("01")))
+    ((raf-catalysis food-catalyst "0" r)))
+  True)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-is-raf?'(["0", "1"],
+                                           [ [ 'raf-reaction',
+                                               'food-catalyst',
+                                               r,
+                                               reactants,
+                                               ["0", "1"],
+                                               products,
+                                               ["01"]
+                                             ]
+                                           ],
+                                           [['raf-catalysis', 'food-catalyst', "0", r]],
+                                           B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, true, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis true, should true. ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-is-raf?
+    ("0" "1")
+    ((raf-reaction self-catalysis r reactants ("0" "1") products ("01")))
+    ((raf-catalysis self-catalysis "01" r)))
+  True)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-is-raf?'(["0", "1"],
+                                           [ [ 'raf-reaction',
+                                               'self-catalysis',
+                                               r,
+                                               reactants,
+                                               ["0", "1"],
+                                               products,
+                                               ["01"]
+                                             ]
+                                           ],
+                                           [ [ 'raf-catalysis',
+                                               'self-catalysis',
+                                               "01",
+                                               r
+                                             ]
+                                           ],
+                                           B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, true, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis true, should true. ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-is-raf?
+    ("0" "1")
+    ((raf-reaction unreachable-cycle r1 reactants (x) products (y))
+     (raf-reaction unreachable-cycle r2 reactants (y) products (x)))
+    ((raf-catalysis unreachable-cycle x r2)
+     (raf-catalysis unreachable-cycle y r1)))
+  False)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-is-raf?'(["0", "1"],
+                                           [ [ 'raf-reaction',
+                                               'unreachable-cycle',
+                                               r1,
+                                               reactants,
+                                               [x],
+                                               products,
+                                               [y]
+                                             ],
+                                             [ 'raf-reaction',
+                                               'unreachable-cycle',
+                                               r2,
+                                               reactants,
+                                               [y],
+                                               products,
+                                               [x]
+                                             ]
+                                           ],
+                                           [ [ 'raf-catalysis',
+                                               'unreachable-cycle',
+                                               x,
+                                               r2
+                                             ],
+                                             [ 'raf-catalysis',
+                                               'unreachable-cycle',
+                                               y,
+                                               r1
+                                             ]
+                                           ],
+                                           B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, false, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis false, should false. ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-is-raf?
+    ("0" "1")
+    ((raf-reaction edge-added r1 reactants ("0") products ("00"))
+     (raf-reaction edge-added r2 reactants ("1") products ("11")))
+    ((raf-catalysis edge-added "0" r1)
+     (raf-catalysis edge-added "1" r2)))
+  True)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-is-raf?'(["0", "1"],
+                                           [ [ 'raf-reaction',
+                                               'edge-added',
+                                               r1,
+                                               reactants,
+                                               ["0"],
+                                               products,
+                                               ["00"]
+                                             ],
+                                             [ 'raf-reaction',
+                                               'edge-added',
+                                               r2,
+                                               reactants,
+                                               ["1"],
+                                               products,
+                                               ["11"]
+                                             ]
+                                           ],
+                                           [ ['raf-catalysis', 'edge-added', "0", r1],
+                                             ['raf-catalysis', 'edge-added', "1", r2]
+                                           ],
+                                           B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, true, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis true, should true. ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-is-raf?
+    ("0" "1")
+    ((raf-reaction deletion-edge r1 reactants ("0") products ("00"))
+     (raf-reaction deletion-edge r2 reactants ("00" "1") products ("001")))
+    ((raf-catalysis deletion-edge "0" r1)))
+  False)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-is-raf?'(["0", "1"],
+                                           [ [ 'raf-reaction',
+                                               'deletion-edge',
+                                               r1,
+                                               reactants,
+                                               ["0"],
+                                               products,
+                                               ["00"]
+                                             ],
+                                             [ 'raf-reaction',
+                                               'deletion-edge',
+                                               r2,
+                                               reactants,
+                                               ["00", "1"],
+                                               products,
+                                               ["001"]
+                                             ]
+                                           ],
+                                           [ [ 'raf-catalysis',
+                                               'deletion-edge',
+                                               "0",
+                                               r1
+                                             ]
+                                           ],
+                                           B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, false, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis false, should false. ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-is-raf?
+    ("0" "1")
+    ((raf-reaction deletion-reaction r2
+       reactants ("00" "1") products ("001")))
+    ((raf-catalysis deletion-reaction "001" r2)))
+  False)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-is-raf?'(["0", "1"],
+                                           [ [ 'raf-reaction',
+                                               'deletion-reaction',
+                                               r2,
+                                               reactants,
+                                               ["00", "1"],
+                                               products,
+                                               ["001"]
+                                             ]
+                                           ],
+                                           [ [ 'raf-catalysis',
+                                               'deletion-reaction',
+                                               "001",
+                                               r2
+                                             ]
+                                           ],
+                                           B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, false, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis false, should false. ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-exhaustive-subset-ids
+    ("0" "1")
+    ((raf-reaction food-chain r1 reactants ("0" "1") products ("01"))
+     (raf-reaction food-chain r2 reactants ("01" "1") products ("011")))
+    ((raf-catalysis food-chain "0" r1)
+     (raf-catalysis food-chain "011" r2)))
+  ((r1) (r1 r2)))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-exhaustive-subset-ids'(["0", "1"],
+                                                         [ [ 'raf-reaction',
+                                                             'food-chain',
+                                                             r1,
+                                                             reactants,
+                                                             ["0", "1"],
+                                                             products,
+                                                             ["01"]
+                                                           ],
+                                                           [ 'raf-reaction',
+                                                             'food-chain',
+                                                             r2,
+                                                             reactants,
+                                                             ["01", "1"],
+                                                             products,
+                                                             ["011"]
+                                                           ]
+                                                         ],
+                                                         [ [ 'raf-catalysis',
+                                                             'food-chain',
+                                                             "0",
+                                                             r1
+                                                           ],
+                                                           [ 'raf-catalysis',
+                                                             'food-chain',
+                                                             "011",
+                                                             r2
+                                                           ]
+                                                         ],
+                                                         B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, [[r1], [r1, r2]], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ((r1) (r1 r2)), should ((r1) (r1 r2)). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-exhaustive-subset-ids
+    ("0" "01" "1")
+    ((raf-reaction multiple-products cleave
+       reactants ("01") products ("0" "1"))
+     (raf-reaction multiple-products left
+       reactants ("0" "0") products ("00"))
+     (raf-reaction multiple-products right
+       reactants ("1" "1") products ("11")))
+    ((raf-catalysis multiple-products "0" cleave)
+     (raf-catalysis multiple-products "0" left)
+     (raf-catalysis multiple-products "1" cleave)
+     (raf-catalysis multiple-products "1" right)))
+  ((right) (left) (left right) (cleave) (cleave right)
+   (cleave left) (cleave left right)))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-exhaustive-subset-ids'(["0", "01", "1"],
+                                                         [ [ 'raf-reaction',
+                                                             'multiple-products',
+                                                             cleave,
+                                                             reactants,
+                                                             ["01"],
+                                                             products,
+                                                             ["0", "1"]
+                                                           ],
+                                                           [ 'raf-reaction',
+                                                             'multiple-products',
+                                                             left,
+                                                             reactants,
+                                                             ["0", "0"],
+                                                             products,
+                                                             ["00"]
+                                                           ],
+                                                           [ 'raf-reaction',
+                                                             'multiple-products',
+                                                             right,
+                                                             reactants,
+                                                             ["1", "1"],
+                                                             products,
+                                                             ["11"]
+                                                           ]
+                                                         ],
+                                                         [ [ 'raf-catalysis',
+                                                             'multiple-products',
+                                                             "0",
+                                                             cleave
+                                                           ],
+                                                           [ 'raf-catalysis',
+                                                             'multiple-products',
+                                                             "0",
+                                                             left
+                                                           ],
+                                                           [ 'raf-catalysis',
+                                                             'multiple-products',
+                                                             "1",
+                                                             cleave
+                                                           ],
+                                                           [ 'raf-catalysis',
+                                                             'multiple-products',
+                                                             "1",
+                                                             right
+                                                           ]
+                                                         ],
+                                                         B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D,
+                  [ [right],
+                    [left],
+                    [left, right],
+                    [cleave],
+                    [cleave, right],
+                    [cleave, left],
+                    [cleave, left, right]
+                  ],
+                  A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ((right) (left) (left right) (cleave) (cleave right) (cleave left) (cleave left right)), should ((right) (left) (left right) (cleave) (cleave right) (cleave left) (cleave left right)). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-exhaustive-subset-ids
+    ("0" "1")
+    ((raf-reaction unreachable-cycle r1 reactants (x) products (y))
+     (raf-reaction unreachable-cycle r2 reactants (y) products (x)))
+    ((raf-catalysis unreachable-cycle x r2)
+     (raf-catalysis unreachable-cycle y r1)))
+  ())
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-exhaustive-subset-ids'(["0", "1"],
+                                                         [ [ 'raf-reaction',
+                                                             'unreachable-cycle',
+                                                             r1,
+                                                             reactants,
+                                                             [x],
+                                                             products,
+                                                             [y]
+                                                           ],
+                                                           [ 'raf-reaction',
+                                                             'unreachable-cycle',
+                                                             r2,
+                                                             reactants,
+                                                             [y],
+                                                             products,
+                                                             [x]
+                                                           ]
+                                                         ],
+                                                         [ [ 'raf-catalysis',
+                                                             'unreachable-cycle',
+                                                             x,
+                                                             r2
+                                                           ],
+                                                           [ 'raf-catalysis',
+                                                             'unreachable-cycle',
+                                                             y,
+                                                             r1
+                                                           ]
+                                                         ],
+                                                         B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, [], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis (), should (). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-maximal-ids
+    ("0" "1")
+    ((raf-reaction food-chain r1 reactants ("0" "1") products ("01"))
+     (raf-reaction food-chain r2 reactants ("01" "1") products ("011")))
+    ((raf-catalysis food-chain "0" r1)
+     (raf-catalysis food-chain "011" r2)))
+  (r1 r2))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-maximal-ids'(["0", "1"],
+                                               [ [ 'raf-reaction',
+                                                   'food-chain',
+                                                   r1,
+                                                   reactants,
+                                                   ["0", "1"],
+                                                   products,
+                                                   ["01"]
+                                                 ],
+                                                 [ 'raf-reaction',
+                                                   'food-chain',
+                                                   r2,
+                                                   reactants,
+                                                   ["01", "1"],
+                                                   products,
+                                                   ["011"]
+                                                 ]
+                                               ],
+                                               [ [ 'raf-catalysis',
+                                                   'food-chain',
+                                                   "0",
+                                                   r1
+                                                 ],
+                                                 [ 'raf-catalysis',
+                                                   'food-chain',
+                                                   "011",
+                                                   r2
+                                                 ]
+                                               ],
+                                               B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, [r1, r2], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis (r1 r2), should (r1 r2). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-irreducible-subset-ids
+    ("0" "1")
+    ((raf-reaction food-chain r1 reactants ("0" "1") products ("01"))
+     (raf-reaction food-chain r2 reactants ("01" "1") products ("011")))
+    ((raf-catalysis food-chain "0" r1)
+     (raf-catalysis food-chain "011" r2)))
+  ((r1)))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-irreducible-subset-ids'(["0", "1"],
+                                                          [ [ 'raf-reaction',
+                                                              'food-chain',
+                                                              r1,
+                                                              reactants,
+                                                              ["0", "1"],
+                                                              products,
+                                                              ["01"]
+                                                            ],
+                                                            [ 'raf-reaction',
+                                                              'food-chain',
+                                                              r2,
+                                                              reactants,
+                                                              ["01", "1"],
+                                                              products,
+                                                              ["011"]
+                                                            ]
+                                                          ],
+                                                          [ [ 'raf-catalysis',
+                                                              'food-chain',
+                                                              "0",
+                                                              r1
+                                                            ],
+                                                            [ 'raf-catalysis',
+                                                              'food-chain',
+                                                              "011",
+                                                              r2
+                                                            ]
+                                                          ],
+                                                          B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, [[r1]], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ((r1)), should ((r1)). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-maximal-ids
+    ("0" "01" "1")
+    ((raf-reaction multiple-products cleave
+       reactants ("01") products ("0" "1"))
+     (raf-reaction multiple-products left
+       reactants ("0" "0") products ("00"))
+     (raf-reaction multiple-products right
+       reactants ("1" "1") products ("11")))
+    ((raf-catalysis multiple-products "0" cleave)
+     (raf-catalysis multiple-products "0" left)
+     (raf-catalysis multiple-products "1" cleave)
+     (raf-catalysis multiple-products "1" right)))
+  (cleave left right))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-maximal-ids'(["0", "01", "1"],
+                                               [ [ 'raf-reaction',
+                                                   'multiple-products',
+                                                   cleave,
+                                                   reactants,
+                                                   ["01"],
+                                                   products,
+                                                   ["0", "1"]
+                                                 ],
+                                                 [ 'raf-reaction',
+                                                   'multiple-products',
+                                                   left,
+                                                   reactants,
+                                                   ["0", "0"],
+                                                   products,
+                                                   ["00"]
+                                                 ],
+                                                 [ 'raf-reaction',
+                                                   'multiple-products',
+                                                   right,
+                                                   reactants,
+                                                   ["1", "1"],
+                                                   products,
+                                                   ["11"]
+                                                 ]
+                                               ],
+                                               [ [ 'raf-catalysis',
+                                                   'multiple-products',
+                                                   "0",
+                                                   cleave
+                                                 ],
+                                                 [ 'raf-catalysis',
+                                                   'multiple-products',
+                                                   "0",
+                                                   left
+                                                 ],
+                                                 [ 'raf-catalysis',
+                                                   'multiple-products',
+                                                   "1",
+                                                   cleave
+                                                 ],
+                                                 [ 'raf-catalysis',
+                                                   'multiple-products',
+                                                   "1",
+                                                   right
+                                                 ]
+                                               ],
+                                               B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, [cleave, left, right], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis (cleave left right), should (cleave left right). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-irreducible-subset-ids
+    ("0" "01" "1")
+    ((raf-reaction multiple-products cleave
+       reactants ("01") products ("0" "1"))
+     (raf-reaction multiple-products left
+       reactants ("0" "0") products ("00"))
+     (raf-reaction multiple-products right
+       reactants ("1" "1") products ("11")))
+    ((raf-catalysis multiple-products "0" cleave)
+     (raf-catalysis multiple-products "0" left)
+     (raf-catalysis multiple-products "1" cleave)
+     (raf-catalysis multiple-products "1" right)))
+  ((right) (left) (cleave)))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-irreducible-subset-ids'(["0", "01", "1"],
+                                                          [ [ 'raf-reaction',
+                                                              'multiple-products',
+                                                              cleave,
+                                                              reactants,
+                                                              ["01"],
+                                                              products,
+                                                              ["0", "1"]
+                                                            ],
+                                                            [ 'raf-reaction',
+                                                              'multiple-products',
+                                                              left,
+                                                              reactants,
+                                                              ["0", "0"],
+                                                              products,
+                                                              ["00"]
+                                                            ],
+                                                            [ 'raf-reaction',
+                                                              'multiple-products',
+                                                              right,
+                                                              reactants,
+                                                              ["1", "1"],
+                                                              products,
+                                                              ["11"]
+                                                            ]
+                                                          ],
+                                                          [ [ 'raf-catalysis',
+                                                              'multiple-products',
+                                                              "0",
+                                                              cleave
+                                                            ],
+                                                            [ 'raf-catalysis',
+                                                              'multiple-products',
+                                                              "0",
+                                                              left
+                                                            ],
+                                                            [ 'raf-catalysis',
+                                                              'multiple-products',
+                                                              "1",
+                                                              cleave
+                                                            ],
+                                                            [ 'raf-catalysis',
+                                                              'multiple-products',
+                                                              "1",
+                                                              right
+                                                            ]
+                                                          ],
+                                                          B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, [[right], [left], [cleave]], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ((right) (left) (cleave)), should ((right) (left) (cleave)). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-maximal-ids
+    ("0" "1")
+    ((raf-reaction unreachable-cycle r1 reactants (x) products (y))
+     (raf-reaction unreachable-cycle r2 reactants (y) products (x)))
+    ((raf-catalysis unreachable-cycle x r2)
+     (raf-catalysis unreachable-cycle y r1)))
+  ())
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-maximal-ids'(["0", "1"],
+                                               [ [ 'raf-reaction',
+                                                   'unreachable-cycle',
+                                                   r1,
+                                                   reactants,
+                                                   [x],
+                                                   products,
+                                                   [y]
+                                                 ],
+                                                 [ 'raf-reaction',
+                                                   'unreachable-cycle',
+                                                   r2,
+                                                   reactants,
+                                                   [y],
+                                                   products,
+                                                   [x]
+                                                 ]
+                                               ],
+                                               [ [ 'raf-catalysis',
+                                                   'unreachable-cycle',
+                                                   x,
+                                                   r2
+                                                 ],
+                                                 [ 'raf-catalysis',
+                                                   'unreachable-cycle',
+                                                   y,
+                                                   r1
+                                                 ]
+                                               ],
+                                               B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, [], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis (), should (). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-irreducible-subset-ids
+    ("0" "1")
+    ((raf-reaction unreachable-cycle r1 reactants (x) products (y))
+     (raf-reaction unreachable-cycle r2 reactants (y) products (x)))
+    ((raf-catalysis unreachable-cycle x r2)
+     (raf-catalysis unreachable-cycle y r1)))
+  ())
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-irreducible-subset-ids'(["0", "1"],
+                                                          [ [ 'raf-reaction',
+                                                              'unreachable-cycle',
+                                                              r1,
+                                                              reactants,
+                                                              [x],
+                                                              products,
+                                                              [y]
+                                                            ],
+                                                            [ 'raf-reaction',
+                                                              'unreachable-cycle',
+                                                              r2,
+                                                              reactants,
+                                                              [y],
+                                                              products,
+                                                              [x]
+                                                            ]
+                                                          ],
+                                                          [ [ 'raf-catalysis',
+                                                              'unreachable-cycle',
+                                                              x,
+                                                              r2
+                                                            ],
+                                                            [ 'raf-catalysis',
+                                                              'unreachable-cycle',
+                                                              y,
+                                                              r1
+                                                            ]
+                                                          ],
+                                                          B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, [], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis (), should (). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-maximal-pruned-ids
+    ("0" "1")
+    ((raf-reaction food-chain r1 reactants ("0" "1") products ("01"))
+     (raf-reaction food-chain r2 reactants ("01" "1") products ("011")))
+    ((raf-catalysis food-chain "0" r1)
+     (raf-catalysis food-chain "011" r2)))
+  (r1 r2))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-maximal-pruned-ids'(["0", "1"],
+                                                      [ [ 'raf-reaction',
+                                                          'food-chain',
+                                                          r1,
+                                                          reactants,
+                                                          ["0", "1"],
+                                                          products,
+                                                          ["01"]
+                                                        ],
+                                                        [ 'raf-reaction',
+                                                          'food-chain',
+                                                          r2,
+                                                          reactants,
+                                                          ["01", "1"],
+                                                          products,
+                                                          ["011"]
+                                                        ]
+                                                      ],
+                                                      [ [ 'raf-catalysis',
+                                                          'food-chain',
+                                                          "0",
+                                                          r1
+                                                        ],
+                                                        [ 'raf-catalysis',
+                                                          'food-chain',
+                                                          "011",
+                                                          r2
+                                                        ]
+                                                      ],
+                                                      B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, [r1, r2], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis (r1 r2), should (r1 r2). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-maximal-pruned-ids
+    ("0" "01" "1")
+    ((raf-reaction multiple-products cleave
+       reactants ("01") products ("0" "1"))
+     (raf-reaction multiple-products left
+       reactants ("0" "0") products ("00"))
+     (raf-reaction multiple-products right
+       reactants ("1" "1") products ("11")))
+    ((raf-catalysis multiple-products "0" cleave)
+     (raf-catalysis multiple-products "0" left)
+     (raf-catalysis multiple-products "1" cleave)
+     (raf-catalysis multiple-products "1" right)))
+  (cleave left right))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-maximal-pruned-ids'(["0", "01", "1"],
+                                                      [ [ 'raf-reaction',
+                                                          'multiple-products',
+                                                          cleave,
+                                                          reactants,
+                                                          ["01"],
+                                                          products,
+                                                          ["0", "1"]
+                                                        ],
+                                                        [ 'raf-reaction',
+                                                          'multiple-products',
+                                                          left,
+                                                          reactants,
+                                                          ["0", "0"],
+                                                          products,
+                                                          ["00"]
+                                                        ],
+                                                        [ 'raf-reaction',
+                                                          'multiple-products',
+                                                          right,
+                                                          reactants,
+                                                          ["1", "1"],
+                                                          products,
+                                                          ["11"]
+                                                        ]
+                                                      ],
+                                                      [ [ 'raf-catalysis',
+                                                          'multiple-products',
+                                                          "0",
+                                                          cleave
+                                                        ],
+                                                        [ 'raf-catalysis',
+                                                          'multiple-products',
+                                                          "0",
+                                                          left
+                                                        ],
+                                                        [ 'raf-catalysis',
+                                                          'multiple-products',
+                                                          "1",
+                                                          cleave
+                                                        ],
+                                                        [ 'raf-catalysis',
+                                                          'multiple-products',
+                                                          "1",
+                                                          right
+                                                        ]
+                                                      ],
+                                                      B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, [cleave, left, right], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis (cleave left right), should (cleave left right). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-maximal-pruned-ids
+    ("0" "1")
+    ((raf-reaction unreachable-cycle r1 reactants (x) products (y))
+     (raf-reaction unreachable-cycle r2 reactants (y) products (x)))
+    ((raf-catalysis unreachable-cycle x r2)
+     (raf-catalysis unreachable-cycle y r1)))
+  ())
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-maximal-pruned-ids'(["0", "1"],
+                                                      [ [ 'raf-reaction',
+                                                          'unreachable-cycle',
+                                                          r1,
+                                                          reactants,
+                                                          [x],
+                                                          products,
+                                                          [y]
+                                                        ],
+                                                        [ 'raf-reaction',
+                                                          'unreachable-cycle',
+                                                          r2,
+                                                          reactants,
+                                                          [y],
+                                                          products,
+                                                          [x]
+                                                        ]
+                                                      ],
+                                                      [ [ 'raf-catalysis',
+                                                          'unreachable-cycle',
+                                                          x,
+                                                          r2
+                                                        ],
+                                                        [ 'raf-catalysis',
+                                                          'unreachable-cycle',
+                                                          y,
+                                                          r1
+                                                        ]
+                                                      ],
+                                                      B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, [], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis (), should (). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-maximal-pruned-ids
+    ("0" "1")
+    ((raf-reaction cascade r1 reactants ("0") products (x))
+     (raf-reaction cascade r2 reactants (x) products (y))
+     (raf-reaction cascade r3 reactants (y) products (z)))
+    ((raf-catalysis cascade "0" r1)
+     (raf-catalysis cascade z r2)))
+  (r1))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-maximal-pruned-ids'(["0", "1"],
+                                                      [ [ 'raf-reaction',
+                                                          cascade,
+                                                          r1,
+                                                          reactants,
+                                                          ["0"],
+                                                          products,
+                                                          [x]
+                                                        ],
+                                                        [ 'raf-reaction',
+                                                          cascade,
+                                                          r2,
+                                                          reactants,
+                                                          [x],
+                                                          products,
+                                                          [y]
+                                                        ],
+                                                        [ 'raf-reaction',
+                                                          cascade,
+                                                          r3,
+                                                          reactants,
+                                                          [y],
+                                                          products,
+                                                          [z]
+                                                        ]
+                                                      ],
+                                                      [ [ 'raf-catalysis',
+                                                          cascade,
+                                                          "0",
+                                                          r1
+                                                        ],
+                                                        [ 'raf-catalysis',
+                                                          cascade,
+                                                          z,
+                                                          r2
+                                                        ]
+                                                      ],
+                                                      B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, [r1], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis (r1), should (r1). ✅ 
+[33m--> metta runnable  -->
+[36m!(test (neutral-raf-list-length (neutral-raf-l3-molecules)) 14)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     ( 'neutral-raf-l3-molecules'(C),
+                       'neutral-raf-list-length'(C, B)
+                     ),
+                     D),
+             (   D=[E]
+             ->  true
+             ;   E=D
+             ),
+             test(E, 14, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis 14, should 14. ✅ 
+[33m--> metta runnable  -->
+[36m!(test (neutral-raf-l3-food) ("0" "00" "01" "1" "10" "11"))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B, 'neutral-raf-l3-food'(B), C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, ["0", "00", "01", "1", "10", "11"], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ("0" "00" "01" "1" "10" "11"), should ("0" "00" "01" "1" "10" "11"). ✅ 
+[33m--> metta runnable  -->
+[36m!(test (neutral-raf-l3-reaction-count) 40)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B, 'neutral-raf-l3-reaction-count'(B), C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, 40, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis 40, should 40. ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-l3-reaction-ids)
+  ("cleave:00:1"
+   "cleave:000:1" "cleave:000:2"
+   "cleave:001:1" "cleave:001:2"
+   "cleave:01:1"
+   "cleave:010:1" "cleave:010:2"
+   "cleave:011:1" "cleave:011:2"
+   "cleave:10:1"
+   "cleave:100:1" "cleave:100:2"
+   "cleave:101:1" "cleave:101:2"
+   "cleave:11:1"
+   "cleave:110:1" "cleave:110:2"
+   "cleave:111:1" "cleave:111:2"
+   "lig:0:0" "lig:0:00" "lig:0:01" "lig:0:1" "lig:0:10" "lig:0:11"
+   "lig:00:0" "lig:00:1" "lig:01:0" "lig:01:1"
+   "lig:1:0" "lig:1:00" "lig:1:01" "lig:1:1" "lig:1:10" "lig:1:11"
+   "lig:10:0" "lig:10:1" "lig:11:0" "lig:11:1"))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B, 'neutral-raf-l3-reaction-ids'(B), C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D,
+                  [ "cleave:00:1",
+                    "cleave:000:1",
+                    "cleave:000:2",
+                    "cleave:001:1",
+                    "cleave:001:2",
+                    "cleave:01:1",
+                    "cleave:010:1",
+                    "cleave:010:2",
+                    "cleave:011:1",
+                    "cleave:011:2",
+                    "cleave:10:1",
+                    "cleave:100:1",
+                    "cleave:100:2",
+                    "cleave:101:1",
+                    "cleave:101:2",
+                    "cleave:11:1",
+                    "cleave:110:1",
+                    "cleave:110:2",
+                    "cleave:111:1",
+                    "cleave:111:2",
+                    "lig:0:0",
+                    "lig:0:00",
+                    "lig:0:01",
+                    "lig:0:1",
+                    "lig:0:10",
+                    "lig:0:11",
+                    "lig:00:0",
+                    "lig:00:1",
+                    "lig:01:0",
+                    "lig:01:1",
+                    "lig:1:0",
+                    "lig:1:00",
+                    "lig:1:01",
+                    "lig:1:1",
+                    "lig:1:10",
+                    "lig:1:11",
+                    "lig:10:0",
+                    "lig:10:1",
+                    "lig:11:0",
+                    "lig:11:1"
+                  ],
+                  A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ("cleave:00:1" "cleave:000:1" "cleave:000:2" "cleave:001:1" "cleave:001:2" "cleave:01:1" "cleave:010:1" "cleave:010:2" "cleave:011:1" "cleave:011:2" "cleave:10:1" "cleave:100:1" "cleave:100:2" "cleave:101:1" "cleave:101:2" "cleave:11:1" "cleave:110:1" "cleave:110:2" "cleave:111:1" "cleave:111:2" "lig:0:0" "lig:0:00" "lig:0:01" "lig:0:1" "lig:0:10" "lig:0:11" "lig:00:0" "lig:00:1" "lig:01:0" "lig:01:1" "lig:1:0" "lig:1:00" "lig:1:01" "lig:1:1" "lig:1:10" "lig:1:11" "lig:10:0" "lig:10:1" "lig:11:0" "lig:11:1"), should ("cleave:00:1" "cleave:000:1" "cleave:000:2" "cleave:001:1" "cleave:001:2" "cleave:01:1" "cleave:010:1" "cleave:010:2" "cleave:011:1" "cleave:011:2" "cleave:10:1" "cleave:100:1" "cleave:100:2" "cleave:101:1" "cleave:101:2" "cleave:11:1" "cleave:110:1" "cleave:110:2" "cleave:111:1" "cleave:111:2" "lig:0:0" "lig:0:00" "lig:0:01" "lig:0:1" "lig:0:10" "lig:0:11" "lig:00:0" "lig:00:1" "lig:01:0" "lig:01:1" "lig:1:0" "lig:1:00" "lig:1:01" "lig:1:1" "lig:1:10" "lig:1:11" "lig:10:0" "lig:10:1" "lig:11:0" "lig:11:1"). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-list-length
+    (neutral-raf-l3-sampled-reactions generated-l3-seed-1 1))
+  8)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     ( 'neutral-raf-l3-sampled-reactions'('generated-l3-seed-1',
+                                                          1,
+                                                          C),
+                       'neutral-raf-list-length'(C, B)
+                     ),
+                     D),
+             (   D=[E]
+             ->  true
+             ;   E=D
+             ),
+             test(E, 8, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis 8, should 8. ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-reaction-ids
+    (neutral-raf-l3-sampled-reactions generated-l3-seed-1 1))
+  ("cleave:000:2" "cleave:01:1" "cleave:111:1" "lig:0:0"
+   "lig:0:01" "lig:0:11" "lig:1:0" "lig:10:1"))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     ( 'neutral-raf-l3-sampled-reactions'('generated-l3-seed-1',
+                                                          1,
+                                                          C),
+                       'neutral-raf-reaction-ids'(C, B)
+                     ),
+                     D),
+             (   D=[E]
+             ->  true
+             ;   E=D
+             ),
+             test(E,
+                  [ "cleave:000:2",
+                    "cleave:01:1",
+                    "cleave:111:1",
+                    "lig:0:0",
+                    "lig:0:01",
+                    "lig:0:11",
+                    "lig:1:0",
+                    "lig:10:1"
+                  ],
+                  A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ("cleave:000:2" "cleave:01:1" "cleave:111:1" "lig:0:0" "lig:0:01" "lig:0:11" "lig:1:0" "lig:10:1"), should ("cleave:000:2" "cleave:01:1" "cleave:111:1" "lig:0:0" "lig:0:01" "lig:0:11" "lig:1:0" "lig:10:1"). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-reaction-ids
+    (neutral-raf-l3-sampled-reactions generated-l3-seed-1 1))
+  (neutral-raf-reaction-ids
+    (neutral-raf-l3-sampled-reactions generated-l3-seed-1 1)))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     ( 'neutral-raf-l3-sampled-reactions'('generated-l3-seed-1',
+                                                          1,
+                                                          C),
+                       'neutral-raf-reaction-ids'(C, B)
+                     ),
+                     D),
+             (   D=[E]
+             ->  true
+             ;   E=D
+             ),
+             'neutral-raf-l3-sampled-reactions'('generated-l3-seed-1', 1, F),
+             'neutral-raf-reaction-ids'(F, G),
+             test(E, G, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ("cleave:000:2" "cleave:01:1" "cleave:111:1" "lig:0:0" "lig:0:01" "lig:0:11" "lig:1:0" "lig:10:1"), should ("cleave:000:2" "cleave:01:1" "cleave:111:1" "lig:0:0" "lig:0:01" "lig:0:11" "lig:1:0" "lig:10:1"). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-l3-sampled-catalysis generated-l3-seed-1 1 0)
+  ())
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-l3-sampled-catalysis'('generated-l3-seed-1',
+                                                        1,
+                                                        0,
+                                                        B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D, [], A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis (), should (). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-list-length
+    (neutral-raf-l3-sampled-catalysis generated-l3-seed-1 1 40))
+  112)
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     ( 'neutral-raf-l3-sampled-catalysis'('generated-l3-seed-1',
+                                                          1,
+                                                          40,
+                                                          C),
+                       'neutral-raf-list-length'(C, B)
+                     ),
+                     D),
+             (   D=[E]
+             ->  true
+             ;   E=D
+             ),
+             test(E, 112, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis 112, should 112. ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-l3-sampled-catalysis generated-l3-seed-2 2 2)
+  (neutral-raf-l3-sampled-catalysis generated-l3-seed-2 2 2))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-l3-sampled-catalysis'('generated-l3-seed-2',
+                                                        2,
+                                                        2,
+                                                        B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             'neutral-raf-l3-sampled-catalysis'('generated-l3-seed-2', 2, 2, E),
+             test(D, E, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ((raf-catalysis generated-l3-seed-2 "00" "lig:0:01") (raf-catalysis generated-l3-seed-2 "000" "lig:00:1") (raf-catalysis generated-l3-seed-2 "01" "cleave:100:2") (raf-catalysis generated-l3-seed-2 "010" "lig:0:1") (raf-catalysis generated-l3-seed-2 "1" "cleave:10:1") (raf-catalysis generated-l3-seed-2 "10" "lig:0:01") (raf-catalysis generated-l3-seed-2 "101" "cleave:010:2") (raf-catalysis generated-l3-seed-2 "11" "cleave:100:2")), should ((raf-catalysis generated-l3-seed-2 "00" "lig:0:01") (raf-catalysis generated-l3-seed-2 "000" "lig:00:1") (raf-catalysis generated-l3-seed-2 "01" "cleave:100:2") (raf-catalysis generated-l3-seed-2 "010" "lig:0:1") (raf-catalysis generated-l3-seed-2 "1" "cleave:10:1") (raf-catalysis generated-l3-seed-2 "10" "lig:0:01") (raf-catalysis generated-l3-seed-2 "101" "cleave:010:2") (raf-catalysis generated-l3-seed-2 "11" "cleave:100:2")). ✅ 
+[33m--> metta runnable  -->
+[36m!(test
+  (neutral-raf-maximal-pruned-ids
+    (neutral-raf-l3-food)
+    (neutral-raf-l3-sampled-reactions generated-l3-seed-2 2)
+    (neutral-raf-l3-sampled-catalysis generated-l3-seed-2 2 2))
+  (neutral-raf-maximal-ids
+    (neutral-raf-l3-food)
+    (neutral-raf-l3-sampled-reactions generated-l3-seed-2 2)
+    (neutral-raf-l3-sampled-catalysis generated-l3-seed-2 2 2)))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     ( 'neutral-raf-l3-food'(C),
+                       'neutral-raf-l3-sampled-reactions'('generated-l3-seed-2',
+                                                          2,
+                                                          D),
+                       'neutral-raf-l3-sampled-catalysis'('generated-l3-seed-2',
+                                                          2,
+                                                          2,
+                                                          E),
+                       'neutral-raf-maximal-pruned-ids'(C,
+                                                        D,
+                                                        E,
+                                                        B)
+                     ),
+                     F),
+             (   F=[G]
+             ->  true
+             ;   G=F
+             ),
+             'neutral-raf-l3-food'(H),
+             'neutral-raf-l3-sampled-reactions'('generated-l3-seed-2', 2, I),
+             'neutral-raf-l3-sampled-catalysis'('generated-l3-seed-2', 2, 2, J),
+             'neutral-raf-maximal-ids'(H, I, J, K),
+             test(G, K, A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis ("cleave:10:1" "lig:0:01"), should ("cleave:10:1" "lig:0:01"). ✅ 
+[33m--> metta runnable  -->
+[36m!(test (neutral-raf-hand-fixture-serialization-status)
+       (neutral-raf-interface neutral-crs-v1 hand-fixtures 7
+                              sampled-calibration embargoed
+                              subset-predicate implemented
+                              exhaustive-enumeration implemented
+                              maximal-and-irrraf implemented))
+[33m-->  prolog goal  -->[35m 
+:- findall(A,
+           ( findall(B,
+                     'neutral-raf-hand-fixture-serialization-status'(B),
+                     C),
+             (   C=[D]
+             ->  true
+             ;   D=C
+             ),
+             test(D,
+                  [ 'neutral-raf-interface',
+                    'neutral-crs-v1',
+                    'hand-fixtures',
+                    7,
+                    'sampled-calibration',
+                    embargoed,
+                    'subset-predicate',
+                    implemented,
+                    'exhaustive-enumeration',
+                    implemented,
+                    'maximal-and-irrraf',
+                    implemented
+                  ],
+                  A)
+           ),
+           _).
+[33m^^^^^^^^^^^^^^^^^^^^^^^
+[0mis (neutral-raf-interface neutral-crs-v1 hand-fixtures 7 sampled-calibration embargoed subset-predicate implemented exhaustive-enumeration implemented maximal-and-irrraf implemented), should (neutral-raf-interface neutral-crs-v1 hand-fixtures 7 sampled-calibration embargoed subset-predicate implemented exhaustive-enumeration implemented maximal-and-irrraf implemented). ✅ 
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true

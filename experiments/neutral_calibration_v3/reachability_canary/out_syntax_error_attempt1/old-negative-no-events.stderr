@@ -1,0 +1,2 @@
+ERROR: [Thread main] /home/openclaw/research-agent/projects/petta-chem/repos/PeTTa-pinned-4ce1d0ea/src/main.pl:23: user:main Syntax error: missing ')', starting at line 9:
+= (canary-row $dynamics-seed $event-count $time-limit $volume)

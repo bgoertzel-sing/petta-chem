@@ -1,0 +1,30 @@
+test_delta_inconsistent (__main__.BadRows) ... ok
+test_duplicate_atom (__main__.BadRows) ... ok
+test_empty_raf_but_reachable (__main__.BadRows) ... ok
+test_empty_raf_with_raf_events (__main__.BadRows) ... ok
+test_f0_with_nonempty_raf (__main__.BadRows) ... ok
+test_first_time_beyond_T (__main__.BadRows) ... ok
+test_identity_mismatch (__main__.BadRows) ... ok
+test_malformed_and_duplicate_rule_ids (__main__.BadRows) ... ok
+test_missing_atom (__main__.BadRows) ... ok
+test_nan_and_inf (__main__.BadRows) ... ok
+test_negative_counts (__main__.BadRows) ... ok
+test_out_of_range_bins (__main__.BadRows) ... ok
+test_reachable_censored_inconsistent (__main__.BadRows) ... ok
+test_real_v2_unevaluated_defect (__main__.BadRows) ... ok
+test_stderr_and_exit_code (__main__.BadRows) ... ok
+test_trailing_garbage (__main__.BadRows) ... ok
+test_truncated_atom (__main__.BadRows) ... ok
+test_unevaluated_in_endpoints (__main__.BadRows) ... ok
+test_unevaluated_nested_call_synthetic (__main__.BadRows) ... ok
+test_wrong_universe_counts (__main__.BadRows) ... ok
+test_good_empty_raf_row_passes (__main__.GoodRows) ... ok
+test_good_row_passes (__main__.GoodRows) ... ok
+test_real_v3_smoke_rows_pass_if_present (__main__.GoodRows) ... ok
+test_universe_sizes (__main__.GoodRows) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.042s
+
+OK
+rc=0

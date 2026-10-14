@@ -1,0 +1,2 @@
+batch-path regression: PASS (row L5 f2-0, maximal-raf-rule-ids is a flat list of 0 rule IDs)
+rc=0

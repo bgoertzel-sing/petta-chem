@@ -1,0 +1,1 @@
+V200 new run 18:08-18:59 killed at ~51 min by a stale wait-loop in the validation harness (tmux kill-session of lane c); not a PeTTa failure; rerun 19:00

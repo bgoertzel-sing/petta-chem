@@ -1,0 +1,6 @@
+new-negative-horizon-before-first-event rc=0 seconds=0
+new-negative-no-events rc=0 seconds=0
+new-positive rc=0 seconds=4
+old-negative-horizon-before-first-event rc=2 seconds=0
+old-negative-no-events rc=2 seconds=0
+old-positive rc=2 seconds=0

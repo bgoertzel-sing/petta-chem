@@ -1,0 +1,4 @@
+neutral calibration v3 runner: validator hook gates receipts; failures freeze the seed
+test_run_neutral_calibration_shard_v3.py rc=0
+neutral calibration query preparation: 276 exact rows; unrun
+test_prepare_neutral_calibration_queries.py rc=0

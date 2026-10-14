@@ -1,0 +1,3 @@
+batch-path regression: PASS (row L5 f2-0, maximal-raf-rule-ids is a flat list of 0 rule IDs)
+empty-RAF guard: PASS (f=0 row: empty RAF, baseline and ablated reachable false / censored)
+rc=0
