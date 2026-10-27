@@ -309,7 +309,9 @@ def main() -> int:
     for seed in range(FIRST_SEED, LAST_SEED + 1):
         key = str(seed)
         if key in frozen:
-            report.append(f"g{seed}: FROZEN ({frozen[key].get('reason', 'review')})")
+            _fv = frozen[key]
+            _reason = _fv.get("reason", "review") if isinstance(_fv, dict) else str(_fv)
+            report.append(f"g{seed}: FROZEN ({_reason})")
             continue
         status, attempt_dir = classify_seed(seed)
         if status == "complete":
